@@ -1,7 +1,7 @@
 <?php
 // DIC configuration
 
-$container = $app->getContainer();
+$container = $slim->getContainer();
 
 // -----------------------------------------------------------------------------
 // Service providers
@@ -11,7 +11,11 @@ $container = $app->getContainer();
 $container['db'] = function($c) {
     $settings = $c->get('settings');
     $db = new It_All\ServicePg\Postgres();
-    $db->connect($settings['db']['database'], $settings['db']['username'], $settings['db']['password']);
+    try {
+        $db->connect($settings['db']['database'], $settings['db']['username'], $settings['db']['password']);
+    } catch (Exception $e) {
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
     return $db;
 };
 
@@ -23,8 +27,10 @@ $container['view'] = function ($c) {
 
 // Logger
 $container['logger'] = function($c) {
+    $settings = $c->get('settings');
     $logger = new \Monolog\Logger('my_logger');
-    $file_handler = new \Monolog\Handler\StreamHandler("../storage/logs/app.log");
+    //$file_handler = new \Monolog\Handler\StreamHandler("../storage/logs/app.log");
+    $file_handler = new \Monolog\Handler\StreamHandler($settings['pathLog']);
     $logger->pushHandler($file_handler);
     return $logger;
 };

@@ -2,7 +2,11 @@
 
 return [
 
-    /** Application Name */
-    'name' => 'BoutiqueCommerce',
+    'storeName' => 'BoutiqueCommerce',
+
+    'logs' => [
+        'pathPhpErrors' => '/storage/logs/phpErrors.log',
+        'pathEvents' => '/storage/logs/events.log'
+    ]
 
 ];
