@@ -1,0 +1,14 @@
+{
+    "require": {
+        "slim/slim": "^3.0",
+        "slim/twig-view": "^2.2",
+        "monolog/monolog": "^1.22",
+        "slim/php-view": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "It_All\\BoutiqueCommerce\\": "",
+            "It_All\\": ""
+        }
+    }
+}
