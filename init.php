@@ -1,32 +1,37 @@
 <?php
-/** note this can also be called for cli scripts */
+/** note: this can also be called for cli scripts.
+ * note: parse errors in this file would cause a Fatal Parse error
+ * with message display (unless display_errors is set Off in php.ini),
+ * using ini_set() will not turn off the display
 
-$rpp = explode('/', __DIR__);
-define('APP_ROOT', implode('/', $rpp).'/' );
+ */
+define('APP_ROOT', __DIR__ . '/' );
 
 require APP_ROOT . 'vendor/autoload.php';
-require APP_ROOT . 'utilities/errorHandlers.php';
 require APP_ROOT . 'utilities/functions.php';
 
-// in case of collision, config.php value overrides
-$config = array_merge(require APP_ROOT . 'config/env.php', require APP_ROOT . 'config/config.php');
+// in case of collision, env.php value overrides
+$config = array_merge(require APP_ROOT . 'config/config.php', require APP_ROOT . 'config/env.php');
+
+$errorHandler = new \It_All\BoutiqueCommerce\Utilities\ErrorHandler($config['errors']['reportMethods'], $config['logs']['pathPhpErrors'], $config['env']);
+register_shutdown_function(array($errorHandler, 'checkForFatal'));
+set_exception_handler(array($errorHandler, 'throwableHandler'));
+
+error_reporting( -1 ); // all, including future types
+ini_set( 'display_errors', 'off' );
+ini_set( 'display_startup_errors', 'off' );
+// keep this even though the error handler logs errors, any errors in the error handler itself or prior to will still be logged
+ini_set('error_log', $config['logs']['pathPhpErrors']);
+
 
 //use It_All\BoutiqueCommerce\Utilities as Utilities;
-
-$m = It_All\BoutiqueCommerce\Utilities\Mailer::getPhpmailer($config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
-
-$m->Subject = 'test';
-$m->Body = 'test';
-$m->addAddress('greg@it-all.com');
-$m->send();
-
-/**
- * error handling
- * using the shutdown function is a workaround to have fatal errors handled
- */
-register_shutdown_function('It_All\BoutiqueCommerce\Utilities\checkForFatal');
-set_error_handler('It_All\BoutiqueCommerce\Utilities\errorHandler');
-set_exception_handler('It_All\BoutiqueCommerce\Utilities\exceptionHandler');
+//
+//$m = It_All\BoutiqueCommerce\Utilities\Mailer::getPhpmailer($config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
+//
+//$m->Subject = 'test';
+//$m->Body = 'test';
+//$m->addAddress('greg@it-all.com');
+//$m->send();
 
 //if (!Utilities::isRunningFromCommandLine()) {
 //    /**

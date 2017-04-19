@@ -1,8 +1,9 @@
 <?php
+$displayErrorDetails = ($config['env'] == 'live' || !$config['debug']) ? false : true;
 return [
     'settings' => [
         // Slim Settings
-        'displayErrorDetails' => true,
+        'displayErrorDetails' => $displayErrorDetails,
 
         // Database Settings
         'db' => [
@@ -17,7 +18,7 @@ return [
             'template_path' => __DIR__ . '/../../ui/views/',
         ],
 
-        'pathLog' => APP_ROOT . '/storage/logs/events.log',
+        'pathLog' => $config['logs']['pathEvents'],
 
     ]
 ];

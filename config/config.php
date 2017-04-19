@@ -5,8 +5,8 @@ return [
     'storeName' => 'BoutiqueCommerce',
 
     'logs' => [
-        'pathPhpErrors' => '/storage/logs/phpErrors.log',
-        'pathEvents' => '/storage/logs/events.log'
+        'pathPhpErrors' => APP_ROOT . 'storage/logs/phpErrors.log',
+        'pathEvents' => APP_ROOT . 'storage/logs/events.log'
     ]
 
 ];

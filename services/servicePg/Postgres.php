@@ -17,7 +17,6 @@ Class Postgres
         }
         $connectionString .= " connect_timeout=5";
         if (!$this->pgConn = pg_connect($connectionString)) {
-            trigger_error("db connection failure");
             throw new \Exception('db connection failure');
         }
         return true;

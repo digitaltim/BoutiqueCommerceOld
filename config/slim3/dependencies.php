@@ -7,15 +7,24 @@ $container = $slim->getContainer();
 // Service providers
 // -----------------------------------------------------------------------------
 
+//// Error Handler
+//$container['errorHandler'] = function ($c) {
+//    return new \It_All\BoutiqueCommerce\Utilities\ErrorHandler();
+//};
+//
+//$container['phpErrorHandler'] = function ($c) {
+//    return new \It_All\BoutiqueCommerce\Utilities\ErrorHandler();
+//};
+
 // Database
 $container['db'] = function($c) {
     $settings = $c->get('settings');
     $db = new It_All\ServicePg\Postgres();
-    try {
-        $db->connect($settings['db']['database'], $settings['db']['username'], $settings['db']['password']);
-    } catch (Exception $e) {
-        echo 'Caught exception: ',  $e->getMessage(), "\n";
-    }
+//    try {
+//        $db->connect($settings['db']['database'], $settings['db']['username'], $settings['db']['password']);
+//    } catch (\Exception $e) {
+//        echo 'Caught exception: ',  $e->getMessage(), "\n";
+//    }
     return $db;
 };
 
@@ -35,9 +44,13 @@ $container['logger'] = function($c) {
     return $logger;
 };
 
+// Error Handling
+unset($container['errorHandler']);
+unset($container['phpErrorHandler']);
+
 // -----------------------------------------------------------------------------
 // Controller factories / registration
 // -----------------------------------------------------------------------------
 $container['HomeController'] = function ($c) {
-    return new It_All\BoutiqueCommerce\Controllers\HomeController($c->get('db'), $c->get('view'));
+    return new It_All\BoutiqueCommerce\Controllers\HomeController($c);
 };

@@ -222,32 +222,6 @@ function getTopScriptDir(): string
 }
 
 /**
- * Useful for reporting errors.  Pass in the array returned from `debug_backtrace()`.
- * @param array $bt
- * @return string
- */
-function backtraceToString(array $bt): string
-{
-    $str = "";
-    $bt = array_reverse($bt);
-    foreach ($bt as $elt) {
-        $file = isset($elt['file']) ? $elt['file'] : 'file not set';
-        // Assumes no } in directory name - a safe bet.
-        if (APP_ROOT) {
-            $pattern = "{^" . preg_quote(APP_ROOT) . "}";
-            // echo "pattern: $pattern \n";
-            $file = preg_replace($pattern, "[www]", $file);
-        }
-        $function = $elt['function'];
-        $class = isset($elt['class']) ? $elt['class'] : '';
-        $type = isset($elt['type']) ? $elt['type'] : '';
-        $line = isset($elt['line']) ? $elt['line'] : 'line not set';
-        $str .= "$file $class$type$function, line $line\n";
-    }
-    return $str;
-}
-
-/**
  * converts array to string
  * @param array $arr
  * @param int $level
@@ -263,7 +237,7 @@ function arrayWalkToStringRecursive(array $arr, int $level = 0): string
     foreach ($arr as $k => $v) {
         // GLOBALS can be too big for memory and can cause an infinite loop GLOBALS: GLOBALS: ...
         if ($k != 'GLOBALS') {
-            $out .= "<br>$tabs$k: ";
+            $out .= "$tabs$k: ";
             if (is_object($v)) {
                 $out .= 'object type: '.get_class($v);
             } elseif (is_array($v)) {

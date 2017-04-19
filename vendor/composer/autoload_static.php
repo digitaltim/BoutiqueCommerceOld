@@ -404,6 +404,7 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'It_All\\BoutiqueCommerce\\Controllers\\Controller' => __DIR__ . '/../..' . '/controllers/Controller.php',
         'It_All\\BoutiqueCommerce\\Controllers\\HomeController' => __DIR__ . '/../..' . '/controllers/HomeController.php',
         'It_All\\BoutiqueCommerce\\Models\\Admin' => __DIR__ . '/../..' . '/models/Admin.php',
+        'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => __DIR__ . '/../..' . '/utilities/ErrorHandler.php',
         'It_All\\BoutiqueCommerce\\Utilities\\Mailer' => __DIR__ . '/../..' . '/utilities/Mailer.php',
         'It_All\\ServicePg\\InsertBuilder' => __DIR__ . '/../..' . '/services/servicePg/InsertBuilder.php',
         'It_All\\ServicePg\\InsertUpdateBuilder' => __DIR__ . '/../..' . '/services/servicePg/InsertUpdateBuilder.php',
