@@ -10,7 +10,10 @@ use It_All\BoutiqueCommerce\Utilities;
 // in case of collision, env.php value overrides
 $config = array_merge(require APP_ROOT . 'config/config.php', require APP_ROOT . 'config/env.php');
 
-$errorHandler = new \It_All\BoutiqueCommerce\Utilities\ErrorHandler($config['errors']['reportMethods'], $config['logs']['pathPhpErrors'], $config['env']);
+// instantiate mailer
+$mailer = new It_All\BoutiqueCommerce\Services\Mailer($config['storeEmails']['defaultFromEmail'], $config['storeEmails']['defaultFromName'], $config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
+
+$errorHandler = new \It_All\BoutiqueCommerce\Utilities\ErrorHandler($config['errors']['reportMethods'], $config['logs']['pathPhpErrors'], $config['env'], $mailer);
 
 // workaround for catching some fatal errors like parse errors. note that parse errors in this file and index.php are not handled, but cause a fatal error with display (not displayed if display_errors is off in php.ini, but the ini_set call will not affect it). todo, write a test to be sure that "Parse error:" and/or "BoutiqueCommerce" are not displayed on the index route (that will cover these 2 files, all others will be handled).
 register_shutdown_function(array($errorHandler, 'checkForFatal'));

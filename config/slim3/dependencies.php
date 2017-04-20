@@ -23,7 +23,7 @@ $container['view'] = function ($c) {
 // Mailer
 $container['mailer'] = function($c) {
     $settings = $c->get('settings');
-    return new It_All\BoutiqueCommerce\Services\Mailer($settings['mailer']['defaultFromEmail'], $settings['mailer']['defaultFromName'], $settings['mailer']['protocol'], $settings['mailer']['smtpHost'], $settings['mailer']['smtpPort']);
+    return $settings['mailer'];
 };
 
 // Logger

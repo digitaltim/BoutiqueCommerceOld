@@ -19,13 +19,7 @@ return [
         ],
 
         // phpMailer Settings
-        'mailer' => [
-            'defaultFromEmail' => $config['storeEmails']['defaultFromEmail'],
-            'defaultFromName' => $config['storeEmails']['defaultFromName'],
-            'protocol' => $config['phpmailer']['protocol'],
-            'smtpHost' => $config['phpmailer']['smtpHost'],
-            'smtpPort' => $config['phpmailer']['smtpPort']
-        ],
+        'mailer' => $mailer,
 
         'pathLog' => $config['logs']['pathEvents'],
 

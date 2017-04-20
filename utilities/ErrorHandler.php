@@ -1,17 +1,21 @@
 <?php
 namespace It_All\BoutiqueCommerce\Utilities;
 
+use It_All\BoutiqueCommerce\Services\Mailer;
+
 class ErrorHandler
 {
     private $reportMethods;
     private $logPath;
     private $env;
+    private $mailer;
 
-    public function __construct(array $reportMethods, string $logPath, string $env)
+    public function __construct(array $reportMethods, string $logPath, string $env, Mailer $m)
     {
         $this->reportMethods = $reportMethods;
         $this->logPath = $logPath;
         $this->env = $env;
+        $this->mailer = $m;
     }
 
     public function __invoke($request, $response, $args)
@@ -134,13 +138,7 @@ class ErrorHandler
 
     private function email()
     {
-        // todo fix this to use new mailer code
-
-//        $m = \It_All\BoutiqueCommerce\Utilities\Mailer::getPhpmailer($this->config['phpmailer']['protocol'], $this->config['phpmailer']['smtpHost'], $this->config['phpmailer']['smtpPort']);
-//        $m->Subject = $_SERVER['SERVER_NAME'] . " Error";
-//        $m->Body = "Check log file for details.";
-//        $m->addAddress('greg@it-all.com');
-//        $m->send();
+        $this->mailer->send($_SERVER['SERVER_NAME'] . " Error", "Check log file for details.", ['greg@it-all.com']);
     }
 
 }
