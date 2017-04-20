@@ -37,7 +37,7 @@ class ErrorHandler
 
         // error_reporting() == 0 happens when an expression is prefixed with @ (meaning: ignore errors).
         if (!($this->env == 'live' || error_reporting() == 0 || !in_array('echo', $this->reportMethods))) {
-            echo $errorMessage;
+            echo nl2br($errorMessage);
         }
 
         if ($this->env == 'live' || in_array('email', $this->reportMethods)) {
@@ -64,7 +64,7 @@ class ErrorHandler
                 $message .= '?' . $_SERVER['QUERY_STRING'];
             }
         }
-        $message .= $errorMessage . "\n\r";
+        $message .= $errorMessage . "\n";
         return $message;
     }
 
@@ -73,10 +73,10 @@ class ErrorHandler
         $error = error_get_last();
         if ($error["type"] == E_ERROR || $error["type"] == E_PARSE || $error["type"] == E_CORE_ERROR || $error["type"] == E_CORE_WARNING) {
             extract($error);
-            $message = "type: $type<br>";
-            $message .= "message: $message<br>";
-            $message .= "file: $file<br>";
-            $message .= "line: $line<br>";
+            $message = "type: $type\n";
+            $message .= "message: $message\n";
+            $message .= "file: $file\n";
+            $message .= "line: $line\n";
             $this->handleError($message, true);
         }
     }
@@ -117,17 +117,17 @@ class ErrorHandler
         foreach ($e->getTrace() as $k => $v) {
             $traceString .= "#$k ";
             $traceString .= arrayWalkToStringRecursive($v);
-            $traceString .= "<br>";
+            $traceString .= "\n";
             $ct++;
         }
 
         $message = $errorTypeStr;
-        $message .= "<br>".$e->getMessage();
-        $message .= "<br>".$e->getFile();
+        $message .= "\n".$e->getMessage();
+        $message .= "\n".$e->getFile();
         $message .= " Line ".$e->getLine();
-        $message .= "<br>Stack Trace:<br>".$traceString;
+        $message .= "\nStack Trace:\n".$traceString;
 
-        //echo "<br>getTraceAsString: ".$e->getTraceAsString();
+        //echo "\ngetTraceAsString: ".$e->getTraceAsString();
 
         $this->handleError($message, $exitPage);
     }

@@ -1,5 +1,5 @@
 <?php
-$displayErrorDetails = ($config['env'] == 'live' || !$config['debug']) ? false : true;
+$displayErrorDetails = ($config['env'] == 'live') ? false : true;
 return [
     'settings' => [
         // Slim Settings
@@ -13,9 +13,18 @@ return [
             'host' => $config['database']['host'],
         ],
 
-        // PhpRenderer settings
+        // PhpRenderer Settings
         'view' => [
             'template_path' => __DIR__ . '/../../ui/views/',
+        ],
+
+        // phpMailer Settings
+        'mailer' => [
+            'defaultFromEmail' => $config['storeEmails']['defaultFromEmail'],
+            'defaultFromName' => $config['storeEmails']['defaultFromName'],
+            'protocol' => $config['phpmailer']['protocol'],
+            'smtpHost' => $config['phpmailer']['smtpHost'],
+            'smtpPort' => $config['phpmailer']['smtpPort']
         ],
 
         'pathLog' => $config['logs']['pathEvents'],

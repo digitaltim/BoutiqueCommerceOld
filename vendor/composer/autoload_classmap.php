@@ -270,6 +270,7 @@ return array(
     'It_All\\BoutiqueCommerce\\Controllers\\Controller' => $baseDir . '/controllers/Controller.php',
     'It_All\\BoutiqueCommerce\\Controllers\\HomeController' => $baseDir . '/controllers/HomeController.php',
     'It_All\\BoutiqueCommerce\\Models\\Admin' => $baseDir . '/models/Admin.php',
+    'It_All\\BoutiqueCommerce\\Services\\Mailer' => $baseDir . '/services/Mailer.php',
     'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => $baseDir . '/utilities/ErrorHandler.php',
     'It_All\\BoutiqueCommerce\\Utilities\\Mailer' => $baseDir . '/utilities/Mailer.php',
     'It_All\\ServicePg\\InsertBuilder' => $baseDir . '/services/servicePg/InsertBuilder.php',

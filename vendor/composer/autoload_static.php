@@ -41,6 +41,7 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'I' => 
         array (
             'It_All\\BoutiqueCommerce\\Utilities\\' => 34,
+            'It_All\\BoutiqueCommerce\\Services\\' => 33,
             'It_All\\BoutiqueCommerce\\' => 24,
             'It_All\\' => 7,
             'Interop\\Container\\' => 18,
@@ -92,6 +93,10 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
             1 => __DIR__ . '/..' . '/league/oauth2-google/src',
         ),
         'It_All\\BoutiqueCommerce\\Utilities\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/',
+        ),
+        'It_All\\BoutiqueCommerce\\Services\\' => 
         array (
             0 => __DIR__ . '/../..' . '/',
         ),
@@ -404,6 +409,7 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'It_All\\BoutiqueCommerce\\Controllers\\Controller' => __DIR__ . '/../..' . '/controllers/Controller.php',
         'It_All\\BoutiqueCommerce\\Controllers\\HomeController' => __DIR__ . '/../..' . '/controllers/HomeController.php',
         'It_All\\BoutiqueCommerce\\Models\\Admin' => __DIR__ . '/../..' . '/models/Admin.php',
+        'It_All\\BoutiqueCommerce\\Services\\Mailer' => __DIR__ . '/../..' . '/services/Mailer.php',
         'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => __DIR__ . '/../..' . '/utilities/ErrorHandler.php',
         'It_All\\BoutiqueCommerce\\Utilities\\Mailer' => __DIR__ . '/../..' . '/utilities/Mailer.php',
         'It_All\\ServicePg\\InsertBuilder' => __DIR__ . '/../..' . '/services/servicePg/InsertBuilder.php',

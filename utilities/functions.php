@@ -30,16 +30,17 @@ function emailNotify($to, string $subject, string $body)
     return false;
 }
 
-//
-//function getBaseUrl()
-//{
-//    $baseUrl = "https://";
-//    if (Config::$domainUseWWW) {
-//        $baseUrl .= "www.";
-//    }
-//    $baseUrl .= $_SERVER['SERVER_NAME'];
-//    return $baseUrl;
-//}
+
+function getBaseUrl()
+{
+    global $config;
+    $baseUrl = "https://";
+    if ($config['domainUseWww']) {
+        $baseUrl .= "www.";
+    }
+    $baseUrl .= $_SERVER['SERVER_NAME'];
+    return $baseUrl;
+}
 
 /**
  * @param string $toPage page and query string only.
@@ -50,7 +51,7 @@ function emailNotify($to, string $subject, string $body)
  */
 function redirect($toPage = null, $addAdminDir = false)
 {
-    global $phpPageError, $config;
+    global $config;
     if (is_null($toPage)) {
         $toPage = getCurrentPage(true, false);
     }
@@ -59,16 +60,11 @@ function redirect($toPage = null, $addAdminDir = false)
         $toPage = "/" . $toPage;
     }
     if ($addAdminDir) {
-        $toPage = "/" . Config::$adminDir . $toPage;
+        $toPage = "/" . $config['dirs']['admin'] . $toPage;
     }
     $to = getBaseUrl() . $toPage;
-    if (!isLiveServer() && $phpPageError && $config['debug']) {
-        echo "<br>Suppressing redirect to $toPage";
-        exit();
-    } else {
-        header("Location: $to");
-        exit();
-    }
+    header("Location: $to");
+    exit();
 }
 
 function redirectCurrentPageNoQs()

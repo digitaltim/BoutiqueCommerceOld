@@ -5,7 +5,7 @@ Class Postgres
 {
     private $pgConn;
 
-    /** host and password are not necessary depending on hba.conf */
+    /** host and password may not be necessary depending on hba.conf */
     public function connect(string $dbname, string $user, string $password = '', string $host = ''): bool
     {
         $connectionString = "dbname=$dbname user=$user";

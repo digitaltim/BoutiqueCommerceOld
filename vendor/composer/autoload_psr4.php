@@ -14,6 +14,7 @@ return array(
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'League\\OAuth2\\Client\\' => array($vendorDir . '/league/oauth2-client/src', $vendorDir . '/league/oauth2-google/src'),
     'It_All\\BoutiqueCommerce\\Utilities\\' => array($baseDir . '/'),
+    'It_All\\BoutiqueCommerce\\Services\\' => array($baseDir . '/'),
     'It_All\\BoutiqueCommerce\\' => array($baseDir . '/'),
     'It_All\\' => array($baseDir . '/'),
     'Interop\\Container\\' => array($vendorDir . '/container-interop/container-interop/src/Interop/Container'),

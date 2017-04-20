@@ -9,6 +9,7 @@ abstract class Controller
     protected $dic; // dependency injection container
     protected $db;
     protected $view;
+    protected $mailer;
 
     public function __construct(Container $dic)
     {
@@ -18,17 +19,14 @@ abstract class Controller
         $this->db = $dic['db'];
         $this->dbConnect();
         $this->view = $dic['view'];
+        $this->mailer = $dic['mailer'];
+        $this->mailer->send('subj', 'body', ['greg@it-all.com']);
     }
 
     public function dbConnect()
     {
         $dbSettings = $this->dic['settings']['db'];
         $this->db->connect($dbSettings['database'], $dbSettings['username'], $dbSettings['password']);
-//        try {
-//            $this->db->connect($dbSettings['database'], $dbSettings['username'], $dbSettings['password']);
-//        } catch (\Exception $e) {
-//            throw new \Exception($e->__toString());
-//        }
     }
 
 }

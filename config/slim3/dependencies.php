@@ -7,24 +7,10 @@ $container = $slim->getContainer();
 // Service providers
 // -----------------------------------------------------------------------------
 
-//// Error Handler
-//$container['errorHandler'] = function ($c) {
-//    return new \It_All\BoutiqueCommerce\Utilities\ErrorHandler();
-//};
-//
-//$container['phpErrorHandler'] = function ($c) {
-//    return new \It_All\BoutiqueCommerce\Utilities\ErrorHandler();
-//};
-
 // Database
 $container['db'] = function($c) {
     $settings = $c->get('settings');
     $db = new It_All\ServicePg\Postgres();
-//    try {
-//        $db->connect($settings['db']['database'], $settings['db']['username'], $settings['db']['password']);
-//    } catch (\Exception $e) {
-//        echo 'Caught exception: ',  $e->getMessage(), "\n";
-//    }
     return $db;
 };
 
@@ -32,6 +18,12 @@ $container['db'] = function($c) {
 $container['view'] = function ($c) {
     $settings = $c->get('settings');
     return new \Slim\Views\PhpRenderer($settings['view']['template_path']);
+};
+
+// Mailer
+$container['mailer'] = function($c) {
+    $settings = $c->get('settings');
+    return new It_All\BoutiqueCommerce\Services\Mailer($settings['mailer']['defaultFromEmail'], $settings['mailer']['defaultFromName'], $settings['mailer']['protocol'], $settings['mailer']['smtpHost'], $settings['mailer']['smtpPort']);
 };
 
 // Logger
