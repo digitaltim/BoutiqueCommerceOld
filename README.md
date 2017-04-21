@@ -1,4 +1,6 @@
 # BoutiqueCommerce
 An eCommerce and Point-Of-Sale platform for apparel boutiques
 
-Built with PostGreSQL, PHP (Slim micro framework)
+Built with PostgreSQL (connecting through PHP-PostgreSQL), PHP (using the Slim3 micro framework),...
+
+Uses PHPMailer,...
