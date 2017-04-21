@@ -272,7 +272,6 @@ return array(
     'It_All\\BoutiqueCommerce\\Models\\Admin' => $baseDir . '/models/Admin.php',
     'It_All\\BoutiqueCommerce\\Services\\Mailer' => $baseDir . '/services/Mailer.php',
     'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => $baseDir . '/utilities/ErrorHandler.php',
-    'It_All\\BoutiqueCommerce\\Utilities\\Mailer' => $baseDir . '/utilities/Mailer.php',
     'It_All\\ServicePg\\InsertBuilder' => $baseDir . '/services/servicePg/InsertBuilder.php',
     'It_All\\ServicePg\\InsertUpdateBuilder' => $baseDir . '/services/servicePg/InsertUpdateBuilder.php',
     'It_All\\ServicePg\\Postgres' => $baseDir . '/services/servicePg/Postgres.php',
