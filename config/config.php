@@ -13,7 +13,7 @@ return [
         'defaultFromName' => 'Boutique Commerce'
     ],
 
-    'sessionTTLhours' => 24,
+    'sessionTtlHours' => 24,
 
     'logs' => [
         'pathPhpErrors' => APP_ROOT . 'storage/logs/phpErrors.log',

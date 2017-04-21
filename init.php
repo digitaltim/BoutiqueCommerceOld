@@ -43,7 +43,7 @@ if (!Utilities\isRunningFromCommandLine()) {
     Utilities\arrayProtectRecursive($_GET);
 
     /** SESSION */
-    $sessionTTLseconds = $config['sessionTTLhours'] * 60 * 60;
+    $sessionTTLseconds = $config['sessionTtlHours'] * 60 * 60;
     ini_set('session.gc_maxlifetime', $sessionTTLseconds);
     ini_set('session.cookie_lifetime', $sessionTTLseconds);
     if (!Utilities\sessionValidId(session_id())) {
