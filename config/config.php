@@ -13,11 +13,17 @@ return [
         'defaultFromName' => 'Boutique Commerce'
     ],
 
-    'sessionTTLhours' => 24,
+    'sessionTtlHours' => 24,
 
-    'logs' => [
-        'pathPhpErrors' => APP_ROOT . 'storage/logs/phpErrors.log',
-        'pathEvents' => APP_ROOT . 'storage/logs/events.log'
-    ]
+    'storage' => [
+        'logs' => [
+            'pathPhpErrors' => APP_ROOT . 'storage/logs/phpErrors.log',
+            'pathEvents' => APP_ROOT . 'storage/logs/events.log'
+        ],
+
+        'pathCache' => APP_ROOT . 'storage/cache/'
+    ],
+
+    'pathTemplates' => APP_ROOT . 'ui/views/'
 
 ];

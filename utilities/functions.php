@@ -30,7 +30,6 @@ function emailNotify($to, string $subject, string $body)
     return false;
 }
 
-
 function getBaseUrl()
 {
     global $config;

@@ -22,24 +22,38 @@ $container['db'] = function($c) {
     return $db;
 };
 
-// PHPRenderer
-$container['view'] = function ($c) {
-    $settings = $c->get('settings');
-    return new \Slim\Views\PhpRenderer($settings['view']['template_path']);
+//// PHPRenderer
+//$container['view'] = function ($container) {
+//    $settings = $container->get('settings');
+//    return new \Slim\Views\PhpRenderer($settings['view']['template_path']);
+//};
+
+// Twig
+$container['view'] = function ($container) {
+    $settings = $container->get('settings');
+    $view = new \Slim\Views\Twig($settings['view']['pathTemplates'], [
+        'cache' => $settings['view']['pathCache'],
+        'auto_reload' => $settings['view']['autoReload']
+    ]);
+
+    // Instantiate and add Slim specific extension
+    $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
+    $view->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
+
+    return $view;
 };
 
 // Mailer
-$container['mailer'] = function($c) {
-    $settings = $c->get('settings');
-    return new It_All\BoutiqueCommerce\Services\Mailer($settings['mailer']['defaultFromEmail'], $settings['mailer']['defaultFromName'], $settings['mailer']['protocol'], $settings['mailer']['smtpHost'], $settings['mailer']['smtpPort']);
+$container['mailer'] = function($container) {
+    $settings = $container->get('settings');
+    return $settings['mailer'];
 };
 
 // Logger
-$container['logger'] = function($c) {
-    $settings = $c->get('settings');
+$container['logger'] = function($container) {
+    $settings = $container->get('settings');
     $logger = new \Monolog\Logger('my_logger');
-    //$file_handler = new \Monolog\Handler\StreamHandler("../storage/logs/app.log");
-    $file_handler = new \Monolog\Handler\StreamHandler($settings['pathLog']);
+    $file_handler = new \Monolog\Handler\StreamHandler($settings['storage']['pathLogs']);
     $logger->pushHandler($file_handler);
     return $logger;
 };

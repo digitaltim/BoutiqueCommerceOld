@@ -17,6 +17,6 @@ abstract class Controller
         $this->db = $dic['db'];
         $this->view = $dic['view'];
         $this->mailer = $dic['mailer'];
-        $this->mailer->send('subj', 'body', ['greg@it-all.com']);
+        //$this->mailer->send('we are in the controller', 'wahoo', ['greg@it-all.com']);
     }
 }
