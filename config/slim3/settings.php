@@ -1,9 +1,10 @@
 <?php
 $displayErrorDetails = ($config['env'] == 'live') ? false : true;
+$twigAutoReload = ($config['env'] == 'live') ? false : true;
 return [
     'settings' => [
         // Slim Settings
-        'displayErrorDetails' => $displayErrorDetails,
+        'displayErrorDetails' => $displayErrorDetails, // slim error handling currently disabled so this has no effect
 
         // Database Settings
         'db' => [
@@ -13,15 +14,21 @@ return [
             'host' => $config['database']['host'],
         ],
 
-        // PhpRenderer Settings
+        // Twig Settings
         'view' => [
-            'template_path' => __DIR__ . '/../../ui/views/',
+            'pathTemplates' => $config['pathTemplates'],
+            'pathCache' => $config['storage']['pathCache'].'twig/',
+            'autoReload' => $twigAutoReload
         ],
 
         // phpMailer Settings
         'mailer' => $mailer,
 
-        'pathLog' => $config['logs']['pathEvents'],
+        // Storage Settings
+        'storage' => [
+            'pathLogs' => $config['storage']['logs']['pathEvents'],
+            'pathTwigCache' => $config['storage']['pathCache'].'twig/',
+        ]
 
     ]
 ];
