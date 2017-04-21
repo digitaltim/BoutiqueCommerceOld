@@ -13,20 +13,10 @@ abstract class Controller
 
     public function __construct(Container $dic)
     {
-        //sfd
-        //throw new \Exception('test');
         $this->dic = $dic;
         $this->db = $dic['db'];
-        $this->dbConnect();
         $this->view = $dic['view'];
         $this->mailer = $dic['mailer'];
         $this->mailer->send('subj', 'body', ['greg@it-all.com']);
     }
-
-    public function dbConnect()
-    {
-        $dbSettings = $this->dic['settings']['db'];
-        $this->db->connect($dbSettings['database'], $dbSettings['username'], $dbSettings['password']);
-    }
-
 }

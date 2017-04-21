@@ -10,7 +10,15 @@ $container = $slim->getContainer();
 // Database
 $container['db'] = function($c) {
     $settings = $c->get('settings');
-    $db = new It_All\ServicePg\Postgres();
+    
+    $db = new It_All\ServicePg\Postgres(
+        $settings['db']['database'],
+        $settings['db']['username'],
+        $settings['db']['password'],
+        $settings['db']['host'],
+        $settings['db']['port']
+    );
+    
     return $db;
 };
 

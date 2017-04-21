@@ -11,6 +11,7 @@ return [
             'username' => $config['database']['username'],
             'password' => $config['database']['password'],
             'host' => $config['database']['host'],
+            'port' => $config['database']['port'],
         ],
 
         // PhpRenderer Settings

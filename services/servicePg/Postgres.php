@@ -6,20 +6,29 @@ Class Postgres
     private $pgConn;
 
     /** host and password may not be necessary depending on hba.conf */
-    public function connect(string $dbname, string $user, string $password = '', string $host = ''): bool
+    public function __construct(
+        string $dbname, 
+        string $user, 
+        string $password = NULL, 
+        string $host = NULL,
+        string $port = NULL
+    )
     {
         $connectionString = "dbname=$dbname user=$user";
-        if (strlen($host) > 0) {
+        if (!($host === NULL)) {
             $connectionString .= " host=$host";
         }
-        if (strlen($password) > 0) {
+        if (!($password === NULL)) {
             $connectionString .= " password=$password";
         }
+        if (!($port === NULL)) {
+            $connectionString .= " port=$port";
+        }
         $connectionString .= " connect_timeout=5";
+        
         if (!$this->pgConn = pg_connect($connectionString)) {
             throw new \Exception('db connection failure');
         }
-        return true;
     }
 
     public function getPgConn() {
