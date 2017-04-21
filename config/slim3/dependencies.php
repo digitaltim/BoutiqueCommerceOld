@@ -9,7 +9,6 @@ $container = $slim->getContainer();
 
 // Database
 $container['db'] = function($c) {
-    $settings = $c->get('settings');
     $db = new It_All\ServicePg\Postgres();
     return $db;
 };
@@ -30,7 +29,6 @@ $container['mailer'] = function($c) {
 $container['logger'] = function($c) {
     $settings = $c->get('settings');
     $logger = new \Monolog\Logger('my_logger');
-    //$file_handler = new \Monolog\Handler\StreamHandler("../storage/logs/app.log");
     $file_handler = new \Monolog\Handler\StreamHandler($settings['pathLog']);
     $logger->pushHandler($file_handler);
     return $logger;
