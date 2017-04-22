@@ -1,4 +1,5 @@
 <?php
+//declare(strict_types=1);
 /** note: this can also be called for cli scripts.*/
 define('APP_ROOT', __DIR__ . '/' );
 
@@ -13,11 +14,20 @@ $config = array_merge(require APP_ROOT . 'config/config.php', require APP_ROOT .
 // instantiate mailer
 $mailer = new It_All\BoutiqueCommerce\Services\Mailer($config['storeEmails']['defaultFromEmail'], $config['storeEmails']['defaultFromName'], $config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
 
-$errorHandler = new \It_All\BoutiqueCommerce\Utilities\ErrorHandler($config['errors']['reportMethods'], $config['storage']['logs']['pathPhpErrors'], $config['env'], $mailer);
+//__construct(string $logPath, bool $liveServer, bool $echoDev, bool $emailDev, Mailer $m, string $emailTo)
+
+$errorHandler = new \It_All\BoutiqueCommerce\Utilities\ErrorHandler(
+    $config['storage']['logs']['pathPhpErrors'],
+    $config['isLive'],
+    $config['errors']['echoDev'],
+    $config['errors']['emailDev'],
+    $mailer,
+    $config['errors']['emailTo']
+);
 
 // workaround for catching some fatal errors like parse errors. note that parse errors in this file and index.php are not handled, but cause a fatal error with display (not displayed if display_errors is off in php.ini, but the ini_set call will not affect it). todo, write a test to be sure that "Parse error:" and/or "BoutiqueCommerce" are not displayed on the index route (that will cover these 2 files, all others will be handled).
 register_shutdown_function(array($errorHandler, 'checkForFatal'));
-
+set_error_handler(array($errorHandler, 'phpErrorHandler'));
 set_exception_handler(array($errorHandler, 'throwableHandler'));
 
 error_reporting( -1 ); // all, including future types
@@ -25,7 +35,7 @@ ini_set( 'display_errors', 'off' );
 ini_set( 'display_startup_errors', 'off' );
 
 // keep this even though the error handler logs errors, so that any errors in the error handler itself or prior to will still be logged. note, if using slim error handling, this will log all php errors
-ini_set('error_log', $config['logs']['pathPhpErrors']);
+ini_set('error_log', $config['storage']['logs']['pathPhpErrors']);
 
 if (!Utilities\isRunningFromCommandLine()) {
     /**

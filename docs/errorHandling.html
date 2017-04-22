@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Error Handling</title>
+</head>
+<body>
+<h1>Error Handling Rules</h1>
+<br><br>
+
+<h2>Reporting Methods:</h2>
+<br><br>
+
+<h3>Logging</h3>
+All error details are logged to $config['storage']['logs']['pathPhpErrors'].
+<br><br>
+
+<h3>Echo</h3>
+<h4>Live Servers*</h4>
+Error details are never echoed, except fatal errors, which cause display of the text set in $config['errors']['fatalMessage'] prior to termination.<br>
+ *Test for live server: $config['isLive'] is true, set in config/.env.php<br>
+<br>
+<h4>Dev Servers*</h4>
+Error details are echoed if $config['errors']['echoDev'] is true<br>
+ * Test for Dev Server: $config['isLive'] is false, set in config/.env.php<br>
+<br><br>
+
+<h3>Email</h3>
+<h3>For security reasons, error details are never emailed.</h3>
+<h4>Live Servers</h4>
+All errors cause generic error notifications to be emailed to $config['errors']['emailTo'].<br>
+<br>
+<h4>Dev Servers*</h4>
+Generic error notifications are emailed to $config['errors']['emailTo'] if $config['errors']['emailDev'] is true.<br>
+<br>
+</body>
+</html>

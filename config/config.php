@@ -1,15 +1,17 @@
 <?php
 
+$domainName = 'boutiquecommerce.org';
+
 return [
 
     'storeName' => 'BoutiqueCommerce',
 
-    'domainName' => 'boutiquecommerce.org',
+    'domainName' => $domainName,
 
     'domainUseWww' => false,
 
     'storeEmails' => [
-        'defaultFromEmail' => 'service@boutiquecommerce.org',
+        'defaultFromEmail' => 'service@'.$domainName,
         'defaultFromName' => 'Boutique Commerce'
     ],
 
@@ -24,6 +26,13 @@ return [
         'pathCache' => APP_ROOT . 'storage/cache/'
     ],
 
-    'pathTemplates' => APP_ROOT . 'ui/views/'
+    'pathTemplates' => APP_ROOT . 'ui/views/',
+
+    'errors' => [
+        'fatalMessage' => 'Hamden, we have a problem.',
+        'emailTo' => 'greg@it-all.com', // todo use generic email @ $domainName and test .env override
+        'echoDev' => true,
+        'emailDev' => false
+    ]
 
 ];

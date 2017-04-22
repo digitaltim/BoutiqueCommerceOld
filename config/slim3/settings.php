@@ -1,10 +1,13 @@
 <?php
-$displayErrorDetails = ($config['env'] == 'live') ? false : true;
-$twigAutoReload = ($config['env'] == 'live') ? false : true;
+
 return [
     'settings' => [
         // Slim Settings
-        'displayErrorDetails' => $displayErrorDetails, // slim error handling currently disabled so this has no effect
+        'displayErrorDetails' => !$config['isLive'], // slim error handling currently disabled so this has no effect
+
+        'outputBuffering' => false, // just to uncomplicate things for now.
+
+        'addContentLengthHeader' => false, // if this is not disabled, slim/App.php line 585 triggered an exception related to error handling, when the php set_error_handler() function was triggered
 
         // Database Settings
         'db' => [
@@ -19,7 +22,7 @@ return [
         'view' => [
             'pathTemplates' => $config['pathTemplates'],
             'pathCache' => $config['storage']['pathCache'].'twig/',
-            'autoReload' => $twigAutoReload
+            'autoReload' => !$config['isLive']
         ],
 
         // phpMailer Settings

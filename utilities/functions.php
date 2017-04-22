@@ -225,9 +225,9 @@ function getTopScriptDir(): string
 function arrayWalkToStringRecursive(array $arr, int $level = 0): string
 {
     $out = "";
-    $tabs = "";
+    $tabs = " ";
     for ($i = 0; $i < $level; $i++) {
-        $tabs .= "&nbsp;&nbsp;";
+        $tabs .= " ";
     }
     foreach ($arr as $k => $v) {
         // GLOBALS can be too big for memory and can cause an infinite loop GLOBALS: GLOBALS: ...
