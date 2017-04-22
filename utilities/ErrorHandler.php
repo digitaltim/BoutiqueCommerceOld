@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace It_All\BoutiqueCommerce\Utilities;
 
 use It_All\BoutiqueCommerce\Services\Mailer;
@@ -109,7 +111,7 @@ class ErrorHandler
 
     }
 
-    private function generateMessageBodyCommon(int $errno, string $errstr, string $errfile = null, string $errline = null): string
+    private function generateMessageBodyCommon(int $errno, string $errstr, string $errfile = null, int $errline = null): string
     {
         $message = $this->getErrorType($errno).": ";
         $message .= "$errstr\n";
@@ -139,7 +141,6 @@ class ErrorHandler
             $traceString .= "#$k ";
             $traceString .= arrayWalkToStringRecursive($v);
             $traceString .= "\n";
-            $ct++;
         }
 
         $message .= "\nStack Trace:\n".$traceString;

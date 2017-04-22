@@ -1,5 +1,6 @@
 <?php
-//declare(strict_types=1);
+declare(strict_types=1);
+
 /** note: this can also be called for cli scripts.*/
 define('APP_ROOT', __DIR__ . '/' );
 
@@ -14,8 +15,7 @@ $config = array_merge(require APP_ROOT . 'config/config.php', require APP_ROOT .
 // instantiate mailer
 $mailer = new It_All\BoutiqueCommerce\Services\Mailer($config['storeEmails']['defaultFromEmail'], $config['storeEmails']['defaultFromName'], $config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
 
-//__construct(string $logPath, bool $liveServer, bool $echoDev, bool $emailDev, Mailer $m, string $emailTo)
-
+// error handling
 $errorHandler = new \It_All\BoutiqueCommerce\Utilities\ErrorHandler(
     $config['storage']['logs']['pathPhpErrors'],
     $config['isLive'],
@@ -54,12 +54,11 @@ if (!Utilities\isRunningFromCommandLine()) {
 
     /** SESSION */
     $sessionTTLseconds = $config['sessionTtlHours'] * 60 * 60;
-    ini_set('session.gc_maxlifetime', $sessionTTLseconds);
-    ini_set('session.cookie_lifetime', $sessionTTLseconds);
+    ini_set('session.gc_maxlifetime', (string) $sessionTTLseconds);
+    ini_set('session.cookie_lifetime', (string) $sessionTTLseconds);
     if (!Utilities\sessionValidId(session_id())) {
         session_regenerate_id(true);
     }
     session_start();
     $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
-
 }
