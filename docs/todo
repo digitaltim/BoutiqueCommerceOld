@@ -1,1 +1,2 @@
-investigate strict mode
+phpdoc for all fns
+decide on establishing consistent coding behavior for fn definition and calls (arguments on one line or multiple?)
