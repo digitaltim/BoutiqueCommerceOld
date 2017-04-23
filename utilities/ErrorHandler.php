@@ -111,7 +111,7 @@ class ErrorHandler
 
     }
 
-    private function generateMessageBodyCommon(int $errno, string $errstr, string $errfile = null, int $errline = null): string
+    private function generateMessageBodyCommon(int $errno, string $errstr, string $errfile = null, string $errline = null): string
     {
         $message = $this->getErrorType($errno).": ";
         $message .= "$errstr\n";
