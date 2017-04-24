@@ -1,5 +1,4 @@
 <?php
-
 require __DIR__ . '/../init.php';
 
 // Instantiate Slim PHP

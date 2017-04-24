@@ -237,7 +237,7 @@ function arrayWalkToStringRecursive(array $arr, int $level = 0): string
                 $out .= 'object type: '.get_class($v);
             } elseif (is_array($v)) {
                 $newLevel = $level + 1;
-                if ($newLevel > 4) {
+                if ($newLevel > 10) {
                     $out .= ' array, too deep, quitting';
                 } else {
                     $out .= arrayWalkToStringRecursive($v, $newLevel);

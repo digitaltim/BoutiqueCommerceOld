@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Controllers;
 
+use It_All\ServicePg\QueryBuilder;
+
 class AdminController extends Controller
 {
     public function index($request, $response)
     {
-        $q = $this->db->queryBuilderFactory("SELECT * FROM admins");
+        $q = new QueryBuilder("SELECT * FROM admins");
         $rs = $q->execute();
         $rows = [];
         while ($row = pg_fetch_assoc($rs)) {

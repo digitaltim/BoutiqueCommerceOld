@@ -29,7 +29,7 @@ Class Postgres
         $connectionString .= " connect_timeout=5";
         
         if (!$this->pgConn = pg_connect($connectionString)) {
-            throw new \Exception('db connection failure');
+            throw new \Exception('postgres connection failure');
         }
     }
 
@@ -37,11 +37,23 @@ Class Postgres
         return $this->pgConn;
     }
 
-    // todo I don't know why ?string isn't working (php 7.1)
-    public function queryBuilderFactory(string $sql = null)
-    {
-        return ($sql === null) ? new QueryBuilder($this->pgConn) : new QueryBuilder($this->pgConn, $sql);
-    }
+//    public function queryBuilderFactory()
+//    {
+//        $args = func_get_args();
+//        var_dump($args);
+//        if ($args > 0) {
+//            $sql = $args[0];
+//            array_shift($args); // drop the first one
+//        } else {
+//            $sql = null;
+//        }
+//        return new QueryBuilder($sql, $args);
+//        // note func_num_args returns 0 if just 1 argument of null passed in
+//        if (count($args) > 0) {
+//            call_user_func_array(array($this, 'add'), $args);
+//        }
+////        return ($sql === null) ? new QueryBuilder() : new QueryBuilder($sql);
+//    }
 
     public function insertBuilderFactory(string $dbTable)
     {
@@ -55,7 +67,7 @@ Class Postgres
 
     public function deleteByPrimaryKey($dbTable, $pkValue, $pkName = 'id')
     {
-        $q = new QueryBuilder("DELETE FROM $dbTable WHERE $pkName=$1", $pkValue);
+        $q = $this->queryBuilderFactory("DELETE FROM $dbTable WHERE $pkName=$1", $pkValue);
         $res = $q->execute();
         return (pg_affected_rows($res) == 0) ? false : true;
     }
@@ -73,7 +85,10 @@ Class Postgres
             $query .= (substr($sk, strlen($sk) - 1) === '%') ? " NOT LIKE '$sk'" : " != '$sk'";
         }
         $query .= " ORDER BY table_name";
-        $q = new QueryBuilder($query, $schema);
+        // todo check out schema arg
+//        $q = new QueryBuilder($query, $schema);
+        $q = $this->queryBuilderFactory($query, $schema);
+
         return $q->execute();
     }
 
@@ -85,8 +100,8 @@ Class Postgres
      */
     public function doesTableExist($tableName, $schema = 'public')
     {
-        $q = new QueryBuilder("SELECT table_name FROM information_schema.tables WHERE table_name = $1 AND table_type =
-    'BASE TABLE' AND table_schema = $2", $tableName, $schema);
+        $q = $this->queryBuilderFactory("SELECT table_name FROM information_schema.tables WHERE table_name = $1 AND table_type = 'BASE TABLE' AND table_schema = $2", $tableName, $schema);
+
         if (pg_num_rows($q->execute()) == 0) {
             return false;
         }
@@ -97,10 +112,10 @@ Class Postgres
      * @param string $tableName
      * @return recordset
      */
-    public function getTableMetaData($tableName)
+    public function getTableMetaData(string $tableName)
     {
-        $q = new QueryBuilder("SELECT column_name, data_type, column_default, is_nullable, character_maximum_length, numeric_precision, udt_name
-FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = $1", $tableName);
+        $q = new QueryBuilder("SELECT column_name, data_type, column_default, is_nullable, character_maximum_length, numeric_precision, udt_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = $1", $tableName);
+
         return $q->execute();
         // note: NOT enough info given by $dbTableFields = pg_meta_data($this->pgConn, $tableName);
     }

@@ -68,3 +68,7 @@ unset($container['phpErrorHandler']);
 $container['HomeController'] = function ($c) {
     return new It_All\BoutiqueCommerce\Controllers\HomeController($c);
 };
+
+$container['CrudController'] = function ($c) {
+    return new It_All\BoutiqueCommerce\Controllers\CrudController($c);
+};

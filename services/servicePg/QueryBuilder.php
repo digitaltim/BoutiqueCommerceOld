@@ -5,17 +5,14 @@ namespace It_All\ServicePg;
 
 class QueryBuilder
 {
-    private $pgConn;
     public $sql;
     public $args = array();
 
     /**
      * QueryBuilder constructor. like add, for convenience
      */
-    function __construct($pgConn) {
-        $this->pgConn = $pgConn;
+    function __construct() {
         $args = func_get_args();
-        array_shift($args); // drop the first one (the connection)
         // note func_num_args returns 0 if just 1 argument of null passed in
         if (count($args) > 0) {
             call_user_func_array(array($this, 'add'), $args);
@@ -69,10 +66,10 @@ class QueryBuilder
      */
     public function execute() {
         //echo '<pre>'.$this->sql;print_r($this->args);echo '</pre>';
-        $res = pg_query_params($this->pgConn, $this->sql, $this->args);
+        $res = pg_query_params($this->sql, $this->args);
         if (!$res) {
-            $this->triggerError();
-            return false;
+            $msg = $this->sql . \It_All\BoutiqueCommerce\Utilities\arrayWalkToStringRecursive($this->args);
+            throw new \Exception('Query Execution Failure: '.$msg);
         }
         return $res;
     }
@@ -81,8 +78,8 @@ class QueryBuilder
      * @param null $newPgConn
      * @return mixed will return the first RETURNING colName
      */
-    public function executeReturning($newPgConn = null) {
-        $res = $this->execute($newPgConn);
+    public function executeReturning() {
+        $res = $this->execute();
         return pg_fetch_row($res)[0];
     }
 
