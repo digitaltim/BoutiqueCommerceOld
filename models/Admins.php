@@ -8,9 +8,9 @@ class Admins extends DbTable
     function __construct(string $tableName, Postgres $db)
     {
         parent::__construct($tableName, $db);
-        $this->allowInsert = false;
-        $this->allowUpdate = false;
-        $this->allowDelete = false;
+//        $this->allowInsert = false;
+//        $this->allowUpdate = false;
+//        $this->allowDelete = false;
     }
 
     static public function getAdminDataForUsername(string $username)

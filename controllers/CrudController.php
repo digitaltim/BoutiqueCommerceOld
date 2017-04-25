@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Controllers;
 
-use It_All\BoutiqueCommerce\Models\Admins;
-use It_All\BoutiqueCommerce\Models\DbTable;
+use It_All\BoutiqueCommerce\UI\UiRsDbTable;
 use Slim\Container;
 
 class CrudController extends Controller
@@ -17,20 +16,30 @@ class CrudController extends Controller
         parent::__construct($container);
     }
 
+    private function setModel()
+    {
+        $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
+        $this->model = (class_exists($class)) ? new $class($this->tableName, $this->db) : new \It_All\BoutiqueCommerce\Models\DbTable($this->tableName, $this->db);
+
+    }
+
     public function show($request, $response, $args)
     {
-        $this->model = new DbTable('admins', $this->db);
         $this->tableName = $args['table'];
-        echo 'show '.$this->tableName;
+//        $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
+//        $this->model = new $class($this->tableName, $this->db);
+        $this->setModel();
+        $UiRsDbTable = new UiRsDbTable($this->model);
+//        echo 'show '.$this->tableName;
         if ($res = $this->model->select('*')) {
-//            $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
-            while ($row = pg_fetch_assoc($res)) {
-                echo $row['name'];
-            }
+            $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
         }
         else {
-            echo "Query Error";
+            $results = "Query Error";
         }
+        //echo $results;
+        return $this->view->render($response, 'CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
+
 
     }
 

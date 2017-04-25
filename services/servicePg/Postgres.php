@@ -37,41 +37,6 @@ Class Postgres
         return $this->pgConn;
     }
 
-//    public function queryBuilderFactory()
-//    {
-//        $args = func_get_args();
-//        var_dump($args);
-//        if ($args > 0) {
-//            $sql = $args[0];
-//            array_shift($args); // drop the first one
-//        } else {
-//            $sql = null;
-//        }
-//        return new QueryBuilder($sql, $args);
-//        // note func_num_args returns 0 if just 1 argument of null passed in
-//        if (count($args) > 0) {
-//            call_user_func_array(array($this, 'add'), $args);
-//        }
-////        return ($sql === null) ? new QueryBuilder() : new QueryBuilder($sql);
-//    }
-
-    public function insertBuilderFactory(string $dbTable)
-    {
-        return new InsertBuilder($this->pgConn, $dbTable);
-    }
-
-    public function updateBuilderFactory(string $dbTable, string $updateOnColumnName, string $updateOnColumnValue)
-    {
-        return new UpdateBuilder($this->pgConn, $dbTable, $updateOnColumnName, $updateOnColumnValue);
-    }
-
-    public function deleteByPrimaryKey($dbTable, $pkValue, $pkName = 'id')
-    {
-        $q = $this->queryBuilderFactory("DELETE FROM $dbTable WHERE $pkName=$1", $pkValue);
-        $res = $q->execute();
-        return (pg_affected_rows($res) == 0) ? false : true;
-    }
-
     /**
      * select all tables in a schema
      * @param string $schema
