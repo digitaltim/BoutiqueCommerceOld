@@ -7,17 +7,19 @@ use Slim\Container;
 
 abstract class Controller
 {
-    protected $dic; // dependency injection container
-    protected $db;
-    protected $view;
-    protected $mailer;
+    protected $container; // dependency injection container
 
-    public function __construct(Container $dic)
+    public function __construct(Container $container)
     {
-        $this->dic = $dic;
-        $this->db = $dic['db'];
-        $this->view = $dic['view'];
-        $this->mailer = $dic['mailer'];
-        //$this->mailer->send('we are in the controller', 'wahoo', ['greg@it-all.com']);
+        $this->container = $container;
+        // Instantiate services/dependencies
+        $container['db'];
+        $container['view'];
+        $container['mailer'];
+    }
+
+    public function __get($name)
+    {
+        return $this->container->{$name};
     }
 }

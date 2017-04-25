@@ -421,6 +421,7 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'Interop\\Container\\Exception\\ContainerException' => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container/Exception/ContainerException.php',
         'Interop\\Container\\Exception\\NotFoundException' => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container/Exception/NotFoundException.php',
         'It_All\\BoutiqueCommerce\\Controllers\\AdminController' => __DIR__ . '/../..' . '/controllers/AdminController.php',
+        'It_All\\BoutiqueCommerce\\Controllers\\AuthController' => __DIR__ . '/../..' . '/controllers/AuthController.php',
         'It_All\\BoutiqueCommerce\\Controllers\\Controller' => __DIR__ . '/../..' . '/controllers/Controller.php',
         'It_All\\BoutiqueCommerce\\Controllers\\CrudController' => __DIR__ . '/../..' . '/controllers/CrudController.php',
         'It_All\\BoutiqueCommerce\\Models\\Admin' => __DIR__ . '/../..' . '/models/Admin.php',

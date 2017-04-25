@@ -1,0 +1,12 @@
+{%  extends 'partials/layout.twig' %}
+
+{%  block content %}
+    <form action="{{ path_for('auth.signup') }}" method="post">
+    	<label for="name">Name</label>
+    	<input type="name" name="name" id="name" placeholder="username">
+	   	<label for="password">Password</label>
+    	<input type="password" name="password" id="password" placeholder="password">
+    	<button type="submit">Sign Up</button>
+
+    </form>
+{%  endblock %}

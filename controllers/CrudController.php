@@ -12,9 +12,9 @@ class CrudController extends Controller
     private $tableName;
     private $model;
 
-    public function __construct(Container $dic)
+    public function __construct(Container $container)
     {
-        parent::__construct($dic);
+        parent::__construct($container);
     }
 
     public function show($request, $response, $args)
