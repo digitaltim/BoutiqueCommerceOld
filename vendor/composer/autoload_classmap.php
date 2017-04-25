@@ -275,6 +275,8 @@ return array(
     'It_All\\BoutiqueCommerce\\Models\\DbColumn' => $baseDir . '/models/DbColumn.php',
     'It_All\\BoutiqueCommerce\\Models\\DbTable' => $baseDir . '/models/DbTable.php',
     'It_All\\BoutiqueCommerce\\Services\\Mailer' => $baseDir . '/services/Mailer.php',
+    'It_All\\BoutiqueCommerce\\UI\\UiRsDbTable' => $baseDir . '/ui/UiRsDbTable.php',
+    'It_All\\BoutiqueCommerce\\UI\\UiRsTable' => $baseDir . '/ui/UiRsTable.php',
     'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => $baseDir . '/utilities/ErrorHandler.php',
     'It_All\\ServicePg\\InsertBuilder' => $baseDir . '/services/servicePg/InsertBuilder.php',
     'It_All\\ServicePg\\InsertUpdateBuilder' => $baseDir . '/services/servicePg/InsertUpdateBuilder.php',

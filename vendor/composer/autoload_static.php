@@ -428,6 +428,8 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'It_All\\BoutiqueCommerce\\Models\\DbColumn' => __DIR__ . '/../..' . '/models/DbColumn.php',
         'It_All\\BoutiqueCommerce\\Models\\DbTable' => __DIR__ . '/../..' . '/models/DbTable.php',
         'It_All\\BoutiqueCommerce\\Services\\Mailer' => __DIR__ . '/../..' . '/services/Mailer.php',
+        'It_All\\BoutiqueCommerce\\UI\\UiRsDbTable' => __DIR__ . '/../..' . '/ui/UiRsDbTable.php',
+        'It_All\\BoutiqueCommerce\\UI\\UiRsTable' => __DIR__ . '/../..' . '/ui/UiRsTable.php',
         'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => __DIR__ . '/../..' . '/utilities/ErrorHandler.php',
         'It_All\\ServicePg\\InsertBuilder' => __DIR__ . '/../..' . '/services/servicePg/InsertBuilder.php',
         'It_All\\ServicePg\\InsertUpdateBuilder' => __DIR__ . '/../..' . '/services/servicePg/InsertUpdateBuilder.php',

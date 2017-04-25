@@ -445,7 +445,7 @@ class DbTable {
      */
     public function select($columns = "*", $whereArr = [], $orderByOverride = null, $limitOverride = null)
     {
-        $q = new QueryBuilder("SELECT * FROM admins");
+        $q = new QueryBuilder("SELECT * FROM $this->tableName");
         if (count($whereArr) > 0) {
             $q->add(" WHERE ");
             $i = 0;

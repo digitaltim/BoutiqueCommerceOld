@@ -1,5 +1,7 @@
 .gitignore
 .gitignore~
-.idea/
 config/env.php
+.idea/
 storage/
+node_modules/
+prebuild/
