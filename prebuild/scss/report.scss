@@ -1,0 +1,40 @@
+@import 'foundation';
+@import 'header';
+@import 'nav';
+@import 'body-main';
+@import 'forms';
+@import 'tables';
+@import 'scrollingTable';
+main {
+  display: block;
+  overflow-x: auto;
+}
+.backendReportTable {
+  border: 0em solid black;
+  padding: .3em;
+  margin: .3em;
+}
+.innerBackendReportTable {
+  margin-left: 4em;
+  border-bottom: .1em dashed #444444;
+  font-size: 92%;
+  margin-bottom: .6em;
+}
+.ffLabel {
+  display: inline;
+  vertical-align: bottom;
+}
+.ffError {
+  display: inline;
+  padding-right: .2em;
+}
+input, label, textarea, select {
+  display: inline;
+  vertical-align: middle;
+}
+input, textarea, select {
+  margin-right: .4em;
+}
+form {
+  //border: 1px solid red;
+}

@@ -1,0 +1,26 @@
+@import 'foundation';
+@import 'body-main';
+@import 'nav';
+@import 'header';
+#adminPageHeading {
+  display: inline;
+  text-transform: uppercase;
+  margin-left: 1em;
+}
+.adminPageHeadingLink {
+  margin-left: 1em;
+  display: inline;
+}
+#results {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-start;
+}
+.card {
+  flex: 0 1 auto;
+  //width: 5em;
+  margin: .2em;
+  padding: 1em;
+  border: .1em solid black;
+}

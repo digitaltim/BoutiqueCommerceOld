@@ -5,13 +5,11 @@ namespace It_All\ServicePg;
 
 class InsertBuilder extends InsertUpdateBuilder
 {
+    /** @var string */
     public $columns;
-    public $values;
 
-    function __construct($pgConn, string $dbTable)
-    {
-        parent::__construct($pgConn, $dbTable);
-    }
+    /** @var string */
+    public $values;
 
     /**
      * adds column to insert query

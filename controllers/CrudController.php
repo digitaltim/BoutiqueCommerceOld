@@ -23,23 +23,33 @@ class CrudController extends Controller
 
     }
 
-    public function show($request, $response, $args)
+    public function index($request, $response, $args)
     {
         $this->tableName = $args['table'];
-//        $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
-//        $this->model = new $class($this->tableName, $this->db);
         $this->setModel();
         $UiRsDbTable = new UiRsDbTable($this->model);
-//        echo 'show '.$this->tableName;
         if ($res = $this->model->select('*')) {
             $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
         }
         else {
             $results = "Query Error";
         }
-        //echo $results;
         return $this->view->render($response, 'CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
 
+    }
+
+    public function show($request, $response, $args)
+    {
+        $this->tableName = $args['table'];
+        $this->setModel();
+        $UiRsDbTable = new UiRsDbTable($this->model);
+        if ($res = $this->model->select('*', ['id' => $args['id']])) {
+            $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
+        }
+        else {
+            $results = "Query Error";
+        }
+        return $this->view->render($response, 'CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
 
     }
 

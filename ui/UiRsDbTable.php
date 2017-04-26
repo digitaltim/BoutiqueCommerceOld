@@ -34,7 +34,7 @@ class UiRsDbTable extends UiRsTable
         $html = "<tr>";
         foreach ($row as $i => $v) {
             $cellValue = $$cellValuePointer;
-            // add update link for id values column cells
+            // add update link for primary key column values
             if ($this->isUpdateCell($type, $i)) {
                 $cellValue = "<a href='update.php?t=$tableName&amp;i=" . $row['id'] . "' title='edit'>$cellValue</a>";
             }

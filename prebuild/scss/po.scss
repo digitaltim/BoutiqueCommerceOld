@@ -1,0 +1,48 @@
+@import 'foundation';
+@import 'header';
+@import 'nav';
+@import 'body-main';
+@import 'forms';
+@import 'tables';
+main {
+  display: block;
+  overflow-x: auto;
+}
+#itemForm > select, #itemForm > input {
+  display: inline;
+  padding: .3em;
+  margin: .6em;
+}
+.errorField {
+  padding: .3em;
+  margin: .6em;
+  border: .3em solid red;
+}
+#orderForm {
+  //border: .1em solid gray;
+  width: 70%;
+  padding: .6em;
+  margin: 1em;
+}
+#itemsTable {
+  border: .1em solid gray;
+  width: 80%;
+  padding: .2em;
+  margin: 1em;
+}
+#itemsTable > thead {
+  text-align: left;
+}
+#itemsTable input {
+  display: inline;
+  margin: 0;
+}
+tfoot {
+  padding-top: 1em;
+  height: 3em;
+  border-top: 1px solid black;
+  font-weight: bold;
+}
+input[type="number"] {
+  text-align: right;
+}

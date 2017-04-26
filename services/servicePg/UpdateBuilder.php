@@ -8,17 +8,17 @@ class UpdateBuilder extends InsertUpdateBuilder {
     public $updateOnColumnValue;
     public $setColumnsValues;
 
-    function __construct($pgConn, string $dbTable, string $updateOnColumnName, string $updateOnColumnValue)
+    function __construct(string $dbTable, string $updateOnColumnName, string $updateOnColumnValue)
     {
         $this->updateOnColumnName = $updateOnColumnName;
         $this->updateOnColumnValue = $updateOnColumnValue;
-        parent::__construct($pgConn, $dbTable);
+        parent::__construct($dbTable);
     }
 
     /**
      * adds column to update query
      * @param string $name
-     * @parm $value
+     * @param $value
      */
     public function addColumn(string $name, $value)
     {

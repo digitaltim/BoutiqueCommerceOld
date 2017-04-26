@@ -1,0 +1,39 @@
+header {
+  flex: 1 0 content;
+  //border: 1px solid green;
+  overflow-x: hidden;
+}
+#topLineContainer {
+  flex: 1 1 100%;
+  padding: .3em .4em .3em;
+  display: flex;
+  justify-content: flex-start;
+  background-color: black;
+  margin-bottom: .7em;
+}
+#topLineContainer > div {
+  flex: 0 1 auto;
+  padding-right: 1em;
+}
+#topLineContainer > div:last-child {
+  text-align: left;
+  padding-right: 0;
+}
+#topLineContainer > div:first-child {
+  text-align: left;
+}
+.adminNoticeSuccess {
+  color: green;
+}
+.adminNoticeFailure {
+  color: red;
+}
+.adminNoticeCaution {
+  color: yellow;
+}
+.adminNoticeMuted {
+  color: grey;
+}
+.headerGreeting {
+  color: #6BE897;
+}

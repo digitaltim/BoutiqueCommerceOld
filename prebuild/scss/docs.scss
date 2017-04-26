@@ -1,0 +1,35 @@
+@import 'foundation';
+@import 'header';
+@import 'nav';
+@import 'body-main';
+
+.dirContent {
+  display: none;
+}
+.dirContainer {
+  width: 100%;
+}
+.fileContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+$nestLevels: 8;
+@for $i from 0 through $nestLevels {
+  .fCL#{$i} {
+    margin: 0 #{$i}em;
+  }
+}
+.file {
+  flex: 1 1 auto;
+  border: .1em solid #6E9669;
+  padding: .2em;
+  margin: .3em;
+  //max-width: 15em;
+  width: 12em;
+  //max-height: 12em;
+  //overflow: auto;
+}
+

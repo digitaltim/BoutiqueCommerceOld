@@ -1,0 +1,91 @@
+$formLabelColor: #A7D45B;
+
+#ffFormError {
+  color: red;
+  margin-bottom: 2em;
+}
+input, textarea, select {
+  display: block;
+  background-color: #dcd4c2;
+  border: .1em solid #000000;
+  color: black;
+  font-size: 1em;
+  padding: .2em;
+  margin: .2em .1em .7em;
+}
+
+input[type="radio"] {
+  display: inline;
+}
+
+input[type="submit"] {
+  padding: .3em;
+  border: .2em solid #000000;
+  border-radius: .4em;
+}
+
+.ffGroupWrapper {
+
+}
+
+.ffFieldWrapper {
+
+}
+
+label, .ffFieldGroupHeader {
+  color: $formLabelColor;
+  font-size: 1em;
+  margin: 0 .3em 0 .6em;
+}
+
+.ffFieldLabelFine {
+  color: grey;
+  font-size: 75%;
+  margin-left: .4em;
+}
+
+.ffFieldDescriptor {
+  font-size: 75%;
+  color: darkgray;
+}
+
+.ffErrorMsg {
+  margin-left: .2em;
+  color: red;
+}
+
+.ffFieldError {
+  //background-color: red;
+  border: .2em solid red;
+}
+
+/*
+.ffError {
+  color: red;
+}
+#ffFormError {
+  color: red;
+}
+.ffFieldError {
+  border: .2em solid red;
+}
+#ffFormSuccess {
+  color: green;
+}
+.ffFormField {
+  padding-top: 1em;
+}
+.ffGroupWrapper {
+  padding-top: .4em;
+}
+.ffFormFieldGroup {
+  padding-top: 0em;
+}
+.ffFormFieldDescriptor {
+  padding-left: .3em;
+}
+#FFformDebug {
+  padding: 1em;
+  border: .1em solid black;
+}
+*/

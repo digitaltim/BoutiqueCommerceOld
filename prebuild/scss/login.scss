@@ -1,0 +1,25 @@
+@import 'foundation';
+@import 'header';
+@import 'body-main';
+@import 'forms';
+
+main {
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+#mainContainerSmall {
+  border: .1em dotted $formLabelColor;
+  padding: 3em;
+  flex: none;
+}
+
+#mainContainerSmall > h1 {
+  font-size: 2em;
+}
+
+#mainContainerSmall > h5 {
+  margin-bottom: 2.5em;
+  width: 18em;
+}
