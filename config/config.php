@@ -32,7 +32,7 @@ return [
         'fatalMessage' => 'Hamden, we have a problem.',
         'emailTo' => 'greg@it-all.com', // todo use generic email (or array) @ $domainName and test .env override
         'echoDev' => true,
-        'emailDev' => true
+        'emailDev' => false
     ]
 
 ];

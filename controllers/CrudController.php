@@ -11,9 +11,9 @@ class CrudController extends Controller
     private $tableName;
     private $model;
 
-    public function __construct(Container $dic)
+    public function __construct(Container $container)
     {
-        parent::__construct($dic);
+        parent::__construct($container);
     }
 
     private function setModel()
@@ -51,10 +51,5 @@ class CrudController extends Controller
         }
         return $this->view->render($response, 'CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
 
-    }
-
-    public function __get($name)
-    {
-        return $this->{$name};
     }
 }

@@ -268,6 +268,7 @@ return array(
     'Interop\\Container\\Exception\\ContainerException' => $vendorDir . '/container-interop/container-interop/src/Interop/Container/Exception/ContainerException.php',
     'Interop\\Container\\Exception\\NotFoundException' => $vendorDir . '/container-interop/container-interop/src/Interop/Container/Exception/NotFoundException.php',
     'It_All\\BoutiqueCommerce\\Controllers\\AdminController' => $baseDir . '/controllers/AdminController.php',
+    'It_All\\BoutiqueCommerce\\Controllers\\AuthController' => $baseDir . '/controllers/AuthController.php',
     'It_All\\BoutiqueCommerce\\Controllers\\Controller' => $baseDir . '/controllers/Controller.php',
     'It_All\\BoutiqueCommerce\\Controllers\\CrudController' => $baseDir . '/controllers/CrudController.php',
     'It_All\\BoutiqueCommerce\\Models\\Admin' => $baseDir . '/models/Admin.php',

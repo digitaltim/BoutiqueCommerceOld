@@ -8,8 +8,8 @@ $container = $slim->getContainer();
 // -----------------------------------------------------------------------------
 
 // Database
-$container['db'] = function($c) {
-    $settings = $c->get('settings');
+$container['db'] = function($container) {
+    $settings = $container->get('settings');
     
     $db = new It_All\ServicePg\Postgres(
         $settings['db']['database'],
@@ -22,12 +22,6 @@ $container['db'] = function($c) {
     return $db;
 };
 
-//// PHPRenderer
-//$container['view'] = function ($container) {
-//    $settings = $container->get('settings');
-//    return new \Slim\Views\PhpRenderer($settings['view']['template_path']);
-//};
-
 // Twig
 $container['view'] = function ($container) {
     $settings = $container->get('settings');
@@ -38,7 +32,7 @@ $container['view'] = function ($container) {
 
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
-    $view->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
+    $view->addExtension(new Slim\Views\TwigExtension($container->router, $basePath));
 
     return $view;
 };
@@ -65,10 +59,19 @@ unset($container['phpErrorHandler']);
 // -----------------------------------------------------------------------------
 // Controller factories / registration
 // -----------------------------------------------------------------------------
-$container['HomeController'] = function ($c) {
-    return new It_All\BoutiqueCommerce\Controllers\HomeController($c);
+$container['HomeController'] = function ($container) {
+    return new It_All\BoutiqueCommerce\Controllers\HomeController($container);
 };
 
-$container['CrudController'] = function ($c) {
-    return new It_All\BoutiqueCommerce\Controllers\CrudController($c);
+$container['AdminController'] = function ($container) {
+    return new It_All\BoutiqueCommerce\Controllers\AdminController($container);
+};
+
+$container['AuthController'] = function ($container) {
+    return new It_All\BoutiqueCommerce\Controllers\AuthController($container);
+};
+
+
+$container['CrudController'] = function ($container) {
+    return new It_All\BoutiqueCommerce\Controllers\CrudController($container);
 };
