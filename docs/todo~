@@ -1,0 +1,4 @@
+-Define directory structure
+-Namespace to directory path conventions i.e. "It_All\BoutiqueCommerce\"
+-declare(strict_types=1); in all files?
+-using typehints on params and return params

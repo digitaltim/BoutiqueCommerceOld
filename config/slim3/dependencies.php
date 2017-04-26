@@ -22,6 +22,11 @@ $container['db'] = function($container) {
     return $db;
 };
 
+// Authentication
+$container['auth'] = function($container) {
+    return new It_All\BoutiqueCommerce\Auth\Auth;
+};
+
 // Twig
 $container['view'] = function ($container) {
     $settings = $container->get('settings');
@@ -33,6 +38,12 @@ $container['view'] = function ($container) {
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
     $view->addExtension(new Slim\Views\TwigExtension($container->router, $basePath));
+    
+    // make auth class available inside templates
+    $view->getEnvironment()->addGlobal('auth', [
+        'check' => $container->auth->check(),
+        'user' => $container->auth->user()
+    ]);
 
     return $view;
 };

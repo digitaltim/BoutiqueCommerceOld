@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Installation</title>
+</head>
+<body>
+	<p>SSL Apache2 Config (Setup for BTQCM)
+	-Modify BoutiqueCommerce.conf Apache configuration file and store in /etc/apache2/sites-enabled/
+	-Copy key and cert to /etc/apache2/ssl
+	-Run: 
+	sudo a2enmod ssl
+	sudo a2enmod rewrite
+	service apache2 restart
+
+	Gulp (Setup for BTQCM)
+	-Installed Node & npm using apt-get
+	-How To Get Started with Gulp.js on your VPS
+	-Run:
+	gulp watch
+	Fix errors:
+	-created sym link to fix Ubuntu package name issue
+	sudo ln -s /usr/bin/nodejs /usr/bin/node
+	-fixed errors from prompt
+
+	NOTE:
+	Should the latest packages be installed versus using the old ones in the Ubuntu repos.
+
+	NOTE:
+	Directories must be in place
+	</p>
+	<p>Use Chrome 57 and above for CSS Grid</p>
+</body>
+</html>
