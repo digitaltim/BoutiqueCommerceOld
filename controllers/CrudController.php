@@ -42,9 +42,4 @@ class CrudController extends Controller
 
 
     }
-
-    public function __get($name)
-    {
-        return $this->{$name};
-    }
 }
