@@ -13,7 +13,7 @@
 	    	<li><a href="{{ path_for('home')}}">BoutiqueCommerce</a></li>
 	        <li><a href="{{ path_for('home')}}">Home</a></li>
 	{% if auth.check %}
-			<li><a href="#">Logout ({{ auth.user.username }})</a></li>
+			<li><a href="{{ path_for('auth.signout')}}">Logout ({{ auth.user.username }})</a></li>
 	{% else %}
 			<li><a href="{{ path_for('auth.signin')}}">Sign In</a></li>
 			<li><a href="{{ path_for('auth.signup')}}">Sign Up</a></li>
@@ -21,6 +21,7 @@
 	    </nav>
 	</header>
 	<section class="main">
+		<h2>Content</h2>
 
         {%  block content %}{%  endblock %}
 
@@ -33,7 +34,7 @@
 
     <footer>
         <h3>Footer</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        <p>Copyright 2017. BoutiqueCommerce</p>
     </footer>
 	</div>
 </body>
