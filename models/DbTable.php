@@ -1,5 +1,8 @@
 <?php
+declare(strict_types=1);
+
 namespace It_All\BoutiqueCommerce\Models;
+
 use It_All\BoutiqueCommerce\Utilities\Database;
 
 /** note on null and '':

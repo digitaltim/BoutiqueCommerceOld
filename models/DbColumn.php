@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace It_All\BoutiqueCommerce\Models;
 
 class DbColumn
@@ -51,22 +53,22 @@ class DbColumn
     {
         if (!$this->isNullable && ($this->getDefaultValue() === false || strlen($this->getDefaultValue()) > 0) ) {
             // otherwise blank is allowed
-            $this->addValidation('required', 'required');
+            $this->addValidation('required');
         }
         switch ($this->type) {
             case 'numeric':
-                $this->addValidation('numeric', true);
+                $this->addValidation('numeric');
                 break;
             case 'smallint':
             case 'bigint':
             case 'integer':
-                $this->addValidation('integer', true);
+                $this->addValidation('integer');
                 break;
             case 'date':
-                $this->addValidation('date', true);
+                $this->addValidation('date');
                 break;
             case 'timestamp without time zone':
-                $this->addValidation('timestamp', true);
+                $this->addValidation('timestamp');
                 break;
             case 'boolean':
             case 'character':
@@ -81,7 +83,7 @@ class DbColumn
 
     public function getDefaultValue()
     {
-        if (strlen($this->defaultValue) == 0) {
+        if ($this->defaultValue === null) {
             return false;
         }
         switch ($this->type) {
@@ -160,7 +162,7 @@ class DbColumn
         return true; // no error
     }
 
-    public function addValidation(string $validationType, string $validationValue)
+    public function addValidation(string $validationType, string $validationValue = null)
     {
         $this->validation[$validationType] = $validationValue;
     }

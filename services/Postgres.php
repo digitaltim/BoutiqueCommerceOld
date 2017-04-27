@@ -20,7 +20,7 @@ Class Postgres
         string $user, 
         string $password = NULL, 
         string $host = NULL,
-        string $port = NULL
+        int $port = NULL
     )
     {
         $connectionString = "dbname=$dbname user=$user";
