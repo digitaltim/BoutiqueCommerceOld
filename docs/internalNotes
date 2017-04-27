@@ -1,0 +1,4 @@
+To create the database schema:
+
+from BC top dir:
+pg_dump -f postgresDb.sql -n public -s {dbname} -U {dbuser}
