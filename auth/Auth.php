@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Auth;
 
-use It_All\ServicePg\QueryBuilder;
+use It_All\BoutiqueCommerce\Utilities\Database\QueryBuilder;
 
 
 /**

@@ -45,68 +45,60 @@ class UiRsTable
         $this->outputColumns = $outputColumns;
     }
 
-    private function tableRow($row, $type = 'body')
+    protected function bodyCellLinkedContent(string $cellIndex, string $cellValue): string
+    {
+        $link = $this->outputColumns[$cellIndex]['link'];
+
+        if ($link == 'VALUE') {
+            $link = $_SERVER['REQUEST_URI'].'/'.$cellValue;
+        }
+
+        if (isset($this->outputColumns[$cellIndex]['linkQsVar'])) {
+            $link .= '?'.$this->outputColumns[$cellIndex]['linkQsVar'] . '=' . $row[$this->outputColumns[$cellIndex]['linkQsVal']];
+        }
+
+        $cellContent = "<a href='$link'";
+
+        if (isset($this->outputColumns[$cellIndex]['linkTarget'])) {
+            $cellContent .= " target='".$this->outputColumns[$cellIndex]['linkTarget']."'";
+        }
+
+        $cellContent .= ">$cellValue</a>";
+
+        return $cellContent;
+    }
+
+    protected function bodyCellContent(string $cellIndex, string $cellValue): string
+    {
+        $cellValue = (isset($this->outputColumns[$cellIndex]['shorten'])) ? substr($cellValue, 0, $this->outputColumns[$cellIndex]['shorten']) : $cellValue;
+
+        if (isset($this->outputColumns[$cellIndex]['link'])) {
+            return $this->bodyCellLinkedContent($cellIndex, $cellValue);
+        }
+
+        return $cellValue;
+    }
+
+    protected function bodyCell(string $cellIndex, string $cellValue): string
+    {
+        return "<td>".$this->bodyCellContent($cellIndex, $cellValue)."</td>";
+    }
+
+    protected function headerCell(string $cellIndex): string
+    {
+        $cellContent = (isset($this->outputColumns[$cellIndex]['label'])) ? $this->outputColumns[$cellIndex]['label'] : $cellIndex;
+        return "<th>".$cellContent."</th>";
+    }
+
+    protected function tableRow(array $row, bool $inHeader = false): string
     {
         $html = "<tr>";
-        foreach ($row as $i=>$v) {
-            if (count($this->outputColumns) == 0 || array_key_exists($i, $this->outputColumns)) {
-                if ($type == 'body') {
-                    $cellTag = 'td';
-                    $cellValue = (isset($this->outputColumns[$i]['shorten'])) ? substr($v, 0, $this->outputColumns[$i]['shorten']) : $v;
-
-                    if (isset($this->outputColumns[$i]['link'])) {
-                        $link = $this->outputColumns[$i]['link'];
-                        if (isset($this->outputColumns[$i]['linkQsVar'])) {
-                            $link .= '?'.$this->outputColumns[$i]['linkQsVar'] . '=' . $row[$this->outputColumns[$i]['linkQsVal']]; 
-                        }
-                        $cellContent = "<a href='$link'";
-                        if (isset($this->outputColumns[$i]['linkTarget'])) {
-                            $cellContent .= " target='".$this->outputColumns[$i]['linkTarget']."'";
-                        }
-                        $cellContent .= ">$cellValue</a>";
-                    } else {
-                        $cellContent = $cellValue;
-                    }
-                }
-                else {
-                    $cellTag = 'th';
-                    $cellContent = (isset($this->outputColumns[$i]['label'])) ? $this->outputColumns[$i]['label'] : $i;
-                }
-                $html .= "<$cellTag>".$cellContent."</$cellTag>";
-                }
+        foreach ($row as $cellIndex => $cellValue) {
+            if (count($this->outputColumns) == 0 || array_key_exists($cellIndex, $this->outputColumns)) {
+                $html .= ($inHeader) ? $this->headerCell($cellIndex) : $this->bodyCell($cellIndex, (string) $cellValue);
+            }
         }
         $html .= "</tr>";
-        return $html;
-    }
-
-    protected function tableHeaderRow($row)
-    {
-        return $this->tableRow($row, 'header');
-    }
-
-    protected function tableBodyRow($row)
-    {
-        return $this->tableRow($row);
-    }
-
-    public function makeTableOld(&$rs, $class = 'adminTable')
-    {
-        $html = "<table class='$class'>";
-        $ct = 0;
-        while ($row = pg_fetch_assoc($rs)) {
-            ++$ct;
-            if ($ct == 1) {
-                $html .= "<thead>";
-                $html .= $this->tableHeaderRow($row);
-                $html .= "</thead>";
-                $html .= "<tbody>";
-            }
-            $html .= $this->tableBodyRow($row);
-            if($ct == pg_num_rows($rs)) {
-                $html .= "</tbody>";
-            }
-        }
-        $html .= "</table>";
         return $html;
     }
 
@@ -124,11 +116,11 @@ EOT;
         while ($row = pg_fetch_assoc($rs)) {
             ++$ct;
             if ($ct == 1) {
-                $html .= $this->tableHeaderRow($row);
+                $html .= $this->tableRow($row, true);
                 $html .= "</thead>";
                 $html .= "<tbody>";
             }
-            $html .= $this->tableBodyRow($row);
+            $html .= $this->tableRow($row);
             if($ct == pg_num_rows($rs)) {
                 $html .= "</tbody>";
             }

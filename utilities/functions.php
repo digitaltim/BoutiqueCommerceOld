@@ -1,6 +1,8 @@
 <?php
 namespace It_All\BoutiqueCommerce\Utilities;
 
+// todo remove unused functions. remove functions based on old page controller model that don't apply to front controller.
+
 /**
  * @param $to mixed array of emails or string of email
  * @param $subject string

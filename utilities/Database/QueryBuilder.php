@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\ServicePg;
+namespace It_All\BoutiqueCommerce\Utilities\Database;
 
 class QueryBuilder
 {

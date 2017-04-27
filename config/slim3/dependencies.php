@@ -11,7 +11,7 @@ $container = $slim->getContainer();
 $container['db'] = function($container) {
     $settings = $container->get('settings');
     
-    $db = new It_All\ServicePg\Postgres(
+    $db = new \It_All\BoutiqueCommerce\Postgres(
         $settings['db']['database'],
         $settings['db']['username'],
         $settings['db']['password'],

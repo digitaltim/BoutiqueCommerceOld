@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Controllers;
 
 use Slim\Container;
-use It_All\ServicePg\QueryBuilder;
+use It_All\BoutiqueCommerce\Utilities\Database;
 
 class AuthController extends Controller
 {
@@ -15,7 +15,7 @@ class AuthController extends Controller
 
     function postSignIn($request, $response, $args)
     {
-        // $q = new QueryBuilder("SELECT id, username, password FROM admins WHERE username = $1 ", $request->getParam('username'));
+        // $q = new Database\QueryBuilder("SELECT id, username, password FROM admins WHERE username = $1 ", $request->getParam('username'));
         // $rs = $q->execute();
         // $row = pg_fetch_assoc($rs);
         

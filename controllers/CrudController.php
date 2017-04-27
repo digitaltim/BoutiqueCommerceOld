@@ -27,7 +27,7 @@ class CrudController extends Controller
     {
         $this->tableName = $args['table'];
         $this->setModel();
-        $UiRsDbTable = new UiRsDbTable($this->model);
+        $UiRsDbTable = new UiRsDBTable($this->model);
         if ($res = $this->model->select('*')) {
             $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
         }

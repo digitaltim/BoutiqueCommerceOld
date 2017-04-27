@@ -1,8 +1,6 @@
 <?php
 namespace It_All\BoutiqueCommerce\Models;
-use It_All\ServicePg\QueryBuilder;
-use It_All\ServicePg\InsertBuilder;
-use It_All\ServicePg\UpdateBuilder;
+use It_All\BoutiqueCommerce\Utilities\Database;
 
 /** note on null and '':
  * if the column is nullable and a blank value is being inserted (updated to), change it to null
@@ -64,7 +62,7 @@ class DbTable {
     /** @var array of general (table-level) validation error messages */
     private $validationErrors;
 
-    function __construct(string $tableName, \It_All\ServicePg\Postgres $db)
+    function __construct(string $tableName, \It_All\BoutiqueCommerce\Postgres $db)
     {
         $this->tableName = $tableName;
         $this->db = $db;
@@ -148,7 +146,7 @@ class DbTable {
 
     private function setPrimaryKeyColumn()
     {
-        $q = new QueryBuilder("SELECT column_name FROM INFORMATION_SCHEMA.constraint_column_usage WHERE table_name = $1 AND constraint_name = $2", $this->tableName, $this->tableName.'_pkey');
+        $q = new Database\QueryBuilder("SELECT column_name FROM INFORMATION_SCHEMA.constraint_column_usage WHERE table_name = $1 AND constraint_name = $2", $this->tableName, $this->tableName.'_pkey');
         $this->primaryKeyColumn = $q->getOne(); // false if doesn't exist
     }
 
@@ -312,7 +310,7 @@ class DbTable {
         if (!$this->getColumn($columnName)) {
             throw new \Exception("Invalid column name: $columnName for table: $this->tableName");
         }
-        $q = new QueryBuilder("SELECT * FROM $this->tableName WHERE $columnName = $1", $value);
+        $q = new Database\QueryBuilder("SELECT * FROM $this->tableName WHERE $columnName = $1", $value);
 
         $res = $q->execute();
         return pg_num_rows($res);
@@ -378,7 +376,7 @@ class DbTable {
         if (!$pkColumn = $this->getPrimaryKeyColumn()) {
             throw new \Exception("Primary Key Column does not exist for table ".$this->tableName);
         }
-        $q = new QueryBuilder("SELECT * FROM ".$this->tableName." WHERE $pkColumn = $1", $pkValue);
+        $q = new Database\QueryBuilder("SELECT * FROM ".$this->tableName." WHERE $pkColumn = $1", $pkValue);
 
         return $q->execute();
     }
@@ -392,7 +390,7 @@ class DbTable {
         if (!$this->allowInsert || !$this->validate($columnValues, array($this->primaryKeyColumn))) {
             return false;
         }
-        $ib = new InsertBuilder($this->tableName);
+        $ib = new Database\InsertBuilder($this->tableName);
         $this->addColumnsToBuilder($ib, $columnValues);
         return ($ib->execute()) ? true : false;
     }
@@ -407,7 +405,7 @@ class DbTable {
             $updErrMsg = (!$this->isUpdateAllowed()) ? "Update Not Allowed" : "Error";
             throw new \Exception($updErrMsg);
         }
-        $ub = new UpdateBuilder($this->tableName, $this->getPrimaryKeyColumn(), $pkValue);
+        $ub = new Database\UpdateBuilder($this->tableName, $this->getPrimaryKeyColumn(), $pkValue);
         $this->addColumnsToBuilder($ub, $columnValues, $currentRow);
         if (count($ub->args) == 0) {
             throw new \Exception("No changes made.");
@@ -425,7 +423,7 @@ class DbTable {
         if (!$pkField = $this->getPrimaryKeyColumn()) {
             throw new \Exception("No primary key for table $this->tableName");
         }
-        $q = new QueryBuilder("DELETE FROM $this->tableName WHERE $pkField = \$1", $pkValue);
+        $q = new Database\QueryBuilder("DELETE FROM $this->tableName WHERE $pkField = \$1", $pkValue);
 
         if ($res = $q->execute()) {
             if (pg_affected_rows($res) == 1) {
@@ -447,7 +445,7 @@ class DbTable {
      */
     public function select($columns = "*", $whereArr = [], $orderByOverride = null, $limitOverride = null)
     {
-        $q = new QueryBuilder("SELECT * FROM $this->tableName");
+        $q = new Database\QueryBuilder("SELECT * FROM $this->tableName");
         if (count($whereArr) > 0) {
             $q->add(" WHERE ");
             $i = 0;

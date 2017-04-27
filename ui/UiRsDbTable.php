@@ -1,6 +1,8 @@
 <?php
 namespace It_All\BoutiqueCommerce\UI;
 
+use It_All\BoutiqueCommerce\Models\DbTable;
+
 /**
  * Class UiRsDbTable
  * makes html table from recordset from 1 particular db table
@@ -9,19 +11,27 @@ class UiRsDbTable extends UiRsTable
 {
     private $dbTableModel;
 
-    function __construct($dbTableModel, $outputColumns = [])
+    function __construct(DbTable $dbTableModel, $outputColumns = [])
     {
         $this->dbTableModel = $dbTableModel;
+        // create output columns
+        foreach ($this->dbTableModel->getColumns() as $column) {
+            $columnName = $column->getName();
+            $outputColumns[$columnName] = [];
+            if ($this->isUpdateColumn($columnName)) {
+                $outputColumns[$columnName]['link'] = 'VALUE'; // todo fix
+            }
+        }
         parent::__construct($outputColumns);
     }
 
-    private function isUpdateCell($rowType, $cellColumn)
+    private function isUpdateColumn($columnName)
     {
-        return ($rowType == 'body' && $cellColumn == $this->dbTableModel->getPrimaryKeyColumn() && $this->dbTableModel->isUpdateAllowed());
+        return ($columnName == $this->dbTableModel->getPrimaryKeyColumn() && $this->dbTableModel->isUpdateAllowed());
     }
 
     // todo add $this->links functionality like parent tableRow if nec
-    private function tableRow(array $row, $type = 'body')
+    protected function tableRowREMOVE(array $row, $type = 'body')
     {
         $tableName = $this->dbTableModel->getTableName();
         if ($type == 'body') {
@@ -57,13 +67,4 @@ class UiRsDbTable extends UiRsTable
         return $html;
     }
 
-    protected function tableHeaderRow($row)
-    {
-        return $this->tableRow($row, 'header');
-    }
-
-    protected function tableBodyRow($row)
-    {
-        return $this->tableRow($row);
-    }
 }

@@ -1,16 +1,17 @@
 <?php
 namespace It_All\BoutiqueCommerce\Models;
 
-use It_All\ServicePg\Postgres;
+use It_All\BoutiqueCommerce\Postgres;
+use It_All\BoutiqueCommerce\Utilities\Database\QueryBuilder;
 
 class Admins extends DbTable
 {
     function __construct(string $tableName, Postgres $db)
     {
         parent::__construct($tableName, $db);
-//        $this->allowInsert = false;
-//        $this->allowUpdate = false;
-//        $this->allowDelete = false;
+        $this->allowInsert = false;
+        $this->allowUpdate = false;
+        $this->allowDelete = false;
     }
 
     static public function getAdminDataForUsername(string $username)
