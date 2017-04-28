@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Controllers;
 
 use Slim\Container;
+use Respect\Validation\Validator as v;
 use It_All\BoutiqueCommerce\Utilities\Database;
 
 class AuthController extends Controller
@@ -40,6 +41,16 @@ class AuthController extends Controller
 
     function postSignUp($request, $response, $args)
     {
+        $validation = $this->validator->validate($request, [
+            'username' => v::notEmpty()->alpha(),
+            'password' => v::noWhitespace()->notEmpty(),
+        ]);
+
+        if ($validation->failed()) {
+            return $response->withRedirect($this->router->pathFor('auth.signup'));
+        }
+
+
         $res = pg_insert($this->db->getPgConn(), 'admins', [
             'username' => $request->getParam('username'),
             'password' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),

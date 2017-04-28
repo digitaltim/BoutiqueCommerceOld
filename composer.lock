@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ae37efeac02c45430cbb16364ffa965d",
-    "content-hash": "e28c0a35098885151c35d6c2ae3b8b0c",
+    "content-hash": "ef9e819af3e5c77abaaf79a5a45caf64",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -36,7 +35,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
-            "time": "2017-02-14 19:40:03"
+            "time": "2017-02-14T19:40:03+00:00"
         },
         {
             "name": "eloquent/phony",
@@ -111,7 +110,7 @@
                 "stubbing",
                 "test"
             ],
-            "time": "2017-01-03 03:48:40"
+            "time": "2017-01-03T03:48:40+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -173,7 +172,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-02-28 22:50:30"
+            "time": "2017-02-28T22:50:30+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -224,7 +223,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-12-20 10:07:11"
+            "time": "2016-12-20T10:07:11+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -289,7 +288,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-03-20 17:10:46"
+            "time": "2017-03-20T17:10:46+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -356,7 +355,7 @@
                 "oauth2",
                 "single sign on"
             ],
-            "time": "2017-02-02 04:08:45"
+            "time": "2017-02-02T04:08:45+00:00"
         },
         {
             "name": "league/oauth2-google",
@@ -406,7 +405,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2017-01-24 15:15:42"
+            "time": "2017-01-24T15:15:42+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -484,7 +483,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-03-13 07:08:03"
+            "time": "2017-03-13T07:08:03+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -527,7 +526,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2017-01-19 11:35:12"
+            "time": "2017-01-19T11:35:12+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -575,7 +574,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-13 16:27:32"
+            "time": "2017-03-13T16:27:32+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -651,7 +650,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-03-15 19:32:56"
+            "time": "2017-03-15T19:32:56+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -697,7 +696,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2015-09-11 15:10:35"
+            "time": "2015-09-11T15:10:35+00:00"
         },
         {
             "name": "psr/container",
@@ -746,7 +745,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-02-14 16:28:37"
+            "time": "2017-02-14T16:28:37+00:00"
         },
         {
             "name": "psr/http-message",
@@ -796,7 +795,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06 14:39:51"
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/log",
@@ -843,7 +842,72 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "respect/validation",
+            "version": "1.1.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Respect/Validation.git",
+                "reference": "5ab87d1dd932872f6670136a513f72ff9ea41c67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Respect/Validation/zipball/5ab87d1dd932872f6670136a513f72ff9ea41c67",
+                "reference": "5ab87d1dd932872f6670136a513f72ff9ea41c67",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "symfony/polyfill-mbstring": "^1.2"
+            },
+            "require-dev": {
+                "egulias/email-validator": "~1.2",
+                "malkusch/bav": "~1.0",
+                "mikey179/vfsstream": "^1.5",
+                "phpunit/phpunit": "~4.0",
+                "symfony/validator": "~2.6.9",
+                "zendframework/zend-validator": "~2.3"
+            },
+            "suggest": {
+                "egulias/email-validator": "Strict (RFC compliant) email validation",
+                "ext-bcmath": "Arbitrary Precision Mathematics",
+                "ext-mbstring": "Multibyte String Functions",
+                "fabpot/php-cs-fixer": "Fix PSR2 and other coding style issues",
+                "malkusch/bav": "German bank account validation",
+                "symfony/validator": "Use Symfony validator through Respect\\Validation",
+                "zendframework/zend-validator": "Use Zend Framework validator through Respect\\Validation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Respect\\Validation\\": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD Style"
+            ],
+            "authors": [
+                {
+                    "name": "Respect/Validation Contributors",
+                    "homepage": "https://github.com/Respect/Validation/graphs/contributors"
+                }
+            ],
+            "description": "The most awesome validation engine ever created for PHP",
+            "homepage": "http://respect.github.io/Validation/",
+            "keywords": [
+                "respect",
+                "validation",
+                "validator"
+            ],
+            "time": "2017-03-14T09:44:11+00:00"
         },
         {
             "name": "slim/php-view",
@@ -892,7 +956,7 @@
                 "template",
                 "view"
             ],
-            "time": "2016-10-11 07:43:08"
+            "time": "2016-10-11T07:43:08+00:00"
         },
         {
             "name": "slim/slim",
@@ -963,7 +1027,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2017-03-19 17:55:20"
+            "time": "2017-03-19T17:55:20+00:00"
         },
         {
             "name": "slim/twig-view",
@@ -1013,7 +1077,7 @@
                 "twig",
                 "view"
             ],
-            "time": "2017-01-25 20:38:39"
+            "time": "2017-01-25T20:38:39+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1072,7 +1136,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14 01:06:16"
+            "time": "2016-11-14T01:06:16+00:00"
         },
         {
             "name": "twig/twig",
@@ -1135,7 +1199,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-04-21 00:13:02"
+            "time": "2017-04-21T00:13:02+00:00"
         }
     ],
     "packages-dev": [],

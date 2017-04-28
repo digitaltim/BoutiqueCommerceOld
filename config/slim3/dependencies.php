@@ -65,6 +65,11 @@ $container['logger'] = function($container) {
     return $logger;
 };
 
+// Form Validation
+$container['validator'] = function ($container) {
+    return new It_All\BoutiqueCommerce\Validation\Validator;
+};
+
 // Error Handling
 unset($container['errorHandler']);
 unset($container['phpErrorHandler']);
