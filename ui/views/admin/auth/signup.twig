@@ -1,13 +1,12 @@
-{%  extends 'partials/layout.twig' %}
+{%  extends 'admin/partials/layout.twig' %}
 
 {%  block content %}
-<section class="main">
-    <form action="{{ path_for('auth.signin') }}" method="post">
+    <form action="{{ path_for('auth.signup') }}" method="post">
     	<label for="username">Name</label>
     	<input type="username" name="username" id="username" placeholder="username">
 	   	<label for="password">Password</label>
     	<input type="password" name="password" id="password" placeholder="password">
-    	<button type="submit">Sign In</button>
+    	<button type="submit">Sign Up</button>
+
     </form>
-</section>
 {%  endblock %}

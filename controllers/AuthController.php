@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function getSignIn($request, $response)
     {
-        return $this->view->render($response, 'auth.twig', ['title' => 'Sign In']);
+        return $this->view->render($response, 'admin/auth/auth.twig', ['title' => 'Sign In']);
     }
 
     function postSignIn($request, $response, $args)
@@ -40,7 +40,7 @@ class AuthController extends Controller
 
     public function getSignUp($request, $response)
     {
-        return $this->view->render($response, 'signup.twig', ['title' => 'Sign Up']);
+        return $this->view->render($response, 'admin/auth/signup.twig', ['title' => 'Sign Up']);
     }
 
     function postSignUp($request, $response, $args)

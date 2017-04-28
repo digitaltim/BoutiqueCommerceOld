@@ -16,17 +16,24 @@ class CrudController extends Controller
         parent::__construct($container);
     }
 
-    private function setModel()
+    private function setModel($response)
     {
         $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
-        $this->model = (class_exists($class)) ? new $class($this->tableName, $this->db) : new \It_All\BoutiqueCommerce\Models\DbTable($this->tableName, $this->db);
-
+        try {
+            $this->model = (class_exists($class)) ? new $class($this->tableName, $this->db) : new \It_All\BoutiqueCommerce\Models\DbTable($this->tableName, $this->db);
+        } catch (\Exception $e) {
+            throw new \Exception('Invalid Table Name: ' . $this->tableName);
+        }
     }
 
     public function index($request, $response, $args)
     {
         $this->tableName = $args['table'];
-        $this->setModel();
+        try {
+            $this->setModel($response);
+        } catch (\Exception $e) {
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+        }
         $UiRsDbTable = new UiRsDBTable($this->model);
         if ($res = $this->model->select('*')) {
             $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
@@ -34,7 +41,7 @@ class CrudController extends Controller
         else {
             $results = "Query Error";
         }
-        return $this->view->render($response, 'CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
+        return $this->view->render($response, 'admin/CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
 
     }
 
@@ -49,7 +56,7 @@ class CrudController extends Controller
         else {
             $results = "Query Error";
         }
-        return $this->view->render($response, 'CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
+        return $this->view->render($response, 'admin/CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
 
     }
 }
