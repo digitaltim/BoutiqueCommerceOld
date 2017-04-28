@@ -10,5 +10,7 @@ $slim->post('/' . $config['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers
 $slim->get('/' . $config['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignUp')->setName('auth.signup');
 $slim->post('/' . $config['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignUp');
 
+$slim->get('/' . $config['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignOut')->setName('auth.signout');
+
 $slim->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:index');
 $slim->get('/CRUD/{table}/{id}', 'It_All\BoutiqueCommerce\Controllers\CrudController:show');
