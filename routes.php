@@ -2,7 +2,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$slim->get('/', 'It_All\BoutiqueCommerce\Controllers\AdminController:index')->setName('home');
+$slim->get('/', 'It_All\BoutiqueCommerce\Controllers\HomeController:index')->setName('home');
 
 $slim->get('/' . $config['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignIn')->setName('auth.signin');
 $slim->post('/' . $config['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignIn');

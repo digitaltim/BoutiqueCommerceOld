@@ -1,4 +1,6 @@
 <?php
+// not currently used. delete when no longer useful.
+
 declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Controllers;

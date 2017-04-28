@@ -425,7 +425,7 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'It_All\\BoutiqueCommerce\\Controllers\\AuthController' => __DIR__ . '/../..' . '/controllers/AuthController.php',
         'It_All\\BoutiqueCommerce\\Controllers\\Controller' => __DIR__ . '/../..' . '/controllers/Controller.php',
         'It_All\\BoutiqueCommerce\\Controllers\\CrudController' => __DIR__ . '/../..' . '/controllers/CrudController.php',
-        'It_All\\BoutiqueCommerce\\Models\\Admin' => __DIR__ . '/../..' . '/models/Admin.php',
+        'It_All\\BoutiqueCommerce\\Controllers\\HomeController' => __DIR__ . '/../..' . '/controllers/HomeController.php',
         'It_All\\BoutiqueCommerce\\Models\\Admins' => __DIR__ . '/../..' . '/models/Admins.php',
         'It_All\\BoutiqueCommerce\\Models\\DbColumn' => __DIR__ . '/../..' . '/models/DbColumn.php',
         'It_All\\BoutiqueCommerce\\Models\\DbTable' => __DIR__ . '/../..' . '/models/DbTable.php',
