@@ -16,7 +16,7 @@ class CrudController extends Controller
         parent::__construct($container);
     }
 
-    private function setModel($response)
+    private function setModel()
     {
         $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
         try {
@@ -30,25 +30,33 @@ class CrudController extends Controller
     {
         $this->tableName = $args['table'];
         try {
-            $this->setModel($response);
+            $this->setModel();
         } catch (\Exception $e) {
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
         $UiRsDbTable = new UiRsDBTable($this->model);
+        $results = '';
         if ($res = $this->model->select('*')) {
-            $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
+            if ($this->model->isInsertAllowed()) {
+                $results .= "<h3 style='display:inline;'><a href='".$this->router->pathFor('crud.getInsert', ['table' => $this->tableName])."'>Insert New</a></h3>";
+            }
+            $results .= (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
         }
         else {
             $results = "Query Error";
         }
-        return $this->view->render($response, 'admin/CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
+        return $this->view->render($response, 'admin/CRUD/index.twig', ['title' => $this->tableName, 'results' => $results]);
 
     }
 
     public function show($request, $response, $args)
     {
         $this->tableName = $args['table'];
-        $this->setModel();
+        try {
+            $this->setModel();
+        } catch (\Exception $e) {
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+        }
         $UiRsDbTable = new UiRsDbTable($this->model);
         if ($res = $this->model->select('*', ['id' => $args['id']])) {
             $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
@@ -58,5 +66,17 @@ class CrudController extends Controller
         }
         return $this->view->render($response, 'admin/CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
 
+    }
+
+    public function getInsert($request, $response, $args)
+    {
+        $this->tableName = $args['table'];
+        // todo it seems this code does not work in the model. why can we render a view from another function? (not in the route?)
+        try {
+            $this->setModel();
+        } catch (\Exception $e) {
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+        }
+        return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Insert '.$this->tableName, 'table' => $this->tableName]);
     }
 }

@@ -12,5 +12,8 @@ $slim->post('/' . $config['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce
 
 $slim->get('/' . $config['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignOut')->setName('auth.signout');
 
+// CRUD
 $slim->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:index');
+$slim->get('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\Controllers\CrudController:getInsert')->setName('crud.getInsert');
 $slim->get('/CRUD/{table}/{id}', 'It_All\BoutiqueCommerce\Controllers\CrudController:show');
+$slim->post('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postInsert')->setName('crud.postInsert');

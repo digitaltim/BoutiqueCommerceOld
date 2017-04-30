@@ -2,4 +2,6 @@
 .gitignore~
 config/env.php
 .idea/
+node_modules/
 storage/
+vendor/

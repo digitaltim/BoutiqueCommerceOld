@@ -3,3 +3,5 @@
  Note (GC): I think docs, node_modules, prebuild, and probably gulpfile.js and schema.sql belong in a top level dir of their own like "non-app" or "resources" or we could use "app" for everything else, but that may be hairy
 -using typehints on params and return params
 -docblocks for all classes, methods, properties (?)
+-Group the routes
+-search todo in code and do
