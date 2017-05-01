@@ -93,3 +93,8 @@ $container['AuthController'] = function ($container) {
 $container['CrudController'] = function ($container) {
     return new It_All\BoutiqueCommerce\Controllers\CrudController($container);
 };
+
+// -----------------------------------------------------------------------------
+// Middleware registration
+// -----------------------------------------------------------------------------
+$slim->add(new It_All\BoutiqueCommerce\Middleware\ValidationErrorsMiddleware($container));

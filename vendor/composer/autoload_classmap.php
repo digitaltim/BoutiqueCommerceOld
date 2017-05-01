@@ -273,6 +273,8 @@ return array(
     'It_All\\BoutiqueCommerce\\Controllers\\Controller' => $baseDir . '/controllers/Controller.php',
     'It_All\\BoutiqueCommerce\\Controllers\\CrudController' => $baseDir . '/controllers/CrudController.php',
     'It_All\\BoutiqueCommerce\\Controllers\\HomeController' => $baseDir . '/controllers/HomeController.php',
+    'It_All\\BoutiqueCommerce\\Middleware\\Middleware' => $baseDir . '/middleware/Middleware.php',
+    'It_All\\BoutiqueCommerce\\Middleware\\ValidationErrorsMiddleware' => $baseDir . '/middleware/ValidationErrorsMiddleware.php',
     'It_All\\BoutiqueCommerce\\Models\\Admins' => $baseDir . '/models/Admins.php',
     'It_All\\BoutiqueCommerce\\Models\\DbColumn' => $baseDir . '/models/DbColumn.php',
     'It_All\\BoutiqueCommerce\\Models\\DbTable' => $baseDir . '/models/DbTable.php',

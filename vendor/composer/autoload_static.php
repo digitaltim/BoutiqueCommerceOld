@@ -434,6 +434,8 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'It_All\\BoutiqueCommerce\\Controllers\\Controller' => __DIR__ . '/../..' . '/controllers/Controller.php',
         'It_All\\BoutiqueCommerce\\Controllers\\CrudController' => __DIR__ . '/../..' . '/controllers/CrudController.php',
         'It_All\\BoutiqueCommerce\\Controllers\\HomeController' => __DIR__ . '/../..' . '/controllers/HomeController.php',
+        'It_All\\BoutiqueCommerce\\Middleware\\Middleware' => __DIR__ . '/../..' . '/middleware/Middleware.php',
+        'It_All\\BoutiqueCommerce\\Middleware\\ValidationErrorsMiddleware' => __DIR__ . '/../..' . '/middleware/ValidationErrorsMiddleware.php',
         'It_All\\BoutiqueCommerce\\Models\\Admins' => __DIR__ . '/../..' . '/models/Admins.php',
         'It_All\\BoutiqueCommerce\\Models\\DbColumn' => __DIR__ . '/../..' . '/models/DbColumn.php',
         'It_All\\BoutiqueCommerce\\Models\\DbTable' => __DIR__ . '/../..' . '/models/DbTable.php',
