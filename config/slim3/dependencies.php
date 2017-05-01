@@ -98,3 +98,4 @@ $container['CrudController'] = function ($container) {
 // Middleware registration
 // -----------------------------------------------------------------------------
 $slim->add(new It_All\BoutiqueCommerce\Middleware\ValidationErrorsMiddleware($container));
+$slim->add(new It_All\BoutiqueCommerce\Middleware\OldInputMiddleware($container));

@@ -4,7 +4,7 @@
     <form action="{{ path_for('auth.signup') }}" method="post">
     	<div class="form-group{{ errors.username ? ' has-error' : '' }}">
 			<label for="username">Name</label>
-    		<input type="username" name="username" id="username" placeholder="username">
+    		<input type="username" name="username" id="username" placeholder="username" value="{{ old.username }}">
     		{% if errors.username %}
 				<span class="help-block">{{ errors.username | first }}</span>
 			{% endif %}
