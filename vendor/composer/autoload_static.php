@@ -449,6 +449,8 @@ class ComposerStaticInit5bfed1bf2ca2f2d950de82b873c660ce
         'It_All\\BoutiqueCommerce\\Utilities\\Database\\QueryBuilder' => __DIR__ . '/../..' . '/utilities/Database/QueryBuilder.php',
         'It_All\\BoutiqueCommerce\\Utilities\\Database\\UpdateBuilder' => __DIR__ . '/../..' . '/utilities/Database/UpdateBuilder.php',
         'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => __DIR__ . '/../..' . '/utilities/ErrorHandler.php',
+        'It_All\\BoutiqueCommerce\\Validation\\Exceptions\\UsernameAvailableException' => __DIR__ . '/../..' . '/validation/Exceptions/UsernameAvailableException.php',
+        'It_All\\BoutiqueCommerce\\Validation\\Rules\\UsernameAvailable' => __DIR__ . '/../..' . '/validation/Rules/UsernameAvailable.php',
         'It_All\\BoutiqueCommerce\\Validation\\Validator' => __DIR__ . '/../..' . '/validation/Validator.php',
         'League\\OAuth2\\Client\\Grant\\AbstractGrant' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/AbstractGrant.php',
         'League\\OAuth2\\Client\\Grant\\AuthorizationCode' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/AuthorizationCode.php',

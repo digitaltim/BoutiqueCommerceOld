@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Respect\Validation\Validator as v;
+
 // DIC configuration
 
 $container = $slim->getContainer();
@@ -99,3 +101,5 @@ $container['CrudController'] = function ($container) {
 // -----------------------------------------------------------------------------
 $slim->add(new It_All\BoutiqueCommerce\Middleware\ValidationErrorsMiddleware($container));
 $slim->add(new It_All\BoutiqueCommerce\Middleware\OldInputMiddleware($container));
+
+v::with('It_All\\BoutiqueCommerce\\Validation\\Rules');

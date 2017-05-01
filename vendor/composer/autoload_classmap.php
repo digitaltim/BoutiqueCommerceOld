@@ -288,6 +288,8 @@ return array(
     'It_All\\BoutiqueCommerce\\Utilities\\Database\\QueryBuilder' => $baseDir . '/utilities/Database/QueryBuilder.php',
     'It_All\\BoutiqueCommerce\\Utilities\\Database\\UpdateBuilder' => $baseDir . '/utilities/Database/UpdateBuilder.php',
     'It_All\\BoutiqueCommerce\\Utilities\\ErrorHandler' => $baseDir . '/utilities/ErrorHandler.php',
+    'It_All\\BoutiqueCommerce\\Validation\\Exceptions\\UsernameAvailableException' => $baseDir . '/validation/Exceptions/UsernameAvailableException.php',
+    'It_All\\BoutiqueCommerce\\Validation\\Rules\\UsernameAvailable' => $baseDir . '/validation/Rules/UsernameAvailable.php',
     'It_All\\BoutiqueCommerce\\Validation\\Validator' => $baseDir . '/validation/Validator.php',
     'League\\OAuth2\\Client\\Grant\\AbstractGrant' => $vendorDir . '/league/oauth2-client/src/Grant/AbstractGrant.php',
     'League\\OAuth2\\Client\\Grant\\AuthorizationCode' => $vendorDir . '/league/oauth2-client/src/Grant/AuthorizationCode.php',
