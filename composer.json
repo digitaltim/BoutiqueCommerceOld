@@ -5,7 +5,8 @@
         "slim/php-view": "^2.2",
         "league/oauth2-google": "^2.0",
         "phpmailer/phpmailer": "^5.2",
-        "respect/validation": "^1.1"
+        "respect/validation": "^1.1",
+        "slim/csrf": "^0.8.1"
     },
     "autoload": {
         "psr-4": {

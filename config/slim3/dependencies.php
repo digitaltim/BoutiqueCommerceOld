@@ -97,9 +97,19 @@ $container['CrudController'] = function ($container) {
 };
 
 // -----------------------------------------------------------------------------
+// Csrf registration
+// -----------------------------------------------------------------------------
+$container['csrf'] = function ($container) {
+    return new \Slim\Csrf\Guard();
+};
+
+// -----------------------------------------------------------------------------
 // Middleware registration
 // -----------------------------------------------------------------------------
 $slim->add(new It_All\BoutiqueCommerce\Middleware\ValidationErrorsMiddleware($container));
 $slim->add(new It_All\BoutiqueCommerce\Middleware\OldInputMiddleware($container));
+$slim->add(new It_All\BoutiqueCommerce\Middleware\CsrfViewMiddleware($container));
+
+$slim->add($container->csrf);
 
 v::with('It_All\\BoutiqueCommerce\\Validation\\Rules');
