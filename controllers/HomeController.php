@@ -7,6 +7,7 @@ class HomeController extends Controller
 {
     public function index($request, $response)
     {
-        return $this->view->render($response, 'frontend/home.twig', ['title' => 'BoutiqueCommerce']);
+        $this->flash->addMessage('global', 'Test flash message');
+		return $this->view->render($response, 'frontend/home.twig', ['title' => 'BoutiqueCommerce']);
     }
 }

@@ -31,6 +31,11 @@ $container['auth'] = function($container) {
     return new It_All\BoutiqueCommerce\Auth\Auth;
 };
 
+// Flash messages
+$container['flash'] = function ($container) {
+    return new \Slim\Flash\Messages();
+};
+
 // Twig
 $container['view'] = function ($container) {
     $settings = $container->get('settings');
@@ -48,6 +53,9 @@ $container['view'] = function ($container) {
         'check' => $container->auth->check(),
         'user' => $container->auth->user()
     ]);
+
+    // make flash messages available inside templates
+    $view->getEnvironment()->addGlobal('flash', $container->flash);
 
     return $view;
 };
