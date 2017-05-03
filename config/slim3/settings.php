@@ -10,15 +10,6 @@ return [
 
         'addContentLengthHeader' => false, // if this is not disabled, slim/App.php line 585 triggered an exception related to error handling, when the php set_error_handler() function was triggered
 
-        // Database Settings
-        'db' => [
-            'database' => $config['database']['name'],
-            'username' => $config['database']['username'],
-            'password' => $config['database']['password'],
-            'host' => $config['database']['host'],
-            'port' => $config['database']['port'],
-        ],
-
         // Twig Settings
         'view' => [
             'pathTemplates' => $config['pathTemplates'],

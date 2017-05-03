@@ -11,18 +11,17 @@ $container = $slim->getContainer();
 // Service providers
 // -----------------------------------------------------------------------------
 
+// Create initial connection to DB 
+$db = new \It_All\BoutiqueCommerce\Postgres(
+    $config['database']['name'],
+    $config['database']['username'],
+    $config['database']['password'],
+    $config['database']['host'],
+    $config['database']['port']
+);
+
 // Database
-$container['db'] = function($container) {
-    $settings = $container->get('settings');
-    
-    $db = new \It_All\BoutiqueCommerce\Postgres(
-        $settings['db']['database'],
-        $settings['db']['username'],
-        $settings['db']['password'],
-        $settings['db']['host'],
-        $settings['db']['port']
-    );
-    
+$container['db'] = function($container) use ($db) {
     return $db;
 };
 
