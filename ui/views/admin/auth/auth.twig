@@ -1,4 +1,4 @@
-{%  extends 'admin/partials/layout.twig' %}
+{%  extends 'frontend/partials/layout.twig' %}
 
 {%  block content %}
 <section class="main">
@@ -8,6 +8,7 @@
 	   	<label for="password">Password</label>
     	<input type="password" name="password" id="password" placeholder="password">
     	<button type="submit">Sign In</button>
+    	{{ csrf.field | raw }}
     </form>
 </section>
 {%  endblock %}
