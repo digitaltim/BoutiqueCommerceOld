@@ -1,15 +1,23 @@
 <?php
 use It_All\BoutiqueCommerce\Middleware\AuthMiddleware;
+use It_All\BoutiqueCommerce\Middleware\GuestMiddleware;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+// Routes that anyone can access
 $slim->get('/', 'It_All\BoutiqueCommerce\Controllers\HomeController:index')->setName('home');
 
-$slim->get('/' . $config['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignIn')->setName('auth.signin');
-$slim->post('/' . $config['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignIn');
+// Group routes that a guest user can access
+$slim->group('', function () {
+	$container = $this->getContainer();
+	$settings = $container->get('settings');
+	
+	$this->get('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignIn')->setName('auth.signin');
+	$this->post('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignIn');
 
-$slim->get('/' . $config['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignUp')->setName('auth.signup');
-$slim->post('/' . $config['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignUp');
+	$this->get('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignUp')->setName('auth.signup');
+	$this->post('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignUp');
+})->add(new GuestMiddleware($container));
 
 // Group routes that a user needs to be signed in to access
 $slim->group('', function () {
