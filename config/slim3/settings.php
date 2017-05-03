@@ -24,7 +24,10 @@ return [
         'storage' => [
             'pathLogs' => $config['storage']['logs']['pathEvents'],
             'pathTwigCache' => $config['storage']['pathCache'].'twig/',
-        ]
+        ],
+        'dirs' => [
+            'admin' => $config['dirs']['admin']
+        ],
 
     ]
 ];

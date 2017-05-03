@@ -10,5 +10,8 @@
 	<p>Uses <a href="https://github.com/Respect/Validation">Respect\Validation</a> for form validation.</p>
 	<p>Uses <a href="https://github.com/slimphp/Slim-Csrf">Slim Framework CSRF Protection</a>.</p>
 	<p>Uses <a href="https://github.com/slimphp/Slim-Flash">Slim Framework Flash Messages</a>.</p>
+	<p>Bootstrap Process:
+	   Loads index.php which calls init.php. The result of the array_merge creates a $config array. Chosen config items are then stored into Slim's container settings. A lot happens just in these two files upon startup.
+	</p>
 </body>
 </html>
