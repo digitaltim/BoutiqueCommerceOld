@@ -63,12 +63,7 @@ $container['view'] = function ($container) {
     $view->getEnvironment()->addGlobal('flash', $container->flash);
 
     // make form former available inside templates
-    // $view->getEnvironment()->addGlobal('form', $container->form);
-    $view->getEnvironment()->addGlobal('form', [
-        'form' => $container->form,
-        'field' => $container->form->field(),
-        'render' => $container->form->render()
-    ]);
+    $view->getEnvironment()->addGlobal('form', $container->form);
 
     return $view;
 };
