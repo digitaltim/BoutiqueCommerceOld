@@ -16,9 +16,9 @@ Class Postgres
 
     /** host and password may not be necessary depending on hba.conf */
     public function __construct(
-        string $dbname, 
-        string $user, 
-        string $password = NULL, 
+        string $dbname,
+        string $user,
+        string $password = NULL,
         string $host = NULL,
         int $port = NULL
     )
@@ -34,7 +34,7 @@ Class Postgres
             $connectionString .= " port=$port";
         }
         $connectionString .= " connect_timeout=5";
-        
+
         if (!$this->pgConn = pg_connect($connectionString)) {
             throw new \Exception('postgres connection failure');
         }

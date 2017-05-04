@@ -7,15 +7,15 @@
     <link href='/css/test.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-	{% include 'frontend/partials/navigation.twig' %}
-	<div class="container">
-	<section class="main">
-		{% include 'frontend/partials/flash.twig' %}
-		<h2>Content</h2>
+    {% include 'frontend/partials/navigation.twig' %}
+    <div class="container">
+    <section class="main">
+        {% include 'frontend/partials/flash.twig' %}
+        <h2>Content</h2>
 
         {%  block content %}{%  endblock %}
 
-        <img src="http://demo.tutorialzine.com/2017/03/css-grid-vs-flexbox/demo/landscape.jpg">       
+        <img src="http://demo.tutorialzine.com/2017/03/css-grid-vs-flexbox/demo/landscape.jpg">
     </section>
 
     <aside class="sidebar">
@@ -26,6 +26,6 @@
         <h3>Footer</h3>
         <p>Copyright 2017. BoutiqueCommerce</p>
     </footer>
-	</div>
+    </div>
 </body>
 </html>

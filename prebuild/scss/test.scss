@@ -22,7 +22,7 @@ body {
 
     display: grid;
     grid-template-columns: 1fr 3fr;
-    grid-template-areas: 
+    grid-template-areas:
         "header header"
         "sidebar main"
         "footer footer";
@@ -41,7 +41,7 @@ header{
 
 header nav {
     justify-self: start;
-    
+
     list-style: none;
 
 /*  This did not work well, inline-block used instead */
@@ -51,7 +51,7 @@ header nav {
 }
 
 header nav li {
-	font-size: 20px;
+    font-size: 20px;
     margin: 20px;
     display: inline-block;
 }
@@ -103,7 +103,7 @@ footer p {
     .container{
         /*  Redefine the grid into a single column layout. */
         grid-template-columns: 1fr;
-        grid-template-areas: 
+        grid-template-areas:
             "header"
             "main"
             "sidebar"

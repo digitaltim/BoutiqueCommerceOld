@@ -3,12 +3,12 @@
 {%  block content %}
 <section class="main">
     <form action="{{ path_for('auth.signin') }}" method="post">
-    	<label for="username">Name</label>
-    	<input type="username" name="username" id="username" placeholder="username">
-	   	<label for="password">Password</label>
-    	<input type="password" name="password" id="password" placeholder="password">
-    	<button type="submit">Sign In</button>
-    	{{ csrf.field | raw }}
+        <label for="username">Name</label>
+        <input type="username" name="username" id="username" placeholder="username">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="password">
+        <button type="submit">Sign In</button>
+        {{ csrf.field | raw }}
     </form>
 </section>
 {%  endblock %}

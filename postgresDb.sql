@@ -607,10 +607,10 @@ CREATE FUNCTION best_customers(order_type order_type, start_dt timestamp without
 begin
 
     -- First get the orders in the given date range, joined to a status row for each item in the order.
-    
+
     create temp table orders_with_items_and_status (
       contact_id          bigint,
-      order_id 	          bigint,
+      order_id            bigint,
       order_type          order_type,
       order_item_id       bigint,
       item_price          numeric,
@@ -624,10 +624,10 @@ begin
     ) on commit drop;
 
     --create index on orders_with_items_and_status (contact_id);
-    
+
     insert into orders_with_items_and_status
       select o.contact_id, o.id, o.order_type, oi.id, oi.item_price, ois.order_item_status
-      from orders o 
+      from orders o
       join order_items oi on o.id = oi.order_id
       join order_item_status ois on ois.order_item_id = oi.id
       where (start_dt is null or o.order_dt >= start_dt)
@@ -637,41 +637,41 @@ begin
 /*   create temp table orders_with_items_and_status on commit drop as
       select o.contact_id, o.id order_id, o.order_type, oi.id order_item_id, oi.item_price, ois.order_item_status status,
       null::boolean is_pending, null::boolean is_cancelled, null::boolean is_normal, null::boolean is_return, null::boolean is_web_return, null::boolean is_store_return
-      from orders o 
+      from orders o
       join order_items oi on o.id = oi.order_id
       join order_item_status ois on ois.order_item_id = oi.id
       where (start_dt is null or o.order_dt >= start_dt)
         and (end_dt is null or o.order_dt <= end_dt)
         and ($1 is null or o.order_type = $1);
-  */ 
+  */
 
     -- Now categorize those rows based on the status and order_type, for easier summing and counting in the next steps.
     update orders_with_items_and_status o
-       set is_pending = 	         (status in ('tbk', 'spc', 'bck', 'tbs')),
-       	   is_cancelled = 		 (status in ('cxs', 'cxc')),
-	   is_normal =  		 (status in ('shp', 'sto')),
-	   is_return =  		 (status = 'ret'),
-	   is_web_return = 		 (status = 'ret' and o.order_type = 'web'),
-	   is_store_return =  		 (status = 'ret' and o.order_type = 'store');
-	  
-    create temp table summed on commit drop as 
+       set is_pending =              (status in ('tbk', 'spc', 'bck', 'tbs')),
+           is_cancelled =        (status in ('cxs', 'cxc')),
+       is_normal =           (status in ('shp', 'sto')),
+       is_return =           (status = 'ret'),
+       is_web_return =       (status = 'ret' and o.order_type = 'web'),
+       is_store_return =         (status = 'ret' and o.order_type = 'store');
+
+    create temp table summed on commit drop as
           select c.contact_id,
-	         count(distinct order_id) as num_orders,
-		 -- item counts
-		 sum(case when is_normal or is_web_return then 1 else 0 end) as total_items,
-		 sum(case when is_return then 1 else 0 end) as returned_items,
-		 sum(case when is_cancelled then 1 else 0 end) as cancelled_items,
-		 0 as net_items,
-		 sum(case when is_pending then 1 else 0 end) as pending_items,
-		 -- dollar sums
-		 sum(case when is_normal or is_web_return then item_price else 0 end) as total,
-		 sum(case when is_return then item_price else 0 end) as returned,
-		 sum(case when is_cancelled then item_price else 0 end) as cancelled,
- 		 0::numeric(10,2) as net,
-		 sum(case when is_pending then item_price else 0 end) as pending,
+             count(distinct order_id) as num_orders,
+         -- item counts
+         sum(case when is_normal or is_web_return then 1 else 0 end) as total_items,
+         sum(case when is_return then 1 else 0 end) as returned_items,
+         sum(case when is_cancelled then 1 else 0 end) as cancelled_items,
+         0 as net_items,
+         sum(case when is_pending then 1 else 0 end) as pending_items,
+         -- dollar sums
+         sum(case when is_normal or is_web_return then item_price else 0 end) as total,
+         sum(case when is_return then item_price else 0 end) as returned,
+         sum(case when is_cancelled then item_price else 0 end) as cancelled,
+         0::numeric(10,2) as net,
+         sum(case when is_pending then item_price else 0 end) as pending,
                  array_agg(distinct order_id) order_ids, array_agg(order_item_id) order_item_ids
-	  from orders_with_items_and_status c
-	  group by c.contact_id;
+      from orders_with_items_and_status c
+      group by c.contact_id;
 
     create unique index on summed (contact_id);
 
@@ -735,7 +735,7 @@ begin
   sql3 = sql1 || ' type yes_no using bool_to_enum( ' || column_name || ' )';
   execute sql3;
 
-  if def is not null then    
+  if def is not null then
     sql4 = sql1 || ' set default ''' || (case when def then 'yes' else 'no' end)  || '''';
     execute sql4;
   end if;
@@ -905,20 +905,20 @@ begin
 
     -- Next get all the items (breakdowns) in the shipment. There is a row row here for each item breakdown row (size and color), not just items.
     -- Add a window function over the item so that code can see when where on the first, last, and nth item_breakdown?
-    create temp table _items on commit drop as 
-      select s.id as shipment_id, s.receive_date, 
+    create temp table _items on commit drop as
+      select s.id as shipment_id, s.receive_date,
              isi.item_id, isi.item_breakdown_id, isi.quantity, isi.unit_cost,
-             ii.style_number, ii.name, ii.price, 
+             ii.style_number, ii.name, ii.price,
              iib.item_color_id, iib.size_id,
-	     seas.season,
-	     -- "primary category" like in PHP code. Is this right?
-	     (select name from inventory_categories c join inventory_item_categories ic on c.id = ic.category_id where ic.item_id = ii.id order by ic.id limit 1) as category,
-	     col.color, sizes.size
+         seas.season,
+         -- "primary category" like in PHP code. Is this right?
+         (select name from inventory_categories c join inventory_item_categories ic on c.id = ic.category_id where ic.item_id = ii.id order by ic.id limit 1) as category,
+         col.color, sizes.size
       from _shipments s
       join inventory_shipment_items isi  on s.id = isi.shipment_id
       join inventory_items ii            on isi.item_id = ii.id
       -- left join because not all items have seasons
-      left join inventory_seasons seas   on ii.season_id = seas.id     
+      left join inventory_seasons seas   on ii.season_id = seas.id
       join inventory_item_breakdown iib  on isi.item_breakdown_id = iib.id
       join inventory_item_colors col     on iib.item_color_id = col.id
       join inventory_sizes sizes         on iib.size_id = sizes.id
@@ -929,24 +929,24 @@ begin
     -- ???
     create index on _items (item_id);
     create index on _items (item_breakdown_id);
-    create index on _items (item_id, item_breakdown_id);        
-    
+    create index on _items (item_id, item_breakdown_id);
+
     -- Images, muliple per item
     create temp table _images (like inventory_item_images) on commit drop;
 
-    insert into _images 
-       select * from inventory_item_images 
+    insert into _images
+       select * from inventory_item_images
        where item_id in (select item_id from _items) order by item_id, imageorder;
-    
+
     -- todo: indexs?
 
     -- Orders
-    
-    create temp table _order_items on commit drop as 
+
+    create temp table _order_items on commit drop as
     select oi.*, o.order_dt, o.contact_id, o.order_type, 'normal' as which_table
-    from _items i 
+    from _items i
     join order_items oi on oi.item_bd_id = i.item_breakdown_id -- and item_id? <- is that redundant?
-    join orders o       on o.id = oi.order_id 
+    join orders o       on o.id = oi.order_id
     where oi.item_id = i.item_id and o.order_dt >= start_date and (orders_end_date is null or o.order_dt <= orders_end_date)
     order by i.item_id, o.id;
 
@@ -963,13 +963,13 @@ begin
 
     -- Adjustments?
 
-    create temp table _adjustments on commit drop as 
-    select ia.* 
+    create temp table _adjustments on commit drop as
+    select ia.*
     from _items i
     join inventory_adjustments ia on ia.item_breakdown_id = i.item_breakdown_id
     where ia.action = 'subtract' AND ia.dt >= i.receive_date AND (orders_end_date is null or dt <= orders_end_date);
 
-    create temp table _order_item_status on commit drop as 
+    create temp table _order_item_status on commit drop as
     select ois.*
     from order_item_status ois where ois.order_item_id in (
         select id from _order_items union select id from _sp_order_items
@@ -1001,12 +1001,12 @@ begin
     from inventory_search_view isv
     join inventory_items ii on ii.id = isv.id
     join vendor_designers d on d.id = ii.designer_id
-	  where ii.status_web = 'active' and d.status_web = 'active'
+      where ii.status_web = 'active' and d.status_web = 'active'
       and (isv.ts_vec @@ tsq
            or ii.style_number ilike for_like
            or d.name ilike for_like)
     -- The old sort
-		-- order by ii.designer_id, ii.price_web desc, ii.enter_date desc;
+        -- order by ii.designer_id, ii.price_web desc, ii.enter_date desc;
     order by rank desc;
   return;
 end;
@@ -1023,7 +1023,7 @@ CREATE FUNCTION update_test_modified_column() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-   NEW.modified = now(); 
+   NEW.modified = now();
    RETURN NEW;
 END;
 $$;

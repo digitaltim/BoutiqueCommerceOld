@@ -11,7 +11,7 @@ $container = $slim->getContainer();
 // Service providers
 // -----------------------------------------------------------------------------
 
-// Create initial connection to DB 
+// Create initial connection to DB
 $db = new \It_All\BoutiqueCommerce\Postgres(
     $config['database']['name'],
     $config['database']['username'],
@@ -46,7 +46,7 @@ $container['view'] = function ($container) {
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
     $view->addExtension(new Slim\Views\TwigExtension($container->router, $basePath));
-    
+
     // make auth class available inside templates
     $view->getEnvironment()->addGlobal('auth', [
         'check' => $container->auth->check(),

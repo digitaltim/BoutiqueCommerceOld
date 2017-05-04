@@ -531,7 +531,7 @@ function isDbTimestamp($check): bool
     return true;
 }
 
-function convertDbDateDbTimestamp($dbDate, $time = 'end') 
+function convertDbDateDbTimestamp($dbDate, $time = 'end')
 {
     if ($time == 'end') {
         return "$dbDate 23:59:59.999999";
@@ -539,7 +539,7 @@ function convertDbDateDbTimestamp($dbDate, $time = 'end')
         return "$dbDate 0:0:0";
     }
 }
-    
+
 function isEmail($check)
 {
     return filter_var($check, FILTER_VALIDATE_EMAIL);

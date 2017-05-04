@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Middleware;
 
 /**
-* 
+*
 */
 class OldInputMiddleware extends Middleware
 {
@@ -14,7 +14,7 @@ class OldInputMiddleware extends Middleware
 			$this->container->view->getEnvironment()->addGlobal('old', $_SESSION['old']);
 			}
 		$_SESSION['old'] = $request->getParams();
-		
+
 		$response = $next($request, $response);
 		return $response;
 	}

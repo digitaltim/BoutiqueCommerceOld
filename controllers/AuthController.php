@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function getSignOut($request, $response)
     {
-        $this->auth->logout();    
+        $this->auth->logout();
         return $response->withRedirect($this->router->pathFor('home'));
     }
 
@@ -30,7 +30,7 @@ class AuthController extends Controller
         if ($auth) {
             return $response->withRedirect($this->router->pathFor('home'));
         }
-        
+
         $this->flash->addMessage('error', 'Could not sign you in with those credentials.');
         return $response->withRedirect($this->router->pathFor('auth.signin'));
     }

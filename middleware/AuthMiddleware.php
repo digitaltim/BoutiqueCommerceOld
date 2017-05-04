@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Middleware;
 
 /**
-* 
+*
 */
 class AuthMiddleware extends Middleware
 {
@@ -15,7 +15,7 @@ class AuthMiddleware extends Middleware
 			$this->container->flash->addMessage('error', 'Please sign in before doing that.');
 			return $response->withRedirect($this->container->router->pathFor('auth.signin'));
 		}
-		
+
 		$response = $next($request, $response);
 		return $response;
 	}

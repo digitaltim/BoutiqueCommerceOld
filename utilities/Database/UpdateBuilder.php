@@ -22,7 +22,7 @@ class UpdateBuilder extends InsertUpdateBuilder {
      */
     public function addColumn(string $name, $value)
     {
-        $this->args[] = $value;     
+        $this->args[] = $value;
         if (count($this->args) > 1) {
             $this->setColumnsValues .= ", ";
         }
