@@ -35,6 +35,12 @@ $container['flash'] = function ($container) {
     return new \Slim\Flash\Messages();
 };
 
+// Form Former
+$container['form'] = function ($container) {
+    return new \It_All\FormFormer\Form();
+};
+
+
 // Twig
 $container['view'] = function ($container) {
     $settings = $container->get('settings');
@@ -55,6 +61,14 @@ $container['view'] = function ($container) {
 
     // make flash messages available inside templates
     $view->getEnvironment()->addGlobal('flash', $container->flash);
+
+    // make form former available inside templates
+    // $view->getEnvironment()->addGlobal('form', $container->form);
+    $view->getEnvironment()->addGlobal('form', [
+        'form' => $container->form,
+        'field' => $container->form->field(),
+        'render' => $container->form->render()
+    ]);
 
     return $view;
 };
