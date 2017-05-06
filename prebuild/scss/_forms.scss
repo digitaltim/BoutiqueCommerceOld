@@ -1,5 +1,9 @@
 $formLabelColor: #A7D45B;
 
+form {
+  margin-top: 1em;
+}
+
 #ffFormError {
   color: red;
   margin-bottom: 2em;
@@ -35,7 +39,7 @@ input[type="submit"] {
 label, .ffFieldGroupHeader {
   color: $formLabelColor;
   font-size: 1em;
-  margin: 0 .3em 0 .6em;
+  margin: 0 .3em 0 .2em;
 }
 
 .ffFieldLabelFine {
@@ -58,34 +62,3 @@ label, .ffFieldGroupHeader {
   //background-color: red;
   border: .2em solid red;
 }
-
-/*
-.ffError {
-  color: red;
-}
-#ffFormError {
-  color: red;
-}
-.ffFieldError {
-  border: .2em solid red;
-}
-#ffFormSuccess {
-  color: green;
-}
-.ffFormField {
-  padding-top: 1em;
-}
-.ffGroupWrapper {
-  padding-top: .4em;
-}
-.ffFormFieldGroup {
-  padding-top: 0em;
-}
-.ffFormFieldDescriptor {
-  padding-left: .3em;
-}
-#FFformDebug {
-  padding: 1em;
-  border: .1em solid black;
-}
-*/

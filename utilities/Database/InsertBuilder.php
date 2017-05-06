@@ -6,10 +6,10 @@ namespace It_All\BoutiqueCommerce\Utilities\Database;
 class InsertBuilder extends InsertUpdateBuilder
 {
     /** @var string */
-    public $columns;
+    public $columns = '';
 
     /** @var string */
-    public $values;
+    public $values = '';
 
     /**
      * adds column to insert query

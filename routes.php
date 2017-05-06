@@ -27,7 +27,7 @@ $slim->group('', function () {
     $this->get('/' . $settings['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignOut')->setName('auth.signout');
 
     // CRUD
-    $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:index');
+    $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:index')->setName('crud.show');
     $this->get('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\Controllers\CrudController:getInsert')->setName('crud.getInsert');
     $this->get('/CRUD/{table}/{id}', 'It_All\BoutiqueCommerce\Controllers\CrudController:show');
     $this->post('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postInsert')->setName('crud.postInsert');

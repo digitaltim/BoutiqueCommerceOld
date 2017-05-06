@@ -124,8 +124,8 @@ $container['csrf'] = function ($container) {
 // -----------------------------------------------------------------------------
 $slim->add(new It_All\BoutiqueCommerce\Middleware\ValidationErrorsMiddleware($container));
 $slim->add(new It_All\BoutiqueCommerce\Middleware\OldInputMiddleware($container));
-$slim->add(new It_All\BoutiqueCommerce\Middleware\CsrfViewMiddleware($container));
+//$slim->add(new It_All\BoutiqueCommerce\Middleware\CsrfViewMiddleware($container));
 
-$slim->add($container->csrf);
+//$slim->add($container->csrf);
 
 v::with('It_All\\BoutiqueCommerce\\Validation\\Rules');

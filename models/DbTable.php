@@ -388,10 +388,10 @@ class DbTable {
      * @param array $columnValues
      * @return bool
      */
-    public function insert(&$columnValues)
+    public function insert($columnValues)
     {
         if (!$this->allowInsert || !$this->validate($columnValues, array($this->primaryKeyColumn))) {
-            return false;
+            throw new \Exception('Insert not allowed on table '.$this->tableName);
         }
         $ib = new Database\InsertBuilder($this->tableName);
         $this->addColumnsToBuilder($ib, $columnValues);
