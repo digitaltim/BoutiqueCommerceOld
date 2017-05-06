@@ -54,7 +54,7 @@ class AuthController extends Controller
 
         $res = pg_insert($this->db->getPgConn(), 'admins', [
             'username' => $request->getParam('username'),
-            'password' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
+            'password_hash' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
         ]);
 
         if ($res) {

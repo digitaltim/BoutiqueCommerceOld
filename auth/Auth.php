@@ -15,7 +15,7 @@ class Auth
     {
         if (isset($_SESSION['user'])) {
             //grab user by their username
-            $q = new QueryBuilder("SELECT id, username, password FROM admins WHERE id = $1 ", $_SESSION['user']);
+            $q = new QueryBuilder("SELECT id, username, password_hash FROM admins WHERE id = $1 ", $_SESSION['user']);
             $rs = $q->execute();
             return pg_fetch_assoc($rs);
         }
@@ -30,7 +30,7 @@ class Auth
     public function attempt(string $username, string $password): bool
     {
         // grab user by their username
-        $q = new QueryBuilder("SELECT id, username, password FROM admins WHERE username = $1 ", $username);
+        $q = new QueryBuilder("SELECT id, username, password_hash FROM admins WHERE username = $1 ", $username);
         $rs = $q->execute();
         $user = pg_fetch_assoc($rs);
 
@@ -40,7 +40,7 @@ class Auth
         }
 
         // verify password for that user
-        if (password_verify($password, $user['password'])) {
+        if (password_verify($password, $user['password_hash'])) {
             // set session for that user
             $_SESSION['user'] = $user['id'];
             return true;
