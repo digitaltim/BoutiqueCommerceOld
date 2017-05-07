@@ -1,10 +1,47 @@
--Explain directory structure in architecture doc
--Improve directory structure if necessary
---Note (GC): I think docs, node_modules, prebuild, and probably gulpfile.js and schema.sql belong in a top level dir of their own like "non-app" or "resources" or we could use "app" for everything else, but that may be hairy
--using typehints on params and return params
+Roadmap
+
+finish infrastructure functionality
+- CRUD
+- authorization (page level)
+- admin nav, messages (bridge between infrastructure and business functionality)
+- docs structure (which docs will be displayed in the admin?)
+
+optimize, document & test infrastructure
+- Improve directory structure: (?) *
+-use typehints on params and return params
 -docblocks for all classes, methods, properties (?)
 -Group the routes
--search todo in code and do
+-move all queries to models (where will join queries go?)
+-search/do todo in code
 -Create installation instructions
 --composer update
 --node gulp node_modules
+-how to prevent xss from rogue admins (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html)
+
+* possible directory structure
+BoutiqueCommerce
+.gitignore
+composer.json
+composer.lock
+gulpfile.js
+LICENSE.md
+postgresDump.sql
+-app
+-routes.php
+--config
+--controllers
+--infrastructure
+--Auth.php
+---database
+---services
+--middleware
+--models
+--public
+--services
+--ui
+--utilities
+-docs
+-node_modules
+-prebuild
+-storage
+-vendor
