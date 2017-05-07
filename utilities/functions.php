@@ -109,9 +109,20 @@ function arrayProtectRecursive(array &$arr)
         if (is_array($v)) {
             arrayProtectRecursive($arr[$k]);
         } else {
-            $arr[$k] = htmlspecialchars($v, ENT_QUOTES | ENT_HTML401);
+            $arr[$k] = protectXSS($v);
         }
     }
+}
+
+/**
+ * use for inputs that are to be displayed in HTML
+ * including values stored in the database
+ * @param string $input
+ * @return string
+ */
+function protectXSS(string $input)
+{
+    return htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
 /**

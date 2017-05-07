@@ -48,10 +48,6 @@ if (!Utilities\isRunningFromCommandLine()) {
         Utilities\redirect();
     }
 
-    /** prevent XSS */
-    Utilities\arrayProtectRecursive($_POST);
-    Utilities\arrayProtectRecursive($_GET);
-
     /** SESSION */
     $sessionTTLseconds = $config['sessionTtlHours'] * 60 * 60;
     ini_set('session.gc_maxlifetime', (string) $sessionTTLseconds);
