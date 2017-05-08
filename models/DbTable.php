@@ -286,7 +286,7 @@ class DbTable {
      * $currentColumnValues are passed in for update validation
      * note, if extra columnValues are passed in, ie they don't exist in columns for this table, they are ignored
      */
-    protected function validate(&$columnValues, $skipColumnNames = null, &$currentColumnValues = null)
+    protected function validate($columnValues, $skipColumnNames = null, $currentColumnValues = null)
     {
         //printPreArray($columnValues);die();
         $valid = true;
@@ -341,7 +341,7 @@ class DbTable {
         return '';
     }
 
-    private function addColumnsToBuilder($qb, &$columnValues, &$updateRow=null)
+    private function addColumnsToBuilder($qb, $columnValues, $updateRow=null)
     {
         if (get_class($qb) == 'InsertBuilder') {
             $isInsert = true;
@@ -398,7 +398,7 @@ class DbTable {
         return ($ib->execute()) ? true : false;
     }
 
-    public function update(&$columnValues, $pkValue)
+    public function update($columnValues, $pkValue)
     {
         if (!$currentRes = $this->selectRowByPrimaryKey($pkValue)) {
             throw new \Exception("INVALID pkValue $pkValue passed");

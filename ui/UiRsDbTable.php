@@ -21,52 +21,30 @@ class UiRsDbTable extends UiRsTable
             $columnName = $column->getName();
             $outputColumns[$columnName] = [];
             if ($this->isUpdateColumn($columnName)) {
-                $outputColumns[$columnName]['link'] = 'VALUE'; // todo fix
+                $outputColumns[$columnName]['link'] = [
+                    'title' => 'update',
+                    'href' => $_SERVER['REQUEST_URI'].'/VALUE',
+                    'text' => 'VALUE',
+                    'target' => '',
+                    'onclick' => ''
+                ];
             }
         }
-        parent::__construct($outputColumns);
+        if ($this->dbTableModel->isDeleteAllowed()) {
+            $outputColumns['X']['link'] = [
+                'title' => 'delete',
+                'href' => $_SERVER['REQUEST_URI'].'/delete/VALUE',
+                'valueKey' => $this->dbTableModel->getPrimaryKeyColumn(),
+                'text' => 'X',
+                'target' => '',
+                'onclick' => ''
+            ];
+        }
+        parent::__construct($outputColumns, $this->dbTableModel->getPrimaryKeyColumn());
     }
 
     private function isUpdateColumn($columnName)
     {
         return ($columnName == $this->dbTableModel->getPrimaryKeyColumn() && $this->dbTableModel->isUpdateAllowed());
     }
-
-    // todo add $this->links functionality like parent tableRow if nec
-    protected function tableRowREMOVE(array $row, $type = 'body')
-    {
-        $tableName = $this->dbTableModel->getTableName();
-        if ($type == 'body') {
-            $cellTag = 'td';
-            $cellValuePointer = 'v'; // for array value
-        } else {
-            $cellTag = 'th';
-            $cellValuePointer = 'i'; // for array index
-        }
-        $html = "<tr>";
-        foreach ($row as $i => $v) {
-            $cellValue = $$cellValuePointer;
-            // add update link for primary key column values
-            if ($this->isUpdateCell($type, $i)) {
-                $cellValue = "<a href='update.php?t=$tableName&amp;i=" . $row['id'] . "' title='edit'>$cellValue</a>";
-            }
-            $html .= "<$cellTag>" . $cellValue . "</$cellTag>";
-        }
-        // add on delete column if nec
-        if ($this->dbTableModel->isDeleteAllowed()) {
-            $html .= "<$cellTag>";
-            if ($type == 'body') {
-                $html .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?t=$tableName&amp;r=" . $row['id'] . "' title='delete' onclick='if(!confirm(\"DELETE id " . $row['id'] . "?\")){return false;}'>";
-            }
-            $html .= "X";
-            if ($type == 'body') {
-                $html .= "</a>";
-            }
-            $html .= "</$cellTag>";
-
-        }
-        $html .= "</tr>";
-        return $html;
-    }
-
 }

@@ -25,6 +25,8 @@ class CrudController extends Controller
         try {
             $this->model = (class_exists($class)) ? new $class($this->tableName, $this->db) : new DbTable($this->tableName, $this->db);
         } catch (\Exception $e) {
+            // todo why doesn't this work? (even if $request, $response, $args are passed in)
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => 'model: Invalid Table Name: ' . $this->tableName]);
             throw new \Exception('Invalid Table Name: ' . $this->tableName);
         }
     }
@@ -52,29 +54,22 @@ class CrudController extends Controller
 
     }
 
-    public function show($request, $response, $args)
+    public function getUpdate($request, $response, $args)
     {
         $this->tableName = $args['table'];
+        $primaryKey = $args['primaryKey'];
         try {
             $this->setModel();
         } catch (\Exception $e) {
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
-        $UiRsDbTable = new UiRsDbTable($this->model);
-        if ($res = $this->model->select('*', ['id' => $args['id']])) {
-            $results = (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
-        }
-        else {
-            $results = "Query Error";
-        }
-        return $this->view->render($response, 'admin/CRUD/show.twig', ['title' => $this->tableName, 'results' => $results]);
-
+        $form = $this->getUpdateForm($primaryKey);
+        return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Update '.$this->tableName, 'table' => $this->tableName, 'form' => $form->generate()]);
     }
 
     public function getInsert($request, $response, $args)
     {
         $this->tableName = $args['table'];
-        // todo it seems this code does not work in the model. why can we render a view from another function? (not in the route?)
         try {
             $this->setModel();
         } catch (\Exception $e) {
@@ -92,7 +87,7 @@ class CrudController extends Controller
         } catch (\Exception $e) {
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
-        if ($this->model->insert($_POST)) {
+        if ($this->model->insert($reqest->getParsedBody())) {
             echo 'insert success';
             return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
         }
@@ -102,6 +97,27 @@ class CrudController extends Controller
 
         $form = $this->getInsertForm();
         return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Post Insert '.$this->tableName, 'table' => $this->tableName, 'form' => $form->generate()]);
+    }
+
+    public function postUpdate($reqest, $response, $args)
+    {
+        $this->tableName = $args['table'];
+        $primaryKey = $args['primaryKey'];
+        try {
+            $this->setModel();
+        } catch (\Exception $e) {
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+        }
+        if ($this->model->update($reqest->getParsedBody(), $primaryKey)) {
+            echo 'update success';
+            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
+        }
+        else {
+            echo 'update failure';
+        }
+
+        $form = $this->getUpdateForm($primaryKey);
+        return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Post Update '.$this->tableName, 'table' => $this->tableName, 'form' => $form->generate()]);
     }
 
     private function getInsertForm()
@@ -114,6 +130,44 @@ class CrudController extends Controller
         $insertForm = new Form($insertFormAttributes, 'verbose');
         $this->addFormFields('insert', $insertForm, 'sub');
         return $insertForm;
+    }
+
+    private function getUpdateForm(string $primaryKey)
+    {
+        // get db record
+        $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
+        $formAttributes = array(
+            'method' => 'post',
+            'action' => $this->container->get('router')->pathFor('crud.postUpdate', ['table' => $this->tableName, 'primaryKey' => $primaryKey]),
+            'novalidate' => 'novalidate'
+        );
+        $form = new Form($formAttributes, 'verbose');
+
+        $this->addFormFields('update', $form, 'sub', pg_fetch_array($rs));
+        return $form;
+    }
+
+    public function delete($reqest, $response, $args)
+    {
+        $this->tableName = $args['table'];
+        $primaryKey = $args['primaryKey'];
+        try {
+            $this->setModel();
+        } catch (\Exception $e) {
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+        }
+        if ($this->model->delete($primaryKey)) {
+            echo 'delete success';
+//            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
+        }
+        else {
+            echo 'delete failure';
+        }
+    }
+
+    private function getForm(string $type = 'insert')
+    {
+
     }
 
     private function isPrimaryKeyColumnForInsert($column, $dbAction)

@@ -5,6 +5,7 @@ finish infrastructure functionality
 - authorization (page level)
 - admin nav, messages (bridge between infrastructure and business functionality)
 - docs structure (which docs will be displayed in the admin?)
+- database backup script (cron?)
 
 optimize, document & test infrastructure
 - Improve directory structure: (?) *

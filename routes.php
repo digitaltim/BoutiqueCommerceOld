@@ -29,6 +29,8 @@ $slim->group('', function () {
     // CRUD
     $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:index')->setName('crud.show');
     $this->get('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\Controllers\CrudController:getInsert')->setName('crud.getInsert');
-    $this->get('/CRUD/{table}/{id}', 'It_All\BoutiqueCommerce\Controllers\CrudController:show');
     $this->post('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postInsert')->setName('crud.postInsert');
+    $this->get('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:getUpdate')->setName('crud.getUpdate');
+    $this->post('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postUpdate')->setName('crud.postUpdate');
+    $this->get('/CRUD/{table}/delete/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:delete')->setName('crud.delete');
 })->add(new AuthMiddleware($container));

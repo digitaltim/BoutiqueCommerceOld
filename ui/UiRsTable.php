@@ -15,7 +15,9 @@ class UiRsTable
      * all display columns must be in this array
      * special case if empty array all columns will be displayed
      */
-    private $outputColumns;
+    protected $outputColumns;
+
+    private $primaryKeyColumn;
 
     /**
      * UiRsTable constructor.
@@ -42,32 +44,26 @@ class UiRsTable
         )
     );
      */
-    function __construct($outputColumns = [])
+    function __construct($outputColumns = [], $primaryKeyColumn = null)
     {
         $this->outputColumns = $outputColumns;
+        $this->primaryKeyColumn = $primaryKeyColumn;
     }
 
-    protected function bodyCellLinkedContent(string $cellIndex, string $cellValue): string
+    private function getLinkAttributes(array $linkInfo, string $cellIndex, string $cellValue): array
     {
-        $link = $this->outputColumns[$cellIndex]['link'];
-
-        if ($link == 'VALUE') {
-            $link = $_SERVER['REQUEST_URI'].'/'.$cellValue;
+        $returnArr = [];
+        $attributes = ['href', 'title', 'target', 'onclick', 'text'];
+        foreach ($attributes as $attribute) {
+            $returnArr[$attribute] = (isset($linkInfo[$attribute])) ? str_replace("VALUE", $cellValue, $linkInfo[$attribute]) : '';
         }
+        return $returnArr;
+    }
 
-        if (isset($this->outputColumns[$cellIndex]['linkQsVar'])) {
-            $link .= '?'.$this->outputColumns[$cellIndex]['linkQsVar'] . '=' . $row[$this->outputColumns[$cellIndex]['linkQsVal']];
-        }
-
-        $cellContent = "<a href='$link'";
-
-        if (isset($this->outputColumns[$cellIndex]['linkTarget'])) {
-            $cellContent .= " target='".$this->outputColumns[$cellIndex]['linkTarget']."'";
-        }
-
-        $cellContent .= ">$cellValue</a>";
-
-        return $cellContent;
+    protected function bodyCellLinkedContent(array $linkInfo, string $cellIndex, string $cellValue): string
+    {
+        extract($this->getLinkAttributes($linkInfo, $cellIndex, $cellValue));
+        return "<a href='$href' title='$title' target='$target' onclick='$onclick'>$text</a>";
     }
 
     protected function bodyCellContent(string $cellIndex, string $cellValue): string
@@ -75,7 +71,7 @@ class UiRsTable
         $cellValue = (isset($this->outputColumns[$cellIndex]['shorten'])) ? substr($cellValue, 0, $this->outputColumns[$cellIndex]['shorten']) : $cellValue;
 
         if (isset($this->outputColumns[$cellIndex]['link'])) {
-            return $this->bodyCellLinkedContent($cellIndex, $cellValue);
+            return $this->bodyCellLinkedContent($this->outputColumns[$cellIndex]['link'], $cellIndex, $cellValue);
         }
 
         return $cellValue;
@@ -100,11 +96,14 @@ class UiRsTable
                 $html .= ($inHeader) ? $this->headerCell($cellIndex) : $this->bodyCell($cellIndex, (string) $cellValue);
             }
         }
+        if (!is_null($this->primaryKeyColumn)) {
+            $html .= ($inHeader) ? $this->headerCell('X') : $this->bodyCell('X', $row[$this->primaryKeyColumn]);
+        }
         $html .= "</tr>";
         return $html;
     }
 
-    public function makeTable(&$rs, $captionTop = null, $captionBottom = null)
+    public function makeTable($rs, $captionTop = null, $captionBottom = null)
     {
         $html = <<< EOT
 <div id='scrollingTableContainer'>
