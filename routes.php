@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 use It_All\BoutiqueCommerce\Middleware\AuthMiddleware;
 use It_All\BoutiqueCommerce\Middleware\GuestMiddleware;
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -34,3 +36,13 @@ $slim->group('', function () {
     $this->post('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postUpdate')->setName('crud.postUpdate');
     $this->get('/CRUD/{table}/delete/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:delete')->setName('crud.delete');
 })->add(new AuthMiddleware($container));
+
+//$slim->get('/{table}', 'It_All\BoutiqueCommerce\UI\Views\ListView:output')->setName('table.show');
+
+$slim->get('/{table}', function ($reqest, $response, $args) {
+    $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
+    $dbTableModel = new $class($this->db);
+    $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
+    $this->model = new $modelClass($dbTableModel);
+    return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
+});

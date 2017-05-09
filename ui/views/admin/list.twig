@@ -6,7 +6,11 @@
     <link href='/css/orm.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-<h1>insert to {{ table }}</h1>
-{{ form | raw }}
+test
+{% for result in results %}
+    {% for field in result %}
+    {{ field }} &nbsp;&nbsp;
+    {% endfor %}<br>
+{% endfor %}
 </body>
 </html>

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Controllers;
 
-use It_All\BoutiqueCommerce\Models\DbColumn;
 use It_All\BoutiqueCommerce\Models\DbTable;
 use It_All\BoutiqueCommerce\UI\UiRsDbTable;
 use It_All\FormFormer\Form;
@@ -23,10 +22,10 @@ class CrudController extends Controller
     {
         $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
         try {
-            $this->model = (class_exists($class)) ? new $class($this->tableName, $this->db) : new DbTable($this->tableName, $this->db);
+            $this->model = (class_exists($class)) ? new $class($this->db) : new DbTable($this->tableName, $this->db);
         } catch (\Exception $e) {
             // todo why doesn't this work? (even if $request, $response, $args are passed in)
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => 'model: Invalid Table Name: ' . $this->tableName]);
+//            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => 'model: Invalid Table Name: ' . $this->tableName]);
             throw new \Exception('Invalid Table Name: ' . $this->tableName);
         }
     }
@@ -63,8 +62,10 @@ class CrudController extends Controller
         } catch (\Exception $e) {
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
-        $form = $this->getUpdateForm($primaryKey);
-        return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Update '.$this->tableName, 'table' => $this->tableName, 'form' => $form->generate()]);
+        $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
+        $form = $this->getForm('update', $primaryKey, pg_fetch_array($rs));
+
+        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Update '.$this->tableName, 'form' => $form->generate()]);
     }
 
     public function getInsert($request, $response, $args)
@@ -75,8 +76,8 @@ class CrudController extends Controller
         } catch (\Exception $e) {
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
-        $form = $this->getInsertForm();
-        return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Insert '.$this->tableName, 'table' => $this->tableName, 'form' => $form->generate()]);
+        $form = $this->getForm();
+        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Insert '.$this->tableName, 'form' => $form->generate()]);
     }
 
     public function postInsert($reqest, $response, $args)
@@ -88,15 +89,13 @@ class CrudController extends Controller
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
         if ($this->model->insert($reqest->getParsedBody())) {
-            echo 'insert success';
+            //todo display success message
             return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
         }
-        else {
-            echo 'insert failure';
-        }
 
-        $form = $this->getInsertForm();
-        return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Post Insert '.$this->tableName, 'table' => $this->tableName, 'form' => $form->generate()]);
+        $form = $this->getForm('insert', null, $reqest->getParsedBody());
+
+        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Error: Insert '.$this->tableName, 'form' => $form->generate()]);
     }
 
     public function postUpdate($reqest, $response, $args)
@@ -108,42 +107,37 @@ class CrudController extends Controller
         } catch (\Exception $e) {
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
+        // todo try catch to find conditions like No changes made
         if ($this->model->update($reqest->getParsedBody(), $primaryKey)) {
-            echo 'update success';
+            //todo display success message
             return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
         }
-        else {
-            echo 'update failure';
-        }
-
-        $form = $this->getUpdateForm($primaryKey);
-        return $this->view->render($response, 'admin/CRUD/insert.twig', ['title' => 'Post Update '.$this->tableName, 'table' => $this->tableName, 'form' => $form->generate()]);
-    }
-
-    private function getInsertForm()
-    {
-        $insertFormAttributes = array(
-            'method' => 'post',
-            'action' => $this->container->get('router')->pathFor('crud.postInsert', ['table' => $this->tableName]),
-            'novalidate' => 'novalidate'
-        );
-        $insertForm = new Form($insertFormAttributes, 'verbose');
-        $this->addFormFields('insert', $insertForm, 'sub');
-        return $insertForm;
-    }
-
-    private function getUpdateForm(string $primaryKey)
-    {
-        // get db record
+        // redisplay form with new values
         $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
+        $form = $this->getForm('update', $primaryKey, $reqest->getParsedBody());
+
+        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Error: Update '.$this->tableName, 'form' => $form->generate()]);
+    }
+
+
+    private function getForm(string $dbAction = 'insert', string $primaryKey = null, array $fieldValues = [])
+    {
+        $pathParms = ['table' => $this->tableName];
+        if ($dbAction == 'update') {
+            $namedRoute = 'crud.postUpdate';
+            $pathParms['primaryKey'] = $primaryKey;
+        } else {
+            $dbAction = 'insert';
+            $namedRoute = 'crud.postInsert';
+        }
         $formAttributes = array(
             'method' => 'post',
-            'action' => $this->container->get('router')->pathFor('crud.postUpdate', ['table' => $this->tableName, 'primaryKey' => $primaryKey]),
+            'action' => $this->container->get('router')->pathFor($namedRoute, $pathParms),
             'novalidate' => 'novalidate'
         );
         $form = new Form($formAttributes, 'verbose');
 
-        $this->addFormFields('update', $form, 'sub', pg_fetch_array($rs));
+        $this->addFormFields($dbAction, $form, 'sub', $fieldValues);
         return $form;
     }
 
@@ -163,11 +157,6 @@ class CrudController extends Controller
         else {
             echo 'delete failure';
         }
-    }
-
-    private function getForm(string $type = 'insert')
-    {
-
     }
 
     private function isPrimaryKeyColumnForInsert($column, $dbAction)

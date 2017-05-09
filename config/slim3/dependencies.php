@@ -92,6 +92,7 @@ $container['validator'] = function ($container) {
 unset($container['errorHandler']);
 unset($container['phpErrorHandler']);
 
+//todo what is the point of these?
 // -----------------------------------------------------------------------------
 // Controller factories / registration
 // -----------------------------------------------------------------------------
@@ -107,9 +108,12 @@ $container['AuthController'] = function ($container) {
     return new It_All\BoutiqueCommerce\Controllers\AuthController($container);
 };
 
-
 $container['CrudController'] = function ($container) {
-    return new It_All\BoutiqueCommerce\Controllers\CrudController($container);
+    return new It_All\BoutiqueCommerce\Controllers\CrudController($container, 'test');
+};
+
+$container['ListView'] = function ($container) {
+    return new It_All\BoutiqueCommerce\UI\Views\ListView($container, 'test');
 };
 
 // -----------------------------------------------------------------------------

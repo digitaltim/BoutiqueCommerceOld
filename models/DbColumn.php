@@ -102,7 +102,7 @@ class DbColumn
         }
     }
 
-    public function _validate($value, $currentValue = false): bool
+    public function validate($value, $currentValue = false): bool
     {
         if ($this->isNullable && (is_null($value) || strlen($value) == 0)) {
             return true;
@@ -156,7 +156,7 @@ class DbColumn
                     }
                     break;
                 default:
-                    trigger_error("validation for $vType undefined", E_USER_ERROR); // exits
+                    throw new \Exception("validation for $vType undefined");
             }
         }
         return true; // no error

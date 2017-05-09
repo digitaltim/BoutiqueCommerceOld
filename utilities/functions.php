@@ -718,7 +718,7 @@ function addFormFieldFieldGroupFromDbColumn(Form $form, DbColumn $column, $initi
         }
     }
     if ($valErrMsg = $column->getValidationError()) {
-        $form->setFfgError($fieldFieldGroup, $valErrMsg);
+        $form->setError($fieldFieldGroup, $valErrMsg);
     }
     return $fieldFieldGroup;
 }

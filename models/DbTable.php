@@ -286,20 +286,19 @@ class DbTable {
      * $currentColumnValues are passed in for update validation
      * note, if extra columnValues are passed in, ie they don't exist in columns for this table, they are ignored
      */
-    protected function validate($columnValues, $skipColumnNames = null, $currentColumnValues = null)
+    protected function validate(array $columnValues, array $skipColumnNames = [], array $currentColumnValues = [])
     {
-        //printPreArray($columnValues);die();
         $valid = true;
         foreach ($this->columns as $c) {
             $cName = $c->getName();
-            if (is_array($skipColumnNames) && !in_array($cName, $skipColumnNames)) {
+            if (!in_array($cName, $skipColumnNames)) {
                 // make sure all required columns exist in the argument. if not, set value to null to cause Required error
                 if ($c->isRequired() && !array_key_exists($cName, $columnValues)) {
                     $columnValues[$cName] = null;
                 }
                 if (array_key_exists($cName, $columnValues)) {
-                    $currentValue = (!is_null($currentColumnValues) && array_key_exists($cName, $currentColumnValues)) ? $currentColumnValues[$cName] : false;
-                    if (!$c->_validate($columnValues[$cName], $currentValue)) {
+                    $currentValue = (array_key_exists($cName, $currentColumnValues)) ? $currentColumnValues[$cName] : false;
+                    if (!$c->validate($columnValues[$cName], $currentValue)) {
                         $valid = false;
                     }
                 }
@@ -384,29 +383,30 @@ class DbTable {
         return $q->execute();
     }
 
-    /**
-     * @param array $columnValues
-     * @return bool
-     */
-    public function insert($columnValues)
+    public function insert(array $columnValues): bool
     {
-        if (!$this->allowInsert || !$this->validate($columnValues, array($this->primaryKeyColumn))) {
-            throw new \Exception('Insert not allowed on table '.$this->tableName);
+        if (!$this->allowInsert) {
+            throw new \Exception("Insert not allowed on table $this->tableName");
+        }
+        if (!$this->validate($columnValues, array($this->primaryKeyColumn))) {
+            return false;
         }
         $ib = new Database\InsertBuilder($this->tableName);
         $this->addColumnsToBuilder($ib, $columnValues);
         return ($ib->execute()) ? true : false;
     }
 
-    public function update($columnValues, $pkValue)
+    public function update(array $columnValues, string $pkValue): bool
     {
         if (!$currentRes = $this->selectRowByPrimaryKey($pkValue)) {
-            throw new \Exception("INVALID pkValue $pkValue passed");
+            throw new \Exception("INVALID primary key $pkValue passed");
         }
         $currentRow = pg_fetch_assoc($currentRes);
-        if (!$this->isUpdateAllowed() || !$this->validate($columnValues, null, $currentRow)) {
-            $updErrMsg = (!$this->isUpdateAllowed()) ? "Update Not Allowed" : "Error";
-            throw new \Exception($updErrMsg);
+        if (!$this->isUpdateAllowed()) {
+            throw new \Exception("Update not allowed on table $this->tableName");
+        }
+        if (!$this->validate($columnValues, ['id'], $currentRow)) {
+            return false;
         }
         $ub = new Database\UpdateBuilder($this->tableName, $this->getPrimaryKeyColumn(), $pkValue);
         $this->addColumnsToBuilder($ub, $columnValues, $currentRow);
