@@ -11,7 +11,7 @@ use It_All\BoutiqueCommerce\Models\DbTable;
  */
 class UiRsDbTable extends UiRsTable
 {
-    private $dbTableModel;
+    protected $dbTableModel;
 
     function __construct(DbTable $dbTableModel, $outputColumns = [])
     {
@@ -30,7 +30,9 @@ class UiRsDbTable extends UiRsTable
                 ];
             }
         }
+        $addDeleteCell = false;
         if ($this->dbTableModel->isDeleteAllowed()) {
+            $addDeleteCell = true;
             $outputColumns['X']['link'] = [
                 'title' => 'delete',
                 'href' => $_SERVER['REQUEST_URI'].'/delete/VALUE',
@@ -40,7 +42,7 @@ class UiRsDbTable extends UiRsTable
                 'onclick' => ''
             ];
         }
-        parent::__construct($outputColumns, $this->dbTableModel->getPrimaryKeyColumn());
+        parent::__construct($outputColumns, $addDeleteCell);
     }
 
     private function isUpdateColumn($columnName)
