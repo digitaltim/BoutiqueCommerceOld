@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+/*
+ * Domain model provides generic accessors to domain state.
+ * https://www.sitepoint.com/community/t/mvc-vs-pac/28490/3
+ */
+
 namespace It_All\BoutiqueCommerce\Models;
 
 use It_All\BoutiqueCommerce\Postgres;

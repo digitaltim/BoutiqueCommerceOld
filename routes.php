@@ -37,12 +37,14 @@ $slim->group('', function () {
     $this->get('/CRUD/{table}/delete/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:delete')->setName('crud.delete');
 })->add(new AuthMiddleware($container));
 
-//$slim->get('/{table}', 'It_All\BoutiqueCommerce\UI\Views\ListView:output')->setName('table.show');
+// This approach uses the ListView view class to render the view for the route
+$slim->get('/{table}', 'It_All\BoutiqueCommerce\UI\Views\ListView:output')->setName('table.show');
 
-$slim->get('/{table}', function ($reqest, $response, $args) {
-    $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
-    $dbTableModel = new $class($this->db);
-    $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
-    $this->model = new $modelClass($dbTableModel);
-    return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
-});
+// This approach avoids using the ListView class and instead renders the view directly
+// $slim->get('/{table}', function ($reqest, $response, $args) {
+//     $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
+//     $dbTableModel = new $class($this->db);
+//     $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
+//     $this->model = new $modelClass($dbTableModel);
+//     return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
+// });
