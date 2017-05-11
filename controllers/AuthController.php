@@ -9,17 +9,6 @@ use It_All\BoutiqueCommerce\Utilities\Database;
 
 class AuthController extends Controller
 {
-    public function getSignOut($request, $response)
-    {
-        $this->auth->logout();
-        return $response->withRedirect($this->router->pathFor('home'));
-    }
-
-    public function getSignIn($request, $response)
-    {
-        return $this->view->render($response, 'admin/auth/auth.twig', ['title' => 'Sign In']);
-    }
-
     function postSignIn($request, $response, $args)
     {
         $auth = $this->auth->attempt(
@@ -33,11 +22,6 @@ class AuthController extends Controller
 
         $this->flash->addMessage('error', 'Could not sign you in with those credentials.');
         return $response->withRedirect($this->router->pathFor('auth.signin'));
-    }
-
-    public function getSignUp($request, $response)
-    {
-        return $this->view->render($response, 'admin/auth/signup.twig', ['title' => 'Sign Up']);
     }
 
     function postSignUp($request, $response, $args)

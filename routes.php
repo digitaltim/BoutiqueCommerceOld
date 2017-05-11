@@ -14,10 +14,12 @@ $slim->group('', function () {
     $container = $this->getContainer();
     $settings = $container->get('settings');
 
-    $this->get('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignIn')->setName('auth.signin');
+    $this->get('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignIn')->setName('auth.signin');
+
     $this->post('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignIn');
 
-    $this->get('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignUp')->setName('auth.signup');
+    $this->get('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignUp')->setName('auth.signup');
+
     $this->post('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignUp');
 })->add(new GuestMiddleware($container));
 
@@ -26,7 +28,7 @@ $slim->group('', function () {
     $container = $this->getContainer();
     $settings = $container->get('settings');
 
-    $this->get('/' . $settings['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignOut')->setName('auth.signout');
+    $this->get('/' . $settings['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignOut')->setName('auth.signout');
 
     // CRUD
     $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:index')->setName('crud.show');
