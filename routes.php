@@ -14,10 +14,12 @@ $slim->group('', function () {
     $container = $this->getContainer();
     $settings = $container->get('settings');
 
-    $this->get('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignIn')->setName('auth.signin');
+    $this->get('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignIn')->setName('auth.signin');
+
     $this->post('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignIn');
 
-    $this->get('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignUp')->setName('auth.signup');
+    $this->get('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignUp')->setName('auth.signup');
+
     $this->post('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignUp');
 })->add(new GuestMiddleware($container));
 
@@ -26,7 +28,7 @@ $slim->group('', function () {
     $container = $this->getContainer();
     $settings = $container->get('settings');
 
-    $this->get('/' . $settings['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignOut')->setName('auth.signout');
+    $this->get('/' . $settings['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignOut')->setName('auth.signout');
 
     // CRUD
     $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:index')->setName('crud.show');
@@ -37,12 +39,14 @@ $slim->group('', function () {
     $this->get('/CRUD/{table}/delete/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:delete')->setName('crud.delete');
 })->add(new AuthMiddleware($container));
 
+// This approach uses the ListView view class to render the view for the route
 $slim->get('/{table}', 'It_All\BoutiqueCommerce\UI\Views\ListView:output')->setName('table.show');
-////
-////$slim->get('/{table}', function ($request, $response, $args) {
-////    $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
-////    $dbTableModel = new $class($this->db);
-////    $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
-////    $this->model = new $modelClass($dbTableModel);
-////    return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
-//});
+
+// This approach avoids using the ListView class and instead renders the view directly
+// $slim->get('/{table}', function ($reqest, $response, $args) {
+//     $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
+//     $dbTableModel = new $class($this->db);
+//     $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
+//     $this->model = new $modelClass($dbTableModel);
+//     return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
+// });
