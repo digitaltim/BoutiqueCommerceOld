@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>{{ title }}}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% if pageType is empty %}
+            <meta name="robots" content="noindex, nofollow">
+        {% elseif pageType == 'public' %}
+            <meta name="keywords" content="{{ metaKeywords }}">
+            <meta name="description" content="{{ metaDescription }}">
+        {% endif %}
+        {% block htmlHeadMeta %}{% endblock %}
+        {% block htmlHeadCss %}{% endblock %}
+    </head>
+    <body>
+    {% block htmlBodyContent %}{% endblock %}
+    {% block htmlBodyJs %}{% endblock %}
+    </body>
+</html>
