@@ -1,29 +1,49 @@
-Roadmap
+1) work on todo list
+2) search todo and do or move here
 
 finish infrastructure functionality
+
 - CRUD
-- authorization (page level)
-- admin nav, messages (bridge between infrastructure and business functionality)
-- docs structure (which docs will be displayed in the admin?)
+-- "port" FF and recordset->html table tools to Twig
+-- test all tables
+--- fix FF/validation errors
+--- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' for not nullable fields on a case by case basis.
+--- create custom dbtable models as necessary
+
+- Authentication
+-- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
+-- change to use FF, new Validator, and AdminsModel
+-- config var for session timeout
+-- view should be on admin route only ($config['dirs']['admin'])
+-- only owner/director can insert new admins (see Authorization)
+
+- Authorization (page level, admin nav, functionality - ie only owner/director can enter new admins)
+
+- Nav Admin
+-- orm tables
+-- item configurability
+-- messaging (flash? may be able to simply pass from controller to view)
+
+- docs
+-- structure (which docs will be displayed in the admin?)
+
 - database backup script (cron?)
+
 - fix favicon.ico error (see phpErrors.log)
-- database unique indexes need to be replaced by unique constraints
-- database columns that should be required (not blank) ie testimonials.person, place should have the default '' removed.
-- database changes such as the 2 points above may need a migration plan (?)
-- republish db schema
+
 - customize Page Not Found error: https://btq/CRUD/testimonials/delete/
 
-optimize, document & test infrastructure
-- Improve directory structure: (?) *
--use typehints on params and return params
--docblocks for all classes, methods, properties (?)
--Group the routes
--move all queries to models (where will join queries go?)
--search/do todo in code
--Create installation instructions
---composer update
---node gulp node_modules
--how to prevent xss from rogue admins (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html)
+- Improve directory structure: (?) *, **
+
+- Group the routes
+
+- optimize, document & test infrastructure
+-- use typehints on params and return params
+-- docblocks for all classes, methods, properties (?)
+-- Create installation instructions
+-- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that?
+
+- fork infrastructure to a new repo
 
 * possible directory structure
 BoutiqueCommerce
@@ -52,3 +72,66 @@ postgresDump.sql
 -prebuild
 -storage
 -vendor
+
+** alternate possible dir struct
+BoutiqueCommerce
+.gitignore
+composer.json
+composer.lock
+LICENSE.md
+README.md
+pgDbSchemaDump.sql
+-src
+ -public
+  .htaccess
+  index.php
+  -css..
+  -js..
+ -infrastructure
+  NavAdmin.php
+  -CRUD
+   CrudController.php
+   CrudView.php
+  -Authentication
+   AuthenticationController.php
+   AuthenticationView.php
+   AuthenticationMiddleware.php
+   GuestMiddleware.php
+  -Authorization..
+  -Database
+   DbTable.php
+   DbColumn.php
+   PgDbAccessService.php
+   -QueryBuilder
+    QueryBuilder.php
+    InsertUpdateBuilder.php
+    InsertBuilder.php
+    UpdateBuilder.php
+  -Utilities
+   CsrfViewMiddleware.php
+   OldInputMiddleware.php (?)
+   ValidatorService.php
+   PhpMailerService.php
+   MessagingAdmin.php (? - flash)
+ -config..
+  routes.php
+ -domain (ie biz)
+  Nav.php
+  -BusinessObjects
+   OrdersModel.php
+   CustomersModel.php
+   ..
+  -Views
+   -Admin.. (pages ie OrdersListView.php)
+   -Public.. (pages ie AboutUsView.php)
+ -templates
+-docs..
+-prebuild
+ gulpfile.js
+ -js..
+ -scss..
+
+-vendor..
+-storage
+ -cache..
+ -logs..
