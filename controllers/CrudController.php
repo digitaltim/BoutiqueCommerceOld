@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Controllers;
 
+use It_All\BoutiqueCommerce\Models\DbColumn;
 use It_All\BoutiqueCommerce\Models\DbTable;
-use It_All\BoutiqueCommerce\UI\UiRsDbTable;
+use It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView;
 use It_All\FormFormer\Form;
 use Slim\Container;
 
@@ -30,7 +31,62 @@ class CrudController extends Controller
         }
     }
 
-    public function index($request, $response, $args)
+    private function setDbColumnValidationRules(DbColumn $c): array
+    {
+        $columnRules = [];
+        if ($c->isRequired()) {
+            $columnRules[] = 'required';
+        }
+
+        switch ($c->getType()) {
+            case 'numeric':
+                $columnRules[] = 'numeric';
+                break;
+            case 'smallint':
+            case 'bigint':
+            case 'integer':
+                $columnRules[] = 'integer';
+                break;
+            case 'date':
+                $columnRules[] = 'date';
+                break;
+            case 'timestamp without time zone':
+                $columnRules[] = 'timestamp';
+                break;
+            case 'boolean':
+            case 'character':
+            case 'character varying':
+            case 'text' :
+            case 'USER-DEFINED':
+                break; // no validation
+            default:
+                throw new \Exception("$this->type column type validation not defined, column $this->name");
+        }
+
+        return $columnRules;
+    }
+
+    private function validateFieldInput($request): bool
+    {
+//        $rules = [
+//            'text' => [
+//                'required',
+//                'numeric'
+//            ]
+//        ];
+        // get field rules from db columns
+        $rules = [];
+        foreach ($request->getParsedBody() as $fieldName => $postedValue) {
+            // find db columns
+            if ($c = $this->model->getColumnByName($fieldName)) {
+                $rules[$fieldName] = $this->setDbColumnValidationRules($c);
+            }
+            // ignore non-db columns
+        }
+        return $this->newvalidator->validate($request->getParsedBody(), $rules);
+    }
+
+    public function postInsert($request, $response, $args)
     {
         $this->tableName = $args['table'];
         try {
@@ -38,87 +94,73 @@ class CrudController extends Controller
         } catch (\Exception $e) {
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
-        $UiRsDbTable = new UiRsDBTable($this->model);
-        $results = '';
-        if ($res = $this->model->select('*')) {
-            if ($this->model->isInsertAllowed()) {
-                $results .= "<h3 style='display:inline;'><a href='".$this->router->pathFor('crud.getInsert', ['table' => $this->tableName])."'>Insert New</a></h3>";
+
+        if ($this->validateFieldInput($request)) {
+            try {
+                $this->model->insert($request->getParsedBody());
+                    //todo, render view, display success message
+                    return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
+                } catch (\Exception $e) {
+                    // todo, render proper error page
+                    die('query failure: '.$e->getMessage());
             }
-            $results .= (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
+        } else {
+            // redisplay the form with input values and error(s)
+            $cv = new CrudView($this->container);
+            return $cv->getInsert($request, $response, $args);
+        }
+    }
+
+    public function postUpdate($request, $response, $args)
+    {
+        $this->tableName = $args['table'];
+        $primaryKey = $args['primaryKey'];
+        try {
+            $this->setModel();
+        } catch (\Exception $e) {
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+        }
+
+        // todo try catch to find conditions like No changes made
+        if ($this->validateFieldInput($request)) {
+            try {
+                $this->model->update($request->getParsedBody(), $primaryKey);
+                //todo, render view, display success message
+                return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
+            } catch (\Exception $e) {
+                // todo, render proper error page
+                die('query failure: '.$e->getMessage());
+            }
+        } else {
+            // redisplay the form with input values and error(s)
+            $cv = new CrudView($this->container);
+            return $cv->getUpdate($request, $response, $args);
+        }
+    }
+
+    public function delete($request, $response, $args)
+    {
+        $this->tableName = $args['table'];
+        $primaryKey = $args['primaryKey'];
+        try {
+            $this->setModel();
+        } catch (\Exception $e) {
+            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+        }
+        if ($this->model->delete($primaryKey)) {
+            echo 'delete success';
+            // todo return a view w/ message
+//            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
         }
         else {
-            $results = "Query Error";
+            echo 'delete failure';
         }
-        return $this->view->render($response, 'admin/CRUD/index.twig', ['title' => $this->tableName, 'results' => $results]);
-
     }
 
-    public function getUpdate($request, $response, $args)
+    private function isPrimaryKeyColumnForInsert($column, $dbAction)
     {
-        $this->tableName = $args['table'];
-        $primaryKey = $args['primaryKey'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
-        }
-        $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
-        $form = $this->getForm('update', $primaryKey, pg_fetch_array($rs));
-
-        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Update '.$this->tableName, 'form' => $form->generate()]);
+        return $column->isPrimaryKey() && $dbAction == 'insert';
     }
-
-    public function getInsert($request, $response, $args)
-    {
-        $this->tableName = $args['table'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
-        }
-        $form = $this->getForm();
-        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Insert '.$this->tableName, 'form' => $form->generate()]);
-    }
-
-    public function postInsert($reqest, $response, $args)
-    {
-        $this->tableName = $args['table'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
-        }
-        if ($this->model->insert($reqest->getParsedBody())) {
-            //todo display success message
-            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
-        }
-
-        $form = $this->getForm('insert', null, $reqest->getParsedBody());
-
-        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Error: Insert '.$this->tableName, 'form' => $form->generate()]);
-    }
-
-    public function postUpdate($reqest, $response, $args)
-    {
-        $this->tableName = $args['table'];
-        $primaryKey = $args['primaryKey'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
-        }
-        // todo try catch to find conditions like No changes made
-        if ($this->model->update($reqest->getParsedBody(), $primaryKey)) {
-            //todo display success message
-            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
-        }
-        // redisplay form with new values
-        $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
-        $form = $this->getForm('update', $primaryKey, $reqest->getParsedBody());
-
-        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Error: Update '.$this->tableName, 'form' => $form->generate()]);
-    }
-
 
     private function getForm(string $dbAction = 'insert', string $primaryKey = null, array $fieldValues = [])
     {
@@ -139,29 +181,6 @@ class CrudController extends Controller
 
         $this->addFormFields($dbAction, $form, 'sub', $fieldValues);
         return $form;
-    }
-
-    public function delete($reqest, $response, $args)
-    {
-        $this->tableName = $args['table'];
-        $primaryKey = $args['primaryKey'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
-        }
-        if ($this->model->delete($primaryKey)) {
-            echo 'delete success';
-//            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
-        }
-        else {
-            echo 'delete failure';
-        }
-    }
-
-    private function isPrimaryKeyColumnForInsert($column, $dbAction)
-    {
-        return $column->isPrimaryKey() && $dbAction == 'insert';
     }
 
     private function addFormFields($dbAction, $form, $submitFieldName, $fieldValues = null)

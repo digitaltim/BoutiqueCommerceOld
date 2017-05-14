@@ -310,128 +310,6 @@ function deleteCookie(string $cookieName)
 }
 
 /**
- * converts argument to int
- */
-function parseInt($check): int
-{
-    if (isInteger($check)) {
-        return intval($check);
-    } else {
-        trigger_error("Can't parse string as integer: $check");
-    }
-}
-
-// VALIDATION FUNCTIONS
-
-/**
- * Check in for being an integer
- * either type int or the string equivalent of an integer
- * @param $in any type
- * note empty string returns false
- * note 0 or "0" returns true (as it should - no 0 problem as is mentioned by some sites)
- * note 4.00 returns true but "4.00" returns false
- * @return bool
- */
-function isInteger($check): bool
-{
-    return (filter_var($check, FILTER_VALIDATE_INT) === false) ? false : true;
-}
-
-function isWholeNumber($check): bool
-{
-    return (!isInteger($check) || $check < 0) ? false : true;
-}
-
-/**
- * checks if string is blank or null
- * this can be helpful for validating required form fields
- * @param string $check
- * @return bool
- */
-function isBlankOrNull($check, $trim = true): bool
-{
-    if ($trim) {
-        $check = trim($check);
-    }
-    return (strlen($check) == 0 || is_null($check));
-}
-
-/**
- * checks if string is blank or zero
- * this can be helpful for validating numeric/integer form fields
- * @param string $check
- * @return bool
- */
-function isBlankOrZero($check, $trim = true): bool
-{
-    if ($trim) {
-        $check = trim($check);
-    }
-    return (strlen($check) == 0 || $check == 0);
-}
-
-/**
- * checks if string is a positive integer
- * @param string $check
- * @return bool
- */
-function isPositiveInteger($check): bool
-{
-    return (isInteger($check) && $check > 0);
-}
-
-
-function isNumericPositive($check): bool
-{
-    if (!is_numeric($check) || $check <= 0) {
-        return false;
-    }
-    return true;
-}
-
-/**
- * @param string $check
- * @return bool
- * format YYYY-mm-dd
- */
-function isDbDate($check): bool
-{
-    // todo use regex
-    if (strlen($check) != 10) {
-        return false;
-    }
-    if (substr($check, 4, 1) != "-" || substr($check, 7, 1) != "-") {
-        return false;
-    }
-    // if all zeros not ok
-    if ($check == '0000-00-00') {
-        return false;
-    }
-    $yr = substr($check, 0, 4);
-    $mo = substr($check, 5, 2);
-    $dy = substr($check, 8, 2);
-    if (substr($yr, 0, 2) != '20') {
-        return false;
-    }
-    if ($mo > 12 || !is_numeric($mo) || (substr($mo, 0, 1) != '0' && substr($mo, 0, 1) != '1')) {
-        return false;
-    }
-    if ($dy > 31 || !is_numeric($dy) || (substr($mo, 0, 1) != '0' && substr($mo, 0, 1) != '1')) {
-        return false;
-    }
-    return true;
-}
-
-/**
- * @param $dbDate has already been verified to be isDbDate()
- * @return bool
- */
-function isDbDateInPast($dbDate):bool
-{
-    return dbDateCompare($dbDate) < 0;
-}
-
-/**
  * @param $d1
  * @param $d2 if null compare to today
  * d1, d2 already verified to be isDbDate()
@@ -455,14 +333,6 @@ function convertDateMktime($dbDate): int
     return mktime(0, 0, 0, substr($dbDate, 5, 2), substr($dbDate, 8, 2), substr($dbDate, 0, 4));
 }
 
-function isDigit($check)
-{
-    if (strlen($check) != 1 || !isInteger($check)) {
-        return false;
-    }
-    return true;
-}
-
 /**
  * @param string $number
  * if number is an integer with .00 it will be cropped and just the int returned. otherwise the original arg will be returned
@@ -470,78 +340,6 @@ function isDigit($check)
 function crop00FromInt($check)
 {
     return (substr($check, strlen($check) - 3, 3) == '.00') ? substr($check, 0, strlen($check) - 3) : $check;
-}
-
-function isTwoCharNumber($check, $max = 99, $leadingZeroOk = true): bool
-{
-    if (strlen($check) != 2) {
-        return false;
-    }
-    if (!isDigit(substr($check, 0, 1)) || !isDigit(substr($check, 1))) {
-        return false;
-    }
-    if (!$leadingZeroOk && substr($check, 0, 1) == '0') {
-        return false;
-    }
-    $checkInt = (int)$check;
-    if ($checkInt > $max) {
-        return false;
-    }
-    return true;
-}
-
-function isDbMilitaryHours($check): bool
-{
-    // 00 - 23
-    return isTwoCharNumber($check, 23);
-}
-
-function isMinutes($check): bool
-{
-    // 00 - 59
-    return isTwoCharNumber($check, 59);
-}
-
-function isSeconds($check): bool
-{
-    // 00 - 59
-    return isMinutes($check);
-}
-
-function isDbTimestamp($check): bool
-{
-    // todo use regex
-    if (!isDbDate(substr($check, 0, 10))) {
-        return false;
-    }
-    // remainder of string like  10:08:16.717238
-    if (substr($check, 10, 1) != ' ') {
-        return false;
-    }
-    $timeParts = explode(":", substr($check, 11));
-    // ok without seconds
-    if (count($timeParts) != 2 && count($timeParts) != 3) {
-        return false;
-    }
-    foreach ($timeParts as $index => $timePart) {
-        if ($index == 0) {
-            if (!isDbMilitaryHours($timePart)) {
-                return false;
-            }
-        } elseif ($index == 1) {
-            if (!isMinutes($timePart)) {
-                return false;
-            }
-        } else {
-            if (!isSeconds(substr($timePart, 0, 2))) {
-                return false;
-            }
-            if (strlen($timePart) > 2 && !is_numeric(substr($timePart, 2))) {
-                return false;
-            }
-        }
-    }
-    return true;
 }
 
 function convertDbDateDbTimestamp($dbDate, $time = 'end')
@@ -552,13 +350,6 @@ function convertDbDateDbTimestamp($dbDate, $time = 'end')
         return "$dbDate 0:0:0";
     }
 }
-
-function isEmail($check)
-{
-    return filter_var($check, FILTER_VALIDATE_EMAIL);
-}
-
-// END VALIDATION FUNCTIONS
 
 /**
  * @param Form $form
@@ -571,8 +362,10 @@ function isEmail($check)
  * @param null $hiddenValue
  * @return mixed
  * @throws \Exception
+ * Note also capable of creating a field group (radio buttons) for enum fields
+ * todo find a better place for this to live
  */
-function addFormFieldFieldGroupFromDbColumn(Form $form, DbColumn $column, $initialValue = '', $label = null, $placeholder=null, $fieldName = null, $isDisabled = false, $hiddenValue = null)
+function getFormFieldFromDbColumn(Form $form, DbColumn $column, $errorMessage = null, $initialValue = '', $label = null, $placeholder=null, $fieldName = null, $isDisabled = false, $hiddenValue = null)
 {
     $defaultTextareaRows = 2;
     $defaultTextareaCols = 40;
@@ -702,23 +495,23 @@ function addFormFieldFieldGroupFromDbColumn(Form $form, DbColumn $column, $initi
                 }
                 break;
             default:
-                throw new \Exception("Undefined field: $columnType ($columnName)", E_USER_ERROR); // exits
+                throw new \Exception("Undefined field: $columnType ($columnName)");
         } // switch
     }
     if ($isFieldgroup) {
-//            var_dump($newField['customSettings']);die();
+        // todo initial value?
         $fieldFieldGroup = $form->addFieldGroup($newField['type'], $newField['name'], $newField['label'], '', $column->isRequired(), $newField['customSettings']);
     } else {
         if ($column->isRequired()) {
             $newField['attributes']['required'] = 'required';
         }
-        $fieldFieldGroup = $form->addField($newField['tag'], $newField['attributes'], $newField['label'], '', $newField['customSettings']); // descriptor is blank
+        $fieldFieldGroup = $form->addField($newField['tag'], $newField['attributes'], $newField['label'], '', $newField['customSettings']);
         if ($callSetValue) {
             $fieldFieldGroup->value($initialValue);
         }
     }
-    if ($valErrMsg = $column->getValidationError()) {
-        $form->setError($fieldFieldGroup, $valErrMsg);
+    if (strlen($errorMessage) > 0) {
+        $form->setError($fieldFieldGroup, $errorMessage);
     }
     return $fieldFieldGroup;
 }

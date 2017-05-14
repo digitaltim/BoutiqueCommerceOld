@@ -6,6 +6,12 @@ finish infrastructure functionality
 - admin nav, messages (bridge between infrastructure and business functionality)
 - docs structure (which docs will be displayed in the admin?)
 - database backup script (cron?)
+- fix favicon.ico error (see phpErrors.log)
+- database unique indexes need to be replaced by unique constraints
+- database columns that should be required (not blank) ie testimonials.person, place should have the default '' removed.
+- database changes such as the 2 points above may need a migration plan (?)
+- republish db schema
+- customize Page Not Found error: https://btq/CRUD/testimonials/delete/
 
 optimize, document & test infrastructure
 - Improve directory structure: (?) *

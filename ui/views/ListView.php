@@ -24,7 +24,7 @@ class ListView
         return $this->container->{$name};
     }
 
-    public function output($reqest, $response, $args)
+    public function output($request, $response, $args)
     {
         $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
         $dbTableModel = new $class($this->db);

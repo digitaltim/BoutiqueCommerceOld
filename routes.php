@@ -29,20 +29,20 @@ $slim->group('', function () {
     $this->get('/' . $settings['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\Controllers\AuthController:getSignOut')->setName('auth.signout');
 
     // CRUD
-    $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:index')->setName('crud.show');
-    $this->get('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\Controllers\CrudController:getInsert')->setName('crud.getInsert');
-    $this->post('/CRUD/{table}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postInsert')->setName('crud.postInsert');
-    $this->get('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:getUpdate')->setName('crud.getUpdate');
+    $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:index')->setName('crud.show');
+    $this->get('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:getInsert')->setName('crud.getInsert');
+    $this->post('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\Controllers\CrudController:postInsert')->setName('crud.postInsert');
+    $this->get('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:getUpdate')->setName('crud.getUpdate');
     $this->post('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postUpdate')->setName('crud.postUpdate');
     $this->get('/CRUD/{table}/delete/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:delete')->setName('crud.delete');
 })->add(new AuthMiddleware($container));
 
-//$slim->get('/{table}', 'It_All\BoutiqueCommerce\UI\Views\ListView:output')->setName('table.show');
-
-$slim->get('/{table}', function ($reqest, $response, $args) {
-    $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
-    $dbTableModel = new $class($this->db);
-    $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
-    $this->model = new $modelClass($dbTableModel);
-    return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
-});
+$slim->get('/{table}', 'It_All\BoutiqueCommerce\UI\Views\ListView:output')->setName('table.show');
+////
+////$slim->get('/{table}', function ($request, $response, $args) {
+////    $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
+////    $dbTableModel = new $class($this->db);
+////    $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
+////    $this->model = new $modelClass($dbTableModel);
+////    return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
+//});

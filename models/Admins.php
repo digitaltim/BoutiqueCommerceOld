@@ -5,6 +5,7 @@ namespace It_All\BoutiqueCommerce\Models;
 
 use It_All\BoutiqueCommerce\Postgres;
 use It_All\BoutiqueCommerce\Utilities\Database\QueryBuilder;
+use It_All\BoutiqueCommerce\Validation\Validator;
 
 class Admins extends DbTable
 {
