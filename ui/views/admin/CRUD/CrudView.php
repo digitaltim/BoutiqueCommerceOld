@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\UI\Views\Admin\CRUD;
 
 use It_All\BoutiqueCommerce\Models\DbColumn;
+use It_All\BoutiqueCommerce\Models\DbTable;
 use It_All\BoutiqueCommerce\UI\UiRsDbTable;
 use It_All\BoutiqueCommerce\UI\Views\Admin\AdminView;
 use It_All\FormFormer\Form;
@@ -30,7 +31,11 @@ class CrudView extends AdminView
         try {
             $this->setModel();
         } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+            return $this->view->render($response, 'admin/error.twig', [
+                'title' => 'Error',
+                'message' => $e->getMessage(),
+                'navigationItems' => $this->navigationItems
+            ]);
         }
         $UiRsDbTable = new UiRsDbTable($this->model);
         $results = '';
@@ -43,7 +48,11 @@ class CrudView extends AdminView
         else {
             $results = "Query Error";
         }
-        return $this->view->render($response, 'admin/CRUD/index.twig', ['title' => $this->tableName, 'results' => $results]);
+        return $this->view->render($response, 'admin/CRUD/index.twig', [
+            'title' => $this->tableName,
+            'results' => $results,
+            'navigationItems' => $this->navigationItems
+        ]);
 
     }
 
@@ -54,14 +63,22 @@ class CrudView extends AdminView
         try {
             $this->setModel();
         } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+            return $this->view->render($response, 'admin/error.twig', [
+                'title' => 'Error',
+                'message' => $e->getMessage(),
+                'navigationItems' => $this->navigationItems
+            ]);
         }
         $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
         $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : pg_fetch_array($rs);
 
         $form = $this->getForm('update', $primaryKey, $fieldValues, $this->newvalidator->getErrors());
 
-        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Update '.$this->tableName, 'form' => $form->generate()]);
+        return $this->view->render($response, 'admin/CRUD/form.twig', [
+            'title' => 'Update '.$this->tableName,
+            'form' => $form->generate(),
+            'navigationItems' => $this->navigationItems
+        ]);
     }
 
     public function getInsert($request, $response, $args)
@@ -70,13 +87,21 @@ class CrudView extends AdminView
         try {
             $this->setModel();
         } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+            return $this->view->render($response, 'admin/error.twig', [
+                'title' => 'Error',
+                'message' => $e->getMessage(),
+                'navigationItems' => $this->navigationItems
+            ]);
         }
 
         $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : [];
         $form = $this->getForm('insert', null, $fieldValues, $this->newvalidator->getErrors());
 
-        return $this->view->render($response, 'admin/CRUD/form.twig', ['title' => 'Insert '.$this->tableName, 'form' => $form->generate()]);
+        return $this->view->render($response, 'admin/CRUD/form.twig', [
+            'title' => 'Insert '.$this->tableName,
+            'form' => $form->generate(),
+            'navigationItems' => $this->navigationItems
+        ]);
     }
 
     private function isPrimaryKeyColumnForInsert(DbColumn $column, string $dbAction)

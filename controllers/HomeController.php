@@ -14,7 +14,7 @@ class HomeController extends Controller
 
     public function test($request, $response)
     {
-        $navAdmin = new NavAdmin();
+        $navAdmin = new NavAdmin($this->db);
         $navigationItems = $navAdmin->getSections();
 
         return $this->view->render($response, 'admin/test.twig', ['navigationItems' => $navigationItems]);

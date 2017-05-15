@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Controllers;
 
+use It_All\BoutiqueCommerce\UI\NavAdmin;
 use It_All\BoutiqueCommerce\Models\DbColumn;
 use It_All\BoutiqueCommerce\Models\DbTable;
 use It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView;
@@ -13,10 +14,15 @@ class CrudController extends Controller
 {
     private $tableName;
     private $model;
+    protected $navigationItems;
 
     public function __construct(Container $container)
     {
         parent::__construct($container);
+
+        // Instantiate navigation navbar contents
+        $navAdmin = new NavAdmin($this->db);
+        $this->navigationItems = $navAdmin->getSections();
     }
 
     private function setModel()
@@ -92,7 +98,11 @@ class CrudController extends Controller
         try {
             $this->setModel();
         } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+            return $this->view->render($response, 'admin/error.twig', [
+                'title' => 'Error',
+                'message' => $e->getMessage(),
+                'navigationItems' => $this->navigationItems
+            ]);
         }
 
         if ($this->validateFieldInput($request)) {
@@ -118,7 +128,11 @@ class CrudController extends Controller
         try {
             $this->setModel();
         } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+            return $this->view->render($response, 'admin/error.twig', [
+                'title' => 'Error',
+                'message' => $e->getMessage(),
+                'navigationItems' => $this->navigationItems
+            ]);
         }
 
         // todo try catch to find conditions like No changes made
@@ -145,7 +159,11 @@ class CrudController extends Controller
         try {
             $this->setModel();
         } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
+            return $this->view->render($response, 'admin/error.twig', [
+                'title' => 'Error',
+                'message' => $e->getMessage(),
+                'navigationItems' => $this->navigationItems
+            ]);
         }
         if ($this->model->delete($primaryKey)) {
             echo 'delete success';

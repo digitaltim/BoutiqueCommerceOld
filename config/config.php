@@ -9,6 +9,8 @@ return [
 
     'domainName' => $domainName,
 
+    'projectsUrl' => 'https://www.' . $domainName . '/redmine/',
+
     'domainUseWww' => false,
 
     'storeEmails' => [
