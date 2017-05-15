@@ -7,7 +7,7 @@
 						{% set navigationItemIndex = loop.index %}
 						{% if navigationItem.subSection %}
 							{% if navigationItem.link %}
-								<h3 class='navItem'><a href="Link:{{ navigationItem.link }}">{{ key }}</a><div class='showNavSubSection' id='showNavSubSection{{ navigationItemIndex }}'> <a href='#' onclick='toggleNavSubSection("{{ navigationItemIndex }}")'>+</a></div></h3>
+								<h3 class='navItem'><a href="{{ navigationItem.link }}">{{ key }}</a><div class='showNavSubSection' id='showNavSubSection{{ navigationItemIndex }}'> <a href='#' onclick='toggleNavSubSection("{{ navigationItemIndex }}")'>+</a></div></h3>
 							{% else %}
 								<h3 class='navItem'>{{ key }}<div class='showNavSubSection' id='showNavSubSection{{ navigationItemIndex }}'> <a href='#' onclick='toggleNavSubSection("{{ navigationItemIndex }}")'>+</a></div></h3>
 							{% endif %}
@@ -18,7 +18,7 @@
 							{% endfor %}
 						{% else %}
 							{% if navigationItem.link %}
-								<h3 class='navItem'><a href="Link:{{ navigationItem.link }}">{{ key }}</a></h3>
+								<h3 class='navItem'><a href="{{ navigationItem.link }}">{{ key }}</a></h3>
 							{% else %}
 								<h3 class='navItem'>{{ key }}</h3>
 							{% endif %}
