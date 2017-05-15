@@ -1,0 +1,8 @@
+{% macro open(tagName, attributes) %}<{{ tagName }}{% for k,v in attributes %} {{ k }}="{{ v }}"{% endfor %}>{% endmacro %}
+
+{% macro close(tagName) %}</{{ tagName }}>{% endmacro %}
+
+{% macro complete(tagName, attributes, endTag, content) %}
+    {% import _self as html %}
+    {{ html.htmlElementOpenTag(tagName, attributes) }}{{ content }}{% if endTag %}{{ html.htmlElementCloseTag(tagName) }}{% endif %}
+{% endmacro %}
