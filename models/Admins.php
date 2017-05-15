@@ -8,9 +8,9 @@ use It_All\BoutiqueCommerce\Utilities\Database\QueryBuilder;
 
 class Admins extends DbTable
 {
-    function __construct(string $tableName, Postgres $db)
+    function __construct(Postgres $db)
     {
-        parent::__construct($tableName, $db);
+        parent::__construct('admins', $db);
         $this->allowInsert = false;
         $this->allowUpdate = false;
         $this->allowDelete = false;

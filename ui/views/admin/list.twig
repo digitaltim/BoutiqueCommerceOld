@@ -1,16 +1,11 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <title>{{ title }}</title>
-    <link href='/css/orm.css' rel='stylesheet' type='text/css'>
-</head>
-<body>
-test
-{% for result in results %}
-    {% for field in result %}
-    {{ field }} &nbsp;&nbsp;
-    {% endfor %}<br>
-{% endfor %}
-</body>
-</html>
+{%  extends 'admin/partials/layout.twig' %}
+
+{%  block content %}
+    test
+    {% for result in results %}
+        {% for field in result %}
+        {{ field }} &nbsp;&nbsp;
+        {% endfor %}<br>
+    {% endfor %}
+{%  endblock %}
+

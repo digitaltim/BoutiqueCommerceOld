@@ -40,6 +40,10 @@ $container['form'] = function ($container) {
     return new \It_All\FormFormer\Form();
 };
 
+// Test
+$container['test'] = function($container) {
+    return new It_All\BoutiqueCommerce\Test\Test;
+};
 
 // Twig
 $container['view'] = function ($container) {
@@ -58,6 +62,14 @@ $container['view'] = function ($container) {
         'check' => $container->auth->check(),
         'user' => $container->auth->user()
     ]);
+
+    // make test class available inside templates
+    $view->getEnvironment()->addGlobal('test', [
+        'check' => $container->test->check(),
+        'user' => $container->test->user()
+    ]);
+
+
 
     // make flash messages available inside templates
     $view->getEnvironment()->addGlobal('flash', $container->flash);

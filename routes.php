@@ -9,6 +9,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 // Routes that anyone can access
 $slim->get('/', 'It_All\BoutiqueCommerce\Controllers\HomeController:index')->setName('home');
 
+$slim->get('/test', 'It_All\BoutiqueCommerce\Controllers\HomeController:test')->setName('test');
+
 // Group routes that a guest user can access
 $slim->group('', function () {
     $container = $this->getContainer();

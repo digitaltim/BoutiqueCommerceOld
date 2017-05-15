@@ -1,0 +1,48 @@
+<header id='pageHeader'>
+	<div id='topLineContainer'>
+		<div id='adminNavWrapper'>
+			<div id='showNav'><a href='#' onclick='toggleNav();'>+ nav</a></div>
+				<nav id='adminNavMain'>
+					{% for key, navigationItem in navigationItems %}
+						{% if navigationItem.subSection %}
+							{% if navigationItem.link %}
+								<h3 class='navItem'><a href="Link:{{ navigationItem.link }}">{{ key }}</a><div class='showNavSubSection' id='showNavSubSection3'> <a href='#' onclick='toggleNavSubSection("3")'>+</a></div></h3>
+							{% else %}
+								<h3 class='navItem'>{{ key }}<div class='showNavSubSection' id='showNavSubSection3'> <a href='#' onclick='toggleNavSubSection("3")'>+</a></div></h3>
+							{% endif %}
+							{% for key, subSectionItem in navigationItem.subSection %}
+								<div class='adminNavMainSubSection' id='adminNavMainSubSection3'>
+									<h3 class='subNavItem'><a href="{{ subSectionItem.link }}">{{ key }}</a></h3>
+								</div>
+							{% endfor %}
+						{% else %}
+							{% if navigationItem.link %}
+								<h3 class='navItem'><a href="Link:{{ navigationItem.link }}">{{ key }}</a></h3>
+							{% else %}
+								<h3 class='navItem'>{{ key }}</h3>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				</nav>
+			</div>
+			<div id='headerTitle'>
+			   <h1><a href="{{ path_for('home')}}">BoutiqueCommerce</a>    &nbsp;<span style='color: grey;'>{LOCAL TESTING}</span></h1>
+			</div>
+			{% if auth.check %}
+				<div id='headerUser'>
+					<h4 class='headerGreeting'>hello {{ auth.user.username }} [<a href="{{ path_for('auth.signout')}}">logout</a>]</h4>
+				</div>
+			{% else %}
+				<div id='headerUser'>
+					<h4 class='headerGreeting'><a href="{{ path_for('auth.signin')}}">Sign In</a></h4>
+				</div>
+				<div id='headerUser'>
+					<h4 class='headerGreeting'><a href="{{ path_for('auth.signup')}}">Sign Up</a></h4>
+				</div>
+			{% endif %}
+		</div>
+		 </div>
+		 <h1 id='adminPageHeading'>{{ title }}</h1>
+		</div>
+	</div>
+</header>
