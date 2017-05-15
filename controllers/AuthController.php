@@ -17,7 +17,7 @@ class AuthController extends Controller
         );
 
         if ($auth) {
-            return $response->withRedirect($this->router->pathFor('home'));
+            return $response->withRedirect($this->router->pathFor('test'));
         }
 
         $this->flash->addMessage('error', 'Could not sign you in with those credentials.');
@@ -44,7 +44,7 @@ class AuthController extends Controller
         if ($res) {
             $this->flash->addMessage('info', 'You have been signed up.');
             $this->auth->attempt($request->getParam('username'), $request->getParam('password'));
-            return $response->withRedirect($this->router->pathFor('home'));
+            return $response->withRedirect($this->router->pathFor('test'));
         }
         return $this->view->render($response, 'signup.twig', ['title' => 'Sign Up']);
     }
