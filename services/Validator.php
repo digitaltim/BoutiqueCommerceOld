@@ -161,7 +161,6 @@ class Validator
      */
     public function isDbDate($check): bool
     {
-        // todo use regex
         if (strlen($check) != 10) {
             return false;
         }
@@ -242,7 +241,6 @@ class Validator
 
     public function isDbTimestamp($check): bool
     {
-        // todo use regex
         if (!$this->isDbDate(substr($check, 0, 10))) {
             return false;
         }

@@ -69,12 +69,9 @@ $container['view'] = function ($container) {
         'user' => $container->test->user()
     ]);
 
-
-
     // make flash messages available inside templates
     $view->getEnvironment()->addGlobal('flash', $container->flash);
 
-    // todo do we need?
     // make form former available inside templates
     $view->getEnvironment()->addGlobal('form', $container->form);
 
@@ -110,7 +107,6 @@ $container['newvalidator'] = function ($container) {
 unset($container['errorHandler']);
 unset($container['phpErrorHandler']);
 
-//todo what is the point of these?
 // -----------------------------------------------------------------------------
 // Controller factories / registration
 // -----------------------------------------------------------------------------

@@ -158,7 +158,6 @@ class DbTable {
      */
     protected function hasInsertPermission(): bool
     {
-        // todo fix
         // return isset($_SESSION['permissions']) && $_SESSION['permissions'] == 'owner';
         return true;
     }

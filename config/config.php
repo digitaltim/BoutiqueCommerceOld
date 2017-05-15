@@ -30,10 +30,17 @@ return [
     'pathTemplates' => APP_ROOT . 'ui/views/',
 
     'errors' => [
-        'fatalMessage' => 'Hamden, we have a problem.',
-        'emailTo' => 'greg@it-all.com', // todo use generic email (or array) @ $domainName and test .env override
-        'echoDev' => true,
-        'emailDev' => false
+        'emailTo' => ['owner', 'programmer'], // emails must be set in 'emails' section
+        'fatalMessage' => 'Apologies, there has been an error on our site. We have been alerted and will correct it as soon as possible.',
+        'echoDev' => true, // echo on dev servers
+        'emailDev' => false // email on dev servers (note live server will always email)
+    ],
+
+    'emails' => [
+        'owner' => "owner@domainName",
+        'programmer' => "programmer@domainName",
+        'service' => "service@domainName"
     ]
+
 
 ];

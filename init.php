@@ -13,19 +13,23 @@ use It_All\BoutiqueCommerce\Utilities;
 $config = array_merge(require APP_ROOT . 'config/config.php', require APP_ROOT . 'config/env.php');
 
 // instantiate mailer
-$mailer = new It_All\BoutiqueCommerce\Services\Mailer($config['storeEmails']['defaultFromEmail'], $config['storeEmails']['defaultFromName'], $config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
+$mailer = new It_All\BoutiqueCommerce\Services\PhpMailerService($config['storeEmails']['defaultFromEmail'], $config['storeEmails']['defaultFromName'], $config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
 
 // error handling
+$emailErrorsTo = [];
+foreach ($config['errors']['emailTo'] as $roleEmail) {
+    $emailErrorsTo[] = $config['emails'][$roleEmail];
+}
 $errorHandler = new \It_All\BoutiqueCommerce\Utilities\ErrorHandler(
     $config['storage']['logs']['pathPhpErrors'],
     $config['isLive'],
     $config['errors']['echoDev'],
     $config['errors']['emailDev'],
     $mailer,
-    $config['errors']['emailTo']
+    $emailErrorsTo
 );
 
-// workaround for catching some fatal errors like parse errors. note that parse errors in this file and index.php are not handled, but cause a fatal error with display (not displayed if display_errors is off in php.ini, but the ini_set call will not affect it). todo, write a test to be sure that "Parse error:" and/or "BoutiqueCommerce" are not displayed on the index route (that will cover these 2 files, all others will be handled).
+// workaround for catching some fatal errors like parse errors. note that parse errors in this file and index.php are not handled, but cause a fatal error with display (not displayed if display_errors is off in php.ini, but the ini_set call will not affect it).
 register_shutdown_function(array($errorHandler, 'checkForFatal'));
 set_error_handler(array($errorHandler, 'phpErrorHandler'));
 set_exception_handler(array($errorHandler, 'throwableHandler'));
@@ -36,7 +40,7 @@ ini_set( 'display_startup_errors', 'off' );
 
 // keep this even though the error handler logs errors, so that any errors in the error handler itself or prior to will still be logged. note, if using slim error handling, this will log all php errors
 ini_set('error_log', $config['storage']['logs']['pathPhpErrors']);
-
+trigger_error('abc');
 if (!Utilities\isRunningFromCommandLine()) {
     /**
      * verify/force all pages to be https. and verify/force www or not www based on Config::useWww

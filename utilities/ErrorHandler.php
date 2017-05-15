@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Utilities;
 
-use It_All\BoutiqueCommerce\Services\Mailer;
+use It_All\BoutiqueCommerce\Services\PhpMailerService;
 
 class ErrorHandler
 {
@@ -13,8 +13,9 @@ class ErrorHandler
     private $emailDev;
     private $mailer;
     private $emailTo;
+    private $fatalMessage;
 
-    public function __construct(string $logPath, bool $isLiveServer, bool $echoDev, bool $emailDev, Mailer $m, string $emailTo)
+    public function __construct(string $logPath, bool $isLiveServer, bool $echoDev, bool $emailDev, PhpMailerService $m, array $emailTo, $fatalMessage = 'Apologies, there has been an error on our site. We have been alerted and will correct it as soon as possible.')
     {
         $this->logPath = $logPath;
         $this->isLiveServer = $isLiveServer;
@@ -22,6 +23,7 @@ class ErrorHandler
         $this->emailDev = $emailDev;
         $this->mailer = $m;
         $this->emailTo = $emailTo;
+        $this->fatalMessage = $fatalMessage;
     }
 
     /**
@@ -31,7 +33,7 @@ class ErrorHandler
      * email - always on live server, depends on config on dev. never email error deets.
      * Then, die if necessary
      */
-    private function handleError(string $messageBody, $die = false)
+    private function handleError(string $messageBody, bool $die = false)
     {
         $errorMessage = $this->generateMessage($messageBody);
 
@@ -50,8 +52,58 @@ class ErrorHandler
         }
 
         if ($die) {
-            die();
+            die($this->fatalMessage);
         }
+    }
+
+    /**
+     * used in register_shutdown_function to see if a fatal error has occured and handle it.
+     * note, this does not occur often in php7, as almost all errors are now exceptions and will be caught by the registered exception handler. fatal errors can still occur for conditions like out of memory: https://trowski.com/2015/06/24/throwable-exceptions-and-errors-in-php7/
+     */
+    public function checkForFatal()
+    {
+        $error = error_get_last();
+        $fatalErrorTypes = [E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR];
+        if (in_array($error["type"], $fatalErrorTypes)) {
+            $this->handleError($this->generateMessageBodyCommon($error["type"], $error["message"], $error["file"], $error["line"]),true, true);
+        }
+    }
+
+    /** @param \Throwable $e
+     * catches both Errors and Exceptions
+     * create error message and send to handleError
+     */
+    public function throwableHandler(\Throwable $e)
+    {
+        $message = $this->generateMessageBodyCommon($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+        $exitPage = ($e->getCode() == E_ERROR || $e->getCode() == E_USER_ERROR) ? true : false;
+
+        $traceString = "";
+        foreach ($e->getTrace() as $k => $v) {
+            $traceString .= "#$k ";
+            $traceString .= arrayWalkToStringRecursive($v);
+            $traceString .= "\n";
+        }
+
+        $message .= "\nStack Trace:\n".$traceString;
+
+        $this->handleError($message, $exitPage);
+    }
+
+    /**
+     * @param int $errno
+     * @param string $errstr
+     * @param string|null $errfile
+     * @param string|null $errline
+     * to be registered with php's set_error_handler()
+     * trigger_error calls this
+     */
+    public function phpErrorHandler(int $errno, string $errstr, string $errfile = null, string $errline = null)
+    {
+        $this->handleError(
+            $this->generateMessageBodyCommon($errno, $errstr, $errfile, $errline),
+            false
+        );
     }
 
     private function generateMessage(string $messageBody): string
@@ -71,15 +123,6 @@ class ErrorHandler
         }
         $message .= "\n" . $messageBody . "\n\n";
         return $message;
-    }
-
-    public function checkForFatal()
-    {
-        $error = error_get_last();
-        $fatalErrorTypes = [E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR];
-        if (in_array($error["type"], $fatalErrorTypes)) {
-            $this->handleError($this->generateMessageBodyCommon($error["type"], $error["message"], $error["file"], $error["line"]),true);
-        }
     }
 
     private function getErrorType($errno)
@@ -133,45 +176,9 @@ class ErrorHandler
         return $message;
     }
 
-    /** @param \Throwable $e
-     * catches both Errors and Exceptions
-     * create error message and send to handleError
-     */
-    public function throwableHandler(\Throwable $e)
-    {
-        $message = $this->generateMessageBodyCommon($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-        $exitPage = ($e->getCode() == E_ERROR || $e->getCode() == E_USER_ERROR) ? true : false;
-
-        $traceString = "";
-        foreach ($e->getTrace() as $k => $v) {
-            $traceString .= "#$k ";
-            $traceString .= arrayWalkToStringRecursive($v);
-            $traceString .= "\n";
-        }
-
-        $message .= "\nStack Trace:\n".$traceString;
-
-        $this->handleError($message, $exitPage);
-    }
-
-    /**
-     * @param int $number
-     * @param string $string
-     * @param string|null $file
-     * @param string|null $line
-     * to be registered with php's set_error_handler()
-     */
-    public function phpErrorHandler(int $errno, string $errstr, string $errfile = null, string $errline = null)
-    {
-        $this->handleError(
-            $this->generateMessageBodyCommon($errno, $errstr, $errfile, $errline),
-            false
-        );
-    }
-
     private function email()
     {
-        $this->mailer->send($_SERVER['SERVER_NAME'] . " Error", "Check log file for details.", [$this->emailTo]);
+        $this->mailer->send($_SERVER['SERVER_NAME'] . " Error", "Check log file for details.", $this->emailTo);
     }
 
 }

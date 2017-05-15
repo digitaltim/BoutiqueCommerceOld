@@ -13,7 +13,6 @@ abstract class Controller
     {
         $this->container = $container;
         // Instantiate services/dependencies
-        // todo do we need to do this?
         $container['db'];
         $container['view'];
         $container['mailer'];

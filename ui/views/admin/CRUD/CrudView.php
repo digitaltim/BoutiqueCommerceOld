@@ -19,7 +19,6 @@ class CrudView extends AdminView
         try {
             $this->model = (class_exists($class)) ? new $class($this->db) : new DbTable($this->tableName, $this->db);
         } catch (\Exception $e) {
-            // todo why doesn't this work? (even if $request, $response, $args are passed in)
 //            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => 'model: Invalid Table Name: ' . $this->tableName]);
             throw new \Exception('Invalid Table Name: ' . $this->tableName);
         }

@@ -25,7 +25,6 @@ class CrudController extends Controller
         try {
             $this->model = (class_exists($class)) ? new $class($this->db) : new DbTable($this->tableName, $this->db);
         } catch (\Exception $e) {
-            // todo why doesn't this work? (even if $request, $response, $args are passed in)
 //            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => 'model: Invalid Table Name: ' . $this->tableName]);
             throw new \Exception('Invalid Table Name: ' . $this->tableName);
         }
@@ -98,10 +97,8 @@ class CrudController extends Controller
         if ($this->validateFieldInput($request)) {
             try {
                 $this->model->insert($request->getParsedBody());
-                    //todo, render view, display success message
                     return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
                 } catch (\Exception $e) {
-                    // todo, render proper error page
                     die('query failure: '.$e->getMessage());
             }
         } else {
@@ -121,14 +118,11 @@ class CrudController extends Controller
             return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => $e->getMessage()]);
         }
 
-        // todo try catch to find conditions like No changes made
         if ($this->validateFieldInput($request)) {
             try {
                 $this->model->update($request->getParsedBody(), $primaryKey);
-                //todo, render view, display success message
                 return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
             } catch (\Exception $e) {
-                // todo, render proper error page
                 die('query failure: '.$e->getMessage());
             }
         } else {
@@ -149,7 +143,6 @@ class CrudController extends Controller
         }
         if ($this->model->delete($primaryKey)) {
             echo 'delete success';
-            // todo return a view w/ message
 //            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
         }
         else {

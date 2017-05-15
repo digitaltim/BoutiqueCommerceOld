@@ -15,7 +15,6 @@ class UiRsDbTable extends UiRsTable
 
     function __construct(DbTable $dbTableModel, $outputColumns = [])
     {
-        // todo transition this to twig and use named routes for links
         $this->dbTableModel = $dbTableModel;
         // create output columns
         foreach ($this->dbTableModel->getColumns() as $column) {

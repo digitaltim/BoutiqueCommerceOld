@@ -1,7 +1,6 @@
 <?php
 namespace It_All\BoutiqueCommerce\Utilities;
 
-// todo remove unused functions. remove functions based on old page controller model that don't apply to front controller.
 use It_All\BoutiqueCommerce\Models\DbColumn;
 use It_All\FormFormer\Form;
 
@@ -181,8 +180,6 @@ function isRunningFromCommandLine(): bool
 
 /**
  * gets extension of a fileName
- * @param string $fileName
- * @return bool or string? TODO
  */
 function getFileExt(string $fileName)
 {
@@ -363,7 +360,6 @@ function convertDbDateDbTimestamp($dbDate, $time = 'end')
  * @return mixed
  * @throws \Exception
  * Note also capable of creating a field group (radio buttons) for enum fields
- * todo find a better place for this to live
  */
 function getFormFieldFromDbColumn(Form $form, DbColumn $column, $errorMessage = null, $initialValue = '', $label = null, $placeholder=null, $fieldName = null, $isDisabled = false, $hiddenValue = null)
 {
@@ -499,7 +495,6 @@ function getFormFieldFromDbColumn(Form $form, DbColumn $column, $errorMessage = 
         } // switch
     }
     if ($isFieldgroup) {
-        // todo initial value?
         $fieldFieldGroup = $form->addFieldGroup($newField['type'], $newField['name'], $newField['label'], '', $column->isRequired(), $newField['customSettings']);
     } else {
         if ($column->isRequired()) {

@@ -13,7 +13,6 @@ class AdminView
     {
         $this->container = $container;
         // Instantiate services/dependencies
-        // todo is this necessary? (note duplication of base controller too)
         $container['db'];
         $container['view'];
         $container['mailer'];

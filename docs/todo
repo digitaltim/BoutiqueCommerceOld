@@ -1,14 +1,16 @@
 1) work on todo list
-2) search todo and do or move here
 
 finish infrastructure functionality
 
 - CRUD
--- "port" FF and recordset->html table tools to Twig
+-- "port" FF and recordset->html table tools to Twig - going to pass / pause on this as would require some FF rewrite and substantial delay. will just output form->generate() to twig and form|raw
 -- test all tables
 --- fix FF/validation errors
 --- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' for not nullable fields on a case by case basis.
 --- create custom dbtable models as necessary
+--- render views, error views and messages from CrudView
+--- display error for update with no changes made
+--- why does view render call not work in setModel (CrudView and CrudController)? (and DRY)
 
 - Authentication
 -- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
@@ -16,13 +18,20 @@ finish infrastructure functionality
 -- config var for session timeout
 -- view should be on admin route only ($config['dirs']['admin'])
 -- only owner/director can insert new admins (see Authorization)
+-- upon successful login set response to desired route/page
 
-- Authorization (page level, admin nav, functionality - ie only owner/director can enter new admins)
+- Authorization (page level, admin nav, functionality - ie only owner/director can enter new admins - see DbTable::hasInsertPermission())
 
 - Nav Admin
 -- orm tables
 -- item configurability
 -- messaging (flash? may be able to simply pass from controller to view)
+
+- What is the point of controller / factories registration in dependencies?
+
+- do we need FF input to Twig in dependencies?
+
+- do we need to instantiate services in base Controller and AdminView? (plus DRY)
 
 - docs
 -- structure (which docs will be displayed in the admin?)
@@ -35,13 +44,21 @@ finish infrastructure functionality
 
 - Improve directory structure: (?) *, **
 
+- can we use named routes in UiRsDbTable?
+
 - Group the routes
+
+- use regex for Validator::isDbDate() and isDbTimestamp
+
+- utilities functions.php - remove unused functions. remove functions based on old page controller model that don't apply to front controller.
+
+- find a better place for getFormFieldFromDbColumn()
 
 - optimize, document & test infrastructure
 -- use typehints on params and return params
 -- docblocks for all classes, methods, properties (?)
 -- Create installation instructions
--- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that?
+-- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
 
 - fork infrastructure to a new repo
 
