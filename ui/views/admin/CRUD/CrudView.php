@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\UI\Views\Admin\CRUD;
 
 use It_All\BoutiqueCommerce\Models\DbColumn;
+use It_All\BoutiqueCommerce\Models\DbTable;
 use It_All\BoutiqueCommerce\UI\UiRsDbTable;
 use It_All\BoutiqueCommerce\UI\Views\Admin\AdminView;
 use It_All\FormFormer\Form;
