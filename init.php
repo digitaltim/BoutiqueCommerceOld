@@ -40,7 +40,7 @@ ini_set( 'display_startup_errors', 'off' );
 
 // keep this even though the error handler logs errors, so that any errors in the error handler itself or prior to will still be logged. note, if using slim error handling, this will log all php errors
 ini_set('error_log', $config['storage']['logs']['pathPhpErrors']);
-trigger_error('abc');
+
 if (!Utilities\isRunningFromCommandLine()) {
     /**
      * verify/force all pages to be https. and verify/force www or not www based on Config::useWww
