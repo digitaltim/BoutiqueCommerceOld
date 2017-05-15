@@ -74,6 +74,7 @@ $container['view'] = function ($container) {
     // make flash messages available inside templates
     $view->getEnvironment()->addGlobal('flash', $container->flash);
 
+    // todo do we need?
     // make form former available inside templates
     $view->getEnvironment()->addGlobal('form', $container->form);
 
@@ -98,6 +99,11 @@ $container['logger'] = function($container) {
 // Form Validation
 $container['validator'] = function ($container) {
     return new It_All\BoutiqueCommerce\Validation\Validator;
+};
+
+// Alternate Form Validation
+$container['newvalidator'] = function ($container) {
+    return new \It_All\BoutiqueCommerce\Services\Validator();
 };
 
 // Error Handling

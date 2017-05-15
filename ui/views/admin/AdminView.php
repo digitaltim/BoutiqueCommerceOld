@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Controllers;
+namespace It_All\BoutiqueCommerce\UI\Views\Admin;
 
 use Slim\Container;
 
-abstract class Controller
+class AdminView
 {
     protected $container; // dependency injection container
 
@@ -13,7 +13,7 @@ abstract class Controller
     {
         $this->container = $container;
         // Instantiate services/dependencies
-        // todo do we need to do this?
+        // todo is this necessary? (note duplication of base controller too)
         $container['db'];
         $container['view'];
         $container['mailer'];
@@ -23,4 +23,5 @@ abstract class Controller
     {
         return $this->container->{$name};
     }
+
 }

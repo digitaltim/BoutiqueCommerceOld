@@ -76,11 +76,9 @@ class ErrorHandler
     public function checkForFatal()
     {
         $error = error_get_last();
-        if ($error["type"] == E_ERROR || $error["type"] == E_PARSE || $error["type"] == E_CORE_ERROR || $error["type"] == E_CORE_WARNING) {
-            $this->handleError(
-                $this->generateMessageBodyCommon($error["type"], $error["message"], $error["file"], $error["line"]),
-                true
-            );
+        $fatalErrorTypes = [E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR];
+        if (in_array($error["type"], $fatalErrorTypes)) {
+            $this->handleError($this->generateMessageBodyCommon($error["type"], $error["message"], $error["file"], $error["line"]),true);
         }
     }
 

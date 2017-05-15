@@ -33,7 +33,7 @@ class ListView
         return $this->container->{$name};
     }
 
-    public function output($reqest, $response, $args)
+    public function output($request, $response, $args)
     {
         // Instantiate the domain model
         $domainModelName = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);

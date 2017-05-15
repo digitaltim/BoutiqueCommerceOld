@@ -1,12 +1,12 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        {% include 'admin/partials/head.twig' %}
-        <link href='/css/orm.css' rel='stylesheet' type='text/css'>
-    </head>
-    <body>
-        {% include 'admin/partials/navigation.twig' %}
-        {{ form | raw }}
-        <script type='text/javascript' src='/js/uiHelper.js'></script>
-    </body>
-</html>
+{% extends 'base.twig' %}
+
+{% block htmlHeadCss %}
+    {% include 'admin/partials/head.twig' %}
+    <link href='/css/orm.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block htmlBodyContent %}
+    {% include 'admin/partials/navigation.twig' %}
+    {{ form | raw }}
+    <script type='text/javascript' src='/js/uiHelper.js'></script>
+{% endblock %}

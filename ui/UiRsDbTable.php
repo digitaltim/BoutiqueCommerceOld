@@ -11,10 +11,11 @@ use It_All\BoutiqueCommerce\Models\DbTable;
  */
 class UiRsDbTable extends UiRsTable
 {
-    private $dbTableModel;
+    protected $dbTableModel;
 
     function __construct(DbTable $dbTableModel, $outputColumns = [])
     {
+        // todo transition this to twig and use named routes for links
         $this->dbTableModel = $dbTableModel;
         // create output columns
         foreach ($this->dbTableModel->getColumns() as $column) {
@@ -30,7 +31,9 @@ class UiRsDbTable extends UiRsTable
                 ];
             }
         }
+        $addDeleteCell = false;
         if ($this->dbTableModel->isDeleteAllowed()) {
+            $addDeleteCell = true;
             $outputColumns['X']['link'] = [
                 'title' => 'delete',
                 'href' => $_SERVER['REQUEST_URI'].'/delete/VALUE',
@@ -40,7 +43,7 @@ class UiRsDbTable extends UiRsTable
                 'onclick' => ''
             ];
         }
-        parent::__construct($outputColumns, $this->dbTableModel->getPrimaryKeyColumn());
+        parent::__construct($outputColumns, $addDeleteCell, $this->dbTableModel->getPrimaryKeyColumn());
     }
 
     private function isUpdateColumn($columnName)

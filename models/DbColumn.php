@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Models;
 
+use It_All\BoutiqueCommerce\Utilities\Database\QueryBuilder;
+
 class DbColumn
 {
     /** @var  */
@@ -17,6 +19,14 @@ class DbColumn
     /** @var bool */
     private $isNullable;
 
+    /**
+     * @var bool
+     * this is an assumption based on if not nullable and defaultValue is blank
+     * it can be overriden using overrideIsBlankable
+     * if a blank input is received for a nullable column it will be entered as null
+     */
+    private $isBlankable;
+
     /** @var string */
     private $defaultValue;
 
@@ -26,16 +36,13 @@ class DbColumn
     /** @var string */
     private $udtName;
 
-    /** @var  array */
-    private $validation;
-
-    /** @var string or null */
-    private $validationError;
+    /** @var bool */
+    private $isUnique;
 
     /** @var array http://www.postgresql.org/docs/9.4/static/datatype-numeric.html */
     private $numericTypes = array('smallint', 'integer', 'bigint', 'decimal', 'numeric', 'real', 'double precision', 'smallserial', 'serial', 'bigserial');
 
-    function __construct(DbTable $dbTableModel,  array $columnInfo)
+    function __construct(DbTable $dbTableModel, array $columnInfo)
     {
         $this->dbTableModel = $dbTableModel;
         $this->name = $columnInfo['column_name'];
@@ -44,42 +51,36 @@ class DbColumn
         $this->defaultValue = $columnInfo['column_default'];
         $this->characterMaximumLength = $columnInfo['character_maximum_length'];
         $this->udtName = $columnInfo['udt_name'];
-        $this->validation = array();
-        $this->setValidation();
-        $this->validationError = null;
+        $this->setIsUnique();
+        $this->setIsBlankable();
     }
 
-    private function setValidation()
+    private function setIsUnique()
     {
-        if (!$this->isNullable && ($this->getDefaultValue() === false || strlen($this->getDefaultValue()) > 0) ) {
-            // otherwise blank is allowed
-            $this->addValidation('required');
-        }
-        switch ($this->type) {
-            case 'numeric':
-                $this->addValidation('numeric');
-                break;
-            case 'smallint':
-            case 'bigint':
-            case 'integer':
-                $this->addValidation('integer');
-                break;
-            case 'date':
-                $this->addValidation('date');
-                break;
-            case 'timestamp without time zone':
-                $this->addValidation('timestamp');
-                break;
-            case 'boolean':
-            case 'character':
-            case 'character varying':
-            case 'text' :
-            case 'USER-DEFINED':
-                break; // no validation
-            default:
-                trigger_error("$this->type column type validation not defined, column $this->name");
-        }
+        $q = new QueryBuilder("SELECT column_name FROM INFORMATION_SCHEMA.constraint_column_usage ccu JOIN information_schema.table_constraints tc ON ccu.constraint_name = tc.constraint_name WHERE ccu.table_name = $1 and tc.table_name = $1 and constraint_type = 'UNIQUE'", $this->dbTableModel->getTableName());
+        $this->isUnique = ($q->getOne()) ? true : false;
     }
+
+    public function getIsUnique(): bool
+    {
+        return $this->isUnique;
+    }
+
+    private function setIsBlankable()
+    {
+        $this->isBlankable = (!$this->isNullable && $this->getDefaultValue() === '') ? true : false;
+    }
+
+    public function getIsBlankable(): bool
+    {
+        return $this->isBlankable;
+    }
+
+    public function overrideIsBlankable(bool $isBlankable)
+    {
+        $this->isBlankable = $isBlankable;
+    }
+
 
     public function getDefaultValue()
     {
@@ -102,103 +103,9 @@ class DbColumn
         }
     }
 
-    public function validate($value, $currentValue = false): bool
-    {
-        if ($this->isNullable && (is_null($value) || strlen($value) == 0)) {
-            return true;
-        }
-        foreach ($this->validation as $vType => $vValue) {
-            switch ($vType) {
-                case 'required':
-                    if (\It_All\BoutiqueCommerce\Utilities\isBlankOrNull($value)) {
-                        $this->validationError = 'Required';
-                        return false;
-                    }
-                    break;
-                case 'unique':
-                    if ($currentValue === false || $value != $currentValue) {
-                        // checking new field value or changed field value
-                        //die("value: $value currentValue: $currentValue");
-                        if ($this->dbTableModel->doesColumnValueExist($this->name, $value)) {
-                            $this->validationError = 'Already Exists';
-                            return false;
-                        }
-                    }
-                    break;
-                case 'integer':
-                    if (!\It_All\BoutiqueCommerce\Utilities\isInteger($value)) {
-                        $this->validationError = 'Must be Integer';
-                        return false;
-                    }
-                    break;
-                case 'numeric':
-                    if (!\It_All\BoutiqueCommerce\Utilities\is_numeric($value)) {
-                        $this->validationError = 'Must be Numeric';
-                        return false;
-                    }
-                    break;
-                case 'numeric_positive':
-                    if (!\It_All\BoutiqueCommerce\Utilities\isNumericPositive($value)) {
-                        $this->validationError = 'Must be Numeric Positive';
-                        return false;
-                    }
-                    break;
-                case 'date':
-                    if (!\It_All\BoutiqueCommerce\Utilities\isDbDate($value)) {
-                        $this->validationError = 'Invalid Date';
-                        return false;
-                    }
-                    break;
-                case 'timestamp':
-                    if (!\It_All\BoutiqueCommerce\Utilities\isDbTimestamp($value)) {
-                        $this->validationError = 'Invalid Timestamp';
-                        return false;
-                    }
-                    break;
-                default:
-                    throw new \Exception("validation for $vType undefined");
-            }
-        }
-        return true; // no error
-    }
-
-    public function addValidation(string $validationType, string $validationValue = null)
-    {
-        $this->validation[$validationType] = $validationValue;
-    }
-
-    public function removeValidation(string $validationType)
-    {
-        if (isset($this->validation[$validationType])) {
-            unset($this->validation[$validationType]);
-        }
-    }
-
-    public function getValidation(): array
-    {
-        return $this->validation;
-    }
-
-    public function getValidationError()
-    {
-        return ($this->validationError === null) ? false : $this->validationError;
-    }
-
-    public function setValidationError($errorMsg)
-    {
-        $this->validationError = $errorMsg;
-    }
-
-    /** true if validation type is set */
-    public function validationTypeExists($vType):bool
-    {
-        return array_key_exists($vType, $this->validation);
-    }
-
-    /** true if required validation is set */
     public function isRequired(): bool
     {
-        return $this->validationTypeExists('required');
+        return !$this->isNullable && ($this->getDefaultValue() === false || strlen($this->getDefaultValue()) > 0);
     }
 
     public function getName(): string
@@ -240,7 +147,7 @@ class DbColumn
         return $this->udtName;
     }
 
-    public function isPrimaryKey()
+    public function isPrimaryKey(): bool
     {
         return $this->name == $this->dbTableModel->getPrimaryKeyColumn();
     }

@@ -24,36 +24,40 @@ class DbTable {
      * this will override the default value set in pg
      * and be overridden by posted insert values
      */
-    protected $defaultColumnValues = array();
+    protected $defaultColumnValues = [];
 
     /** @var array $columnName => $value; hidden field added in insert form. things like enter_date that gets set to now */
-    protected $hiddenInsertColumnValues = array();
+    protected $hiddenInsertColumnValues = [];
 
     /** @var array $columnName => $value; hidden field added in insert form */
-    protected $hiddenUpdateColumnValues = array();
+    protected $hiddenUpdateColumnValues = [];
 
     /** @var array exclude columns in insert form and therefore insert query
      * note primary key gets added here by default
      */
-    protected $excludedInsertColumns = array();
+    protected $excludedInsertColumns = [];
 
     /** @var array exclude columns in update form and therefore update query
      * note primary key gets added here by default
      */
-    protected $excludedUpdateColumns = array();
+    protected $excludedUpdateColumns = [];
 
     /** @var array set fields disabled in insert form */
-    protected $disabledInsertColumns = array();
+    protected $disabledInsertColumns = [];
 
     /** @var array set fields disabled in update form */
-    protected $disabledUpdateColumns = array();
+    protected $disabledUpdateColumns = [];
 
     /** @var  column name or false */
     private $primaryKeyColumn;
 
-    private $orderBy = "id DESC";
+    private $orderBy = '';
 
-    public $selectLimit = 300;
+    /**
+     * @var int default 1000
+     */
+    public $selectLimit = 1000;
+
     protected $allowInsert = true;
 
     /** @var bool only works if there is a primary key column */
@@ -63,7 +67,6 @@ class DbTable {
     protected $allowDelete = true;
 
     /** @var array of general (table-level) validation error messages */
-    private $validationErrors;
 
     function __construct(string $tableName, \It_All\BoutiqueCommerce\Postgres $db)
     {
@@ -77,74 +80,60 @@ class DbTable {
         if ($this->primaryKeyColumn !== false) {
             $this->excludedInsertColumns[] = $this->primaryKeyColumn;
             $this->excludedUpdateColumns[] = $this->primaryKeyColumn;
+            $this->orderBy = "$this->primaryKeyColumn DESC"; // default
         }
-        $this->validationErrors = array();
     }
 
-    public function getOrderBy()
+    public function getOrderBy(): string
     {
         return $this->orderBy;
     }
 
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns;
     }
 
-    public function getDefaultColumnValues()
+    public function getDefaultColumnValues(): array
     {
         return $this->defaultColumnValues;
+    }
+
+    private function verifyInsertOrUpdate(string $insertOrUpdate)
+    {
+        if ($insertOrUpdate != 'insert' && $insertOrUpdate != 'update') {
+            throw new \Exception("Invalid argument passed, must be insert or update");
+        }
     }
 
     /**
      * @param string $dbAction 'insert' or 'update'
      * @return array
      */
-    public function getHiddenColumnValues($dbAction)
+    public function getHiddenColumnValues(string $insertOrUpdate): array
     {
-        if ($dbAction == 'insert') {
-            return $this->hiddenInsertColumnValues;
-        }
-        elseif ($dbAction == 'update') {
-            return $this->hiddenUpdateColumnValues;
-        }
-        else {
-            throw new \Exception("Invalid argument passed");
-        }
+        $this->verifyInsertOrUpdate($insertOrUpdate);
+        return $this->{"hidden".ucwords($insertOrUpdate)."ColumnValues"};
     }
 
     /**
      * @param string $queryAction 'insert' or 'update'
      * @return array
      */
-    public function getExcludedColumns($dbAction)
+    public function getExcludedColumns(string $insertOrUpdate): array
     {
-        if ($dbAction == 'insert') {
-            return $this->excludedInsertColumns;
-        }
-        elseif ($dbAction == 'update') {
-            return $this->excludedUpdateColumns;
-        }
-        else {
-            throw new \Exception("Invalid argument passed");
-        }
+        $this->verifyInsertOrUpdate($insertOrUpdate);
+        return $this->{"excluded".ucwords($insertOrUpdate)."Columns"};
     }
 
     /**
      * @param string $queryAction 'insert' or 'update'
      * @return array
      */
-    public function getDisabledColumns($dbAction)
+    public function getDisabledColumns(string $insertOrUpdate): array
     {
-        if ($dbAction == 'insert') {
-            return $this->disabledInsertColumns;
-        }
-        elseif ($dbAction == 'update') {
-            return $this->disabledUpdateColumns;
-        }
-        else {
-            throw new \Exception("Invalid argument passed");
-        }
+        $this->verifyInsertOrUpdate($insertOrUpdate);
+        return $this->{"disabled".ucwords($insertOrUpdate)."Columns"};
     }
 
     private function setPrimaryKeyColumn()
@@ -158,7 +147,7 @@ class DbTable {
         return $this->primaryKeyColumn;
     }
 
-    protected function isPrimaryKeyColumn($columnName)
+    protected function isPrimaryKeyColumn(string $columnName): bool
     {
         return $this->primaryKeyColumn === $columnName;
     }
@@ -167,7 +156,7 @@ class DbTable {
      * @return bool
      * can be overridden by child table classes to grant permission to other users
      */
-    protected function hasInsertPermission()
+    protected function hasInsertPermission(): bool
     {
         // todo fix
         // return isset($_SESSION['permissions']) && $_SESSION['permissions'] == 'owner';
@@ -178,7 +167,7 @@ class DbTable {
      * @return bool
      * can be overridden by child table classes to grant permission to other users
      */
-    private function hasUpdatePermission()
+    private function hasUpdatePermission(): bool
     {
         return $this->hasInsertPermission();
     }
@@ -187,27 +176,27 @@ class DbTable {
      * @return bool
      * can be overridden by child table classes to grant permission to other users
      */
-    private function hasDeletePermission()
+    private function hasDeletePermission(): bool
     {
         return $this->hasInsertPermission();
     }
 
-    public function isInsertAllowed()
+    public function isInsertAllowed(): bool
     {
         return $this->hasInsertPermission() && $this->allowInsert;
     }
 
-    public function isUpdateAllowed()
+    public function isUpdateAllowed(): bool
     {
         return $this->hasUpdatePermission() && $this->getPrimaryKeyColumn() !== false && $this->allowUpdate;
     }
 
-    public function isDeleteAllowed()
+    public function isDeleteAllowed(): bool
     {
         return $this->hasDeletePermission() && $this->getPrimaryKeyColumn() !== false && $this->allowUpdate;
     }
 
-    public function getTableName()
+    public function getTableName(): string
     {
         return $this->tableName;
     }
@@ -220,96 +209,19 @@ class DbTable {
         }
     }
 
-    /** adds general (table-level) validation error to array */
-    public function addValidationError($errorMsg)
-    {
-        $this->validationErrors[] = $errorMsg;
-    }
-
-    /**
-     * @return array
-     * both table level and column level errors
-     */
-    public function getValidationErrors()
-    {
-        $vErrors = array();
-        // table level
-        foreach ($this->validationErrors as $errorMsg) {
-            $vErrors[] = array('msg' => $errorMsg);
-        }
-        // column level
-        foreach ($this->columns as $c) {
-            $vE = $c->getValidationError();
-            if (!is_null($vE)) {
-                $vErrors[] = array('column' => $c->getName(), 'msg' => $vE);
-            }
-        }
-        return $vErrors;
-    }
-
-    public function getColumn($columnName)
+    public function getColumnByName(string $columnName)
     {
         foreach ($this->columns as $c) {
             if ($c->getName() == $columnName) {
                 return $c;
             }
         }
-        throw new \Exception("$columnName column not defined in $this->tableName model");
+        return false;
     }
 
-    protected function addColumnValidation($dbColumn, $validationType, $validationValue)
+    public function getRowCountForColumnValue(string $columnName, string $value): int
     {
-        $dbColumn->addValidation($validationType, $validationValue);
-    }
-
-    protected function addColumnValidationByName($columnName, $validationType, $validationValue)
-    {
-        $this->addColumnValidation($this->getColumn($columnName), $validationType, $validationValue);
-    }
-
-    protected function removeColumnValidation($dbColumn, $validationType)
-    {
-        $dbColumn->removeValidation($validationType);
-    }
-
-    protected function removeColumnValidationByName($columnName, $validationType)
-    {
-        $this->removeColumnValidation($this->getColumn($columnName), $validationType);
-    }
-
-    /**
-     * @param array $columnValues
-     * @return bool
-     * validate only the columns for which values are received
-     * create sub-class and override if table-specific validation necessary
-     * note, this could be changed to public if there's reason to validate independently of insert/update
-     * $currentColumnValues are passed in for update validation
-     * note, if extra columnValues are passed in, ie they don't exist in columns for this table, they are ignored
-     */
-    protected function validate(array $columnValues, array $skipColumnNames = [], array $currentColumnValues = [])
-    {
-        $valid = true;
-        foreach ($this->columns as $c) {
-            $cName = $c->getName();
-            if (!in_array($cName, $skipColumnNames)) {
-                // make sure all required columns exist in the argument. if not, set value to null to cause Required error
-                if ($c->isRequired() && !array_key_exists($cName, $columnValues)) {
-                    $columnValues[$cName] = null;
-                }
-                if (array_key_exists($cName, $columnValues)) {
-                    $currentValue = (array_key_exists($cName, $currentColumnValues)) ? $currentColumnValues[$cName] : false;
-                    if (!$c->validate($columnValues[$cName], $currentValue)) {
-                        $valid = false;
-                    }
-                }
-            }
-        }
-        return $valid;
-    }
-
-    public function getRowCountForColumnValue($columnName, $value)
-    {
-        if (!$this->getColumn($columnName)) {
+        if (!$this->getColumnByName($columnName)) {
             throw new \Exception("Invalid column name: $columnName for table: $this->tableName");
         }
         $q = new Database\QueryBuilder("SELECT * FROM $this->tableName WHERE $columnName = $1", $value);
@@ -318,12 +230,12 @@ class DbTable {
         return pg_num_rows($res);
     }
 
-    public function doesColumnValueExist($columnName, $value)
+    public function doesColumnValueExist(string $columnName, string $value): bool
     {
         return $this->getRowCountForColumnValue($columnName, $value) > 0;
     }
 
-    private function handleBlankValue($column)
+    private function handleBlankValue(DbColumn $column)
     {
         // set to null if field is nullable
         if ($column->getIsNullable()) {
@@ -340,7 +252,7 @@ class DbTable {
         return '';
     }
 
-    private function addColumnsToBuilder($qb, $columnValues, $updateRow=null)
+    private function addColumnsToBuilder(Database\QueryBuilder $qb, array $columnValues, array $updateRow = null)
     {
         if (get_class($qb) == 'InsertBuilder') {
             $isInsert = true;
@@ -373,7 +285,7 @@ class DbTable {
         }
     }
 
-    public function selectRowByPrimaryKey($pkValue)
+    public function selectRowByPrimaryKey(string $pkValue)
     {
         if (!$pkColumn = $this->getPrimaryKeyColumn()) {
             throw new \Exception("Primary Key Column does not exist for table ".$this->tableName);
@@ -383,20 +295,17 @@ class DbTable {
         return $q->execute();
     }
 
-    public function insert(array $columnValues): bool
+    public function insert(array $columnValues)
     {
         if (!$this->allowInsert) {
             throw new \Exception("Insert not allowed on table $this->tableName");
         }
-        if (!$this->validate($columnValues, array($this->primaryKeyColumn))) {
-            return false;
-        }
         $ib = new Database\InsertBuilder($this->tableName);
         $this->addColumnsToBuilder($ib, $columnValues);
-        return ($ib->execute()) ? true : false;
+        return $ib->execute();
     }
 
-    public function update(array $columnValues, string $pkValue): bool
+    public function update(array $columnValues, string $pkValue)
     {
         if (!$currentRes = $this->selectRowByPrimaryKey($pkValue)) {
             throw new \Exception("INVALID primary key $pkValue passed");
@@ -405,20 +314,15 @@ class DbTable {
         if (!$this->isUpdateAllowed()) {
             throw new \Exception("Update not allowed on table $this->tableName");
         }
-        if (!$this->validate($columnValues, ['id'], $currentRow)) {
-            return false;
-        }
         $ub = new Database\UpdateBuilder($this->tableName, $this->getPrimaryKeyColumn(), $pkValue);
         $this->addColumnsToBuilder($ub, $columnValues, $currentRow);
         if (count($ub->args) == 0) {
             throw new \Exception("No changes made.");
-        } elseif (!$res = $ub->execute()) {
-            throw new \Exception("Query failed.");
         }
-        return true;
+        return $ub->execute();
     }
 
-    public function delete($pkValue)
+    public function delete(string $pkValue): bool
     {
         if(!$this->allowDelete) {
             throw new \Exception("Deletions not allowed for table $this->tableName");
@@ -446,14 +350,14 @@ class DbTable {
      * @return
      * NOTE: there may be some weaknesses/incompatibilites in the WHERE clause, especially with null.
      */
-    public function select($columns = "*", $whereArr = [], $orderByOverride = null, $limitOverride = null)
+    public function select(string $columns = "*", array $whereArr = [], string $orderByOverride = null, string $limitOverride = null)
     {
         $q = new Database\QueryBuilder("SELECT * FROM $this->tableName");
         if (count($whereArr) > 0) {
             $q->add(" WHERE ");
             $i = 0;
             foreach ($whereArr as $colName => $colValue) {
-                if ($this->getColumn($colName)) {
+                if ($this->getColumnByName($colName)) {
                     $i++;
                     if ($i > 1) {
                         $q->add(" AND ");
@@ -470,7 +374,7 @@ class DbTable {
         $orderBy = ($orderByOverride != null) ? $orderByOverride : $this->orderBy;
         if ($limitOverride === 0) {
             $limit = "";
-        } elseif (\It_All\BoutiqueCommerce\Utilities\isInteger($limitOverride)) {
+        } elseif (\It_All\BoutiqueCommerce\Services\Validator::isInteger($limitOverride)) {
             $limit = "LIMIT $limitOverride";
         } else {
             $limit = "LIMIT $this->selectLimit";

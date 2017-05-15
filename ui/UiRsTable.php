@@ -17,7 +17,13 @@ class UiRsTable
      */
     protected $outputColumns;
 
-    private $primaryKeyColumn;
+    /**
+     * @var bool
+     */
+    private $addDeleteCell;
+
+    /** @var string the column value to use for the delete link (typicaly primaryKey column). note: hacky */
+    private $deleteValueColumn;
 
     /**
      * UiRsTable constructor.
@@ -44,10 +50,11 @@ class UiRsTable
         )
     );
      */
-    function __construct($outputColumns = [], $primaryKeyColumn = null)
+    function __construct($outputColumns = [], bool $addDeleteCell = false, string $deleteValueColumn = null)
     {
         $this->outputColumns = $outputColumns;
-        $this->primaryKeyColumn = $primaryKeyColumn;
+        $this->addDeleteCell = $addDeleteCell;
+        $this->deleteValueColumn = $deleteValueColumn;
     }
 
     private function getLinkAttributes(array $linkInfo, string $cellIndex, string $cellValue): array
@@ -96,8 +103,9 @@ class UiRsTable
                 $html .= ($inHeader) ? $this->headerCell($cellIndex) : $this->bodyCell($cellIndex, (string) $cellValue);
             }
         }
-        if (!is_null($this->primaryKeyColumn)) {
-            $html .= ($inHeader) ? $this->headerCell('X') : $this->bodyCell('X', $row[$this->primaryKeyColumn]);
+        // add in a delete column if necessary. value does not matter
+        if ($this->addDeleteCell) {
+            $html .= ($inHeader) ? $this->headerCell('X') : $this->bodyCell('X', $row[$this->deleteValueColumn]);
         }
         $html .= "</tr>";
         return $html;
