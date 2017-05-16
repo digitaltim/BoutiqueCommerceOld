@@ -5,7 +5,7 @@ finish infrastructure functionality
 - CRUD
 -- test all tables
 --- fix any FF/validation errors
---- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' for not nullable fields on a case by case basis.
+--- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' and not nullable for not nullable fields on a case by case basis.
 --- create custom dbtable models as necessary
 --- render views, error views and messages from CrudView
 --- display error for update with no changes made
@@ -36,9 +36,9 @@ finish infrastructure functionality
 - docs
 -- structure (which docs will be displayed in the admin?)
 
-- database backup script (cron?)
+- what to do about commits for js/scss mods (get .map files - ignore? what about frontend js/css?)
 
-- fix favicon.ico error (see phpErrors.log)
+- database backup script (cron?)
 
 - customize Page Not Found error: https://btq/CRUD/testimonials/delete/
 
