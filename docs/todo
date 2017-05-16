@@ -3,12 +3,13 @@
 finish infrastructure functionality
 
 - CRUD
+-- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' and not nullable for not nullable fields on a case by case basis.
 -- test all tables
 --- fix any FF/validation errors
---- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' and not nullable for not nullable fields on a case by case basis.
---- create custom dbtable models as necessary
+--- create custom dbtable models as necessary (defer until infrastructure complete)
 --- render views, error views and messages from CrudView
 --- display error for update with no changes made
+--- add cancel buttons on insert and update
 --- why does view render call not work in setModel (CrudView and CrudController)? (and DRY)
 
 - Nav Admin
@@ -18,7 +19,6 @@ finish infrastructure functionality
 -- make sure {LOCAL TESTING} appears only for dev
 
 - Authentication
--- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
 -- change to use FF, new Validator, and AdminsModel
 -- config var for session timeout
 -- view should be on admin route only ($config['dirs']['admin'])
@@ -26,6 +26,7 @@ finish infrastructure functionality
 -- upon successful login set response to desired route/page
 
 - Authorization (page level, admin nav, functionality - ie only owner/director can enter new admins - see DbTable::hasInsertPermission())
+-- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
 
 - What is the point of controller / factories registration in dependencies?
 
@@ -54,6 +55,8 @@ finish infrastructure functionality
 
 - find a better place for getFormFieldFromDbColumn()
 
+- log events
+
 - optimize, document & test infrastructure
 -- use typehints on params and return params
 -- docblocks for all classes, methods, properties (?)
@@ -61,6 +64,7 @@ finish infrastructure functionality
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
 
 - fork infrastructure to a new repo
+-- the schema should only contain the admins table and maybe a test table
 
 * possible directory structure
 BoutiqueCommerce
