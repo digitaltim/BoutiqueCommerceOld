@@ -607,10 +607,10 @@ CREATE FUNCTION best_customers(order_type order_type, start_dt timestamp without
 begin
 
     -- First get the orders in the given date range, joined to a status row for each item in the order.
-
+    
     create temp table orders_with_items_and_status (
       contact_id          bigint,
-      order_id            bigint,
+      order_id 	          bigint,
       order_type          order_type,
       order_item_id       bigint,
       item_price          numeric,
@@ -624,10 +624,10 @@ begin
     ) on commit drop;
 
     --create index on orders_with_items_and_status (contact_id);
-
+    
     insert into orders_with_items_and_status
       select o.contact_id, o.id, o.order_type, oi.id, oi.item_price, ois.order_item_status
-      from orders o
+      from orders o 
       join order_items oi on o.id = oi.order_id
       join order_item_status ois on ois.order_item_id = oi.id
       where (start_dt is null or o.order_dt >= start_dt)
@@ -637,41 +637,41 @@ begin
 /*   create temp table orders_with_items_and_status on commit drop as
       select o.contact_id, o.id order_id, o.order_type, oi.id order_item_id, oi.item_price, ois.order_item_status status,
       null::boolean is_pending, null::boolean is_cancelled, null::boolean is_normal, null::boolean is_return, null::boolean is_web_return, null::boolean is_store_return
-      from orders o
+      from orders o 
       join order_items oi on o.id = oi.order_id
       join order_item_status ois on ois.order_item_id = oi.id
       where (start_dt is null or o.order_dt >= start_dt)
         and (end_dt is null or o.order_dt <= end_dt)
         and ($1 is null or o.order_type = $1);
-  */
+  */ 
 
     -- Now categorize those rows based on the status and order_type, for easier summing and counting in the next steps.
     update orders_with_items_and_status o
-       set is_pending =              (status in ('tbk', 'spc', 'bck', 'tbs')),
-           is_cancelled =        (status in ('cxs', 'cxc')),
-       is_normal =           (status in ('shp', 'sto')),
-       is_return =           (status = 'ret'),
-       is_web_return =       (status = 'ret' and o.order_type = 'web'),
-       is_store_return =         (status = 'ret' and o.order_type = 'store');
-
-    create temp table summed on commit drop as
+       set is_pending = 	         (status in ('tbk', 'spc', 'bck', 'tbs')),
+       	   is_cancelled = 		 (status in ('cxs', 'cxc')),
+	   is_normal =  		 (status in ('shp', 'sto')),
+	   is_return =  		 (status = 'ret'),
+	   is_web_return = 		 (status = 'ret' and o.order_type = 'web'),
+	   is_store_return =  		 (status = 'ret' and o.order_type = 'store');
+	  
+    create temp table summed on commit drop as 
           select c.contact_id,
-             count(distinct order_id) as num_orders,
-         -- item counts
-         sum(case when is_normal or is_web_return then 1 else 0 end) as total_items,
-         sum(case when is_return then 1 else 0 end) as returned_items,
-         sum(case when is_cancelled then 1 else 0 end) as cancelled_items,
-         0 as net_items,
-         sum(case when is_pending then 1 else 0 end) as pending_items,
-         -- dollar sums
-         sum(case when is_normal or is_web_return then item_price else 0 end) as total,
-         sum(case when is_return then item_price else 0 end) as returned,
-         sum(case when is_cancelled then item_price else 0 end) as cancelled,
-         0::numeric(10,2) as net,
-         sum(case when is_pending then item_price else 0 end) as pending,
+	         count(distinct order_id) as num_orders,
+		 -- item counts
+		 sum(case when is_normal or is_web_return then 1 else 0 end) as total_items,
+		 sum(case when is_return then 1 else 0 end) as returned_items,
+		 sum(case when is_cancelled then 1 else 0 end) as cancelled_items,
+		 0 as net_items,
+		 sum(case when is_pending then 1 else 0 end) as pending_items,
+		 -- dollar sums
+		 sum(case when is_normal or is_web_return then item_price else 0 end) as total,
+		 sum(case when is_return then item_price else 0 end) as returned,
+		 sum(case when is_cancelled then item_price else 0 end) as cancelled,
+ 		 0::numeric(10,2) as net,
+		 sum(case when is_pending then item_price else 0 end) as pending,
                  array_agg(distinct order_id) order_ids, array_agg(order_item_id) order_item_ids
-      from orders_with_items_and_status c
-      group by c.contact_id;
+	  from orders_with_items_and_status c
+	  group by c.contact_id;
 
     create unique index on summed (contact_id);
 
@@ -735,7 +735,7 @@ begin
   sql3 = sql1 || ' type yes_no using bool_to_enum( ' || column_name || ' )';
   execute sql3;
 
-  if def is not null then
+  if def is not null then    
     sql4 = sql1 || ' set default ''' || (case when def then 'yes' else 'no' end)  || '''';
     execute sql4;
   end if;
@@ -905,20 +905,20 @@ begin
 
     -- Next get all the items (breakdowns) in the shipment. There is a row row here for each item breakdown row (size and color), not just items.
     -- Add a window function over the item so that code can see when where on the first, last, and nth item_breakdown?
-    create temp table _items on commit drop as
-      select s.id as shipment_id, s.receive_date,
+    create temp table _items on commit drop as 
+      select s.id as shipment_id, s.receive_date, 
              isi.item_id, isi.item_breakdown_id, isi.quantity, isi.unit_cost,
-             ii.style_number, ii.name, ii.price,
+             ii.style_number, ii.name, ii.price, 
              iib.item_color_id, iib.size_id,
-         seas.season,
-         -- "primary category" like in PHP code. Is this right?
-         (select name from inventory_categories c join inventory_item_categories ic on c.id = ic.category_id where ic.item_id = ii.id order by ic.id limit 1) as category,
-         col.color, sizes.size
+	     seas.season,
+	     -- "primary category" like in PHP code. Is this right?
+	     (select name from inventory_categories c join inventory_item_categories ic on c.id = ic.category_id where ic.item_id = ii.id order by ic.id limit 1) as category,
+	     col.color, sizes.size
       from _shipments s
       join inventory_shipment_items isi  on s.id = isi.shipment_id
       join inventory_items ii            on isi.item_id = ii.id
       -- left join because not all items have seasons
-      left join inventory_seasons seas   on ii.season_id = seas.id
+      left join inventory_seasons seas   on ii.season_id = seas.id     
       join inventory_item_breakdown iib  on isi.item_breakdown_id = iib.id
       join inventory_item_colors col     on iib.item_color_id = col.id
       join inventory_sizes sizes         on iib.size_id = sizes.id
@@ -929,24 +929,24 @@ begin
     -- ???
     create index on _items (item_id);
     create index on _items (item_breakdown_id);
-    create index on _items (item_id, item_breakdown_id);
-
+    create index on _items (item_id, item_breakdown_id);        
+    
     -- Images, muliple per item
     create temp table _images (like inventory_item_images) on commit drop;
 
-    insert into _images
-       select * from inventory_item_images
+    insert into _images 
+       select * from inventory_item_images 
        where item_id in (select item_id from _items) order by item_id, imageorder;
-
+    
     -- todo: indexs?
 
     -- Orders
-
-    create temp table _order_items on commit drop as
+    
+    create temp table _order_items on commit drop as 
     select oi.*, o.order_dt, o.contact_id, o.order_type, 'normal' as which_table
-    from _items i
+    from _items i 
     join order_items oi on oi.item_bd_id = i.item_breakdown_id -- and item_id? <- is that redundant?
-    join orders o       on o.id = oi.order_id
+    join orders o       on o.id = oi.order_id 
     where oi.item_id = i.item_id and o.order_dt >= start_date and (orders_end_date is null or o.order_dt <= orders_end_date)
     order by i.item_id, o.id;
 
@@ -963,13 +963,13 @@ begin
 
     -- Adjustments?
 
-    create temp table _adjustments on commit drop as
-    select ia.*
+    create temp table _adjustments on commit drop as 
+    select ia.* 
     from _items i
     join inventory_adjustments ia on ia.item_breakdown_id = i.item_breakdown_id
     where ia.action = 'subtract' AND ia.dt >= i.receive_date AND (orders_end_date is null or dt <= orders_end_date);
 
-    create temp table _order_item_status on commit drop as
+    create temp table _order_item_status on commit drop as 
     select ois.*
     from order_item_status ois where ois.order_item_id in (
         select id from _order_items union select id from _sp_order_items
@@ -1001,12 +1001,12 @@ begin
     from inventory_search_view isv
     join inventory_items ii on ii.id = isv.id
     join vendor_designers d on d.id = ii.designer_id
-      where ii.status_web = 'active' and d.status_web = 'active'
+	  where ii.status_web = 'active' and d.status_web = 'active'
       and (isv.ts_vec @@ tsq
            or ii.style_number ilike for_like
            or d.name ilike for_like)
     -- The old sort
-        -- order by ii.designer_id, ii.price_web desc, ii.enter_date desc;
+		-- order by ii.designer_id, ii.price_web desc, ii.enter_date desc;
     order by rank desc;
   return;
 end;
@@ -1023,7 +1023,7 @@ CREATE FUNCTION update_test_modified_column() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-   NEW.modified = now();
+   NEW.modified = now(); 
    RETURN NEW;
 END;
 $$;
@@ -1043,7 +1043,7 @@ CREATE TABLE accounts (
     id bigint NOT NULL,
     account character varying(100) NOT NULL,
     account_type account_type DEFAULT 'Bank'::account_type NOT NULL,
-    descrip text DEFAULT ''::text NOT NULL,
+    descrip text,
     parent bigint
 );
 
@@ -1264,103 +1264,6 @@ CREATE TABLE category_search_aliases (
 
 
 ALTER TABLE category_search_aliases OWNER TO btqcm;
-
---
--- Name: checking; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE checking (
-    id bigint NOT NULL,
-    trans_date date NOT NULL,
-    trans_type trans_type NOT NULL,
-    amount numeric(10,2) DEFAULT 0.00 NOT NULL,
-    descrip text DEFAULT ''::text NOT NULL,
-    check_num integer DEFAULT 0 NOT NULL,
-    check_pay_to text DEFAULT ''::text NOT NULL,
-    clear_date date,
-    account1 bigint,
-    amount1 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account2 bigint,
-    amount2 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account3 bigint,
-    amount3 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account4 bigint,
-    amount4 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account5 bigint,
-    amount5 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account6 bigint,
-    amount6 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account7 bigint,
-    amount7 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account8 bigint,
-    amount8 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account9 bigint,
-    amount9 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account10 bigint,
-    amount10 numeric(10,2) DEFAULT 0.00 NOT NULL
-);
-
-
-ALTER TABLE checking OWNER TO btqcm;
-
---
--- Name: checking_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE checking_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE checking_id_seq OWNER TO btqcm;
-
---
--- Name: checking_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE checking_id_seq OWNED BY checking.id;
-
-
---
--- Name: checking_bofa; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE checking_bofa (
-    id bigint DEFAULT nextval('checking_id_seq'::regclass) NOT NULL,
-    trans_date date NOT NULL,
-    trans_type trans_type NOT NULL,
-    amount numeric(10,2) DEFAULT 0.00 NOT NULL,
-    descrip text DEFAULT ''::text NOT NULL,
-    check_num integer DEFAULT 0 NOT NULL,
-    check_pay_to text DEFAULT ''::text NOT NULL,
-    clear_date date,
-    account1 bigint,
-    amount1 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account2 bigint,
-    amount2 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account3 bigint,
-    amount3 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account4 bigint,
-    amount4 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account5 bigint,
-    amount5 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account6 bigint,
-    amount6 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account7 bigint,
-    amount7 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account8 bigint,
-    amount8 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account9 bigint,
-    amount9 numeric(10,2) DEFAULT 0.00 NOT NULL,
-    account10 bigint,
-    amount10 numeric(10,2) DEFAULT 0.00 NOT NULL
-);
-
-
-ALTER TABLE checking_bofa OWNER TO btqcm;
 
 --
 -- Name: checkout_gcs; Type: TABLE; Schema: public; Owner: btqcm
@@ -2280,41 +2183,6 @@ ALTER SEQUENCE gift_certificates_id_seq OWNED BY gift_certificates.id;
 
 
 --
--- Name: gtd_someday_maybe; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE gtd_someday_maybe (
-    id bigint NOT NULL,
-    name character varying(255) NOT NULL,
-    description text,
-    created timestamp without time zone NOT NULL
-);
-
-
-ALTER TABLE gtd_someday_maybe OWNER TO btqcm;
-
---
--- Name: gtd_someday_maybe_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE gtd_someday_maybe_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE gtd_someday_maybe_id_seq OWNER TO btqcm;
-
---
--- Name: gtd_someday_maybe_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE gtd_someday_maybe_id_seq OWNED BY gtd_someday_maybe.id;
-
-
---
 -- Name: inventory_adjustments; Type: TABLE; Schema: public; Owner: btqcm
 --
 
@@ -3062,81 +2930,6 @@ ALTER TABLE inventory_sizes_id_seq OWNER TO btqcm;
 --
 
 ALTER SEQUENCE inventory_sizes_id_seq OWNED BY inventory_sizes.id;
-
-
---
--- Name: invoice_shipments; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE invoice_shipments (
-    id bigint NOT NULL,
-    invoice_id bigint NOT NULL,
-    shipment_id bigint NOT NULL
-);
-
-
-ALTER TABLE invoice_shipments OWNER TO btqcm;
-
---
--- Name: invoice_shipments_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE invoice_shipments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE invoice_shipments_id_seq OWNER TO btqcm;
-
---
--- Name: invoice_shipments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE invoice_shipments_id_seq OWNED BY invoice_shipments.id;
-
-
---
--- Name: invoices; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE invoices (
-    id bigint NOT NULL,
-    invoice_number text NOT NULL,
-    terms invoice_terms DEFAULT 'net 30'::invoice_terms NOT NULL,
-    items_amount numeric(8,2) DEFAULT 0.00 NOT NULL,
-    shipping_amount numeric(6,2) DEFAULT 0.00 NOT NULL,
-    due_date date NOT NULL,
-    paid_date date,
-    vendor_id bigint NOT NULL,
-    factor_id bigint NOT NULL,
-    designer_id bigint NOT NULL
-);
-
-
-ALTER TABLE invoices OWNER TO btqcm;
-
---
--- Name: invoices_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE invoices_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE invoices_id_seq OWNER TO btqcm;
-
---
--- Name: invoices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE invoices_id_seq OWNED BY invoices.id;
 
 
 --
@@ -3915,21 +3708,6 @@ ALTER SEQUENCE payroll_id_seq OWNED BY payroll.id;
 
 
 --
--- Name: prices_changed_before_constraint; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE prices_changed_before_constraint (
-    id bigint,
-    price numeric(8,2),
-    sale_price numeric(8,2),
-    price_web numeric(8,2),
-    sale_price_web numeric(8,2)
-);
-
-
-ALTER TABLE prices_changed_before_constraint OWNER TO btqcm;
-
---
 -- Name: promotions; Type: TABLE; Schema: public; Owner: btqcm
 --
 
@@ -4085,48 +3863,6 @@ ALTER SEQUENCE store_credits_id_seq OWNED BY store_credits.id;
 
 
 --
--- Name: submissions; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE submissions (
-    id bigint NOT NULL,
-    title text DEFAULT ''::text NOT NULL,
-    image text DEFAULT ''::text NOT NULL,
-    description text NOT NULL,
-    link text DEFAULT ''::text NOT NULL,
-    artist text DEFAULT ''::text NOT NULL,
-    contact_id bigint,
-    location text DEFAULT ''::text NOT NULL,
-    email text DEFAULT ''::text NOT NULL,
-    enter_dt timestamp without time zone DEFAULT now() NOT NULL,
-    status active_or_inactive DEFAULT 'inactive'::active_or_inactive NOT NULL
-);
-
-
-ALTER TABLE submissions OWNER TO btqcm;
-
---
--- Name: submissions_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE submissions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE submissions_id_seq OWNER TO btqcm;
-
---
--- Name: submissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE submissions_id_seq OWNED BY submissions.id;
-
-
---
 -- Name: testimonials; Type: TABLE; Schema: public; Owner: btqcm
 --
 
@@ -4134,8 +3870,8 @@ CREATE TABLE testimonials (
     id bigint NOT NULL,
     enter_date date NOT NULL,
     text text NOT NULL,
-    person character varying(50) DEFAULT ''::text NOT NULL,
-    place character varying(100) DEFAULT ''::text NOT NULL,
+    person character varying(50) NOT NULL,
+    place character varying(100) NOT NULL,
     status active_or_inactive DEFAULT 'active'::active_or_inactive NOT NULL
 );
 
@@ -4164,123 +3900,6 @@ ALTER SEQUENCE testimonials_id_seq OWNED BY testimonials.id;
 
 
 --
--- Name: tracker2; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE tracker2 (
-    id bigint NOT NULL,
-    visitdatetime timestamp without time zone DEFAULT now() NOT NULL,
-    referer bigint NOT NULL,
-    ip inet NOT NULL,
-    browser bigint NOT NULL,
-    web_page bigint NOT NULL,
-    cookie_id text NOT NULL,
-    ad_code bigint
-);
-
-
-ALTER TABLE tracker2 OWNER TO btqcm;
-
---
--- Name: tracker2_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE tracker2_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE tracker2_id_seq OWNER TO btqcm;
-
---
--- Name: tracker2_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE tracker2_id_seq OWNED BY tracker2.id;
-
-
---
--- Name: tracker_browsers; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE tracker_browsers (
-    id bigint NOT NULL,
-    browser character varying NOT NULL
-);
-
-
-ALTER TABLE tracker_browsers OWNER TO btqcm;
-
---
--- Name: tracker_referers; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE tracker_referers (
-    id bigint NOT NULL,
-    url character varying NOT NULL
-);
-
-
-ALTER TABLE tracker_referers OWNER TO btqcm;
-
---
--- Name: tracker_web_pages; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE tracker_web_pages (
-    id bigint NOT NULL,
-    url_path character varying NOT NULL
-);
-
-
-ALTER TABLE tracker_web_pages OWNER TO btqcm;
-
---
--- Name: tracker2_view; Type: VIEW; Schema: public; Owner: btqcm
---
-
-CREATE VIEW tracker2_view AS
- SELECT t.id,
-    t.visitdatetime,
-    tr.url AS referer,
-    t.ip,
-    tb.browser,
-    twp.url_path AS web_page,
-    t.cookie_id,
-    t.ad_code
-   FROM (((tracker2 t
-     LEFT JOIN tracker_referers tr ON ((t.referer = tr.id)))
-     LEFT JOIN tracker_browsers tb ON ((t.browser = tb.id)))
-     LEFT JOIN tracker_web_pages twp ON ((t.web_page = twp.id)));
-
-
-ALTER TABLE tracker2_view OWNER TO btqcm;
-
---
--- Name: tracker_browsers_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE tracker_browsers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE tracker_browsers_id_seq OWNER TO btqcm;
-
---
--- Name: tracker_browsers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE tracker_browsers_id_seq OWNED BY tracker_browsers.id;
-
-
---
 -- Name: tracker_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
 --
 
@@ -4293,93 +3912,6 @@ CREATE SEQUENCE tracker_id_seq
 
 
 ALTER TABLE tracker_id_seq OWNER TO btqcm;
-
---
--- Name: tracker_referers_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE tracker_referers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE tracker_referers_id_seq OWNER TO btqcm;
-
---
--- Name: tracker_referers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE tracker_referers_id_seq OWNED BY tracker_referers.id;
-
-
---
--- Name: tracker_web_pages_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE tracker_web_pages_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE tracker_web_pages_id_seq OWNER TO btqcm;
-
---
--- Name: tracker_web_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE tracker_web_pages_id_seq OWNED BY tracker_web_pages.id;
-
-
---
--- Name: vendor_contacts; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE vendor_contacts (
-    id bigint NOT NULL,
-    contact_type vendor_contact_type DEFAULT 'designer'::vendor_contact_type NOT NULL,
-    contact_title text DEFAULT ''::text NOT NULL,
-    contact_address text DEFAULT ''::text NOT NULL,
-    contact_address2 text DEFAULT ''::text NOT NULL,
-    contact_city text DEFAULT ''::text NOT NULL,
-    contact_state text DEFAULT ''::text NOT NULL,
-    contact_country text DEFAULT ''::text NOT NULL,
-    contact_postalcode text DEFAULT ''::text NOT NULL,
-    contact_phone text DEFAULT ''::text NOT NULL,
-    contact_phonecell text DEFAULT ''::text NOT NULL,
-    contact_fax text DEFAULT ''::text NOT NULL,
-    contact_email text DEFAULT ''::text NOT NULL,
-    contact_notes text NOT NULL
-);
-
-
-ALTER TABLE vendor_contacts OWNER TO btqcm;
-
---
--- Name: vendor_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE vendor_contacts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE vendor_contacts_id_seq OWNER TO btqcm;
-
---
--- Name: vendor_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE vendor_contacts_id_seq OWNED BY vendor_contacts.id;
-
 
 --
 -- Name: vendor_designers; Type: TABLE; Schema: public; Owner: btqcm
@@ -4535,40 +4067,6 @@ ALTER SEQUENCE vendor_designers_id_seq OWNED BY vendor_designers.id;
 
 
 --
--- Name: vendor_designers_representatives; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE vendor_designers_representatives (
-    id bigint NOT NULL,
-    designer_id bigint NOT NULL,
-    representative_id bigint NOT NULL
-);
-
-
-ALTER TABLE vendor_designers_representatives OWNER TO btqcm;
-
---
--- Name: vendor_designers_representatives_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE vendor_designers_representatives_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE vendor_designers_representatives_id_seq OWNER TO btqcm;
-
---
--- Name: vendor_designers_representatives_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE vendor_designers_representatives_id_seq OWNED BY vendor_designers_representatives.id;
-
-
---
 -- Name: vendor_factors; Type: TABLE; Schema: public; Owner: btqcm
 --
 
@@ -4613,104 +4111,6 @@ ALTER SEQUENCE vendor_factors_id_seq OWNED BY vendor_factors.id;
 
 
 --
--- Name: vendor_representatives; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE vendor_representatives (
-    id bigint NOT NULL,
-    name text DEFAULT ''::text NOT NULL,
-    rep_address text DEFAULT ''::text NOT NULL,
-    rep_address2 text DEFAULT ''::text NOT NULL,
-    rep_city text DEFAULT ''::text NOT NULL,
-    rep_state text DEFAULT ''::text NOT NULL,
-    rep_country text DEFAULT ''::text NOT NULL,
-    rep_postalcode text DEFAULT ''::text NOT NULL,
-    rep_phone text DEFAULT ''::text NOT NULL,
-    rep_fax text DEFAULT ''::text NOT NULL,
-    rep_email text DEFAULT ''::text NOT NULL,
-    rep_ra_address text DEFAULT ''::text NOT NULL,
-    rep_ra_address2 text DEFAULT ''::text NOT NULL,
-    rep_ra_city text DEFAULT ''::text NOT NULL,
-    rep_ra_state text DEFAULT ''::text NOT NULL,
-    rep_ra_country text DEFAULT ''::text NOT NULL,
-    rep_ra_postalcode text DEFAULT ''::text NOT NULL,
-    rep_ra_phone text DEFAULT ''::text NOT NULL,
-    rep_ra_fax text DEFAULT ''::text NOT NULL,
-    rep_ra_email text DEFAULT ''::text NOT NULL,
-    rep_pay_address text DEFAULT ''::text NOT NULL,
-    rep_pay_address2 text DEFAULT ''::text NOT NULL,
-    rep_pay_city text DEFAULT ''::text NOT NULL,
-    rep_pay_state text DEFAULT ''::text NOT NULL,
-    rep_pay_country text DEFAULT ''::text NOT NULL,
-    rep_pay_postalcode text DEFAULT ''::text NOT NULL,
-    rep_pay_phone text DEFAULT ''::text NOT NULL,
-    rep_pay_fax text DEFAULT ''::text NOT NULL,
-    rep_pay_email text DEFAULT ''::text NOT NULL,
-    rep_account text DEFAULT ''::text NOT NULL,
-    rep_terms vendor_rep_terms DEFAULT 'Net30'::vendor_rep_terms NOT NULL,
-    rep_url text DEFAULT ''::text NOT NULL,
-    notes text NOT NULL
-);
-
-
-ALTER TABLE vendor_representatives OWNER TO btqcm;
-
---
--- Name: vendor_representatives_factors; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE vendor_representatives_factors (
-    id bigint NOT NULL,
-    representative_id bigint NOT NULL,
-    factor_id bigint NOT NULL
-);
-
-
-ALTER TABLE vendor_representatives_factors OWNER TO btqcm;
-
---
--- Name: vendor_representatives_factors_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE vendor_representatives_factors_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE vendor_representatives_factors_id_seq OWNER TO btqcm;
-
---
--- Name: vendor_representatives_factors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE vendor_representatives_factors_id_seq OWNED BY vendor_representatives_factors.id;
-
-
---
--- Name: vendor_representatives_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE vendor_representatives_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE vendor_representatives_id_seq OWNER TO btqcm;
-
---
--- Name: vendor_representatives_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE vendor_representatives_id_seq OWNED BY vendor_representatives.id;
-
-
---
 -- Name: accounts id; Type: DEFAULT; Schema: public; Owner: btqcm
 --
 
@@ -4750,13 +4150,6 @@ ALTER TABLE ONLY cart_items ALTER COLUMN id SET DEFAULT nextval('cart_items_id_s
 --
 
 ALTER TABLE ONLY carts ALTER COLUMN id SET DEFAULT nextval('carts_id_seq'::regclass);
-
-
---
--- Name: checking id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking ALTER COLUMN id SET DEFAULT nextval('checking_id_seq'::regclass);
 
 
 --
@@ -4914,13 +4307,6 @@ ALTER TABLE ONLY gift_certificates ALTER COLUMN id SET DEFAULT nextval('gift_cer
 
 
 --
--- Name: gtd_someday_maybe id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY gtd_someday_maybe ALTER COLUMN id SET DEFAULT nextval('gtd_someday_maybe_id_seq'::regclass);
-
-
---
 -- Name: inventory_adjustments id; Type: DEFAULT; Schema: public; Owner: btqcm
 --
 
@@ -5051,20 +4437,6 @@ ALTER TABLE ONLY inventory_size_scales ALTER COLUMN id SET DEFAULT nextval('inve
 --
 
 ALTER TABLE ONLY inventory_sizes ALTER COLUMN id SET DEFAULT nextval('inventory_sizes_id_seq'::regclass);
-
-
---
--- Name: invoice_shipments id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoice_shipments ALTER COLUMN id SET DEFAULT nextval('invoice_shipments_id_seq'::regclass);
-
-
---
--- Name: invoices id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoices ALTER COLUMN id SET DEFAULT nextval('invoices_id_seq'::regclass);
 
 
 --
@@ -5229,52 +4601,10 @@ ALTER TABLE ONLY store_credits ALTER COLUMN id SET DEFAULT nextval('store_credit
 
 
 --
--- Name: submissions id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY submissions ALTER COLUMN id SET DEFAULT nextval('submissions_id_seq'::regclass);
-
-
---
 -- Name: testimonials id; Type: DEFAULT; Schema: public; Owner: btqcm
 --
 
 ALTER TABLE ONLY testimonials ALTER COLUMN id SET DEFAULT nextval('testimonials_id_seq'::regclass);
-
-
---
--- Name: tracker2 id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker2 ALTER COLUMN id SET DEFAULT nextval('tracker2_id_seq'::regclass);
-
-
---
--- Name: tracker_browsers id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_browsers ALTER COLUMN id SET DEFAULT nextval('tracker_browsers_id_seq'::regclass);
-
-
---
--- Name: tracker_referers id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_referers ALTER COLUMN id SET DEFAULT nextval('tracker_referers_id_seq'::regclass);
-
-
---
--- Name: tracker_web_pages id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_web_pages ALTER COLUMN id SET DEFAULT nextval('tracker_web_pages_id_seq'::regclass);
-
-
---
--- Name: vendor_contacts id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_contacts ALTER COLUMN id SET DEFAULT nextval('vendor_contacts_id_seq'::regclass);
 
 
 --
@@ -5299,31 +4629,10 @@ ALTER TABLE ONLY vendor_designers_featured_images ALTER COLUMN id SET DEFAULT ne
 
 
 --
--- Name: vendor_designers_representatives id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_designers_representatives ALTER COLUMN id SET DEFAULT nextval('vendor_designers_representatives_id_seq'::regclass);
-
-
---
 -- Name: vendor_factors id; Type: DEFAULT; Schema: public; Owner: btqcm
 --
 
 ALTER TABLE ONLY vendor_factors ALTER COLUMN id SET DEFAULT nextval('vendor_factors_id_seq'::regclass);
-
-
---
--- Name: vendor_representatives id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_representatives ALTER COLUMN id SET DEFAULT nextval('vendor_representatives_id_seq'::regclass);
-
-
---
--- Name: vendor_representatives_factors id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_representatives_factors ALTER COLUMN id SET DEFAULT nextval('vendor_representatives_factors_id_seq'::regclass);
 
 
 --
@@ -5367,6 +4676,14 @@ ALTER TABLE ONLY admins
 
 
 --
+-- Name: admins admins_username_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+--
+
+ALTER TABLE ONLY admins
+    ADD CONSTRAINT admins_username_key UNIQUE (username);
+
+
+--
 -- Name: cart_items cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
 --
 
@@ -5380,22 +4697,6 @@ ALTER TABLE ONLY cart_items
 
 ALTER TABLE ONLY carts
     ADD CONSTRAINT carts_pkey PRIMARY KEY (id);
-
-
---
--- Name: checking_bofa checking_bofa_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_pkey PRIMARY KEY (id);
-
-
---
--- Name: checking checking_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_pkey PRIMARY KEY (id);
 
 
 --
@@ -5567,14 +4868,6 @@ ALTER TABLE ONLY gift_certificates
 
 
 --
--- Name: gtd_someday_maybe gtd_someday_maybe_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY gtd_someday_maybe
-    ADD CONSTRAINT gtd_someday_maybe_pkey PRIMARY KEY (id);
-
-
---
 -- Name: inventory_adjustments inventory_adjustments_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
 --
 
@@ -5740,30 +5033,6 @@ ALTER TABLE ONLY inventory_sizes
 
 ALTER TABLE ONLY inventory_sizes
     ADD CONSTRAINT inventory_sizes_size_key UNIQUE (size);
-
-
---
--- Name: invoice_shipments invoice_shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoice_shipments
-    ADD CONSTRAINT invoice_shipments_pkey PRIMARY KEY (id);
-
-
---
--- Name: invoices invoices_invoice_number_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoices
-    ADD CONSTRAINT invoices_invoice_number_key UNIQUE (invoice_number);
-
-
---
--- Name: invoices invoices_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoices
-    ADD CONSTRAINT invoices_pkey PRIMARY KEY (id);
 
 
 --
@@ -5983,83 +5252,11 @@ ALTER TABLE ONLY store_credits
 
 
 --
--- Name: submissions submissions_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY submissions
-    ADD CONSTRAINT submissions_pkey PRIMARY KEY (id);
-
-
---
 -- Name: testimonials testimonials_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
 --
 
 ALTER TABLE ONLY testimonials
     ADD CONSTRAINT testimonials_pkey PRIMARY KEY (id);
-
-
---
--- Name: tracker2 tracker2_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker2
-    ADD CONSTRAINT tracker2_pkey PRIMARY KEY (id);
-
-
---
--- Name: tracker_browsers tracker_browsers_browser_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_browsers
-    ADD CONSTRAINT tracker_browsers_browser_key UNIQUE (browser);
-
-
---
--- Name: tracker_browsers tracker_browsers_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_browsers
-    ADD CONSTRAINT tracker_browsers_pkey PRIMARY KEY (id);
-
-
---
--- Name: tracker_referers tracker_referers_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_referers
-    ADD CONSTRAINT tracker_referers_pkey PRIMARY KEY (id);
-
-
---
--- Name: tracker_referers tracker_referers_url_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_referers
-    ADD CONSTRAINT tracker_referers_url_key UNIQUE (url);
-
-
---
--- Name: tracker_web_pages tracker_web_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_web_pages
-    ADD CONSTRAINT tracker_web_pages_pkey PRIMARY KEY (id);
-
-
---
--- Name: tracker_web_pages tracker_web_pages_url_path_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker_web_pages
-    ADD CONSTRAINT tracker_web_pages_url_path_key UNIQUE (url_path);
-
-
---
--- Name: vendor_contacts vendor_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_contacts
-    ADD CONSTRAINT vendor_contacts_pkey PRIMARY KEY (id);
 
 
 --
@@ -6095,51 +5292,11 @@ ALTER TABLE ONLY vendor_designers
 
 
 --
--- Name: vendor_designers_representatives vendor_designers_representati_designer_id_representative_id_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_designers_representatives
-    ADD CONSTRAINT vendor_designers_representati_designer_id_representative_id_key UNIQUE (designer_id, representative_id);
-
-
---
--- Name: vendor_designers_representatives vendor_designers_representatives_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_designers_representatives
-    ADD CONSTRAINT vendor_designers_representatives_pkey PRIMARY KEY (id);
-
-
---
 -- Name: vendor_factors vendor_factors_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
 --
 
 ALTER TABLE ONLY vendor_factors
     ADD CONSTRAINT vendor_factors_pkey PRIMARY KEY (id);
-
-
---
--- Name: vendor_representatives_factors vendor_representatives_factors_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_representatives_factors
-    ADD CONSTRAINT vendor_representatives_factors_pkey PRIMARY KEY (id);
-
-
---
--- Name: vendor_representatives_factors vendor_representatives_factors_representative_id_factor_id_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_representatives_factors
-    ADD CONSTRAINT vendor_representatives_factors_representative_id_factor_id_key UNIQUE (representative_id, factor_id);
-
-
---
--- Name: vendor_representatives vendor_representatives_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_representatives
-    ADD CONSTRAINT vendor_representatives_pkey PRIMARY KEY (id);
 
 
 --
@@ -6182,104 +5339,6 @@ CREATE INDEX cart_items_item_id_idx ON cart_items USING btree (item_id);
 --
 
 CREATE INDEX carts_tracker_cookie_id_idx ON carts USING btree (tracker_cookie_id);
-
-
---
--- Name: checking_account1_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_account1_idx ON checking USING btree (account1);
-
-
---
--- Name: checking_account2_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_account2_idx ON checking USING btree (account2);
-
-
---
--- Name: checking_account3_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_account3_idx ON checking USING btree (account3);
-
-
---
--- Name: checking_account4_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_account4_idx ON checking USING btree (account4);
-
-
---
--- Name: checking_account5_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_account5_idx ON checking USING btree (account5);
-
-
---
--- Name: checking_amount_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_amount_idx ON checking USING btree (amount);
-
-
---
--- Name: checking_bofa_account1_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_bofa_account1_idx ON checking_bofa USING btree (account1);
-
-
---
--- Name: checking_bofa_account2_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_bofa_account2_idx ON checking_bofa USING btree (account2);
-
-
---
--- Name: checking_bofa_account3_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_bofa_account3_idx ON checking_bofa USING btree (account3);
-
-
---
--- Name: checking_bofa_account4_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_bofa_account4_idx ON checking_bofa USING btree (account4);
-
-
---
--- Name: checking_bofa_account5_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_bofa_account5_idx ON checking_bofa USING btree (account5);
-
-
---
--- Name: checking_bofa_amount_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_bofa_amount_idx ON checking_bofa USING btree (amount);
-
-
---
--- Name: checking_bofa_descrip_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_bofa_descrip_idx ON checking_bofa USING btree (descrip);
-
-
---
--- Name: checking_descrip_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX checking_descrip_idx ON checking USING btree (descrip);
 
 
 --
@@ -6668,27 +5727,6 @@ CREATE INDEX inventory_size_scale_sizes_size_scale_id_idx ON inventory_size_scal
 
 
 --
--- Name: invoices_designer_id_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX invoices_designer_id_idx ON invoices USING btree (designer_id);
-
-
---
--- Name: invoices_factor_id_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX invoices_factor_id_idx ON invoices USING btree (factor_id);
-
-
---
--- Name: invoices_vendor_id_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX invoices_vendor_id_idx ON invoices USING btree (vendor_id);
-
-
---
 -- Name: news_event_idx; Type: INDEX; Schema: public; Owner: btqcm
 --
 
@@ -6913,48 +5951,6 @@ CREATE INDEX store_credits_order_id_idx ON store_credits USING btree (order_id);
 
 
 --
--- Name: submissions_contact_id_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX submissions_contact_id_idx ON submissions USING btree (contact_id);
-
-
---
--- Name: tracker2_ad_code_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX tracker2_ad_code_idx ON tracker2 USING btree (ad_code);
-
-
---
--- Name: tracker2_cookie_id_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX tracker2_cookie_id_idx ON tracker2 USING btree (cookie_id);
-
-
---
--- Name: tracker2_ip_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX tracker2_ip_idx ON tracker2 USING btree (ip);
-
-
---
--- Name: tracker2_referer_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX tracker2_referer_idx ON tracker2 USING btree (referer);
-
-
---
--- Name: vendor_contacts_contact_type_idx; Type: INDEX; Schema: public; Owner: btqcm
---
-
-CREATE INDEX vendor_contacts_contact_type_idx ON vendor_contacts USING btree (contact_type);
-
-
---
 -- Name: vendor_designers_featured_images_designer_id_idx; Type: INDEX; Schema: public; Owner: btqcm
 --
 
@@ -7066,166 +6062,6 @@ ALTER TABLE ONLY carts
 
 ALTER TABLE ONLY category_search_aliases
     ADD CONSTRAINT category_search_aliases_id_fkey FOREIGN KEY (id) REFERENCES inventory_categories(id);
-
-
---
--- Name: checking checking_account10_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account10_fkey FOREIGN KEY (account10) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account1_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account1_fkey FOREIGN KEY (account1) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account2_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account2_fkey FOREIGN KEY (account2) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account3_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account3_fkey FOREIGN KEY (account3) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account4_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account4_fkey FOREIGN KEY (account4) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account5_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account5_fkey FOREIGN KEY (account5) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account6_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account6_fkey FOREIGN KEY (account6) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account7_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account7_fkey FOREIGN KEY (account7) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account8_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account8_fkey FOREIGN KEY (account8) REFERENCES accounts(id);
-
-
---
--- Name: checking checking_account9_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking
-    ADD CONSTRAINT checking_account9_fkey FOREIGN KEY (account9) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account10_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account10_fkey FOREIGN KEY (account10) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account1_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account1_fkey FOREIGN KEY (account1) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account2_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account2_fkey FOREIGN KEY (account2) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account3_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account3_fkey FOREIGN KEY (account3) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account4_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account4_fkey FOREIGN KEY (account4) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account5_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account5_fkey FOREIGN KEY (account5) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account6_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account6_fkey FOREIGN KEY (account6) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account7_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account7_fkey FOREIGN KEY (account7) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account8_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account8_fkey FOREIGN KEY (account8) REFERENCES accounts(id);
-
-
---
--- Name: checking_bofa checking_bofa_account9_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY checking_bofa
-    ADD CONSTRAINT checking_bofa_account9_fkey FOREIGN KEY (account9) REFERENCES accounts(id);
 
 
 --
@@ -7717,46 +6553,6 @@ ALTER TABLE ONLY inventory_size_scale_sizes
 
 
 --
--- Name: invoice_shipments invoice_shipments_invoice_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoice_shipments
-    ADD CONSTRAINT invoice_shipments_invoice_id_fkey FOREIGN KEY (invoice_id) REFERENCES invoices(id);
-
-
---
--- Name: invoice_shipments invoice_shipments_shipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoice_shipments
-    ADD CONSTRAINT invoice_shipments_shipment_id_fkey FOREIGN KEY (shipment_id) REFERENCES inventory_shipments(id);
-
-
---
--- Name: invoices invoices_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoices
-    ADD CONSTRAINT invoices_designer_id_fkey FOREIGN KEY (designer_id) REFERENCES vendor_designers(id);
-
-
---
--- Name: invoices invoices_factor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoices
-    ADD CONSTRAINT invoices_factor_id_fkey FOREIGN KEY (factor_id) REFERENCES vendor_factors(id);
-
-
---
--- Name: invoices invoices_vendor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY invoices
-    ADD CONSTRAINT invoices_vendor_id_fkey FOREIGN KEY (vendor_id) REFERENCES vendor_contacts(id);
-
-
---
 -- Name: order_item_status_history order_item_status_history_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
 --
 
@@ -8029,38 +6825,6 @@ ALTER TABLE ONLY store_credits
 
 
 --
--- Name: submissions submissions_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY submissions
-    ADD CONSTRAINT submissions_contact_id_fkey FOREIGN KEY (contact_id) REFERENCES contacts(id);
-
-
---
--- Name: tracker2 tracker2_browser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker2
-    ADD CONSTRAINT tracker2_browser_fkey FOREIGN KEY (browser) REFERENCES tracker_browsers(id);
-
-
---
--- Name: tracker2 tracker2_referer_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker2
-    ADD CONSTRAINT tracker2_referer_fkey FOREIGN KEY (referer) REFERENCES tracker_referers(id);
-
-
---
--- Name: tracker2 tracker2_web_page_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY tracker2
-    ADD CONSTRAINT tracker2_web_page_fkey FOREIGN KEY (web_page) REFERENCES tracker_web_pages(id);
-
-
---
 -- Name: vendor_designers_factors vendor_designers_factors_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
 --
 
@@ -8090,38 +6854,6 @@ ALTER TABLE ONLY vendor_designers_featured_images
 
 ALTER TABLE ONLY vendor_designers_featured_images
     ADD CONSTRAINT vendor_designers_featured_images_item_id_fkey FOREIGN KEY (item_id) REFERENCES inventory_items(id);
-
-
---
--- Name: vendor_designers_representatives vendor_designers_representatives_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_designers_representatives
-    ADD CONSTRAINT vendor_designers_representatives_designer_id_fkey FOREIGN KEY (designer_id) REFERENCES vendor_designers(id);
-
-
---
--- Name: vendor_designers_representatives vendor_designers_representatives_representative_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_designers_representatives
-    ADD CONSTRAINT vendor_designers_representatives_representative_id_fkey FOREIGN KEY (representative_id) REFERENCES vendor_representatives(id);
-
-
---
--- Name: vendor_representatives_factors vendor_representatives_factors_factor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_representatives_factors
-    ADD CONSTRAINT vendor_representatives_factors_factor_id_fkey FOREIGN KEY (factor_id) REFERENCES vendor_factors(id);
-
-
---
--- Name: vendor_representatives_factors vendor_representatives_factors_representative_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY vendor_representatives_factors
-    ADD CONSTRAINT vendor_representatives_factors_representative_id_fkey FOREIGN KEY (representative_id) REFERENCES vendor_representatives(id);
 
 
 --
