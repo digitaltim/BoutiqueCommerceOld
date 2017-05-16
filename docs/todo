@@ -3,14 +3,19 @@
 finish infrastructure functionality
 
 - CRUD
--- "port" FF and recordset->html table tools to Twig - going to pass / pause on this as would require some FF rewrite and substantial delay. will just output form->generate() to twig and form|raw
 -- test all tables
---- fix FF/validation errors
+--- fix any FF/validation errors
 --- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' for not nullable fields on a case by case basis.
 --- create custom dbtable models as necessary
 --- render views, error views and messages from CrudView
 --- display error for update with no changes made
 --- why does view render call not work in setModel (CrudView and CrudController)? (and DRY)
+
+- Nav Admin
+-- item configurability
+-- messaging (flash? may be able to simply pass from controller to view)
+-- nav should not show in sign in page (admin dir)
+-- make sure {LOCAL TESTING} appears only for dev
 
 - Authentication
 -- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
@@ -21,11 +26,6 @@ finish infrastructure functionality
 -- upon successful login set response to desired route/page
 
 - Authorization (page level, admin nav, functionality - ie only owner/director can enter new admins - see DbTable::hasInsertPermission())
-
-- Nav Admin
--- orm tables
--- item configurability
--- messaging (flash? may be able to simply pass from controller to view)
 
 - What is the point of controller / factories registration in dependencies?
 
