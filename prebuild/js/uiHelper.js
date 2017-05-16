@@ -174,7 +174,9 @@ function createXMLHTTPObject() {
     return xmlhttp;
 }
 
-document.getElementById("scrollingTableContainer").addEventListener("scroll",function(){
-    var translate = "translate(0,"+this.scrollTop+"px)";
-    this.querySelector("thead").style.transform = translate;
-});
+if(document.getElementById("scrollingTableContainer")) {
+    document.getElementById("scrollingTableContainer").addEventListener("scroll",function(){
+        var translate = "translate(0,"+this.scrollTop+"px)";
+        this.querySelector("thead").style.transform = translate;
+    });
+}
