@@ -4,11 +4,12 @@ finish infrastructure functionality
 
 - CRUD
 -- test all tables (insert, update, delete, verify enum types)
+-- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' and not nullable for not nullable fields on a case by case basis.
 --- fix any FF/validation errors
---- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' and not nullable for not nullable fields on a case by case basis.
---- create custom dbtable models as necessary
+--- create custom dbtable models as necessary (defer until infrastructure complete)
 --- render views, error views and messages from CrudView
 --- display error for update with no changes made
+--- add cancel buttons on insert and update
 --- why does view render call not work in setModel (CrudView and CrudController)? (and DRY)
 
 - ADMIN NAVIGATION
@@ -65,9 +66,13 @@ finish infrastructure functionality
 -- Should we use docblocks for all classes, methods, properties (?)
 -- use typehints on params and return params
 
+- log events
+
+
 - INFRASTRUCTURE
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
 -- fork infrastructure to a new repo
+-- the schema should only contain the admins table and maybe a test table
 
 - Improve directory structure: (?) *, **
 * possible directory structure
