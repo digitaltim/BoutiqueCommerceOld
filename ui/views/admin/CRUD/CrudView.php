@@ -40,7 +40,7 @@ class CrudView extends AdminView
         $results = '';
         if ($res = $this->model->select('*')) {
             if ($this->model->isInsertAllowed()) {
-                $results .= "<h3 style='display:inline;'><a href='".$this->router->pathFor('crud.getInsert', ['table' => $this->tableName])."'>Insert New</a></h3>";
+                $results .= "<h3 style='display:inline;'><a href='".$this->router->pathFor('crud.getInsert', ['table' => $this->tableName])."'>Insert Record</a></h3>";
             }
             $results .= (pg_num_rows($res) > 0) ? $UiRsDbTable->makeTable($res) : 'No results';
         }
