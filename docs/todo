@@ -4,7 +4,7 @@ finish infrastructure functionality
 
 - CRUD
 -- test all tables (insert, update, delete, verify enum types)
--- update schema - remove unused tables, change unique indexes to unique constraints, drop default '' and not nullable for not nullable fields on a case by case basis.
+-- update schema drop default '' and not nullable for not nullable fields on a case by case basis.
 --- fix any FF/validation errors
 --- create custom dbtable models as necessary (defer until infrastructure complete)
 --- render views, error views and messages from CrudView
@@ -70,13 +70,14 @@ finish infrastructure functionality
 -- Should we use docblocks for all classes, methods, properties (?)
 -- use typehints on params and return params
 
-- log events
+- MONOLOG EVENT LOGGING
+- for infrastructure - just for CRUD and admin specific CRUD
 
 
 - INFRASTRUCTURE
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
 -- fork infrastructure to a new repo
--- the schema should only contain the admins table and maybe a test table
+-- the schema should only contain the admins table and maybe a test table in the forked repo
 
 - Improve directory structure: (?) *, **
 * possible directory structure
@@ -170,6 +171,7 @@ pgDbSchemaDump.sql
 -storage
  -cache..
  -logs..
+-ignored
 
 
 OTHER

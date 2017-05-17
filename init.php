@@ -53,12 +53,13 @@ if (!Utilities\isRunningFromCommandLine()) {
     }
 
     /** SESSION */
-    $sessionTTLseconds = $config['sessionTtlHours'] * 60 * 60;
+    $sessionTTLseconds = $config['session']['ttlHours'] * 60 * 60;
     ini_set('session.gc_maxlifetime', (string) $sessionTTLseconds);
     ini_set('session.cookie_lifetime', (string) $sessionTTLseconds);
     if (!Utilities\sessionValidId(session_id())) {
         session_regenerate_id(true);
     }
+    session_save_path($config['session']['savePath']);
     session_start();
     $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 }
