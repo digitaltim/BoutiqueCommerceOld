@@ -30,6 +30,9 @@ finish infrastructure functionality
 -- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
 -- only owner/director can insert new admins (see Authorization)
 
+- CSRF
+-- uncomment middleware and apply to all forms
+
 - DO I UNDERSTAND THE FRAMEWORK
 -- What does registering controller / factories in dependencies do? When they are commented out the script still runs?
 -- Should FF functions be made available to Twig templates by registering it as global to the view in dependencies?
@@ -50,6 +53,7 @@ finish infrastructure functionality
 
 - Use pathFor() functionality to create named routes. Ex. in CrudView index function for new UiRsDbTable?
 
+*update: to maximize performance, routes should not be grouped (https://github.com/slimphp/Slim/issues/2165). Ungrouped 5/17.
 - Group the routes for
 -- Naming simplification
 -- Using authorization middleware (similar to the authentication middleware)
