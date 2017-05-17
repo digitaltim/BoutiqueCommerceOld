@@ -17,7 +17,7 @@ class AuthController extends Controller
         );
 
         if ($auth) {
-            return $response->withRedirect($this->router->pathFor('test'));
+            return $response->withRedirect($this->router->pathFor('crud.show', ['table' => 'admins']));
         }
 
         $this->flash->addMessage('error', 'Could not sign you in with those credentials.');
