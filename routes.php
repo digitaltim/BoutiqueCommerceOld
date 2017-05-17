@@ -6,49 +6,45 @@ use It_All\BoutiqueCommerce\Middleware\GuestMiddleware;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+// For maximum performance, routes should not be grouped
+// https://github.com/slimphp/Slim/issues/2165
+
+/////////////////////////////////////////
 // Routes that anyone can access
+
 $slim->get('/', 'It_All\BoutiqueCommerce\Controllers\HomeController:index')->setName('home');
+/////////////////////////////////////////
 
-$slim->get('/test', 'It_All\BoutiqueCommerce\Controllers\HomeController:test')->setName('test');
+/////////////////////////////////////////
+// Routes that only non-authenticated users (Guests) can access
 
-// Group routes that a guest user can access
-$slim->group('', function () {
-    $container = $this->getContainer();
-    $settings = $container->get('settings');
+$slim->get('/' . $config['dirs']['admin'], 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignIn')->add(new GuestMiddleware($container))->setName('auth.signin');
 
-    $this->get('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignIn')->setName('auth.signin');
+$slim->post('/' . $config['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignIn')->add(new GuestMiddleware($container));
 
-    $this->post('/' . $settings['dirs']['admin'], 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignIn');
+$slim->get('/' . $config['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignUp')->add(new GuestMiddleware($container))->setName('auth.signup');
 
-    $this->get('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignUp')->setName('auth.signup');
+$slim->post('/' . $config['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignUp')->add(new GuestMiddleware($container));
 
-    $this->post('/' . $settings['dirs']['admin'] . '/signup', 'It_All\BoutiqueCommerce\Controllers\AuthController:postSignUp');
-})->add(new GuestMiddleware($container));
+/////////////////////////////////////////
 
-// Group routes that a user needs to be signed in to access
-$slim->group('', function () {
-    $container = $this->getContainer();
-    $settings = $container->get('settings');
+/////////////////////////////////////////
+// Routes that only authenticated users access
+$slim->get('/' . $config['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignOut')->setName('auth.signout');
 
-    $this->get('/' . $settings['dirs']['admin'] . '/signout', 'It_All\BoutiqueCommerce\UI\Views\AuthenticationView:getSignOut')->setName('auth.signout');
+// CRUD
+$slim->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:index')->add(new AuthMiddleware($container))->setName('crud.show');
 
-    // CRUD
-    $this->get('/CRUD/{table}', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:index')->setName('crud.show');
-    $this->get('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:getInsert')->setName('crud.getInsert');
-    $this->post('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\Controllers\CrudController:postInsert')->setName('crud.postInsert');
-    $this->get('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:getUpdate')->setName('crud.getUpdate');
-    $this->post('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postUpdate')->setName('crud.postUpdate');
-    $this->get('/CRUD/{table}/delete/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:delete')->setName('crud.delete');
-})->add(new AuthMiddleware($container));
+$slim->get('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:getInsert')->add(new AuthMiddleware($container))->setName('crud.getInsert');
 
-// This approach uses the ListView view class to render the view for the route
+$slim->post('/CRUD/{table}/insert', 'It_All\BoutiqueCommerce\Controllers\CrudController:postInsert')->add(new AuthMiddleware($container))->setName('crud.postInsert');
+
+$slim->get('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView:getUpdate')->add(new AuthMiddleware($container))->setName('crud.getUpdate');
+
+$slim->post('/CRUD/{table}/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:postUpdate')->add(new AuthMiddleware($container))->setName('crud.postUpdate');
+
+$slim->get('/CRUD/{table}/delete/{primaryKey}', 'It_All\BoutiqueCommerce\Controllers\CrudController:delete')->add(new AuthMiddleware($container))->setName('crud.delete');
+/////////////////////////////////////////
+
+// MVC Test
 $slim->get('/{table}', 'It_All\BoutiqueCommerce\UI\Views\ListView:output')->setName('table.show');
-
-// This approach avoids using the ListView class and instead renders the view directly
-// $slim->get('/{table}', function ($reqest, $response, $args) {
-//     $class = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
-//     $dbTableModel = new $class($this->db);
-//     $modelClass = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
-//     $this->model = new $modelClass($dbTableModel);
-//     return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->model->getRecords()]);
-// });

@@ -5,8 +5,6 @@ use Respect\Validation\Validator as v;
 
 // DIC configuration
 
-$container = $slim->getContainer();
-
 // -----------------------------------------------------------------------------
 // Service providers
 // -----------------------------------------------------------------------------
