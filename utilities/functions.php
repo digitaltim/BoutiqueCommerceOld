@@ -262,11 +262,14 @@ function arrayWalkToStringRecursive(array $arr, int $level = 0): string
     return $out;
 }
 
-function printPreArray(array $in)
+function printPreArray(array $in, bool $die = false)
 {
     echo "<pre>";
     print_r($in);
     echo "</pre>";
+    if ($die) {
+        die('Array print and die.');
+    }
 }
 
 /**
