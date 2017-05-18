@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Services;
 
-use function It_All\BoutiqueCommerce\Utilities\printPreArray;
-
 class Validator
 {
     private $errors;

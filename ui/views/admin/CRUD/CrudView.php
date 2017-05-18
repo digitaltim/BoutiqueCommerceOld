@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\UI\Views\Admin\CRUD;
 
+use It_All\BoutiqueCommerce\Middleware\CsrfFormFormerHelper;
 use It_All\BoutiqueCommerce\Models\DbColumn;
 use It_All\BoutiqueCommerce\Models\DbTable;
 use It_All\BoutiqueCommerce\UI\UiRsDbTable;
@@ -45,7 +46,11 @@ class CrudView extends AdminView
         $this->model = CrudHelper::getModel($this->tableName, $this->db);
 
         $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : [];
-        $form = $this->getForm('insert', null, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
+        $form = $this->getForm($request,'insert', null, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
+
+        if ($generalErrorMessage !== null) {
+
+        }
 
         return $this->view->render($response, 'admin/CRUD/form.twig', [
             'title' => 'Insert to '.$this->tableName,
@@ -63,7 +68,7 @@ class CrudView extends AdminView
         $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
         $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : pg_fetch_array($rs);
 
-        $form = $this->getForm('update', $primaryKey, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
+        $form = $this->getForm($request,'update', $primaryKey, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
 
         return $this->view->render($response, 'admin/CRUD/form.twig', [
             'title' => 'Update '.$this->tableName,
@@ -78,6 +83,7 @@ class CrudView extends AdminView
     }
 
     private function getForm(
+        $request,
         string $dbAction = 'insert',
         string $primaryKey = null,
         array $fieldValues = [],
@@ -103,11 +109,12 @@ class CrudView extends AdminView
             $form->setCustomErrorMsg($generalErrorMessage);
         }
 
-        $this->addFormFields($dbAction, $form, 'sub', $fieldValues, $fieldErrors);
+        $this->addFormFields($request,$dbAction, $form, 'sub', $fieldValues, $fieldErrors);
         return $form;
     }
 
     private function addFormFields(
+        $request,
         string $dbAction,
         Form $form,
         string $submitFieldName = 'sub',
@@ -154,6 +161,9 @@ class CrudView extends AdminView
                 \It_All\BoutiqueCommerce\Utilities\getFormFieldFromDbColumn($form, $column, $errorMessage, $initialValue, null, null, null, $isDisabled, $hiddenValue);
             }
         }
+
+        CsrfFormFormerHelper::addCsrfFields($form, $request, $this->container);
+
         $submitButtonInfo = array(
             'attributes' => array(
                 'name' => $submitFieldName,
