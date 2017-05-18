@@ -108,7 +108,12 @@ class CrudView extends AdminView
         return $column->isPrimaryKey() && $dbAction == 'insert';
     }
 
-    private function getForm(string $dbAction = 'insert', string $primaryKey = null, array $fieldValues = [], array $fieldErrors = [])
+    private function getForm(
+        string $dbAction = 'insert',
+        string $primaryKey = null,
+        array $fieldValues = [],
+        array $fieldErrors = []
+    )
     {
         $pathParms = ['table' => $this->tableName];
         if ($dbAction == 'update') {
@@ -129,7 +134,13 @@ class CrudView extends AdminView
         return $form;
     }
 
-    private function addFormFields(string $dbAction, Form $form, string $submitFieldName = 'sub', array $fieldValues = [], array $fieldErrors = [])
+    private function addFormFields(
+        string $dbAction,
+        Form $form,
+        string $submitFieldName = 'sub',
+        array $fieldValues = [],
+        array $fieldErrors = []
+    )
     {
         if ($dbAction != 'insert' && $dbAction != 'update') {
             throw new \Exception("invalid form type $dbAction");
