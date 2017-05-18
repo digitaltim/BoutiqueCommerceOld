@@ -389,7 +389,7 @@ function getFormFieldFromDbColumn(Form $form, DbColumn $column, $errorMessage = 
         ];
     }
     else {
-        $label = ($label === null) ? ucwords(str_replace("_"," ",$columnName)) : $label;
+        $label = ($label === null) ? $columnName : $label;
         $newField = [
             'label' => $label,
             'tag' => 'input',

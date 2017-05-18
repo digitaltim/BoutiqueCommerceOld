@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\UI\Views\Admin\CRUD;
 
 use It_All\BoutiqueCommerce\Models\DbColumn;
+use It_All\BoutiqueCommerce\Models\DbTable;
 use It_All\BoutiqueCommerce\UI\UiRsDbTable;
 use It_All\BoutiqueCommerce\UI\Views\Admin\AdminView;
 use It_All\FormFormer\Form;
@@ -47,7 +48,7 @@ class CrudView extends AdminView
         $form = $this->getForm('insert', null, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
 
         return $this->view->render($response, 'admin/CRUD/form.twig', [
-            'title' => 'Insert '.$this->tableName,
+            'title' => 'Insert to '.$this->tableName,
             'form' => $form->generate(),
             'navigationItems' => $this->navigationItems
         ]);

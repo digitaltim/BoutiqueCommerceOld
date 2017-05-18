@@ -7,6 +7,7 @@
 
 {% block htmlBodyContent %}
     {% include 'admin/partials/navigation.twig' %}
+    {{ title }}
     {{ form | raw }}
     <script type='text/javascript' src='/js/uiHelper.js'></script>
 {% endblock %}

@@ -144,6 +144,9 @@ class CrudController extends Controller
             $cv = new CrudView($this->container);
             return $cv->getUpdate($request, $response, $args, $generalErrorMessage);
         }
+
+        $this->flash->addMessage('success', 'Updated');
+        return $response->withRedirect($this->router->pathFor('crud.show', ['table' => $this->tableName]));
     }
 
     public function delete($request, $response, $args)

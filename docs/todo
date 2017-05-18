@@ -2,12 +2,6 @@
 
 finish infrastructure functionality
 
-- CRUD
--- test all tables (insert, update, delete, verify enum types)
--- update schema drop default '' and not nullable for not nullable fields on a case by case basis.
---- fix any FF/validation errors
---- add cancel buttons on insert and update
-
 - OUTPUT
 -- change all twig output files to extend base.twig
 
