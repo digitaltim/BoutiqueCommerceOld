@@ -58,7 +58,7 @@ class AuthController extends Controller
         if ($res) {
             $this->flash->addMessage('info', 'You have been signed up.');
             $this->auth->attempt($request->getParam('username'), $request->getParam('password'));
-            return $response->withRedirect($this->router->pathFor('test'));
+            return $response->withRedirect($this->router->pathFor('crud.show', ['table' => 'admins']));
         }
         return $this->view->render($response, 'signup.twig', ['title' => 'Sign Up']);
     }
