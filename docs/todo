@@ -2,9 +2,6 @@
 
 finish infrastructure functionality
 
-- OUTPUT
--- change all twig output files to extend base.twig
-
 - ADMIN NAVIGATION
 -- fix html errors - many bottom </div> match nothing
 -- item configurability
@@ -25,7 +22,10 @@ finish infrastructure functionality
 -- only owner/director can insert new admins (see Authorization)
 
 - CSRF
--- uncomment middleware and apply to all forms
+-- apply to all forms
+
+- OUTPUT
+-- change all twig output files to extend base.twig
 
 - DO I UNDERSTAND THE FRAMEWORK
 -- What does registering controller / factories in dependencies do? When they are commented out the script still runs?
