@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\UI\Views;
 
+use It_All\BoutiqueCommerce\Middleware\CsrfFormFormerHelper;
 use It_All\BoutiqueCommerce\UI\Views\Admin\AdminView;
 use It_All\FormFormer\Form;
 use Slim\Container;
@@ -52,6 +53,8 @@ class AuthenticationView extends AdminView
         );
 
         $form = new Form($formAttributes, 'verbose');
+
+        CsrfFormFormerHelper::addCsrfFields($form, $request, $this->container);
 
         // set authentication failed general error message
         if (isset($generalErrorMessage)) {
