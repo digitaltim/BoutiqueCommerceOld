@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 use It_All\BoutiqueCommerce\Middleware\AuthMiddleware;
 use It_All\BoutiqueCommerce\Middleware\GuestMiddleware;
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
 
 // For maximum performance, routes should not be grouped
 // https://github.com/slimphp/Slim/issues/2165
