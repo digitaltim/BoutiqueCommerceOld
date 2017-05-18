@@ -150,3 +150,46 @@
       <![endif]-->
    </body>
 </html>
+
+<!-- Login page HTML -->
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+   <meta charset='utf-8'>
+   <meta content='noindex, nofollow' name='robots'>
+   <meta content='width=device-width, initial-scale=1' name='viewport'>
+   <title>::Login</title>
+   <link href='/css/login.css' rel='stylesheet' type='text/css'>
+</head>
+<body onload='document.getElementById("username").focus();'>
+   <header id='pageHeader'>
+      <div id='topLineContainer'>
+         <div id='headerTitle'>
+            <h1>Hello Boutique Admin &nbsp;<span style='color: grey;'>{LOCAL TESTING}</span></h1>
+         </div>
+      </div>
+   </header>
+   <main>
+      <div id='mainContainerSmall'>
+         <h1>Login</h1>
+         <h5>Authorized Use By Hello Boutique Group, LLC employees and associates only.</h5>
+         <form action='/pR1v4taDm1ns1T3/login.php?page=/pR1v4taDm1ns1T3/admins/index.php' method='post' novalidate='1'>
+            <input name='failedAttempts' type='hidden' value='0'>
+            <div class='ffFieldWrapper'>
+               <label for='username'>Username</label><span class='ffFieldLabelFine'>required</span><input id='username' maxlength='40' name='username' required="" size='20'>
+            </div>
+            <div class='ffFieldWrapper'>
+               <label for='password'>Password</label><span class='ffFieldLabelFine'>required</span><input id='password' maxlength='40' name='password' required="" size='20' type='password'>
+            </div>
+            <div class='ffFieldWrapper'>
+               <input name='loginSubmit' type='submit' value=' e n t e r '>
+            </div>
+         </form>
+      </div>
+   </main>
+   <script src='/js/uiHelper.js' type='text/javascript'>
+   </script> <!--[if lt IE 9]>
+        <script src="/js/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+</body>
+</html>

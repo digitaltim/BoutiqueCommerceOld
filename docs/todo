@@ -68,6 +68,8 @@ finish infrastructure functionality
 - MONOLOG EVENT LOGGING
 - for infrastructure - just for CRUD and admin specific CRUD
 
+- remove eloquent from vendor
+
 
 - INFRASTRUCTURE
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw

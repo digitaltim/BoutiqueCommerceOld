@@ -6,11 +6,22 @@ namespace It_All\BoutiqueCommerce\Controllers;
 use Slim\Container;
 use Respect\Validation\Validator as v;
 use It_All\BoutiqueCommerce\Utilities\Database;
+use It_All\BoutiqueCommerce\UI\Views\AuthenticationView;
 
 class AuthController extends Controller
 {
     function postSignIn($request, $response, $args)
     {
+        $rules = [];
+        $rules['username'] = ['required'];
+        $rules['password'] = ['required'];
+
+        if (!$this->newvalidator->validate($request->getParsedBody(), $rules)) {
+            // redisplay the form with input values and error(s)
+            $authenticationView = new AuthenticationView($this->container);
+            return $authenticationView->getSignIn($request, $response, $args);
+        }
+
         $auth = $this->auth->attempt(
             $request->getParam('username'),
             $request->getParam('password')
@@ -20,8 +31,11 @@ class AuthController extends Controller
             return $response->withRedirect($this->router->pathFor('crud.show', ['table' => 'admins']));
         }
 
-        $this->flash->addMessage('error', 'Could not sign you in with those credentials.');
-        return $response->withRedirect($this->router->pathFor('auth.signin'));
+        $generalErrorMessage = 'Could not sign you in with those credentials.';
+
+        // redisplay the form with input values and error(s)
+        $authenticationView = new AuthenticationView($this->container);
+        return $authenticationView->getSignIn($request, $response, $args, $generalErrorMessage);
     }
 
     function postSignUp($request, $response, $args)

@@ -101,7 +101,7 @@ class CrudView extends AdminView
         }
         $formAttributes = array(
             'method' => 'post',
-            'action' => $this->container->get('router')->pathFor($namedRoute, $pathParms),
+            'action' => $this->router->pathFor($namedRoute, $pathParms),
             'novalidate' => 'novalidate'
         );
         $form = new Form($formAttributes, 'verbose');
