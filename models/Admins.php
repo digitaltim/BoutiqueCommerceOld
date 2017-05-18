@@ -12,7 +12,7 @@ class Admins extends DbTable
     function __construct(Postgres $db)
     {
         parent::__construct('admins', $db);
-        $this->allowInsert = false;
+        $this->allowInsert = true;
         $this->allowUpdate = false;
         $this->allowDelete = false;
     }

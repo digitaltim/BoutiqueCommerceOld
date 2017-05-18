@@ -72,6 +72,7 @@ finish infrastructure functionality
 
 - consider refactoring the signup/in methods/templates in views/controllers & twig. They are almost identical... DRY
 
+- check failure condition for inserting new admin
 
 
 - INFRASTRUCTURE
