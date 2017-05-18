@@ -17,20 +17,27 @@ class Admins extends DbTable
         $this->allowDelete = false;
     }
 
-    static public function getAdminDataForUsername(string $username)
+    public function checkRecordExistsForUsername(string $username)
+    {
+        $q = new QueryBuilder("SELECT id FROM admins WHERE username = $1", $username);
+        $q->execute();
+        return $q->checkRecordsExist();
+    }
+
+    public function getAdminDataForUsername(string $username)
     {
         $q = new QueryBuilder("SELECT a.id as admin_id, a.permissions, a.password_hash, e.id as employee_id, e.fname, e.lname FROM admins a LEFT OUTER JOIN employees e ON a.employee_id = e.id  WHERE a.username = $1", $username);
         return $q->execute();
     }
 
-    static public function getAdminDataForId(int $id)
+    public function getAdminDataForId(int $id)
     {
         $q = new QueryBuilder("SELECT a.username, a.permissions, e.id as employee_id, e.fname, e.lname FROM admins a LEFT OUTER JOIN employees e ON a.employee_id = e.id  WHERE a.id = $1", $id);
         $Res = $q->execute();
         return pg_fetch_assoc($Res);
     }
 
-    static public function getAdminsData()
+    public function getAdminsData()
     {
         $q = new QueryBuilder("SELECT a.id as admin_id, a.username, a.permissions, e.fname, e.lname FROM admins a LEFT OUTER JOIN employees e ON a.employee_id = e.id  ORDER BY username");
         return $q->execute();

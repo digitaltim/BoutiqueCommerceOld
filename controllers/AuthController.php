@@ -7,6 +7,7 @@ use Slim\Container;
 use Respect\Validation\Validator as v;
 use It_All\BoutiqueCommerce\Utilities\Database;
 use It_All\BoutiqueCommerce\UI\Views\AuthenticationView;
+use It_All\BoutiqueCommerce\Models\Admins;
 
 class AuthController extends Controller
 {
@@ -40,15 +41,24 @@ class AuthController extends Controller
 
     function postSignUp($request, $response, $args)
     {
-        $validation = $this->validator->validate($request, [
-            'username' => v::notEmpty()->alpha()->usernameAvailable(),
-            'password' => v::noWhitespace()->notEmpty(),
-        ]);
+        $adminsModel = new Admins($this->db);
 
-        if ($validation->failed()) {
-            return $response->withRedirect($this->router->pathFor('auth.signup'));
+        $rules = [];
+        $rules['username'] = ['required'];
+        $rules['password'] = ['required'];
+
+        if (!$this->newvalidator->validate($request->getParsedBody(), $rules)) {
+            // redisplay the form with input values and error(s)
+            $authenticationView = new AuthenticationView($this->container);
+            return $authenticationView->getSignUp($request, $response, $args);
         }
 
+        if ($adminsModel->checkRecordExistsForUsername($request->getParam('username'))) {
+            $generalErrorMessage = 'Username already exists.';
+            // redisplay the form with input values and error(s)
+            $authenticationView = new AuthenticationView($this->container);
+            return $authenticationView->getSignUp($request, $response, $args, $generalErrorMessage);
+        }
 
         $res = pg_insert($this->db->getPgConn(), 'admins', [
             'username' => $request->getParam('username'),
@@ -57,9 +67,19 @@ class AuthController extends Controller
 
         if ($res) {
             $this->flash->addMessage('info', 'You have been signed up.');
-            $this->auth->attempt($request->getParam('username'), $request->getParam('password'));
+
+            $this->auth->attempt(
+                $request->getParam('username'),
+                $request->getParam('password')
+            );
+
             return $response->withRedirect($this->router->pathFor('crud.show', ['table' => 'admins']));
         }
-        return $this->view->render($response, 'signup.twig', ['title' => 'Sign Up']);
+
+        $generalErrorMessage = 'Error inserting new username.';
+
+        // redisplay the form with input values and error(s)
+        $authenticationView = new AuthenticationView($this->container);
+        return $authenticationView->getSignUp($request, $response, $args, $generalErrorMessage);
     }
 }
