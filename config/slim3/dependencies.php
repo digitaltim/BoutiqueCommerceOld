@@ -131,7 +131,6 @@ $slim->add($container->csrf);
 // -----------------------------------------------------------------------------
 // Middleware registration
 // -----------------------------------------------------------------------------
-$slim->add(new It_All\BoutiqueCommerce\Middleware\ValidationErrorsMiddleware($container));
 $slim->add(new It_All\BoutiqueCommerce\Middleware\OldInputMiddleware($container));
 
 v::with('It_All\\BoutiqueCommerce\\Validation\\Rules');
