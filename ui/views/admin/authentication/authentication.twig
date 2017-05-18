@@ -1,0 +1,32 @@
+{% extends 'base.twig' %}
+
+{% block htmlHeadCss %}
+    {% include 'admin/partials/head.twig' %}
+    <link href='/css/login.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block htmlBodyContent %}
+    <body onload='document.getElementById("username").focus();'>
+    <header id='pageHeader'>
+        <div id='topLineContainer'>
+            <div id='headerTitle'>
+               <h1><a href="{{ path_for('home')}}">BoutiqueCommerce</a>    &nbsp;<span style='color: grey;'>{LOCAL TESTING}</span></h1>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div id='mainContainerSmall'>
+            <h1>Login</h1>
+            <h5>Authorized for use by BoutiqueCommerce employees and associates only.</h5>
+
+            {{ form | raw}}
+            {{ csrf.field | raw }}
+
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block htmlBodyJs %}
+    <script type='text/javascript' src='/js/uiHelper.js'></script>
+{% endblock %}
