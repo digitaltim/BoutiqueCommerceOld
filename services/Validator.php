@@ -304,11 +304,10 @@ class Validator
         return true;
     }
 
-    static public function isEmail($check)
+    static public function isEmail(string $check): bool
     {
         return filter_var($check, FILTER_VALIDATE_EMAIL);
     }
 
     // END VALIDATION FUNCTIONS
-
 }
