@@ -7,6 +7,9 @@
 
 {% block htmlBodyContent %}
     {% include 'admin/partials/navigation.twig' %}
+    {% if flash.getMessage('success').0 %}
+        {{ flash.getMessage('success').0 }}
+    {% endif %}
     {{ results | raw }}
     <script type='text/javascript' src='/js/uiHelper.js'></script>
 {% endblock %}

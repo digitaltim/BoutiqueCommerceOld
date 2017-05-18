@@ -5,9 +5,8 @@ namespace It_All\BoutiqueCommerce\Controllers;
 
 use It_All\BoutiqueCommerce\UI\NavAdmin;
 use It_All\BoutiqueCommerce\Models\DbColumn;
-use It_All\BoutiqueCommerce\Models\DbTable;
+use It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudHelper;
 use It_All\BoutiqueCommerce\UI\Views\Admin\CRUD\CrudView;
-use It_All\FormFormer\Form;
 use Slim\Container;
 
 class CrudController extends Controller
@@ -23,17 +22,6 @@ class CrudController extends Controller
         // Instantiate navigation navbar contents
         $navAdmin = new NavAdmin($this->db);
         $this->navigationItems = $navAdmin->getSections();
-    }
-
-    private function setModel()
-    {
-        $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
-        try {
-            $this->model = (class_exists($class)) ? new $class($this->db) : new DbTable($this->tableName, $this->db);
-        } catch (\Exception $e) {
-//            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => 'model: Invalid Table Name: ' . $this->tableName]);
-            throw new \Exception('Invalid Table Name: ' . $this->tableName);
-        }
     }
 
     private function setDbColumnValidationRules(DbColumn $c): array
@@ -71,101 +59,106 @@ class CrudController extends Controller
         return $columnRules;
     }
 
+    /**
+     * @param $request
+     * @return bool
+     *  $rules = [
+     *      'fieldname' => [
+     *          'rule1',
+     *          'rule2'
+     *      ], ...
+     *  ];
+     */
     private function validateFieldInput($request): bool
     {
-//        $rules = [
-//            'text' => [
-//                'required',
-//                'numeric'
-//            ]
-//        ];
+        // look for fields that are required but are not in the posted array (ie radio button or checkbox fields for which no value has been checked). if found, enter them as empty string to fieldInputs so they are marked invalid. note, skip primary key field as it should not be validated.
+        $fieldInputs = $request->getParsedBody();
+        foreach ($this->model->getColumns() as $c) {
+            $cName = $c->getName();
+            if ($c->isRequired() && !$this->model->isPrimaryKeyColumn($cName) && !array_key_exists($cName, $fieldInputs)) {
+                $fieldInputs[$cName] = '';
+            }
+        }
+
         // get field rules from db columns
         $rules = [];
-        foreach ($request->getParsedBody() as $fieldName => $postedValue) {
+        foreach ($fieldInputs as $fieldName => $postedValue) {
             // find db columns
             if ($c = $this->model->getColumnByName($fieldName)) {
                 $rules[$fieldName] = $this->setDbColumnValidationRules($c);
             }
-            // ignore non-db columns
+            // ignore any non-db columns
         }
-        return $this->newvalidator->validate($request->getParsedBody(), $rules);
+
+        return $this->newvalidator->validate($fieldInputs, $rules);
     }
 
     public function postInsert($request, $response, $args)
     {
         $this->tableName = $args['table'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', [
-                'title' => 'Error',
-                'message' => $e->getMessage(),
-                'navigationItems' => $this->navigationItems
-            ]);
-        }
-
+        $this->model = CrudHelper::getModel($this->tableName, $this->db);
+        $redisplayForm = false;
         if ($this->validateFieldInput($request)) {
             try {
-                $this->model->insert($request->getParsedBody());
-                    return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
-                } catch (\Exception $e) {
-                    die('query failure: '.$e->getMessage());
+                    $this->model->insert($request->getParsedBody());
+                } catch (\Throwable $e) {
+                    $redisplayForm = true;
             }
         } else {
+            $redisplayForm = true;
+        }
+
+        if ($redisplayForm) {
             // redisplay the form with input values and error(s)
             $cv = new CrudView($this->container);
             return $cv->getInsert($request, $response, $args);
         }
+
+        $this->flash->addMessage('success', 'Inserted');
+        return $response->withRedirect($this->router->pathFor('crud.show', ['table' => $this->tableName]));
+
     }
 
     public function postUpdate($request, $response, $args)
     {
         $this->tableName = $args['table'];
-        $primaryKey = $args['primaryKey'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', [
-                'title' => 'Error',
-                'message' => $e->getMessage(),
-                'navigationItems' => $this->navigationItems
-            ]);
-        }
+        $this->model = CrudHelper::getModel($this->tableName, $this->db);
 
+        $primaryKey = $args['primaryKey'];
+
+        $redisplayForm = false;
+        $generalErrorMessage = null;
         if ($this->validateFieldInput($request)) {
             try {
                 $this->model->update($request->getParsedBody(), $primaryKey);
-                return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
-            } catch (\Exception $e) {
-                die('query failure: '.$e->getMessage());
+            } catch (\Throwable $e) {
+                $redisplayForm = true;
+                $generalErrorMessage = $e->getMessage();
             }
         } else {
+            $redisplayForm = true;
+        }
+
+        if ($redisplayForm) {
             // redisplay the form with input values and error(s)
             $cv = new CrudView($this->container);
-            return $cv->getUpdate($request, $response, $args);
+            return $cv->getUpdate($request, $response, $args, $generalErrorMessage);
         }
     }
 
     public function delete($request, $response, $args)
     {
         $this->tableName = $args['table'];
+        $this->model = CrudHelper::getModel($this->tableName, $this->db);
+
         $primaryKey = $args['primaryKey'];
         try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', [
-                'title' => 'Error',
-                'message' => $e->getMessage(),
-                'navigationItems' => $this->navigationItems
-            ]);
+            $this->model->delete($primaryKey);
+        } catch (\Throwable $e) {
+            $this->flash->addMessage('failure', 'Not Deleted '.$e->getMessage());
         }
-        if ($this->model->delete($primaryKey)) {
-            echo 'delete success';
-//            return $response->withStatus(302)->withHeader('Location', '/CRUD/'.$this->tableName);
-        }
-        else {
-            echo 'delete failure';
-        }
-    }
 
+        $this->flash->addMessage('success', 'Deleted');
+        return $response->withRedirect($this->router->pathFor('crud.show', ['table' => $this->tableName]));
+    }
 }

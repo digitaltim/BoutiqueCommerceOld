@@ -6,15 +6,15 @@ finish infrastructure functionality
 -- test all tables (insert, update, delete, verify enum types)
 -- update schema drop default '' and not nullable for not nullable fields on a case by case basis.
 --- fix any FF/validation errors
---- create custom dbtable models as necessary (defer until infrastructure complete)
---- render views, error views and messages from CrudView
---- display error for update with no changes made
 --- add cancel buttons on insert and update
---- why does view render call not work in setModel (CrudView and CrudController)? (and DRY)
+
+- OUTPUT
+-- change all twig output files to extend base.twig
 
 - ADMIN NAVIGATION
+-- fix html errors - many bottom </div> match nothing
 -- item configurability
--- messaging (flash? may be able to simply pass from controller to view)
+-- messaging (flash? may be able to simply pass from controller to view). update: flash messages only work on redirect, try using $_SESSION['adminMessages'][] (array so we can have multiple)
 -- nav should not show in sign in page (admin dir)
 -- make sure {LOCAL TESTING} appears only for dev (use islive in env)
 
@@ -60,7 +60,8 @@ finish infrastructure functionality
 
 - Validation
 -- Refactor Validator::isDbDate() and isDbTimestamp using Regex
--- Consider use cases for Respect/Validation vs. integrated based on Simple Validator... Should we use the simple for everthing when the decision to switch was based on getting validation in CRUD working?
+-- Consider use cases for Respect/Validation vs. integrated based on Simple Validator... Should we use the simple for everthing when the decision to switch was based on getting validation in CRUD working? --> UPDATE - This is actually about getting the validation in FF working, not CRUD. Since we have lots of forms to build and we're going to try FF, it will be much easier to use our own validator based on SV than respect's validator. I don't think our validation needs are very complex for most forms. For complex needs, we can write a custom validation function on a per form basis.
+-- refactor $this->newvalidator calls in CRUD after above decision.
 
 - In /utilities/functions.php
 -- Remove unused functions. remove functions based on old page controller model that don't apply to front controller.

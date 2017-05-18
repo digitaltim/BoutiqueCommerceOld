@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\UI\Views\Admin\CRUD;
 
 use It_All\BoutiqueCommerce\Models\DbColumn;
-use It_All\BoutiqueCommerce\Models\DbTable;
 use It_All\BoutiqueCommerce\UI\UiRsDbTable;
 use It_All\BoutiqueCommerce\UI\Views\Admin\AdminView;
 use It_All\FormFormer\Form;
@@ -13,29 +12,11 @@ class CrudView extends AdminView
 {
     private $model;
 
-    private function setModel()
-    {
-        $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($this->tableName);
-        try {
-            $this->model = (class_exists($class)) ? new $class($this->db) : new DbTable($this->tableName, $this->db);
-        } catch (\Exception $e) {
-//            return $this->view->render($response, 'admin/error.twig', ['title' => 'Error', 'message' => 'model: Invalid Table Name: ' . $this->tableName]);
-            throw new \Exception('Invalid Table Name: ' . $this->tableName);
-        }
-    }
-
-    public function index($request, $response, $args)
+    public function index($request, $response, $args, string $message = '')
     {
         $this->tableName = $args['table'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', [
-                'title' => 'Error',
-                'message' => $e->getMessage(),
-                'navigationItems' => $this->navigationItems
-            ]);
-        }
+        $this->model = CrudHelper::getModel($this->tableName, $this->db);
+
         $UiRsDbTable = new UiRsDbTable($this->model);
         $results = '';
         if ($res = $this->model->select('*')) {
@@ -47,57 +28,44 @@ class CrudView extends AdminView
         else {
             $results = "Query Error";
         }
+
         return $this->view->render($response, 'admin/CRUD/index.twig', [
             'title' => $this->tableName,
+            'message' => $message,
             'results' => $results,
             'navigationItems' => $this->navigationItems
         ]);
 
     }
 
-    public function getUpdate($request, $response, $args)
+    public function getInsert($request, $response, $args, string $generalErrorMessage = null)
     {
         $this->tableName = $args['table'];
-        $primaryKey = $args['primaryKey'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', [
-                'title' => 'Error',
-                'message' => $e->getMessage(),
-                'navigationItems' => $this->navigationItems
-            ]);
-        }
-        $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
-        $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : pg_fetch_array($rs);
+        $this->model = CrudHelper::getModel($this->tableName, $this->db);
 
-        $form = $this->getForm('update', $primaryKey, $fieldValues, $this->newvalidator->getErrors());
+        $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : [];
+        $form = $this->getForm('insert', null, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
 
         return $this->view->render($response, 'admin/CRUD/form.twig', [
-            'title' => 'Update '.$this->tableName,
+            'title' => 'Insert '.$this->tableName,
             'form' => $form->generate(),
             'navigationItems' => $this->navigationItems
         ]);
     }
 
-    public function getInsert($request, $response, $args)
+    public function getUpdate($request, $response, $args, string $generalErrorMessage = null)
     {
         $this->tableName = $args['table'];
-        try {
-            $this->setModel();
-        } catch (\Exception $e) {
-            return $this->view->render($response, 'admin/error.twig', [
-                'title' => 'Error',
-                'message' => $e->getMessage(),
-                'navigationItems' => $this->navigationItems
-            ]);
-        }
+        $this->model = CrudHelper::getModel($this->tableName, $this->db);
 
-        $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : [];
-        $form = $this->getForm('insert', null, $fieldValues, $this->newvalidator->getErrors());
+        $primaryKey = $args['primaryKey'];
+        $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
+        $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : pg_fetch_array($rs);
+
+        $form = $this->getForm('update', $primaryKey, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
 
         return $this->view->render($response, 'admin/CRUD/form.twig', [
-            'title' => 'Insert '.$this->tableName,
+            'title' => 'Update '.$this->tableName,
             'form' => $form->generate(),
             'navigationItems' => $this->navigationItems
         ]);
@@ -108,7 +76,7 @@ class CrudView extends AdminView
         return $column->isPrimaryKey() && $dbAction == 'insert';
     }
 
-    private function getForm(string $dbAction = 'insert', string $primaryKey = null, array $fieldValues = [], array $fieldErrors = [])
+    private function getForm(string $dbAction = 'insert', string $primaryKey = null, array $fieldValues = [], array $fieldErrors = [], string $generalErrorMessage = null)
     {
         $pathParms = ['table' => $this->tableName];
         if ($dbAction == 'update') {
@@ -124,6 +92,9 @@ class CrudView extends AdminView
             'novalidate' => 'novalidate'
         );
         $form = new Form($formAttributes, 'verbose');
+        if ($generalErrorMessage !== null) {
+            $form->setCustomErrorMsg($generalErrorMessage);
+        }
 
         $this->addFormFields($dbAction, $form, 'sub', $fieldValues, $fieldErrors);
         return $form;

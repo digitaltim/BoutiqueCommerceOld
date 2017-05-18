@@ -14,7 +14,8 @@ return [
         'view' => [
             'pathTemplates' => $config['pathTemplates'],
             'pathCache' => $config['storage']['pathCache'].'twig/',
-            'autoReload' => !$config['isLive']
+            'autoReload' => !$config['isLive'],
+            'debug' => true
         ],
 
         // phpMailer Settings

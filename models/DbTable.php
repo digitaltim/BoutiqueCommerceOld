@@ -147,7 +147,7 @@ class DbTable {
         return $this->primaryKeyColumn;
     }
 
-    protected function isPrimaryKeyColumn(string $columnName): bool
+    public function isPrimaryKeyColumn(string $columnName): bool
     {
         return $this->primaryKeyColumn === $columnName;
     }

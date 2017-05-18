@@ -38,33 +38,27 @@ $container['form'] = function ($container) {
     return new \It_All\FormFormer\Form();
 };
 
-// Test
-$container['test'] = function($container) {
-    return new It_All\BoutiqueCommerce\Test\Test;
-};
-
 // Twig
 $container['view'] = function ($container) {
     $settings = $container->get('settings');
     $view = new \Slim\Views\Twig($settings['view']['pathTemplates'], [
         'cache' => $settings['view']['pathCache'],
-        'auto_reload' => $settings['view']['autoReload']
+        'auto_reload' => $settings['view']['autoReload'],
+        'debug' => $settings['view']['debug']
     ]);
 
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
     $view->addExtension(new Slim\Views\TwigExtension($container->router, $basePath));
+    if ($settings['view']['debug']) {
+        // allows {{ dump(var) }}
+        $view->addExtension(new Twig_Extension_Debug());
+    }
 
     // make auth class available inside templates
     $view->getEnvironment()->addGlobal('auth', [
         'check' => $container->auth->check(),
         'user' => $container->auth->user()
-    ]);
-
-    // make test class available inside templates
-    $view->getEnvironment()->addGlobal('test', [
-        'check' => $container->test->check(),
-        'user' => $container->test->user()
     ]);
 
     // make flash messages available inside templates

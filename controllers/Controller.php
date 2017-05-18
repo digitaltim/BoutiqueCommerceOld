@@ -16,6 +16,7 @@ abstract class Controller
         $container['db'];
         $container['view'];
         $container['mailer'];
+        $container['flash'];
     }
 
     public function __get($name)

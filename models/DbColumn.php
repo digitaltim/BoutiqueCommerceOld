@@ -36,7 +36,10 @@ class DbColumn
     /** @var string */
     private $udtName;
 
-    /** @var bool */
+    /**
+     * @var bool
+     * has a unique constraint
+     */
     private $isUnique;
 
     /** @var array http://www.postgresql.org/docs/9.4/static/datatype-numeric.html */
