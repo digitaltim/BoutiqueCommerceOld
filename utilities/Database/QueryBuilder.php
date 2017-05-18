@@ -7,6 +7,7 @@ class QueryBuilder
 {
     public $sql;
     public $args = array();
+    private $numberResultRows;
 
     /**
      * QueryBuilder constructor. like add, for convenience
@@ -17,6 +18,29 @@ class QueryBuilder
         if (count($args) > 0) {
             call_user_func_array(array($this, 'add'), $args);
         }
+    }
+
+    /** must be called after execute() */
+    public function getNumberResultRows()
+    {
+        if (!isset($this->numberResultRows)) {
+            throw new \Exception("execute() must be called prior");
+        }
+        return $this->numberResultRows;
+    }
+
+    /** must be called after execute() */
+    public function checkRecordsExist(): bool
+    {
+        if (!isset($this->numberResultRows)) {
+            throw new \Exception("execute() must be called prior");
+        }
+        return ($this->numberResultRows > 0);
+    }
+
+    private function setNumberResultRows($rs)
+    {
+        $this->numberResultRows = pg_num_rows($rs);
     }
 
     /**
@@ -71,6 +95,7 @@ class QueryBuilder
             $msg = $this->sql . \It_All\BoutiqueCommerce\Utilities\arrayWalkToStringRecursive($this->args);
             throw new \Exception('Query Execution Failure: '.$msg);
         }
+        $this->setNumberResultRows($res);
         return $res;
     }
 
