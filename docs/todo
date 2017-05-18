@@ -68,7 +68,10 @@ finish infrastructure functionality
 - MONOLOG EVENT LOGGING
 - for infrastructure - just for CRUD and admin specific CRUD
 
-- remove eloquent from vendor
+- remove eloquent from vendor (check vendor for other remnants to remove)
+
+- consider refactoring the signup/in methods/templates in views/controllers & twig. They are almost identical... DRY
+
 
 
 - INFRASTRUCTURE
