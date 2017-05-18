@@ -140,8 +140,6 @@ pgDbSchemaDump.sql
     InsertBuilder.php
     UpdateBuilder.php
   -Utilities
-   CsrfViewMiddleware.php
-   OldInputMiddleware.php (?)
    ValidatorService.php
    PhpMailerService.php
    MessagingAdmin.php (? - flash)
