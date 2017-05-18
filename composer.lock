@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "0b3b7e3ac198d327e8fe1ce8d8761d94",
     "content-hash": "48ffccd22143b31d57a001380a83c158",
     "packages": [
         {
@@ -35,7 +36,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
-            "time": "2017-02-14T19:40:03+00:00"
+            "time": "2017-02-14 19:40:03"
         },
         {
             "name": "eloquent/phony",
@@ -105,7 +106,7 @@
                 "stubbing",
                 "test"
             ],
-            "time": "2017-04-22T10:50:55+00:00"
+            "time": "2017-04-22 10:50:55"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -167,7 +168,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-02-28T22:50:30+00:00"
+            "time": "2017-02-28 22:50:30"
         },
         {
             "name": "guzzlehttp/promises",
@@ -218,7 +219,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-12-20T10:07:11+00:00"
+            "time": "2016-12-20 10:07:11"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -283,7 +284,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-03-20T17:10:46+00:00"
+            "time": "2017-03-20 17:10:46"
         },
         {
             "name": "it-all/form-former",
@@ -380,7 +381,7 @@
                 "oauth2",
                 "single sign on"
             ],
-            "time": "2017-04-25T14:43:14+00:00"
+            "time": "2017-04-25 14:43:14"
         },
         {
             "name": "league/oauth2-google",
@@ -430,7 +431,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2017-01-24T15:15:42+00:00"
+            "time": "2017-01-24 15:15:42"
         },
         {
             "name": "monolog/monolog",
@@ -508,7 +509,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-03-13T07:08:03+00:00"
+            "time": "2017-03-13 07:08:03"
         },
         {
             "name": "nikic/fast-route",
@@ -551,7 +552,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2017-01-19T11:35:12+00:00"
+            "time": "2017-01-19 11:35:12"
         },
         {
             "name": "paragonie/random_compat",
@@ -599,7 +600,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-13T16:27:32+00:00"
+            "time": "2017-03-13 16:27:32"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -675,7 +676,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-03-15T19:32:56+00:00"
+            "time": "2017-03-15 19:32:56"
         },
         {
             "name": "pimple/pimple",
@@ -721,7 +722,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2015-09-11T15:10:35+00:00"
+            "time": "2015-09-11 15:10:35"
         },
         {
             "name": "psr/container",
@@ -770,7 +771,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-02-14T16:28:37+00:00"
+            "time": "2017-02-14 16:28:37"
         },
         {
             "name": "psr/http-message",
@@ -820,7 +821,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06T14:39:51+00:00"
+            "time": "2016-08-06 14:39:51"
         },
         {
             "name": "psr/log",
@@ -867,7 +868,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "respect/validation",
@@ -932,7 +933,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2017-03-14T09:44:11+00:00"
+            "time": "2017-03-14 09:44:11"
         },
         {
             "name": "slim/csrf",
@@ -982,7 +983,7 @@
                 "middleware",
                 "slim"
             ],
-            "time": "2016-12-20T20:45:43+00:00"
+            "time": "2016-12-20 20:45:43"
         },
         {
             "name": "slim/flash",
@@ -1030,7 +1031,7 @@
                 "provider",
                 "slim"
             ],
-            "time": "2016-11-11T16:29:19+00:00"
+            "time": "2016-11-11 16:29:19"
         },
         {
             "name": "slim/php-view",
@@ -1079,7 +1080,7 @@
                 "template",
                 "view"
             ],
-            "time": "2016-10-11T07:43:08+00:00"
+            "time": "2016-10-11 07:43:08"
         },
         {
             "name": "slim/slim",
@@ -1150,7 +1151,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2017-03-19T17:55:20+00:00"
+            "time": "2017-03-19 17:55:20"
         },
         {
             "name": "slim/twig-view",
@@ -1200,7 +1201,7 @@
                 "twig",
                 "view"
             ],
-            "time": "2017-01-25T20:38:39+00:00"
+            "time": "2017-01-25 20:38:39"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1259,7 +1260,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2016-11-14 01:06:16"
         },
         {
             "name": "twig/twig",
@@ -1322,7 +1323,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-04-21T00:13:02+00:00"
+            "time": "2017-04-21 00:13:02"
         }
     ],
     "packages-dev": [],

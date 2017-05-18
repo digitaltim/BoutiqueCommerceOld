@@ -18,6 +18,7 @@ class AdminView
         $container['db'];
         $container['view'];
         $container['mailer'];
+        $container['flash'];
 
         // Instantiate navigation navbar contents
         $navAdmin = new NavAdmin($this->db);

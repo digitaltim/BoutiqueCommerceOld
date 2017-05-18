@@ -262,11 +262,14 @@ function arrayWalkToStringRecursive(array $arr, int $level = 0): string
     return $out;
 }
 
-function printPreArray(array $in)
+function printPreArray(array $in, bool $die = false)
 {
     echo "<pre>";
     print_r($in);
     echo "</pre>";
+    if ($die) {
+        die('Array print and die.');
+    }
 }
 
 /**
@@ -386,7 +389,7 @@ function getFormFieldFromDbColumn(Form $form, DbColumn $column, $errorMessage = 
         ];
     }
     else {
-        $label = ($label === null) ? ucwords(str_replace("_"," ",$columnName)) : $label;
+        $label = ($label === null) ? $columnName : $label;
         $newField = [
             'label' => $label,
             'tag' => 'input',

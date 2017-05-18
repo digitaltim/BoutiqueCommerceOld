@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Services;
 
+use function It_All\BoutiqueCommerce\Utilities\printPreArray;
+
 class Validator
 {
     private $errors;
@@ -17,12 +19,17 @@ class Validator
         foreach ($input as $fieldName => $fieldValue) {
             if (array_key_exists($fieldName, $rules)) {
                 foreach ($rules[$fieldName] as $rule) {
+                    // if field is not required and value is empty stop validating
+                    if (!in_array('required', $rules[$fieldName]) && self::isBlankOrNull($fieldValue)) {
+                        break;
+                    }
                     if (!$this->validateRule($fieldName, $fieldValue, $rule)) {
                         break; // stop validating further rules upon error
                     }
                 }
             }
         }
+
         return empty($this->errors);
     }
 
@@ -31,7 +38,7 @@ class Validator
         switch ($rule) {
 
             case 'required':
-                if ($fieldValue === null || trim($fieldValue) == '') {
+                if (self::isBlankOrNull($fieldValue)) {
                     $this->setError($fieldName, $rule, $rule);
                     return false;
                 }
@@ -52,14 +59,14 @@ class Validator
                 break;
 
             case 'date':
-                if (!$this->isDbDate($fieldValue)) {
+                if (!self::isDbDate($fieldValue)) {
                     $this->setError($fieldName, $rule);
                     return false;
                 }
                 break;
 
             case 'timestamp':
-                if (!$this->isDbTimestamp($fieldValue)) {
+                if (!self::isDbTimestamp($fieldValue)) {
                     $this->setError($fieldName, $rule);
                     return false;
                 }
@@ -102,7 +109,7 @@ class Validator
         return (filter_var($check, FILTER_VALIDATE_INT) === false) ? false : true;
     }
 
-    public function isWholeNumber($check): bool
+    static public function isWholeNumber($check): bool
     {
         return (!self::isInteger($check) || $check < 0) ? false : true;
     }
@@ -111,14 +118,15 @@ class Validator
      * checks if string is blank or null
      * this can be helpful for validating required form fields
      * @param string $check
+     * @param bool $trim
      * @return bool
      */
-    public function isBlankOrNull($check, $trim = true): bool
+    static public function isBlankOrNull($check, bool $trim = true): bool
     {
         if ($trim) {
             $check = trim($check);
         }
-        return (strlen($check) == 0 || is_null($check));
+        return (strlen($check) == 0 || $check === null);
     }
 
     /**
@@ -127,12 +135,12 @@ class Validator
      * @param string $check
      * @return bool
      */
-    public function isBlankOrZero($check, $trim = true): bool
+    static public function isBlankOrZero(string $check, bool $trim = true): bool
     {
         if ($trim) {
             $check = trim($check);
         }
-        return (strlen($check) == 0 || $check == 0);
+        return (strlen($check) == 0 || $check === '0');
     }
 
     /**
@@ -140,13 +148,13 @@ class Validator
      * @param string $check
      * @return bool
      */
-    public function isPositiveInteger($check): bool
+    static public function isPositiveInteger(string $check): bool
     {
         return (self::isInteger($check) && $check > 0);
     }
 
 
-    public function isNumericPositive($check): bool
+    static public function isNumericPositive($check): bool
     {
         if (!is_numeric($check) || $check <= 0) {
             return false;
@@ -159,7 +167,7 @@ class Validator
      * @return bool
      * format YYYY-mm-dd
      */
-    public function isDbDate($check): bool
+    static public function isDbDate(string $check): bool
     {
         if (strlen($check) != 10) {
             return false;
@@ -190,12 +198,12 @@ class Validator
      * @param $dbDate has already been verified to be isDbDate()
      * @return bool
      */
-    public function isDbDateInPast($dbDate):bool
+    static public function isDbDateInPast(string $dbDate):bool
     {
-        return \It_All\BoutiqueCommerce\Utilities\dbDateCompare($dbDate) < 0;
+        return self::dbDateCompare($dbDate) < 0;
     }
 
-    public function isDigit($check)
+    static public function isDigit($check)
     {
         if (strlen($check) != 1 || !self::isInteger($check)) {
             return false;
@@ -203,12 +211,12 @@ class Validator
         return true;
     }
 
-    public function isTwoCharNumber($check, $max = 99, $leadingZeroOk = true): bool
+    static public function isTwoCharNumber($check, $max = 99, $leadingZeroOk = true): bool
     {
         if (strlen($check) != 2) {
             return false;
         }
-        if (!$this->isDigit(substr($check, 0, 1)) || !$this->isDigit(substr($check, 1))) {
+        if (!self::isDigit(substr($check, 0, 1)) || !self::isDigit(substr($check, 1))) {
             return false;
         }
         if (!$leadingZeroOk && substr($check, 0, 1) == '0') {
@@ -221,27 +229,51 @@ class Validator
         return true;
     }
 
-    public function isDbMilitaryHours($check): bool
+    static public function isDbMilitaryHours($check): bool
     {
         // 00 - 23
-        return $this->isTwoCharNumber($check, 23);
+        return self::isTwoCharNumber($check, 23);
     }
 
-    public function isMinutes($check): bool
+    static public function isMinutes($check): bool
     {
         // 00 - 59
-        return $this->isTwoCharNumber($check, 59);
+        return self::isTwoCharNumber($check, 59);
     }
 
-    public function isSeconds($check): bool
+    static public function isSeconds($check): bool
     {
         // 00 - 59
-        return $this->isMinutes($check);
+        return self::isMinutes($check);
     }
 
-    public function isDbTimestamp($check): bool
+    /**
+     * @param $d1
+     * @param $d2 if null compare to today
+     * d1, d2 already verified to be isDbDate()
+     * @return int
+     */
+    static public function dbDateCompare($d1, $d2 = null): int
     {
-        if (!$this->isDbDate(substr($check, 0, 10))) {
+        // inputs 2 mysql dates and returns d1 - d2 in seconds
+        if ($d2 === null) {
+            $d2 = date('Y-m-d');
+        }
+        return convertDateMktime($d1) - convertDateMktime($d2);
+    }
+
+    /**
+     * @param $dbDate already been verified to be isDbDate()
+     * @return int
+     */
+    static public function convertDateMktime($dbDate): int
+    {
+        return mktime(0, 0, 0, substr($dbDate, 5, 2), substr($dbDate, 8, 2), substr($dbDate, 0, 4));
+    }
+
+    static public function isDbTimestamp($check): bool
+    {
+        if (!self::isDbDate(substr($check, 0, 10))) {
             return false;
         }
         // remainder of string like  10:08:16.717238
@@ -255,15 +287,15 @@ class Validator
         }
         foreach ($timeParts as $index => $timePart) {
             if ($index == 0) {
-                if (!$this->isDbMilitaryHours($timePart)) {
+                if (!self::isDbMilitaryHours($timePart)) {
                     return false;
                 }
             } elseif ($index == 1) {
-                if (!$this->isMinutes($timePart)) {
+                if (!self::isMinutes($timePart)) {
                     return false;
                 }
             } else {
-                if (!$this->isSeconds(substr($timePart, 0, 2))) {
+                if (!self::isSeconds(substr($timePart, 0, 2))) {
                     return false;
                 }
                 if (strlen($timePart) > 2 && !is_numeric(substr($timePart, 2))) {
@@ -274,7 +306,7 @@ class Validator
         return true;
     }
 
-    public function isEmail($check)
+    static public function isEmail($check)
     {
         return filter_var($check, FILTER_VALIDATE_EMAIL);
     }

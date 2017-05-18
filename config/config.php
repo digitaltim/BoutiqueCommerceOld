@@ -18,7 +18,10 @@ return [
         'defaultFromName' => 'Boutique Commerce'
     ],
 
-    'sessionTtlHours' => 24,
+    'session' => [
+        'ttlHours' => 24,
+        'savePath' => APP_ROOT . 'storage/sessions',
+    ],
 
     'storage' => [
         'logs' => [
