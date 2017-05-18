@@ -64,9 +64,6 @@ $container['view'] = function ($container) {
     // make flash messages available inside templates
     $view->getEnvironment()->addGlobal('flash', $container->flash);
 
-    // make form former available inside templates
-    $view->getEnvironment()->addGlobal('form', $container->form);
-
     return $view;
 };
 
