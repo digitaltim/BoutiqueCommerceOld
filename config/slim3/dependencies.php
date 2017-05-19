@@ -76,7 +76,7 @@ $container['mailer'] = function($container) {
 // Logger
 $container['logger'] = function($container) {
     $settings = $container->get('settings');
-    $logger = new \Monolog\Logger('my_logger');
+    $logger = new \Monolog\Logger('monologger');
     $file_handler = new \Monolog\Handler\StreamHandler($settings['storage']['pathLogs']);
     $logger->pushHandler($file_handler);
     return $logger;

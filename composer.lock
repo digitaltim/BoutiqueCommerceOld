@@ -292,12 +292,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/it-all/FormFormer.git",
-                "reference": "82bff9bcd630572a5083aee8bc351e50e3d25e94"
+                "reference": "ae764009e6347af24122863e9c29a1af0844a902"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/it-all/FormFormer/zipball/82bff9bcd630572a5083aee8bc351e50e3d25e94",
-                "reference": "82bff9bcd630572a5083aee8bc351e50e3d25e94",
+                "url": "https://api.github.com/repos/it-all/FormFormer/zipball/ae764009e6347af24122863e9c29a1af0844a902",
+                "reference": "ae764009e6347af24122863e9c29a1af0844a902",
                 "shasum": ""
             },
             "require": {
@@ -314,7 +314,7 @@
                 "GPL-3.0"
             ],
             "description": "HTML5 Form Creation Tool",
-            "time": "2017-05-19 18:16:52"
+            "time": "2017-05-19 18:35:13"
         },
         {
             "name": "league/oauth2-client",

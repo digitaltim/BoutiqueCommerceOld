@@ -29,6 +29,7 @@ class AuthController extends Controller
         );
 
         if ($auth) {
+            $this->logger->addInfo($request->getParam('username').' logged in.');
             return $response->withRedirect($this->router->pathFor('crud.show', ['table' => 'admins']));
         }
 
@@ -66,6 +67,7 @@ class AuthController extends Controller
         ]);
 
         if ($res) {
+            $this->logger->addInfo('New user '.$request->getParam('username').' added.');
             $this->flash->addMessage('info', 'You have been signed up.');
 
             $this->auth->attempt(

@@ -12,7 +12,7 @@ use It_All\BoutiqueCommerce\Utilities;
 // in case of collision, env.php value overrides
 $config = array_merge(require APP_ROOT . 'config/config.php', require APP_ROOT . 'config/env.php');
 
-// instantiate mailer
+// instantiate mailer, which is used in error handler and container
 $mailer = new It_All\BoutiqueCommerce\Services\PhpMailerService($config['storeEmails']['defaultFromEmail'], $config['storeEmails']['defaultFromName'], $config['phpmailer']['protocol'], $config['phpmailer']['smtpHost'], $config['phpmailer']['smtpPort']);
 
 // error handling

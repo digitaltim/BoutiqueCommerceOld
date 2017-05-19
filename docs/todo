@@ -47,24 +47,19 @@ finish infrastructure functionality
 
 - Use pathFor() functionality to create named routes. Ex. in CrudView index function for new UiRsDbTable?
 
-*update: to maximize performance, routes should not be grouped (https://github.com/slimphp/Slim/issues/2165). Ungrouped 5/17.
-- Group the routes for
--- Naming simplification
--- Using authorization middleware (similar to the authentication middleware)
-
 - Validation
 -- Refactor Validator::isDbDate() and isDbTimestamp using Regex
 
 - In /utilities/functions.php
 -- Remove unused functions. remove functions based on old page controller model that don't apply to front controller.
--- Find a better place for getFormFieldFromDbColumn()
+-- Find a better place for getFormFieldFromDbColumn(). update - will do when improving directory structure.
 
 - CODING STANDARDS
 -- Should we use docblocks for all classes, methods, properties (?)
 -- use typehints on params and return params
 
 - MONOLOG EVENT LOGGING
-- for: create new admin, admin log in, admin log in attempts exceeded
+- for: admin log in attempts exceeded
 
 - INFRASTRUCTURE
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
