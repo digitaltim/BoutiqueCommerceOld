@@ -4,8 +4,6 @@ declare(strict_types=1);
 return [
     'settings' => [
         // Slim Settings
-        'displayErrorDetails' => !$config['isLive'], // slim error handling currently disabled so this has no effect
-
         'outputBuffering' => false, // just to uncomplicate things for now.
 
         'addContentLengthHeader' => false, // if this is not disabled, slim/App.php line 585 triggered an exception related to error handling, when the php set_error_handler() function was triggered
@@ -14,7 +12,7 @@ return [
         'view' => [
             'pathTemplates' => $config['pathTemplates'],
             'pathCache' => $config['storage']['pathCache'].'twig/',
-            'autoReload' => !$config['isLive'],
+            'autoReload' => $config['twigAutoReload'],
             'debug' => true
         ],
 
@@ -30,5 +28,7 @@ return [
             'admin' => $config['dirs']['admin']
         ],
 
+        // General settings
+        'isLive' => $config['isLive'],
     ]
 ];

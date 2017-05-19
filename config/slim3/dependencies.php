@@ -64,6 +64,9 @@ $container['view'] = function ($container) {
     // make flash messages available inside templates
     $view->getEnvironment()->addGlobal('flash', $container->flash);
 
+    // make isLive setting available inside templates
+    $view->getEnvironment()->addGlobal('isLive', $settings['isLive']);
+
     return $view;
 };
 
@@ -127,8 +130,3 @@ $container['csrf'] = function ($container) {
 };
 
 $slim->add($container->csrf);
-
-// -----------------------------------------------------------------------------
-// Middleware registration
-// -----------------------------------------------------------------------------
-v::with('It_All\\BoutiqueCommerce\\Validation\\Rules');
