@@ -84,11 +84,6 @@ $container['logger'] = function($container) {
 
 // Form Validation
 $container['validator'] = function ($container) {
-    return new It_All\BoutiqueCommerce\Validation\Validator;
-};
-
-// Alternate Form Validation
-$container['newvalidator'] = function ($container) {
     return new \It_All\BoutiqueCommerce\Services\Validator();
 };
 
@@ -127,8 +122,3 @@ $container['csrf'] = function ($container) {
 };
 
 $slim->add($container->csrf);
-
-// -----------------------------------------------------------------------------
-// Middleware registration
-// -----------------------------------------------------------------------------
-v::with('It_All\\BoutiqueCommerce\\Validation\\Rules');

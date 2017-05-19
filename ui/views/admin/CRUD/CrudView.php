@@ -46,7 +46,7 @@ class CrudView extends AdminView
         $this->model = CrudHelper::getModel($this->tableName, $this->db);
 
         $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : [];
-        $form = $this->getForm($request,'insert', null, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
+        $form = $this->getForm($request,'insert', null, $fieldValues, $this->validator->getErrors(), $generalErrorMessage);
 
         if ($generalErrorMessage !== null) {
 
@@ -68,7 +68,7 @@ class CrudView extends AdminView
         $rs = $this->model->select('*', [$this->model->getPrimaryKeyColumn() => $primaryKey]);
         $fieldValues = (null !== $request->getParsedBody()) ? $request->getParsedBody() : pg_fetch_array($rs);
 
-        $form = $this->getForm($request,'update', $primaryKey, $fieldValues, $this->newvalidator->getErrors(), $generalErrorMessage);
+        $form = $this->getForm($request,'update', $primaryKey, $fieldValues, $this->validator->getErrors(), $generalErrorMessage);
 
         return $this->view->render($response, 'admin/CRUD/form.twig', [
             'title' => 'Update '.$this->tableName,

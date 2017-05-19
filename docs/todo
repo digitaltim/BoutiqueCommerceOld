@@ -2,10 +2,6 @@
 
 finish infrastructure functionality
 
-- FORMFORMER
--- escape all outputs from form inputs and/or database fields from form inputs
--- escape value='' using attribute method (anything else?)
-
 - ADMIN NAVIGATION
 -- fix html errors - many bottom </div> match nothing
 -- item configurability
@@ -21,7 +17,6 @@ finish infrastructure functionality
 -- are fns in It_All\BoutiqueCommerce\Auth\Auth.php still being used? consider moving them or some of them to the model or elsewhere. Delete unused fns. Definitely at least move queries to model.
 -- consider refactoring the signup/in methods/templates in views/controllers & twig. They are almost identical... DRY
 -- check failure condition for inserting new admin
-
 
 
 - AUTHORIZATION
@@ -59,8 +54,6 @@ finish infrastructure functionality
 
 - Validation
 -- Refactor Validator::isDbDate() and isDbTimestamp using Regex
--- Consider use cases for Respect/Validation vs. integrated based on Simple Validator... Should we use the simple for everthing when the decision to switch was based on getting validation in CRUD working? --> UPDATE - This is actually about getting the validation in FF working, not CRUD. Since we have lots of forms to build and we're going to try FF, it will be much easier to use our own validator based on SV than respect's validator. I don't think our validation needs are very complex for most forms. For complex needs, we can write a custom validation function on a per form basis.
--- refactor $this->newvalidator calls in CRUD after above decision.
 
 - In /utilities/functions.php
 -- Remove unused functions. remove functions based on old page controller model that don't apply to front controller.

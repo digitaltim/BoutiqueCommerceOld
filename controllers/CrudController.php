@@ -90,7 +90,7 @@ class CrudController extends Controller
             // ignore any non-db columns
         }
 
-        return $this->newvalidator->validate($fieldInputs, $rules);
+        return $this->validator->validate($fieldInputs, $rules);
     }
 
     public function postInsert($request, $response, $args)

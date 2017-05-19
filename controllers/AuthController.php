@@ -17,7 +17,7 @@ class AuthController extends Controller
         $rules['username'] = ['required'];
         $rules['password'] = ['required'];
 
-        if (!$this->newvalidator->validate($request->getParsedBody(), $rules)) {
+        if (!$this->validator->validate($request->getParsedBody(), $rules)) {
             // redisplay the form with input values and error(s)
             $authenticationView = new AuthenticationView($this->container);
             return $authenticationView->getSignIn($request, $response, $args);
@@ -47,7 +47,7 @@ class AuthController extends Controller
         $rules['username'] = ['required'];
         $rules['password'] = ['required'];
 
-        if (!$this->newvalidator->validate($request->getParsedBody(), $rules)) {
+        if (!$this->validator->validate($request->getParsedBody(), $rules)) {
             // redisplay the form with input values and error(s)
             $authenticationView = new AuthenticationView($this->container);
             return $authenticationView->getSignUp($request, $response, $args);

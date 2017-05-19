@@ -31,7 +31,7 @@ class AuthenticationView extends AdminView
     public function getSignIn($request, $response, $args, string $generalErrorMessage = null)
     {
         // check if there are errors from previous form submission
-        $errors = $this->newvalidator->getErrors();
+        $errors = $this->validator->getErrors();
 
         // grab any prior data submitted to persist form data on load
         $fieldValues = (null !== $request->getParsedBody()) ?
@@ -113,7 +113,7 @@ class AuthenticationView extends AdminView
     public function getSignUp($request, $response, $args, string $generalErrorMessage = null)
     {
         // check if there are errors from previous form submission
-        $errors = $this->newvalidator->getErrors();
+        $errors = $this->validator->getErrors();
 
         // grab any prior data submitted to persist form data on load
         $fieldValues = (null !== $request->getParsedBody()) ?
@@ -124,7 +124,7 @@ class AuthenticationView extends AdminView
         if (isset($fieldValues['username'])) {
             $usernameFieldValue = $fieldValues['username'];
         } else {
-            $usernameFieldValue = null;
+            $usernameFieldValue = '';
         }
 
         // create form
