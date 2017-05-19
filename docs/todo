@@ -1,17 +1,20 @@
-1) work on todo list
+1) work on todo list (i can't    get          out)
 
 finish infrastructure functionality
+
+- FORMFORMER
+-- escape all outputs from form inputs and/or database fields from form inputs
+-- escape value='' using attribute method (anything else?)
 
 - ADMIN NAVIGATION
 -- fix html errors - many bottom </div> match nothing
 -- item configurability
--- messaging (flash? may be able to simply pass from controller to view). update: flash messages only work on redirect, try using $_SESSION['adminMessages'][] (array so we can have multiple)
+-- messaging (flash? may be able to simply pass from controller to view). update: flash messages only work on redirect, try using $_SESSION['adminMessages'][] (array so we can have multiple). another update, not sure whether we should use flash messaging for this or at all. may be more useful (and pretty easy) to populate $_SESSION['adminMessages'][] and make it globally available to twig, then spit it back and empty it.
 -- nav should not show in sign in page (admin dir)
 -- make sure {LOCAL TESTING} appears only for dev (use islive in env)
 
 - AUTHENTICATION
 -- change to use FF, new Validator, and AdminsModel (look at example in vendor and CrudView formgenerate(). Also call queries from Model)
--- config var for session timeout (seconds to live in session variable which shouhld live in the config/init)
 -- All admin pages should route through ($config['dirs']['admin'])
 -- upon successful login set response to desired route/page
 
@@ -21,15 +24,11 @@ finish infrastructure functionality
 -- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
 -- only owner/director can insert new admins (see Authorization)
 
-- CSRF
--- apply to all forms
-
 - OUTPUT
 -- change all twig output files to extend base.twig
 
 - DO I UNDERSTAND THE FRAMEWORK
--- What does registering controller / factories in dependencies do? When they are commented out the script still runs?
--- Should FF functions be made available to Twig templates by registering it as global to the view in dependencies?
+-- What does registering controller / factories in dependencies do? When they are commented out the script still runs. it makes them available to use in controllers or views (wherever the container is passed). some testing probably still in order on this.
 -- What services need instantiation in base classes, ex. Controller and AdminView? (plus DRY)
 
 - DOCUMENTATION
@@ -66,9 +65,7 @@ finish infrastructure functionality
 -- use typehints on params and return params
 
 - MONOLOG EVENT LOGGING
-- for infrastructure - just for CRUD and admin specific CRUD
-
-- remove eloquent from vendor
+- for: create new admin, admin log in, admin log in attempts exceeded
 
 
 - INFRASTRUCTURE

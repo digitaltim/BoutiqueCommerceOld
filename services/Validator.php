@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Services;
 
+/**
+ * Class Validator
+ * @package It_All\BoutiqueCommerce\Services
+ * Inspired by https://github.com/cangelis/simple-validator
+ */
 class Validator
 {
     private $errors;
