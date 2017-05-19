@@ -15,8 +15,14 @@ finish infrastructure functionality
 
 - AUTHENTICATION
 -- change to use FF, new Validator, and AdminsModel (look at example in vendor and CrudView formgenerate(). Also call queries from Model)
+-- the sign up page has to input all of the admins db fields, including the employee_id join (not required). it should be renamed 'Create Admin'. we'll also need an 'Edit Admin' page which will use basically the same form.
 -- All admin pages should route through ($config['dirs']['admin'])
 -- upon successful login set response to desired route/page
+-- are fns in It_All\BoutiqueCommerce\Auth\Auth.php still being used? consider moving them or some of them to the model or elsewhere. Delete unused fns. Definitely at least move queries to model.
+-- consider refactoring the signup/in methods/templates in views/controllers & twig. They are almost identical... DRY
+-- check failure condition for inserting new admin
+
+
 
 - AUTHORIZATION
 -- (page level, admin nav, functionality - ie only owner/director can enter new admins - see DbTable::hasInsertPermission())
@@ -66,10 +72,6 @@ finish infrastructure functionality
 
 - MONOLOG EVENT LOGGING
 - for: create new admin, admin log in, admin log in attempts exceeded
-
-- consider refactoring the signup/in methods/templates in views/controllers & twig. They are almost identical... DRY
-
-- check failure condition for inserting new admin
 
 - INFRASTRUCTURE
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
