@@ -60,7 +60,7 @@ class AuthController extends Controller
             return $authenticationView->getSignUp($request, $response, $args, $generalErrorMessage);
         }
 
-        $res = pg_insert($this->db->getPgConn(), 'admins', [
+        $res = $adminsModel->insert([
             'username' => $request->getParam('username'),
             'password_hash' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
         ]);

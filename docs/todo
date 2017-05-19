@@ -67,6 +67,9 @@ finish infrastructure functionality
 - MONOLOG EVENT LOGGING
 - for: create new admin, admin log in, admin log in attempts exceeded
 
+- consider refactoring the signup/in methods/templates in views/controllers & twig. They are almost identical... DRY
+
+- check failure condition for inserting new admin
 
 - INFRASTRUCTURE
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
