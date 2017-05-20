@@ -27,7 +27,11 @@
 				</nav>
 			</div>
 			<div id='headerTitle'>
-			   <h1><a href="{{ path_for('home')}}">BoutiqueCommerce</a>    &nbsp;<span style='color: grey;'>{LOCAL TESTING}</span></h1>
+				<h1><a href="{{ path_for('home')}}">BoutiqueCommerce</a>    &nbsp;
+					{% if not isLive %}
+						<span style='color: grey;'>{LOCAL TESTING}</span>
+					{% endif %}
+				</h1>
 			</div>
 			{% if auth.check %}
 				<div id='headerUser'>

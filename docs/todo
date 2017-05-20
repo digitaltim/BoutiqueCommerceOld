@@ -1,4 +1,4 @@
-1) work on todo list (i can't    get          out)
+1) work on todo list
 
 finish infrastructure functionality
 
@@ -7,7 +7,6 @@ finish infrastructure functionality
 -- item configurability
 -- messaging (flash? may be able to simply pass from controller to view). update: flash messages only work on redirect, try using $_SESSION['adminMessages'][] (array so we can have multiple). another update, not sure whether we should use flash messaging for this or at all. may be more useful (and pretty easy) to populate $_SESSION['adminMessages'][] and make it globally available to twig, then spit it back and empty it.
 -- nav should not show in sign in page (admin dir)
--- make sure {LOCAL TESTING} appears only for dev (use islive in env)
 
 - AUTHENTICATION
 -- change to use FF, new Validator, and AdminsModel (look at example in vendor and CrudView formgenerate(). Also call queries from Model)
@@ -53,6 +52,7 @@ finish infrastructure functionality
 - In /utilities/functions.php
 -- Remove unused functions. remove functions based on old page controller model that don't apply to front controller.
 -- Find a better place for getFormFieldFromDbColumn(). update - will do when improving directory structure.
+--- isLiveServer() ?
 
 - CODING STANDARDS
 -- Should we use docblocks for all classes, methods, properties (?)
