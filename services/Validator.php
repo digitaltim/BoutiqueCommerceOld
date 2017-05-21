@@ -17,6 +17,18 @@ class Validator
         $this->errors = [];
     }
 
+    static public function getRules(array $fields): array
+    {
+        $rules = [];
+        foreach ($fields as $fieldName => $fieldInfo) {
+            if (isset($fieldInfo['validation'])) {
+                $rules[$fieldName] = $fieldInfo['validation'];
+            }
+        }
+
+        return $rules;
+    }
+
     public function validate(array $input, array $rules): bool
     {
         foreach ($input as $fieldName => $fieldValue) {
@@ -33,7 +45,11 @@ class Validator
             }
         }
 
-        return empty($this->errors);
+        if (!empty($this->errors)) {
+            $_SESSION['validationErrors'] = $this->errors;
+            return false;
+        }
+        return true;
     }
 
     private function validateRule(string $fieldName, string $fieldValue, string $rule): bool
@@ -91,10 +107,11 @@ class Validator
         return $this->errors;
     }
 
-    public function getErrorByFieldName(string $fieldName)
+    public function getError(string $fieldName)
     {
-        return (array_key_exists($fieldName, $this->errors)) ? $this->errors[$fieldName] : null;
+        return (array_key_exists($fieldName, $this->errors)) ? $this->errors[$fieldName] : '';
     }
+
 
     // VALIDATION FUNCTIONS
 

@@ -35,15 +35,20 @@ class ErrorHandler
      */
     private function handleError(string $messageBody, bool $die = false)
     {
+        // happens when an expression is prefixed with @ (meaning: ignore errors).
+        if (error_reporting() == 0) {
+            return;
+        }
         $errorMessage = $this->generateMessage($messageBody);
 
         // log
         error_log($errorMessage, 3, $this->logPath);
 
         // echo
-        // error_reporting() == 0 happens when an expression is prefixed with @ (meaning: ignore errors).
-        if (error_reporting() != 0 || (!$this->isLiveServer && $this->echoDev)) {
+        if (!$this->isLiveServer && $this->echoDev) {
             echo nl2br($errorMessage, false);
+        } else {
+            echo 'An error has occurred<br>';
         }
 
         // email

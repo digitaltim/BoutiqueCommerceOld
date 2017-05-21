@@ -27,22 +27,19 @@
 				</nav>
 			</div>
 			<div id='headerTitle'>
-				<h1><a href="{{ path_for('home')}}">BoutiqueCommerce</a>    &nbsp;
+				<h1><a href="{{ path_for('home')}}">{{ storeName }}</a>    &nbsp;
 					{% if not isLive %}
 						<span style='color: grey;'>{LOCAL TESTING}</span>
 					{% endif %}
 				</h1>
 			</div>
-			{% if auth.check %}
+			{% if authentication.check %}
 				<div id='headerUser'>
-					<h4 class='headerGreeting'>hello {{ auth.user.username }} [<a href="{{ path_for('auth.signout')}}">logout</a>]</h4>
+					<h4 class='headerGreeting'>hello {{ authentication.user.username }} [<a href="{{ path_for('authentication.logout')}}">logout</a>]</h4>
 				</div>
 			{% else %}
 				<div id='headerUser'>
-					<h4 class='headerGreeting'><a href="{{ path_for('auth.signin')}}">Sign In</a></h4>
-				</div>
-				<div id='headerUser'>
-					<h4 class='headerGreeting'><a href="{{ path_for('auth.signup')}}">Sign Up</a></h4>
+					<h4 class='headerGreeting'><a href="{{ path_for('authentication.login')}}">Login</a></h4>
 				</div>
 			{% endif %}
 		</div>

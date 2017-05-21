@@ -4,5 +4,18 @@
 
 {% macro complete(tagName, attributes, endTag, content) %}
     {% import _self as html %}
-    {{ html.htmlElementOpenTag(tagName, attributes) }}{{ content }}{% if endTag %}{{ html.htmlElementCloseTag(tagName) }}{% endif %}
+    {{ html.open(tagName, attributes) }}{{ content }}{% if endTag %}{{ html.close(tagName) }}{% endif %}
+{% endmacro %}
+
+{% macro input(type, id, name, size, maxlength, value) %}
+    {% import _self as html %}
+    {% set attributes = {
+        'type': type,
+        'id': id,
+        'name': name,
+        'size': size,
+        'maxlength': maxlength,
+        'value': value
+    } %}
+    {{ html.open('input', attributes) }}
 {% endmacro %}

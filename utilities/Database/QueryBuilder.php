@@ -89,7 +89,7 @@ class QueryBuilder
      * @return recordset
      */
     public function execute() {
-        //echo '<pre>'.$this->sql;print_r($this->args);echo '</pre>';
+//        echo '<pre>'.$this->sql;print_r($this->args);echo '</pre>';
         $res = pg_query_params($this->sql, $this->args);
         if (!$res) {
             $msg = $this->sql . \It_All\BoutiqueCommerce\Utilities\arrayWalkToStringRecursive($this->args);

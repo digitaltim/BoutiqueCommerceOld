@@ -4,19 +4,21 @@ finish infrastructure functionality
 
 - ADMIN NAVIGATION
 -- fix html errors - many bottom </div> match nothing
--- item configurability
 -- messaging (flash? may be able to simply pass from controller to view). update: flash messages only work on redirect, try using $_SESSION['adminMessages'][] (array so we can have multiple). another update, not sure whether we should use flash messaging for this or at all. may be more useful (and pretty easy) to populate $_SESSION['adminMessages'][] and make it globally available to twig, then spit it back and empty it.
--- nav should not show in sign in page (admin dir)
+-- use named paths for links
 
 - AUTHENTICATION
--- change to use FF, new Validator, and AdminsModel (look at example in vendor and CrudView formgenerate(). Also call queries from Model)
--- the sign up page has to input all of the admins db fields, including the employee_id join (not required). it should be renamed 'Create Admin'. we'll also need an 'Edit Admin' page which will use basically the same form.
--- All admin pages should route through ($config['dirs']['admin'])
--- upon successful login set response to desired route/page
--- are fns in It_All\BoutiqueCommerce\Auth\Auth.php still being used? consider moving them or some of them to the model or elsewhere. Delete unused fns. Definitely at least move queries to model.
--- consider refactoring the signup/in methods/templates in views/controllers & twig. They are almost identical... DRY
--- check failure condition for inserting new admin
+-- decide what to do if there are too many failed login attempts
+-- have a config var for # failed login attempts that causes action
 
+- ADD NEW ADMIN
+-- add the other db fields to the page
+
+- EDIT ADMIN
+-- create the page
+
+- DELETE ADMIN
+-- create the ability
 
 - AUTHORIZATION
 -- (page level, admin nav, functionality - ie only owner/director can enter new admins - see DbTable::hasInsertPermission())
@@ -26,6 +28,9 @@ finish infrastructure functionality
 
 - OUTPUT
 -- change all twig output files to extend base.twig
+
+- OLD INPUT
+-- use a middleware to put posted vars into a session var instead of $_SESSION['formInput'] = $request->getParams(); in every post controller method.
 
 - DO I UNDERSTAND THE FRAMEWORK
 -- What does registering controller / factories in dependencies do? When they are commented out the script still runs. it makes them available to use in controllers or views (wherever the container is passed). some testing probably still in order on this.

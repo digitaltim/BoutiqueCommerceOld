@@ -13,7 +13,6 @@ use It_All\BoutiqueCommerce\Utilities\Database;
 
 class DbTable {
     private $tableName;
-    private $db;
     private $dbTableMetaRes;
 
     /** @var  array of column objects belonging to table */
@@ -68,11 +67,10 @@ class DbTable {
 
     /** @var array of general (table-level) validation error messages */
 
-    function __construct(string $tableName, \It_All\BoutiqueCommerce\Postgres $db)
+    function __construct(string $tableName)
     {
         $this->tableName = $tableName;
-        $this->db = $db;
-        if(!$this->dbTableMetaRes = $this->db->getTableMetaData($this->tableName)) {
+        if(!$this->dbTableMetaRes = \It_All\BoutiqueCommerce\Postgres::getTableMetaData($this->tableName)) {
             throw new \Exception("getTableMetaData failed for $tableName");
         }
         $this->setColumns();

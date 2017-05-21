@@ -4,21 +4,17 @@ form {
   margin: 1em;
 }
 
-#ffFormError {
-  color: red;
-  margin-bottom: 1.2em;
-}
-
 input, select, textarea, button, meter, progress, output {
+  display: block;
   background-color: #dcd4c2;
   border: .1em solid #000000;
   color: black;
   font-size: 1em;
   padding: .2em;
-  margin: .2em .5em 1em;
+  margin: .1em .5em 1em .1em;
 }
 
-input[type="radio"] {
+input[type="radio"], input[type="checkbox"] {
   display: inline;
 }
 
@@ -28,36 +24,24 @@ input[type="submit"] {
   border-radius: .4em;
 }
 
-.ffGroupWrapper {
-
-}
-
-.ffFieldWrapper {
-
-}
-
-label, .ffFieldGroupHeader {
+label {
+  display: block;
   color: $formLabelColor;
   font-size: 1em;
   margin: 0 .3em 0 .2em;
 }
 
-.ffFieldLabelFine {
-  color: grey;
-  font-size: 75%;
-  margin-left: .4em;
+.generalFormError {
+  color: red;
+  font-size: 1.2em;
+  margin-bottom: 1em;
 }
 
-.ffFieldDescriptor {
-  font-size: 75%;
-  color: darkgray;
-}
-
-.ffErrorMsg {
-  margin-left: .2em;
+.formErrorMsg {
+  display: inline;
   color: red;
 }
 
-.ffFieldError {
-  border: .2em solid red;
+.formFieldError {
+  border: .1em solid red;
 }

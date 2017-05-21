@@ -13,7 +13,6 @@ class NavAdmin
     private $sections;
     private $database;
 
-
     const NAV_LI_STYLE = 'navListItem';
     const SUBNAV_LI_STYLE = 'subNavListItem';
     const NAV_ITEM_STYLE = 'navItem';
@@ -27,47 +26,18 @@ class NavAdmin
         return $this;
     }
 
-    /**
-     * permissions should only be set here for external URL links. internal (admin) link permissions are set in Config::setAdminPagePermissions()
-     * links should include index.php in order to match Config::$adminPagePermissions
-     * no sub-subSections allowed
-     */
     private function setSections()
     {
         global $config;
 
         $this->sections = [
-            'Orders' => [
-                'link' => '/orders/index.php'
-            ],
-            'Designers' => [
-                'link' => '/designers/index.php'
-            ],
-            'Testimonials' => [
-                'link' => '/ORM/index.php?t=testimonials',
-                'permissions' => 'owner',
-                'subSection' => [
-                    'insert' => [
-                        'link' => 'ORM/insert.php?t=testimonials',
-                        'permissions' => 'owner'
-                    ]
-                ]
-            ],
-            'Projects' => [
-                'permissions' => 'admin',
-                'link' => $config['projectsUrl'],
-                'linkType' => 'external',
-                'target' => '_blank'
-            ],
-            'Reports' => [
-                'subSection' => [
-                    'Best Customers' => [
-                        'link' => '/reports/BestCustomers.php'
-                    ]
-                ]
-            ],
             'Admin Users' => [
-                'link' => '/CRUD/admins'
+                'link' => '/CRUD/admins',
+                'subSection' => [
+                    'Add New Admin' => [
+                        'link' => '/'.$config['dirs']['admin'].'/admins/insert'
+                    ]
+                ]
             ],
             'CRUD' => [
                 'subSection' => [
@@ -80,7 +50,6 @@ class NavAdmin
      * Set CRUD navigation subsections
      */
     private function setCrudNavigationSubsections() {
-        $ormTables = "";
         $dbTables = array();
         if ($dbTablesRes = $this->database->getSchemaTables()) {
             while ($tableRow = pg_fetch_array($dbTablesRes)) {

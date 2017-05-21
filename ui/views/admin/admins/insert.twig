@@ -2,7 +2,7 @@
 
 {% block htmlHeadCss %}
     {% include 'admin/partials/head.twig' %}
-    <link href='/css/login.css' rel='stylesheet' type='text/css'>
+    <link href='/css/login.css?v=1.1' rel='stylesheet' type='text/css'>
 {% endblock %}
 
 {% block htmlBodyContent %}
@@ -10,7 +10,7 @@
     <header id='pageHeader'>
         <div id='topLineContainer'>
             <div id='headerTitle'>
-                <h1><a href="{{ path_for('home')}}">BoutiqueCommerce</a>    &nbsp;
+                <h1><a href="{{ path_for('home')}}">{{ storeName }}</a>    &nbsp;
                     {% if not isLive %}
                         <span style='color: grey;'>{LOCAL TESTING}</span>
                     {% endif %}
@@ -20,11 +20,13 @@
     </header>
     <main>
         <div id='mainContainerSmall'>
-            <h1>Login</h1>
-            <h5>Authorized for use by BoutiqueCommerce employees and associates only.</h5>
-
-            {{ form | raw}}
-
+            <h1>Insert New Admin User</h1>
+            <form name="f1" method="post" action="{{ path_for('admins.post.insert')}}">
+                {% if generalFormError %}
+                    <span class="generalFormError">{{ generalFormError }}</span>
+                {% endif %}
+                {% include 'admin/partials/formFields.twig' %}
+            </form>
         </div>
     </main>
 

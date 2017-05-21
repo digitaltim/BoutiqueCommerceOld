@@ -30,5 +30,6 @@ return [
 
         // General settings
         'isLive' => $config['isLive'],
+        'storeName' => $config['storeName']
     ]
 ];

@@ -1,12 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Respect\Validation\Validator as v;
-
 // DIC configuration
 
 // -----------------------------------------------------------------------------
-// Service providers
+// Services (Dependencies)
 // -----------------------------------------------------------------------------
 
 // Create initial connection to DB
@@ -24,8 +22,8 @@ $container['db'] = function($container) use ($db) {
 };
 
 // Authentication
-$container['auth'] = function($container) {
-    return new It_All\BoutiqueCommerce\Auth\Auth;
+$container['authentication'] = function($container) {
+    return new It_All\BoutiqueCommerce\Authentication\Authentication;
 };
 
 // Flash messages
@@ -50,22 +48,24 @@ $container['view'] = function ($container) {
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
     $view->addExtension(new Slim\Views\TwigExtension($container->router, $basePath));
+
     if ($settings['view']['debug']) {
         // allows {{ dump(var) }}
         $view->addExtension(new Twig_Extension_Debug());
     }
 
     // make auth class available inside templates
-    $view->getEnvironment()->addGlobal('auth', [
-        'check' => $container->auth->check(),
-        'user' => $container->auth->user()
+    $view->getEnvironment()->addGlobal('authentication', [
+        'check' => $container->authentication->check(),
+        'user' => $container->authentication->user()
     ]);
 
     // make flash messages available inside templates
     $view->getEnvironment()->addGlobal('flash', $container->flash);
 
-    // make isLive setting available inside templates
+    // make some config setting available inside templates
     $view->getEnvironment()->addGlobal('isLive', $settings['isLive']);
+    $view->getEnvironment()->addGlobal('storeName', $settings['storeName']);
 
     return $view;
 };
@@ -90,38 +90,19 @@ $container['validator'] = function ($container) {
     return new \It_All\BoutiqueCommerce\Services\Validator();
 };
 
+// CSRF
+$container['csrf'] = function ($container) {
+    return new \Slim\Csrf\Guard();
+};
+
+// End Services (Dependencies)
+
 // Error Handling
 unset($container['errorHandler']);
 unset($container['phpErrorHandler']);
 
 // -----------------------------------------------------------------------------
-// Controller factories / registration
+// Middleware registration
 // -----------------------------------------------------------------------------
-$container['HomeController'] = function ($container) {
-    return new It_All\BoutiqueCommerce\Controllers\HomeController($container);
-};
-
-$container['AdminController'] = function ($container) {
-    return new It_All\BoutiqueCommerce\Controllers\AdminController($container);
-};
-
-$container['AuthController'] = function ($container) {
-    return new It_All\BoutiqueCommerce\Controllers\AuthController($container);
-};
-
-$container['CrudController'] = function ($container) {
-    return new It_All\BoutiqueCommerce\Controllers\CrudController($container, 'test');
-};
-
-$container['ListView'] = function ($container) {
-    return new It_All\BoutiqueCommerce\UI\Views\ListView($container, 'test');
-};
-
-// -----------------------------------------------------------------------------
-// Csrf registration
-// -----------------------------------------------------------------------------
-$container['csrf'] = function ($container) {
-    return new \Slim\Csrf\Guard();
-};
-
+$slim->add(new It_All\BoutiqueCommerce\Middleware\CsrfViewMiddleware($container));
 $slim->add($container->csrf);
