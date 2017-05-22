@@ -16,8 +16,592 @@ SET row_security = off;
 
 SET search_path = public, pg_catalog;
 
+ALTER TABLE ONLY public.vendor_designers_featured_images DROP CONSTRAINT vendor_designers_featured_images_item_id_fkey;
+ALTER TABLE ONLY public.vendor_designers_featured_images DROP CONSTRAINT vendor_designers_featured_images_designer_id_fkey;
+ALTER TABLE ONLY public.vendor_designers_factors DROP CONSTRAINT vendor_designers_factors_factor_id_fkey;
+ALTER TABLE ONLY public.vendor_designers_factors DROP CONSTRAINT vendor_designers_factors_designer_id_fkey;
+ALTER TABLE ONLY public.store_credits DROP CONSTRAINT store_credits_order_id_fkey1;
+ALTER TABLE ONLY public.store_credits DROP CONSTRAINT store_credits_order_id_fkey;
+ALTER TABLE ONLY public.store_credits DROP CONSTRAINT store_credits_contacts_id_fkey;
+ALTER TABLE ONLY public.payroll DROP CONSTRAINT payroll_employee_id_fkey;
+ALTER TABLE ONLY public.payment_failures DROP CONSTRAINT payment_failures_checkout_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_sc DROP CONSTRAINT orders_transactions_sc_transactions_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_sc DROP CONSTRAINT orders_transactions_sc_store_credits_id_fkey;
+ALTER TABLE ONLY public.orders_transactions DROP CONSTRAINT orders_transactions_order_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_items DROP CONSTRAINT orders_transactions_items_transactions_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_items DROP CONSTRAINT orders_transactions_items_order_item_status_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_gc DROP CONSTRAINT orders_transactions_gc_transactions_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_gc DROP CONSTRAINT orders_transactions_gc_gift_certificates_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_deposit_items DROP CONSTRAINT orders_transactions_deposit_items_transactions_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_deposit_items DROP CONSTRAINT orders_transactions_deposit_items_order_item_status_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_cc DROP CONSTRAINT orders_transactions_cc_transactions_id_fkey;
+ALTER TABLE ONLY public.orders_transactions_cc DROP CONSTRAINT orders_transactions_cc_contact_authnet_payment_profile_id_fkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_promotion_id_fkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_contact_id_fkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_ad_code_fkey;
+ALTER TABLE ONLY public.order_shipments DROP CONSTRAINT order_shipments_shipping_method_id_fkey;
+ALTER TABLE ONLY public.order_shipments DROP CONSTRAINT order_shipments_order_id_fkey;
+ALTER TABLE ONLY public.order_shipments DROP CONSTRAINT order_shipments_by_employee_id_fkey;
+ALTER TABLE ONLY public.order_shipment_items DROP CONSTRAINT order_shipment_items_order_shipment_id_fkey;
+ALTER TABLE ONLY public.order_shipment_items DROP CONSTRAINT order_shipment_items_order_item_status_id_fkey;
+ALTER TABLE ONLY public.order_returns DROP CONSTRAINT order_returns_received_by_fkey;
+ALTER TABLE ONLY public.order_returns DROP CONSTRAINT order_returns_order_id_fkey;
+ALTER TABLE ONLY public.order_return_items DROP CONSTRAINT order_return_items_order_return_id_fkey;
+ALTER TABLE ONLY public.order_return_items DROP CONSTRAINT order_return_items_order_item_status_id_fkey;
+ALTER TABLE ONLY public.order_items DROP CONSTRAINT order_items_order_id_fkey;
+ALTER TABLE ONLY public.order_items DROP CONSTRAINT order_items_item_id_fkey;
+ALTER TABLE ONLY public.order_items DROP CONSTRAINT order_items_item_bd_id_fkey;
+ALTER TABLE ONLY public.order_item_status DROP CONSTRAINT order_item_status_order_item_id_fkey;
+ALTER TABLE ONLY public.order_item_status_history DROP CONSTRAINT order_item_status_history_order_item_status_id_fkey;
+ALTER TABLE ONLY public.order_item_status_history DROP CONSTRAINT order_item_status_history_order_item_id_fkey;
+ALTER TABLE ONLY public.inventory_size_scale_sizes DROP CONSTRAINT inventory_size_scale_sizes_size_scale_id_fkey;
+ALTER TABLE ONLY public.inventory_size_scale_sizes DROP CONSTRAINT inventory_size_scale_sizes_size_id_fkey;
+ALTER TABLE ONLY public.inventory_shipments DROP CONSTRAINT inventory_shipments_designer_id_fkey;
+ALTER TABLE ONLY public.inventory_shipment_items DROP CONSTRAINT inventory_shipment_items_shipment_id_fkey;
+ALTER TABLE ONLY public.inventory_shipment_items DROP CONSTRAINT inventory_shipment_items_item_id_fkey;
+ALTER TABLE ONLY public.inventory_shipment_items DROP CONSTRAINT inventory_shipment_items_item_breakdown_id_fkey;
+ALTER TABLE ONLY public.inventory_items DROP CONSTRAINT inventory_items_size_scale_id_fkey;
+ALTER TABLE ONLY public.inventory_items DROP CONSTRAINT inventory_items_season_id_fkey;
+ALTER TABLE ONLY public.inventory_items_popular DROP CONSTRAINT inventory_items_popular_item_id_fkey;
+ALTER TABLE ONLY public.inventory_items_groupings DROP CONSTRAINT inventory_items_groupings_item_id_fkey;
+ALTER TABLE ONLY public.inventory_items_groupings DROP CONSTRAINT inventory_items_groupings_grouping_id_fkey;
+ALTER TABLE ONLY public.inventory_items DROP CONSTRAINT inventory_items_grouping_id_fkey;
+ALTER TABLE ONLY public.inventory_items DROP CONSTRAINT inventory_items_designer_id_fkey;
+ALTER TABLE ONLY public.inventory_item_images DROP CONSTRAINT inventory_item_images_item_id_fkey;
+ALTER TABLE ONLY public.inventory_item_colors DROP CONSTRAINT inventory_item_colors_item_id_fkey;
+ALTER TABLE ONLY public.inventory_item_categories DROP CONSTRAINT inventory_item_categories_item_id_fkey;
+ALTER TABLE ONLY public.inventory_item_categories DROP CONSTRAINT inventory_item_categories_category_id_fkey;
+ALTER TABLE ONLY public.inventory_item_breakdown DROP CONSTRAINT inventory_item_breakdown_size_id_fkey;
+ALTER TABLE ONLY public.inventory_item_breakdown DROP CONSTRAINT inventory_item_breakdown_item_id_fkey;
+ALTER TABLE ONLY public.inventory_item_breakdown DROP CONSTRAINT inventory_item_breakdown_item_color_id_fkey;
+ALTER TABLE ONLY public.inventory_groupings DROP CONSTRAINT inventory_groupings_season_id_fkey;
+ALTER TABLE ONLY public.inventory_groupings DROP CONSTRAINT inventory_groupings_designer_id_fkey;
+ALTER TABLE ONLY public.inventory_cross_sell DROP CONSTRAINT inventory_cross_sell_item_id_fkey;
+ALTER TABLE ONLY public.inventory_cross_sell DROP CONSTRAINT inventory_cross_sell_cross_item_id_fkey;
+ALTER TABLE ONLY public.inventory_ais_reports DROP CONSTRAINT inventory_ais_reports_item_id_fkey;
+ALTER TABLE ONLY public.inventory_adjustments DROP CONSTRAINT inventory_adjustments_item_breakdown_id_fkey;
+ALTER TABLE ONLY public.gift_certificates DROP CONSTRAINT gift_certificates_order_item_id_fkey;
+ALTER TABLE ONLY public.general_journal DROP CONSTRAINT general_journal_account_debit_fkey;
+ALTER TABLE ONLY public.general_journal DROP CONSTRAINT general_journal_account_credit_fkey;
+ALTER TABLE ONLY public.emails_sent_xx DROP CONSTRAINT emails_sent_request_id_fkey;
+ALTER TABLE ONLY public.emails_sent_xx DROP CONSTRAINT emails_sent_email_id_fkey;
+ALTER TABLE ONLY public.emails DROP CONSTRAINT emails_ad_code_id_fkey;
+ALTER TABLE ONLY public.email_queue DROP CONSTRAINT email_queue_email_id_fkey;
+ALTER TABLE ONLY public.email_queue DROP CONSTRAINT email_queue_contact_id_fkey;
+ALTER TABLE ONLY public.email_contacts DROP CONSTRAINT email_contacts_email_id_fkey;
+ALTER TABLE ONLY public.email_contacts DROP CONSTRAINT email_contacts_contact_id_fkey;
+ALTER TABLE ONLY public.designer_order_item_status DROP CONSTRAINT doris_fkey;
+ALTER TABLE ONLY public.designer_order_items DROP CONSTRAINT dori_fkey;
+ALTER TABLE ONLY public.designer_search_aliases DROP CONSTRAINT designer_search_aliases_id_fkey;
+ALTER TABLE ONLY public.designer_orders DROP CONSTRAINT designer_orders_placed_by_employee_id_fkey;
+ALTER TABLE ONLY public.designer_orders DROP CONSTRAINT designer_orders_entered_by_employee_id_fkey;
+ALTER TABLE ONLY public.designer_orders DROP CONSTRAINT designer_orders_designer_id_fkey;
+ALTER TABLE ONLY public.designer_orders DROP CONSTRAINT designer_orders_confirmation_received_by_employee_id_fkey;
+ALTER TABLE ONLY public.designer_orders DROP CONSTRAINT designer_orders_cancelled_by_employee_id_fkey;
+ALTER TABLE ONLY public.designer_orders DROP CONSTRAINT designer_orders_approved_by_employee_id_fkey;
+ALTER TABLE ONLY public.designer_order_items DROP CONSTRAINT designer_order_items_item_breakdown_id_fkey;
+ALTER TABLE ONLY public.designer_order_item_status DROP CONSTRAINT designer_order_item_status_received_shipment_item_id_fkey;
+ALTER TABLE ONLY public.designer_order_item_status DROP CONSTRAINT designer_order_item_status_order_item_status_id_fkey;
+ALTER TABLE ONLY public.customer_appreciation DROP CONSTRAINT customer_appreciation_season_id_fkey;
+ALTER TABLE ONLY public.customer_appreciation DROP CONSTRAINT customer_appreciation_contact_id_fkey;
+ALTER TABLE ONLY public.contacts_ml_removes DROP CONSTRAINT contacts_ml_removes_contact_id_fkey;
+ALTER TABLE ONLY public.promotions DROP CONSTRAINT contacts_id;
+ALTER TABLE ONLY public.contact_requests DROP CONSTRAINT contact_requests_contact_id_fkey;
+ALTER TABLE ONLY public.contact_authnet_profiles DROP CONSTRAINT contact_authnet_profiles_contact_id_fkey;
+ALTER TABLE ONLY public.contact_authnet_payment_profiles DROP CONSTRAINT contact_authnet_payment_profile_contact_authnet_profile_id_fkey;
+ALTER TABLE ONLY public.checkouts DROP CONSTRAINT checkouts_promotion_id_fkey;
+ALTER TABLE ONLY public.checkouts DROP CONSTRAINT checkouts_order_id_fkey;
+ALTER TABLE ONLY public.checkouts DROP CONSTRAINT checkouts_contact_id_fkey;
+ALTER TABLE ONLY public.checkouts DROP CONSTRAINT checkouts_cart_id_fkey;
+ALTER TABLE ONLY public.checkout_gcs DROP CONSTRAINT checkout_gcs_gc_id_fkey;
+ALTER TABLE ONLY public.checkout_gcs DROP CONSTRAINT checkout_gcs_checkout_id_fkey;
+ALTER TABLE ONLY public.category_search_aliases DROP CONSTRAINT category_search_aliases_id_fkey;
+ALTER TABLE ONLY public.carts DROP CONSTRAINT carts_contact_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_size_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_item_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_item_color_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_gift_certificate_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_cart_id_fkey;
+ALTER TABLE ONLY public.admins DROP CONSTRAINT admins_employee_id_fkey;
+ALTER TABLE ONLY public.accounts DROP CONSTRAINT accounts_parent_fkey;
+DROP TRIGGER update_search_view_trigger ON public.designer_search_aliases;
+DROP TRIGGER update_search_view_trigger ON public.inventory_items;
+DROP TRIGGER email_lower_trigger ON public.contacts;
+DROP INDEX public.vendor_designers_status_featured_idx;
+DROP INDEX public.vendor_designers_shortname_idx;
+DROP INDEX public.vendor_designers_featured_images_designer_id_idx;
+DROP INDEX public.store_credits_order_id_idx;
+DROP INDEX public.store_credits_contacts_id_idx;
+DROP INDEX public.shipping_methods_carrier_idx;
+DROP INDEX public.payment_failures_checkout_id_idx;
+DROP INDEX public.orders_transactions_status_idx;
+DROP INDEX public.orders_transactions_sc_store_credits_id_idx;
+DROP INDEX public.orders_transactions_order_id_idx;
+DROP INDEX public.orders_transactions_method_idx;
+DROP INDEX public.orders_transactions_gc_gift_certificates_id_idx;
+DROP INDEX public.orders_transactions_cc_transactions_id_idx;
+DROP INDEX public.orders_transactions_cc_status_cctr_idx;
+DROP INDEX public.orders_transactions_cc_gateway_trans_id_idx;
+DROP INDEX public.orders_transactions_cc_gateway_ref_trans_id_idx;
+DROP INDEX public.orders_transactions_cc_gateway_action_idx;
+DROP INDEX public.orders_transactions_cc_cc_type_idx;
+DROP INDEX public.orders_store_receipt_number_idx;
+DROP INDEX public.orders_salesperson2_idx;
+DROP INDEX public.orders_salesperson1_idx;
+DROP INDEX public.orders_promotion_id_idx;
+DROP INDEX public.orders_order_status_idx;
+DROP INDEX public.orders_ad_code_idx;
+DROP INDEX public.order_shipments_carrier_idx;
+DROP INDEX public.order_items_order_id_idx;
+DROP INDEX public.order_items_item_bd_id_idx;
+DROP INDEX public.order_item_status_shipped_from_idx;
+DROP INDEX public.order_item_status_order_item_status_idx;
+DROP INDEX public.order_item_status_order_item_id_idx;
+DROP INDEX public.order_item_status_history_shipped_from_idx;
+DROP INDEX public.order_item_status_history_order_item_status_idx;
+DROP INDEX public.order_item_status_history_order_item_status_id_idx;
+DROP INDEX public.news_status_event_date_id_idx;
+DROP INDEX public.news_event_idx;
+DROP INDEX public.inventory_size_scale_sizes_size_scale_id_idx;
+DROP INDEX public.inventory_size_scale_sizes_size_id_idx;
+DROP INDEX public.inventory_shipments_packing_slip_number_idx;
+DROP INDEX public.inventory_shipments_designer_id_idx;
+DROP INDEX public.inventory_shipment_items_shipment_id_idx;
+DROP INDEX public.inventory_shipment_items_item_id_idx;
+DROP INDEX public.inventory_shipment_items_item_breakdown_id_idx;
+DROP INDEX public.inventory_search_idx;
+DROP INDEX public.inventory_items_style_number_idx;
+DROP INDEX public.inventory_items_season_id_idx;
+DROP INDEX public.inventory_items_groupings_item_id_idx;
+DROP INDEX public.inventory_items_groupings_grouping_id_idx;
+DROP INDEX public.inventory_items_grouping_id_idx;
+DROP INDEX public.inventory_items_designer_id_idx;
+DROP INDEX public.inventory_item_images_item_id_idx;
+DROP INDEX public.inventory_item_colors_item_id_idx;
+DROP INDEX public.inventory_item_colors_color_idx;
+DROP INDEX public.inventory_item_categories_item_id_idx;
+DROP INDEX public.inventory_item_categories_category_id_idx;
+DROP INDEX public.inventory_item_breakdown_size_id_idx;
+DROP INDEX public.inventory_item_breakdown_item_id_idx;
+DROP INDEX public.inventory_item_breakdown_item_color_id_idx;
+DROP INDEX public.inventory_groupings_season_id_idx;
+DROP INDEX public.inventory_groupings_designer_id_idx;
+DROP INDEX public.inventory_cross_sell_item_id_idx;
+DROP INDEX public.inventory_ais_reports_report_date_idx;
+DROP INDEX public.inventory_ais_reports_item_id_idx;
+DROP INDEX public.inventory_adjustments_item_breakdown_id_idx;
+DROP INDEX public.gift_certificates_redemption_code_idx;
+DROP INDEX public.gift_certificates_order_item_id_idx;
+DROP INDEX public.gift_certificates_gc_number_idx;
+DROP INDEX public.general_journal_ref_number_idx;
+DROP INDEX public.general_journal_account_debit_idx;
+DROP INDEX public.general_journal_account_credit_idx;
+DROP INDEX public.emails_sent_id_idx;
+DROP INDEX public.emails_send_contact_type_idx;
+DROP INDEX public.emails_on_email_list_idx;
+DROP INDEX public.emails_ad_code_id_idx;
+DROP INDEX public.email_contacts_request_id_idx;
+DROP INDEX public.email_contacts_email_id_idx;
+DROP INDEX public.email_contacts_email_id_contact_id_idx;
+DROP INDEX public.email_contacts_contact_id_idx;
+DROP INDEX public.contacts_state_idx;
+DROP INDEX public.contacts_postcards_sends_contact_id_idx;
+DROP INDEX public.contacts_name_idx;
+DROP INDEX public.contacts_ml_removes_contact_id_idx;
+DROP INDEX public.contacts_email_list_idx;
+DROP INDEX public.contacts_email_idx1;
+DROP INDEX public.contact_requests_contact_id_idx;
+DROP INDEX public.contact_authnet_profiles_authnet_customer_id_idx;
+DROP INDEX public.contact_authnet_payment_profiles_authnet_payment_profile_id_idx;
+DROP INDEX public.checkouts_order_id_idx;
+DROP INDEX public.checkouts_cart_id_idx;
+DROP INDEX public.checkout_gcs_gc_id_idx;
+DROP INDEX public.checkout_gcs_checkout_id_idx;
+DROP INDEX public.carts_tracker_cookie_id_idx;
+DROP INDEX public.cart_items_item_id_idx;
+DROP INDEX public.cart_items_cart_id_idx;
+DROP INDEX public.accounts_parent_idx;
+DROP INDEX public.accounts_account_type_idx;
+DROP INDEX public.accounts_account_idx;
+ALTER TABLE ONLY public.vendor_factors DROP CONSTRAINT vendor_factors_pkey;
+ALTER TABLE ONLY public.vendor_designers DROP CONSTRAINT vendor_designers_pkey;
+ALTER TABLE ONLY public.vendor_designers_featured_images DROP CONSTRAINT vendor_designers_featured_images_pkey;
+ALTER TABLE ONLY public.vendor_designers_factors DROP CONSTRAINT vendor_designers_factors_pkey;
+ALTER TABLE ONLY public.vendor_designers_factors DROP CONSTRAINT vendor_designers_factors_designer_id_factor_id_key;
+ALTER TABLE ONLY public.testimonials DROP CONSTRAINT testimonials_pkey;
+ALTER TABLE ONLY public.store_credits DROP CONSTRAINT store_credits_pkey;
+ALTER TABLE ONLY public.shipping_methods DROP CONSTRAINT shipping_methods_pkey;
+ALTER TABLE ONLY public.searches DROP CONSTRAINT searches_pkey;
+ALTER TABLE ONLY public.promotions DROP CONSTRAINT promotions_pkey;
+ALTER TABLE ONLY public.promotions DROP CONSTRAINT promotions_code_key;
+ALTER TABLE ONLY public.payroll DROP CONSTRAINT payroll_pkey;
+ALTER TABLE ONLY public.payment_failures DROP CONSTRAINT payment_failures_pkey;
+ALTER TABLE ONLY public.orders_transactions_sc DROP CONSTRAINT orders_transactions_sc_transactions_id_store_credits_id_key;
+ALTER TABLE ONLY public.orders_transactions_sc DROP CONSTRAINT orders_transactions_sc_pkey;
+ALTER TABLE ONLY public.orders_transactions DROP CONSTRAINT orders_transactions_pkey;
+ALTER TABLE ONLY public.orders_transactions_items DROP CONSTRAINT orders_transactions_items_pkey;
+ALTER TABLE ONLY public.orders_transactions_gc DROP CONSTRAINT orders_transactions_gc_transactions_id_gift_certificates_id_key;
+ALTER TABLE ONLY public.orders_transactions_gc DROP CONSTRAINT orders_transactions_gc_pkey;
+ALTER TABLE ONLY public.orders_transactions_deposit_items DROP CONSTRAINT orders_transactions_deposit_items_pkey;
+ALTER TABLE ONLY public.orders_transactions_cc DROP CONSTRAINT orders_transactions_cc_pkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_pkey;
+ALTER TABLE ONLY public.order_shipments DROP CONSTRAINT order_shipments_tracking_number_key;
+ALTER TABLE ONLY public.order_shipments DROP CONSTRAINT order_shipments_pkey;
+ALTER TABLE ONLY public.order_shipment_items DROP CONSTRAINT order_shipment_items_pkey;
+ALTER TABLE ONLY public.order_returns DROP CONSTRAINT order_returns_pkey;
+ALTER TABLE ONLY public.order_return_items DROP CONSTRAINT order_return_items_pkey;
+ALTER TABLE ONLY public.order_items DROP CONSTRAINT order_items_pkey;
+ALTER TABLE ONLY public.order_item_status DROP CONSTRAINT order_item_status_pkey;
+ALTER TABLE ONLY public.order_item_status_history DROP CONSTRAINT order_item_status_history_pkey;
+ALTER TABLE ONLY public.news DROP CONSTRAINT news_pkey;
+ALTER TABLE ONLY public.news_images DROP CONSTRAINT news_images_pkey;
+ALTER TABLE ONLY public.licenses DROP CONSTRAINT licenses_pkey;
+ALTER TABLE ONLY public.inventory_sizes DROP CONSTRAINT inventory_sizes_size_key;
+ALTER TABLE ONLY public.inventory_sizes DROP CONSTRAINT inventory_sizes_pkey;
+ALTER TABLE ONLY public.inventory_size_scales DROP CONSTRAINT inventory_size_scales_pkey;
+ALTER TABLE ONLY public.inventory_size_scale_sizes DROP CONSTRAINT inventory_size_scale_sizes_pkey;
+ALTER TABLE ONLY public.inventory_shipments DROP CONSTRAINT inventory_shipments_pkey;
+ALTER TABLE ONLY public.inventory_shipment_items DROP CONSTRAINT inventory_shipment_items_pkey;
+ALTER TABLE ONLY public.inventory_seasons DROP CONSTRAINT inventory_seasons_pkey;
+ALTER TABLE ONLY public.inventory_reports DROP CONSTRAINT inventory_reports_pkey;
+ALTER TABLE ONLY public.inventory_items_popular DROP CONSTRAINT inventory_items_popular_pkey;
+ALTER TABLE ONLY public.inventory_items_popular DROP CONSTRAINT inventory_items_popular_item_id_key;
+ALTER TABLE ONLY public.inventory_items DROP CONSTRAINT inventory_items_pkey;
+ALTER TABLE ONLY public.inventory_items_groupings DROP CONSTRAINT inventory_items_groupings_pkey;
+ALTER TABLE ONLY public.inventory_item_images DROP CONSTRAINT inventory_item_images_pkey;
+ALTER TABLE ONLY public.inventory_item_colors DROP CONSTRAINT inventory_item_colors_pkey;
+ALTER TABLE ONLY public.inventory_item_categories DROP CONSTRAINT inventory_item_categories_pkey;
+ALTER TABLE ONLY public.inventory_item_breakdown DROP CONSTRAINT inventory_item_breakdown_pkey;
+ALTER TABLE ONLY public.inventory_groupings DROP CONSTRAINT inventory_groupings_pkey;
+ALTER TABLE ONLY public.inventory_cross_sell DROP CONSTRAINT inventory_cross_sell_pkey;
+ALTER TABLE ONLY public.inventory_categories DROP CONSTRAINT inventory_categories_pkey;
+ALTER TABLE ONLY public.inventory_ais_reports DROP CONSTRAINT inventory_ais_reports_pkey;
+ALTER TABLE ONLY public.inventory_adjustments DROP CONSTRAINT inventory_adjustments_pkey;
+ALTER TABLE ONLY public.gift_certificates DROP CONSTRAINT gift_certificates_pkey;
+ALTER TABLE ONLY public.general_journal DROP CONSTRAINT general_journal_pkey;
+ALTER TABLE ONLY public.employees DROP CONSTRAINT employees_pkey;
+ALTER TABLE ONLY public.emails DROP CONSTRAINT emails_pkey;
+ALTER TABLE ONLY public.email_send_requests DROP CONSTRAINT email_send_requests_pkey;
+ALTER TABLE ONLY public.email_queue DROP CONSTRAINT email_queue_pkey;
+ALTER TABLE ONLY public.email_outbox DROP CONSTRAINT email_outbox_pkey;
+ALTER TABLE ONLY public.email_images DROP CONSTRAINT email_images_pkey;
+ALTER TABLE ONLY public.email_contacts DROP CONSTRAINT email_contacts_pkey;
+ALTER TABLE ONLY public.designer_orders DROP CONSTRAINT designer_orders_pkey;
+ALTER TABLE ONLY public.designer_order_items DROP CONSTRAINT designer_order_items_pkey;
+ALTER TABLE ONLY public.designer_order_item_status DROP CONSTRAINT designer_order_item_status_pkey;
+ALTER TABLE ONLY public.customer_appreciation DROP CONSTRAINT customer_appreciation_pkey;
+ALTER TABLE ONLY public.contacts_postcards_sends DROP CONSTRAINT contacts_postcards_sends_pkey;
+ALTER TABLE ONLY public.contacts DROP CONSTRAINT contacts_pkey;
+ALTER TABLE ONLY public.contacts_ml_removes DROP CONSTRAINT contacts_ml_removes_pkey;
+ALTER TABLE ONLY public.contact_requests DROP CONSTRAINT contact_requests_pkey;
+ALTER TABLE ONLY public.contact_authnet_profiles DROP CONSTRAINT contact_authnet_profiles_pkey;
+ALTER TABLE ONLY public.contact_authnet_payment_profiles DROP CONSTRAINT contact_authnet_payment_profiles_pkey;
+ALTER TABLE ONLY public.checkouts DROP CONSTRAINT checkouts_pkey;
+ALTER TABLE ONLY public.checkout_gcs DROP CONSTRAINT checkout_gcs_pkey;
+ALTER TABLE ONLY public.carts DROP CONSTRAINT carts_pkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_pkey;
+ALTER TABLE ONLY public.admins DROP CONSTRAINT admins_username_key;
+ALTER TABLE ONLY public.admins DROP CONSTRAINT admins_pkey;
+ALTER TABLE ONLY public.ad_codes DROP CONSTRAINT ad_codes_pkey;
+ALTER TABLE ONLY public.accounts DROP CONSTRAINT accountunique;
+ALTER TABLE ONLY public.accounts DROP CONSTRAINT accounts_pkey;
+ALTER TABLE public.vendor_factors ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.vendor_designers_featured_images ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.vendor_designers_factors ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.vendor_designers ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.testimonials ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.store_credits ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.shipping_methods ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.searches ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.promotions ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.payroll ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.payment_failures ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.orders_transactions_sc ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.orders_transactions_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.orders_transactions_gc ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.orders_transactions_deposit_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.orders_transactions_cc ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.orders_transactions ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.orders ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.order_shipments ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.order_shipment_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.order_returns ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.order_return_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.order_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.order_item_status_history ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.order_item_status ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.news_images ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.news ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.licenses ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_sizes ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_size_scales ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_size_scale_sizes ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_shipments ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_shipment_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_seasons ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_reports ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_items_popular ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_items_groupings ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_item_images ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_item_colors ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_item_categories ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_item_breakdown ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_groupings ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_cross_sell ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_categories ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_ais_reports ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.inventory_adjustments ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.gift_certificates ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.general_journal ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.employees ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.emails_sent_xx ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.emails ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.email_send_requests ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.email_queue ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.email_outbox ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.email_images ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.email_contacts ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.designer_orders ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.designer_order_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.designer_order_item_status ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.customer_appreciation ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.contacts_postcards_sends ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.contacts_ml_removes ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.contacts ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.contact_requests ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.contact_authnet_profiles ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.contact_authnet_payment_profiles ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.checkouts ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.checkout_gcs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.carts ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.cart_items ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.admins ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.ad_codes ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.accounts ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE public.vendor_factors_id_seq;
+DROP TABLE public.vendor_factors;
+DROP SEQUENCE public.vendor_designers_id_seq;
+DROP SEQUENCE public.vendor_designers_featured_images_id_seq;
+DROP TABLE public.vendor_designers_featured_images;
+DROP SEQUENCE public.vendor_designers_factors_id_seq;
+DROP TABLE public.vendor_designers_factors;
+DROP TABLE public.vendor_designers;
+DROP SEQUENCE public.tracker_id_seq;
+DROP SEQUENCE public.testimonials_id_seq;
+DROP TABLE public.testimonials;
+DROP SEQUENCE public.store_credits_id_seq;
+DROP TABLE public.store_credits;
+DROP SEQUENCE public.shipping_methods_id_seq;
+DROP TABLE public.shipping_methods;
+DROP SEQUENCE public.searches_id_seq;
+DROP TABLE public.searches;
+DROP SEQUENCE public.promotions_id_seq;
+DROP TABLE public.promotions;
+DROP SEQUENCE public.payroll_id_seq;
+DROP TABLE public.payroll;
+DROP SEQUENCE public.payment_failures_id_seq;
+DROP TABLE public.payment_failures;
+DROP SEQUENCE public.orders_transactions_sc_id_seq;
+DROP TABLE public.orders_transactions_sc;
+DROP SEQUENCE public.orders_transactions_items_id_seq;
+DROP TABLE public.orders_transactions_items;
+DROP SEQUENCE public.orders_transactions_id_seq;
+DROP SEQUENCE public.orders_transactions_gc_id_seq;
+DROP TABLE public.orders_transactions_gc;
+DROP SEQUENCE public.orders_transactions_deposit_items_id_seq;
+DROP TABLE public.orders_transactions_deposit_items;
+DROP SEQUENCE public.orders_transactions_cc_id_seq;
+DROP TABLE public.orders_transactions_cc;
+DROP TABLE public.orders_transactions;
+DROP SEQUENCE public.orders_id_seq;
+DROP TABLE public.orders;
+DROP SEQUENCE public.order_shipments_id_seq;
+DROP TABLE public.order_shipments;
+DROP SEQUENCE public.order_shipment_items_id_seq;
+DROP TABLE public.order_shipment_items;
+DROP SEQUENCE public.order_returns_id_seq;
+DROP TABLE public.order_returns;
+DROP SEQUENCE public.order_return_items_id_seq;
+DROP TABLE public.order_return_items;
+DROP SEQUENCE public.order_items_id_seq;
+DROP TABLE public.order_items;
+DROP SEQUENCE public.order_item_status_id_seq;
+DROP SEQUENCE public.order_item_status_history_id_seq;
+DROP TABLE public.order_item_status_history;
+DROP TABLE public.order_item_status;
+DROP SEQUENCE public.news_images_id_seq;
+DROP TABLE public.news_images;
+DROP SEQUENCE public.news_id_seq;
+DROP TABLE public.news;
+DROP SEQUENCE public.licenses_id_seq;
+DROP TABLE public.licenses;
+DROP SEQUENCE public.inventory_sizes_id_seq;
+DROP TABLE public.inventory_sizes;
+DROP SEQUENCE public.inventory_size_scales_id_seq;
+DROP TABLE public.inventory_size_scales;
+DROP SEQUENCE public.inventory_size_scale_sizes_id_seq;
+DROP TABLE public.inventory_size_scale_sizes;
+DROP SEQUENCE public.inventory_shipments_id_seq;
+DROP TABLE public.inventory_shipments;
+DROP SEQUENCE public.inventory_shipment_items_id_seq;
+DROP TABLE public.inventory_shipment_items;
+DROP SEQUENCE public.inventory_seasons_id_seq;
+DROP TABLE public.inventory_seasons;
+DROP MATERIALIZED VIEW public.inventory_search_view;
+DROP SEQUENCE public.inventory_reports_id_seq;
+DROP TABLE public.inventory_reports;
+DROP SEQUENCE public.inventory_items_popular_id_seq;
+DROP TABLE public.inventory_items_popular;
+DROP SEQUENCE public.inventory_items_id_seq;
+DROP SEQUENCE public.inventory_items_groupings_id_seq;
+DROP TABLE public.inventory_items_groupings;
+DROP TABLE public.inventory_items;
+DROP SEQUENCE public.inventory_item_images_id_seq;
+DROP TABLE public.inventory_item_images;
+DROP SEQUENCE public.inventory_item_colors_id_seq;
+DROP TABLE public.inventory_item_colors;
+DROP SEQUENCE public.inventory_item_categories_id_seq;
+DROP TABLE public.inventory_item_categories;
+DROP SEQUENCE public.inventory_item_breakdown_id_seq;
+DROP TABLE public.inventory_item_breakdown;
+DROP SEQUENCE public.inventory_groupings_id_seq;
+DROP TABLE public.inventory_groupings;
+DROP SEQUENCE public.inventory_cross_sell_id_seq;
+DROP TABLE public.inventory_cross_sell;
+DROP SEQUENCE public.inventory_categories_id_seq;
+DROP TABLE public.inventory_categories;
+DROP SEQUENCE public.inventory_ais_reports_id_seq;
+DROP TABLE public.inventory_ais_reports;
+DROP SEQUENCE public.inventory_adjustments_id_seq;
+DROP TABLE public.inventory_adjustments;
+DROP SEQUENCE public.gift_certificates_id_seq;
+DROP TABLE public.gift_certificates;
+DROP SEQUENCE public.general_journal_id_seq;
+DROP TABLE public.general_journal;
+DROP SEQUENCE public.employees_id_seq;
+DROP TABLE public.employees;
+DROP SEQUENCE public.emails_sent_id_seq;
+DROP TABLE public.emails_sent_xx;
+DROP SEQUENCE public.emails_id_seq;
+DROP TABLE public.emails;
+DROP SEQUENCE public.email_send_requests_id_seq;
+DROP TABLE public.email_send_requests;
+DROP SEQUENCE public.email_queue_id_seq;
+DROP TABLE public.email_queue;
+DROP SEQUENCE public.email_outbox_id_seq;
+DROP TABLE public.email_outbox;
+DROP SEQUENCE public.email_images_id_seq;
+DROP TABLE public.email_images;
+DROP SEQUENCE public.email_contacts_id_seq;
+DROP TABLE public.email_contacts;
+DROP TABLE public.designer_search_aliases;
+DROP SEQUENCE public.designer_orders_id_seq;
+DROP TABLE public.designer_orders;
+DROP SEQUENCE public.designer_order_items_id_seq;
+DROP TABLE public.designer_order_items;
+DROP SEQUENCE public.designer_order_item_status_id_seq;
+DROP TABLE public.designer_order_item_status;
+DROP SEQUENCE public.customer_appreciation_id_seq;
+DROP TABLE public.customer_appreciation;
+DROP SEQUENCE public.contacts_postcards_sends_id_seq;
+DROP TABLE public.contacts_postcards_sends;
+DROP SEQUENCE public.contacts_ml_removes_id_seq;
+DROP TABLE public.contacts_ml_removes;
+DROP SEQUENCE public.contacts_id_seq;
+DROP TABLE public.contacts;
+DROP SEQUENCE public.contact_requests_id_seq;
+DROP TABLE public.contact_requests;
+DROP SEQUENCE public.contact_authnet_profiles_id_seq;
+DROP TABLE public.contact_authnet_profiles;
+DROP SEQUENCE public.contact_authnet_payment_profiles_id_seq;
+DROP TABLE public.contact_authnet_payment_profiles;
+DROP SEQUENCE public.checkouts_id_seq;
+DROP TABLE public.checkouts;
+DROP SEQUENCE public.checkout_gcs_id_seq;
+DROP TABLE public.checkout_gcs;
+DROP TABLE public.category_search_aliases;
+DROP SEQUENCE public.carts_id_seq;
+DROP TABLE public.carts;
+DROP SEQUENCE public.cart_items_id_seq;
+DROP TABLE public.cart_items;
+DROP SEQUENCE public.admins_id_seq;
+DROP TABLE public.admins;
+DROP SEQUENCE public.ad_codes_id_seq;
+DROP TABLE public.ad_codes;
+DROP SEQUENCE public.accounts_id_seq;
+DROP TABLE public.accounts;
+DROP FUNCTION public.update_test_modified_column();
+DROP FUNCTION public.search_inventory(query text);
+DROP FUNCTION public.sales_by_designer_shipments(start_date date, shipments_end_date date, orders_end_date date, season bigint, designer bigint);
+DROP FUNCTION public.on_inventory_change();
+DROP FUNCTION public.on_contacts_email_change();
+DROP FUNCTION public.item_profit(price real, cost real);
+DROP FUNCTION public.fill_tracker2_table(start_id bigint, max_rows bigint);
+DROP FUNCTION public.designer_search_vector(id bigint);
+DROP FUNCTION public.designer_search_strings(id bigint);
+DROP FUNCTION public.convert_bool_column(table_name text, column_name text);
+DROP FUNCTION public.bool_to_enum(val boolean);
+DROP FUNCTION public.best_customers(order_type order_type, start_dt timestamp without time zone, end_dt timestamp without time zone);
+DROP TYPE public.yes_no;
+DROP TYPE public.vendor_rep_terms;
+DROP TYPE public.vendor_contact_type;
+DROP TYPE public.transaction_method;
+DROP TYPE public.trans_type;
+DROP TYPE public.status_cctr;
+DROP TYPE public.shipping_locations;
+DROP TYPE public.shipping_carriers;
+DROP TYPE public.shipped_from_old;
+DROP TYPE public.shipped_from;
+DROP TYPE public.send_contact_type;
+DROP TYPE public.pay_type;
+DROP TYPE public.order_type;
+DROP TYPE public.order_transaction_type;
+DROP TYPE public.order_transaction_status;
+DROP TYPE public.order_status;
+DROP TYPE public.order_item_status_type;
+DROP TYPE public.order_item_action;
+DROP TYPE public.on_email_list_type;
+DROP TYPE public.news_event;
+DROP TYPE public.marital_status;
+DROP TYPE public.invoice_terms;
+DROP TYPE public.inventory_adjustment_action;
+DROP TYPE public.gtd_waiting_for_status;
+DROP TYPE public.gtd_projects_actions_status;
+DROP TYPE public.gtd_notes_status;
+DROP TYPE public.gtd_actions_types;
+DROP TYPE public.gc_status;
+DROP TYPE public.gateway_action;
+DROP TYPE public.email_text_type;
+DROP TYPE public.designer_terms;
+DROP TYPE public.designer_status_featured;
+DROP TYPE public.designer_pay_to;
+DROP TYPE public.contacts_email_list_type;
+DROP TYPE public.communication_methods;
+DROP TYPE public.cc_type;
+DROP TYPE public.cc_gateway;
+DROP TYPE public.ais_report_time_period;
+DROP TYPE public.active_or_inactive;
+DROP TYPE public.account_type;
+DROP SCHEMA public;
 --
--- Name: account_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA public;
+
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: account_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE account_type AS ENUM (
@@ -36,10 +620,8 @@ CREATE TYPE account_type AS ENUM (
 );
 
 
-ALTER TYPE account_type OWNER TO btqcm;
-
 --
--- Name: active_or_inactive; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: active_or_inactive; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE active_or_inactive AS ENUM (
@@ -48,10 +630,8 @@ CREATE TYPE active_or_inactive AS ENUM (
 );
 
 
-ALTER TYPE active_or_inactive OWNER TO btqcm;
-
 --
--- Name: ais_report_time_period; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: ais_report_time_period; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE ais_report_time_period AS ENUM (
@@ -64,10 +644,8 @@ CREATE TYPE ais_report_time_period AS ENUM (
 );
 
 
-ALTER TYPE ais_report_time_period OWNER TO btqcm;
-
 --
--- Name: cc_gateway; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: cc_gateway; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE cc_gateway AS ENUM (
@@ -80,10 +658,8 @@ CREATE TYPE cc_gateway AS ENUM (
 );
 
 
-ALTER TYPE cc_gateway OWNER TO btqcm;
-
 --
--- Name: cc_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: cc_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE cc_type AS ENUM (
@@ -94,10 +670,8 @@ CREATE TYPE cc_type AS ENUM (
 );
 
 
-ALTER TYPE cc_type OWNER TO btqcm;
-
 --
--- Name: communication_methods; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: communication_methods; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE communication_methods AS ENUM (
@@ -111,10 +685,8 @@ email',
 );
 
 
-ALTER TYPE communication_methods OWNER TO btqcm;
-
 --
--- Name: contacts_email_list_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: contacts_email_list_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE contacts_email_list_type AS ENUM (
@@ -125,10 +697,8 @@ CREATE TYPE contacts_email_list_type AS ENUM (
 );
 
 
-ALTER TYPE contacts_email_list_type OWNER TO btqcm;
-
 --
--- Name: designer_pay_to; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: designer_pay_to; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE designer_pay_to AS ENUM (
@@ -137,10 +707,8 @@ CREATE TYPE designer_pay_to AS ENUM (
 );
 
 
-ALTER TYPE designer_pay_to OWNER TO btqcm;
-
 --
--- Name: designer_status_featured; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: designer_status_featured; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE designer_status_featured AS ENUM (
@@ -150,10 +718,8 @@ CREATE TYPE designer_status_featured AS ENUM (
 );
 
 
-ALTER TYPE designer_status_featured OWNER TO btqcm;
-
 --
--- Name: designer_terms; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: designer_terms; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE designer_terms AS ENUM (
@@ -167,10 +733,8 @@ CREATE TYPE designer_terms AS ENUM (
 );
 
 
-ALTER TYPE designer_terms OWNER TO btqcm;
-
 --
--- Name: email_text_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: email_text_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE email_text_type AS ENUM (
@@ -179,10 +743,8 @@ CREATE TYPE email_text_type AS ENUM (
 );
 
 
-ALTER TYPE email_text_type OWNER TO btqcm;
-
 --
--- Name: gateway_action; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: gateway_action; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE gateway_action AS ENUM (
@@ -195,10 +757,8 @@ CREATE TYPE gateway_action AS ENUM (
 );
 
 
-ALTER TYPE gateway_action OWNER TO btqcm;
-
 --
--- Name: gc_status; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: gc_status; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE gc_status AS ENUM (
@@ -208,10 +768,8 @@ CREATE TYPE gc_status AS ENUM (
 );
 
 
-ALTER TYPE gc_status OWNER TO btqcm;
-
 --
--- Name: gtd_actions_types; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: gtd_actions_types; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE gtd_actions_types AS ENUM (
@@ -223,10 +781,8 @@ CREATE TYPE gtd_actions_types AS ENUM (
 );
 
 
-ALTER TYPE gtd_actions_types OWNER TO btqcm;
-
 --
--- Name: gtd_notes_status; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: gtd_notes_status; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE gtd_notes_status AS ENUM (
@@ -235,10 +791,8 @@ CREATE TYPE gtd_notes_status AS ENUM (
 );
 
 
-ALTER TYPE gtd_notes_status OWNER TO btqcm;
-
 --
--- Name: gtd_projects_actions_status; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: gtd_projects_actions_status; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE gtd_projects_actions_status AS ENUM (
@@ -248,10 +802,8 @@ CREATE TYPE gtd_projects_actions_status AS ENUM (
 );
 
 
-ALTER TYPE gtd_projects_actions_status OWNER TO btqcm;
-
 --
--- Name: gtd_waiting_for_status; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: gtd_waiting_for_status; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE gtd_waiting_for_status AS ENUM (
@@ -260,10 +812,8 @@ CREATE TYPE gtd_waiting_for_status AS ENUM (
 );
 
 
-ALTER TYPE gtd_waiting_for_status OWNER TO btqcm;
-
 --
--- Name: inventory_adjustment_action; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: inventory_adjustment_action; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE inventory_adjustment_action AS ENUM (
@@ -272,10 +822,8 @@ CREATE TYPE inventory_adjustment_action AS ENUM (
 );
 
 
-ALTER TYPE inventory_adjustment_action OWNER TO btqcm;
-
 --
--- Name: invoice_terms; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: invoice_terms; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE invoice_terms AS ENUM (
@@ -284,10 +832,8 @@ CREATE TYPE invoice_terms AS ENUM (
 );
 
 
-ALTER TYPE invoice_terms OWNER TO btqcm;
-
 --
--- Name: marital_status; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: marital_status; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE marital_status AS ENUM (
@@ -297,10 +843,8 @@ CREATE TYPE marital_status AS ENUM (
 );
 
 
-ALTER TYPE marital_status OWNER TO btqcm;
-
 --
--- Name: news_event; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: news_event; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE news_event AS ENUM (
@@ -314,10 +858,8 @@ CREATE TYPE news_event AS ENUM (
 );
 
 
-ALTER TYPE news_event OWNER TO btqcm;
-
 --
--- Name: on_email_list_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: on_email_list_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE on_email_list_type AS ENUM (
@@ -327,10 +869,8 @@ CREATE TYPE on_email_list_type AS ENUM (
 );
 
 
-ALTER TYPE on_email_list_type OWNER TO btqcm;
-
 --
--- Name: order_item_action; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: order_item_action; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE order_item_action AS ENUM (
@@ -339,10 +879,8 @@ CREATE TYPE order_item_action AS ENUM (
 );
 
 
-ALTER TYPE order_item_action OWNER TO btqcm;
-
 --
--- Name: order_item_status_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: order_item_status_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE order_item_status_type AS ENUM (
@@ -365,10 +903,8 @@ CREATE TYPE order_item_status_type AS ENUM (
 );
 
 
-ALTER TYPE order_item_status_type OWNER TO btqcm;
-
 --
--- Name: order_status; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: order_status; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE order_status AS ENUM (
@@ -378,10 +914,8 @@ CREATE TYPE order_status AS ENUM (
 );
 
 
-ALTER TYPE order_status OWNER TO btqcm;
-
 --
--- Name: order_transaction_status; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: order_transaction_status; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE order_transaction_status AS ENUM (
@@ -392,10 +926,8 @@ CREATE TYPE order_transaction_status AS ENUM (
 );
 
 
-ALTER TYPE order_transaction_status OWNER TO btqcm;
-
 --
--- Name: order_transaction_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: order_transaction_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE order_transaction_type AS ENUM (
@@ -404,10 +936,8 @@ CREATE TYPE order_transaction_type AS ENUM (
 );
 
 
-ALTER TYPE order_transaction_type OWNER TO btqcm;
-
 --
--- Name: order_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: order_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE order_type AS ENUM (
@@ -416,10 +946,8 @@ CREATE TYPE order_type AS ENUM (
 );
 
 
-ALTER TYPE order_type OWNER TO btqcm;
-
 --
--- Name: pay_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: pay_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE pay_type AS ENUM (
@@ -428,10 +956,8 @@ CREATE TYPE pay_type AS ENUM (
 );
 
 
-ALTER TYPE pay_type OWNER TO btqcm;
-
 --
--- Name: send_contact_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: send_contact_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE send_contact_type AS ENUM (
@@ -442,10 +968,8 @@ CREATE TYPE send_contact_type AS ENUM (
 );
 
 
-ALTER TYPE send_contact_type OWNER TO btqcm;
-
 --
--- Name: shipped_from; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: shipped_from; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE shipped_from AS ENUM (
@@ -454,10 +978,8 @@ CREATE TYPE shipped_from AS ENUM (
 );
 
 
-ALTER TYPE shipped_from OWNER TO btqcm;
-
 --
--- Name: shipped_from_old; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: shipped_from_old; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE shipped_from_old AS ENUM (
@@ -467,10 +989,8 @@ CREATE TYPE shipped_from_old AS ENUM (
 );
 
 
-ALTER TYPE shipped_from_old OWNER TO btqcm;
-
 --
--- Name: shipping_carriers; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: shipping_carriers; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE shipping_carriers AS ENUM (
@@ -481,10 +1001,8 @@ CREATE TYPE shipping_carriers AS ENUM (
 );
 
 
-ALTER TYPE shipping_carriers OWNER TO btqcm;
-
 --
--- Name: shipping_locations; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: shipping_locations; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE shipping_locations AS ENUM (
@@ -492,10 +1010,8 @@ CREATE TYPE shipping_locations AS ENUM (
 );
 
 
-ALTER TYPE shipping_locations OWNER TO btqcm;
-
 --
--- Name: status_cctr; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: status_cctr; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE status_cctr AS ENUM (
@@ -507,10 +1023,8 @@ CREATE TYPE status_cctr AS ENUM (
 );
 
 
-ALTER TYPE status_cctr OWNER TO btqcm;
-
 --
--- Name: trans_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: trans_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE trans_type AS ENUM (
@@ -519,10 +1033,8 @@ CREATE TYPE trans_type AS ENUM (
 );
 
 
-ALTER TYPE trans_type OWNER TO btqcm;
-
 --
--- Name: transaction_method; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: transaction_method; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE transaction_method AS ENUM (
@@ -536,10 +1048,8 @@ CREATE TYPE transaction_method AS ENUM (
 );
 
 
-ALTER TYPE transaction_method OWNER TO btqcm;
-
 --
--- Name: vendor_contact_type; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: vendor_contact_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE vendor_contact_type AS ENUM (
@@ -549,10 +1059,8 @@ CREATE TYPE vendor_contact_type AS ENUM (
 );
 
 
-ALTER TYPE vendor_contact_type OWNER TO btqcm;
-
 --
--- Name: vendor_rep_terms; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: vendor_rep_terms; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE vendor_rep_terms AS ENUM (
@@ -565,10 +1073,8 @@ CREATE TYPE vendor_rep_terms AS ENUM (
 );
 
 
-ALTER TYPE vendor_rep_terms OWNER TO btqcm;
-
 --
--- Name: yes_no; Type: TYPE; Schema: public; Owner: btqcm
+-- Name: yes_no; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE yes_no AS ENUM (
@@ -577,10 +1083,8 @@ CREATE TYPE yes_no AS ENUM (
 );
 
 
-ALTER TYPE yes_no OWNER TO btqcm;
-
 --
--- Name: best_customers(order_type, timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: best_customers(order_type, timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION best_customers(order_type order_type, start_dt timestamp without time zone, end_dt timestamp without time zone) RETURNS void
@@ -665,10 +1169,8 @@ end;
 $_$;
 
 
-ALTER FUNCTION public.best_customers(order_type order_type, start_dt timestamp without time zone, end_dt timestamp without time zone) OWNER TO btqcm;
-
 --
--- Name: bool_to_enum(boolean); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: bool_to_enum(boolean); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION bool_to_enum(val boolean) RETURNS yes_no
@@ -684,10 +1186,8 @@ end;
 $$;
 
 
-ALTER FUNCTION public.bool_to_enum(val boolean) OWNER TO btqcm;
-
 --
--- Name: convert_bool_column(text, text); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: convert_bool_column(text, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION convert_bool_column(table_name text, column_name text) RETURNS void
@@ -725,10 +1225,8 @@ end;
 $$;
 
 
-ALTER FUNCTION public.convert_bool_column(table_name text, column_name text) OWNER TO btqcm;
-
 --
--- Name: designer_search_strings(bigint); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: designer_search_strings(bigint); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION designer_search_strings(id bigint) RETURNS SETOF text
@@ -746,10 +1244,8 @@ end;
 $_$;
 
 
-ALTER FUNCTION public.designer_search_strings(id bigint) OWNER TO btqcm;
-
 --
--- Name: designer_search_vector(bigint); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: designer_search_vector(bigint); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION designer_search_vector(id bigint) RETURNS tsvector
@@ -764,10 +1260,8 @@ end;
 $_$;
 
 
-ALTER FUNCTION public.designer_search_vector(id bigint) OWNER TO btqcm;
-
 --
--- Name: fill_tracker2_table(bigint, bigint); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: fill_tracker2_table(bigint, bigint); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION fill_tracker2_table(start_id bigint, max_rows bigint) RETURNS void
@@ -806,10 +1300,8 @@ end;
 $$;
 
 
-ALTER FUNCTION public.fill_tracker2_table(start_id bigint, max_rows bigint) OWNER TO btqcm;
-
 --
--- Name: item_profit(real, real); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: item_profit(real, real); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION item_profit(price real, cost real) RETURNS real
@@ -822,10 +1314,8 @@ end;
 $$;
 
 
-ALTER FUNCTION public.item_profit(price real, cost real) OWNER TO btqcm;
-
 --
--- Name: on_contacts_email_change(); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: on_contacts_email_change(); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION on_contacts_email_change() RETURNS trigger
@@ -838,10 +1328,8 @@ end;
 $$;
 
 
-ALTER FUNCTION public.on_contacts_email_change() OWNER TO btqcm;
-
 --
--- Name: on_inventory_change(); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: on_inventory_change(); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION on_inventory_change() RETURNS trigger
@@ -854,10 +1342,8 @@ end;
 $$;
 
 
-ALTER FUNCTION public.on_inventory_change() OWNER TO btqcm;
-
 --
--- Name: sales_by_designer_shipments(date, date, date, bigint, bigint); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: sales_by_designer_shipments(date, date, date, bigint, bigint); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION sales_by_designer_shipments(start_date date, shipments_end_date date, orders_end_date date, season bigint, designer bigint) RETURNS void
@@ -963,10 +1449,8 @@ end;
 $$;
 
 
-ALTER FUNCTION public.sales_by_designer_shipments(start_date date, shipments_end_date date, orders_end_date date, season bigint, designer bigint) OWNER TO btqcm;
-
 --
--- Name: search_inventory(text); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: search_inventory(text); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION search_inventory(query text) RETURNS TABLE(id bigint, designer character varying, rank real)
@@ -995,10 +1479,8 @@ end;
 $_$;
 
 
-ALTER FUNCTION public.search_inventory(query text) OWNER TO btqcm;
-
 --
--- Name: update_test_modified_column(); Type: FUNCTION; Schema: public; Owner: btqcm
+-- Name: update_test_modified_column(); Type: FUNCTION; Schema: public; Owner: -
 --
 
 CREATE FUNCTION update_test_modified_column() RETURNS trigger
@@ -1011,14 +1493,12 @@ END;
 $$;
 
 
-ALTER FUNCTION public.update_test_modified_column() OWNER TO btqcm;
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: accounts; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE accounts (
@@ -1030,10 +1510,8 @@ CREATE TABLE accounts (
 );
 
 
-ALTER TABLE accounts OWNER TO btqcm;
-
 --
--- Name: accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE accounts_id_seq
@@ -1044,17 +1522,15 @@ CREATE SEQUENCE accounts_id_seq
     CACHE 1;
 
 
-ALTER TABLE accounts_id_seq OWNER TO btqcm;
-
 --
--- Name: accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 
 
 --
--- Name: ad_codes; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: ad_codes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE ad_codes (
@@ -1066,10 +1542,8 @@ CREATE TABLE ad_codes (
 );
 
 
-ALTER TABLE ad_codes OWNER TO btqcm;
-
 --
--- Name: ad_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: ad_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE ad_codes_id_seq
@@ -1080,17 +1554,15 @@ CREATE SEQUENCE ad_codes_id_seq
     CACHE 1;
 
 
-ALTER TABLE ad_codes_id_seq OWNER TO btqcm;
-
 --
--- Name: ad_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: ad_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE ad_codes_id_seq OWNED BY ad_codes.id;
 
 
 --
--- Name: admins; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: admins; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE admins (
@@ -1103,10 +1575,8 @@ CREATE TABLE admins (
 );
 
 
-ALTER TABLE admins OWNER TO btqcm;
-
 --
--- Name: admins_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: admins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE admins_id_seq
@@ -1117,17 +1587,15 @@ CREATE SEQUENCE admins_id_seq
     CACHE 1;
 
 
-ALTER TABLE admins_id_seq OWNER TO btqcm;
-
 --
--- Name: admins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: admins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
 
 
 --
--- Name: cart_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: cart_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE cart_items (
@@ -1142,10 +1610,8 @@ CREATE TABLE cart_items (
 );
 
 
-ALTER TABLE cart_items OWNER TO btqcm;
-
 --
--- Name: cart_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: cart_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE cart_items_id_seq
@@ -1156,17 +1622,15 @@ CREATE SEQUENCE cart_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE cart_items_id_seq OWNER TO btqcm;
-
 --
--- Name: cart_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: cart_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE cart_items_id_seq OWNED BY cart_items.id;
 
 
 --
--- Name: carts; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: carts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE carts (
@@ -1177,10 +1641,8 @@ CREATE TABLE carts (
 );
 
 
-ALTER TABLE carts OWNER TO btqcm;
-
 --
--- Name: carts_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: carts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE carts_id_seq
@@ -1191,17 +1653,15 @@ CREATE SEQUENCE carts_id_seq
     CACHE 1;
 
 
-ALTER TABLE carts_id_seq OWNER TO btqcm;
-
 --
--- Name: carts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: carts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE carts_id_seq OWNED BY carts.id;
 
 
 --
--- Name: category_search_aliases; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: category_search_aliases; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE category_search_aliases (
@@ -1210,10 +1670,8 @@ CREATE TABLE category_search_aliases (
 );
 
 
-ALTER TABLE category_search_aliases OWNER TO btqcm;
-
 --
--- Name: checkout_gcs; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: checkout_gcs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE checkout_gcs (
@@ -1223,10 +1681,8 @@ CREATE TABLE checkout_gcs (
 );
 
 
-ALTER TABLE checkout_gcs OWNER TO btqcm;
-
 --
--- Name: checkout_gcs_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: checkout_gcs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE checkout_gcs_id_seq
@@ -1237,17 +1693,15 @@ CREATE SEQUENCE checkout_gcs_id_seq
     CACHE 1;
 
 
-ALTER TABLE checkout_gcs_id_seq OWNER TO btqcm;
-
 --
--- Name: checkout_gcs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: checkout_gcs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE checkout_gcs_id_seq OWNED BY checkout_gcs.id;
 
 
 --
--- Name: checkouts; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: checkouts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE checkouts (
@@ -1263,10 +1717,8 @@ CREATE TABLE checkouts (
 );
 
 
-ALTER TABLE checkouts OWNER TO btqcm;
-
 --
--- Name: checkouts_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: checkouts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE checkouts_id_seq
@@ -1277,17 +1729,15 @@ CREATE SEQUENCE checkouts_id_seq
     CACHE 1;
 
 
-ALTER TABLE checkouts_id_seq OWNER TO btqcm;
-
 --
--- Name: checkouts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: checkouts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE checkouts_id_seq OWNED BY checkouts.id;
 
 
 --
--- Name: contact_authnet_payment_profiles; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: contact_authnet_payment_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contact_authnet_payment_profiles (
@@ -1298,10 +1748,8 @@ CREATE TABLE contact_authnet_payment_profiles (
 );
 
 
-ALTER TABLE contact_authnet_payment_profiles OWNER TO btqcm;
-
 --
--- Name: contact_authnet_payment_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: contact_authnet_payment_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE contact_authnet_payment_profiles_id_seq
@@ -1312,17 +1760,15 @@ CREATE SEQUENCE contact_authnet_payment_profiles_id_seq
     CACHE 1;
 
 
-ALTER TABLE contact_authnet_payment_profiles_id_seq OWNER TO btqcm;
-
 --
--- Name: contact_authnet_payment_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: contact_authnet_payment_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE contact_authnet_payment_profiles_id_seq OWNED BY contact_authnet_payment_profiles.id;
 
 
 --
--- Name: contact_authnet_profiles; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: contact_authnet_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contact_authnet_profiles (
@@ -1333,10 +1779,8 @@ CREATE TABLE contact_authnet_profiles (
 );
 
 
-ALTER TABLE contact_authnet_profiles OWNER TO btqcm;
-
 --
--- Name: contact_authnet_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: contact_authnet_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE contact_authnet_profiles_id_seq
@@ -1347,17 +1791,15 @@ CREATE SEQUENCE contact_authnet_profiles_id_seq
     CACHE 1;
 
 
-ALTER TABLE contact_authnet_profiles_id_seq OWNER TO btqcm;
-
 --
--- Name: contact_authnet_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: contact_authnet_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE contact_authnet_profiles_id_seq OWNED BY contact_authnet_profiles.id;
 
 
 --
--- Name: contact_requests; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: contact_requests; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contact_requests (
@@ -1369,10 +1811,8 @@ CREATE TABLE contact_requests (
 );
 
 
-ALTER TABLE contact_requests OWNER TO btqcm;
-
 --
--- Name: contact_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: contact_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE contact_requests_id_seq
@@ -1383,17 +1823,15 @@ CREATE SEQUENCE contact_requests_id_seq
     CACHE 1;
 
 
-ALTER TABLE contact_requests_id_seq OWNER TO btqcm;
-
 --
--- Name: contact_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: contact_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE contact_requests_id_seq OWNED BY contact_requests.id;
 
 
 --
--- Name: contacts; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contacts (
@@ -1427,10 +1865,8 @@ CREATE TABLE contacts (
 );
 
 
-ALTER TABLE contacts OWNER TO btqcm;
-
 --
--- Name: contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE contacts_id_seq
@@ -1441,17 +1877,15 @@ CREATE SEQUENCE contacts_id_seq
     CACHE 1;
 
 
-ALTER TABLE contacts_id_seq OWNER TO btqcm;
-
 --
--- Name: contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE contacts_id_seq OWNED BY contacts.id;
 
 
 --
--- Name: contacts_ml_removes; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: contacts_ml_removes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contacts_ml_removes (
@@ -1461,10 +1895,8 @@ CREATE TABLE contacts_ml_removes (
 );
 
 
-ALTER TABLE contacts_ml_removes OWNER TO btqcm;
-
 --
--- Name: contacts_ml_removes_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: contacts_ml_removes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE contacts_ml_removes_id_seq
@@ -1475,17 +1907,15 @@ CREATE SEQUENCE contacts_ml_removes_id_seq
     CACHE 1;
 
 
-ALTER TABLE contacts_ml_removes_id_seq OWNER TO btqcm;
-
 --
--- Name: contacts_ml_removes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: contacts_ml_removes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE contacts_ml_removes_id_seq OWNED BY contacts_ml_removes.id;
 
 
 --
--- Name: contacts_postcards_sends; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: contacts_postcards_sends; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contacts_postcards_sends (
@@ -1496,10 +1926,8 @@ CREATE TABLE contacts_postcards_sends (
 );
 
 
-ALTER TABLE contacts_postcards_sends OWNER TO btqcm;
-
 --
--- Name: contacts_postcards_sends_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: contacts_postcards_sends_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE contacts_postcards_sends_id_seq
@@ -1510,17 +1938,15 @@ CREATE SEQUENCE contacts_postcards_sends_id_seq
     CACHE 1;
 
 
-ALTER TABLE contacts_postcards_sends_id_seq OWNER TO btqcm;
-
 --
--- Name: contacts_postcards_sends_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: contacts_postcards_sends_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE contacts_postcards_sends_id_seq OWNED BY contacts_postcards_sends.id;
 
 
 --
--- Name: customer_appreciation; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: customer_appreciation; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE customer_appreciation (
@@ -1534,10 +1960,8 @@ CREATE TABLE customer_appreciation (
 );
 
 
-ALTER TABLE customer_appreciation OWNER TO btqcm;
-
 --
--- Name: customer_appreciation_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: customer_appreciation_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE customer_appreciation_id_seq
@@ -1548,17 +1972,15 @@ CREATE SEQUENCE customer_appreciation_id_seq
     CACHE 1;
 
 
-ALTER TABLE customer_appreciation_id_seq OWNER TO btqcm;
-
 --
--- Name: customer_appreciation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: customer_appreciation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE customer_appreciation_id_seq OWNED BY customer_appreciation.id;
 
 
 --
--- Name: designer_order_item_status; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE designer_order_item_status (
@@ -1572,10 +1994,8 @@ CREATE TABLE designer_order_item_status (
 );
 
 
-ALTER TABLE designer_order_item_status OWNER TO btqcm;
-
 --
--- Name: designer_order_item_status_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE designer_order_item_status_id_seq
@@ -1586,17 +2006,15 @@ CREATE SEQUENCE designer_order_item_status_id_seq
     CACHE 1;
 
 
-ALTER TABLE designer_order_item_status_id_seq OWNER TO btqcm;
-
 --
--- Name: designer_order_item_status_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE designer_order_item_status_id_seq OWNED BY designer_order_item_status.id;
 
 
 --
--- Name: designer_order_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: designer_order_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE designer_order_items (
@@ -1615,10 +2033,8 @@ CREATE TABLE designer_order_items (
 );
 
 
-ALTER TABLE designer_order_items OWNER TO btqcm;
-
 --
--- Name: designer_order_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: designer_order_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE designer_order_items_id_seq
@@ -1629,17 +2045,15 @@ CREATE SEQUENCE designer_order_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE designer_order_items_id_seq OWNER TO btqcm;
-
 --
--- Name: designer_order_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: designer_order_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE designer_order_items_id_seq OWNED BY designer_order_items.id;
 
 
 --
--- Name: designer_orders; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: designer_orders; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE designer_orders (
@@ -1675,10 +2089,8 @@ CREATE TABLE designer_orders (
 );
 
 
-ALTER TABLE designer_orders OWNER TO btqcm;
-
 --
--- Name: designer_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: designer_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE designer_orders_id_seq
@@ -1689,17 +2101,15 @@ CREATE SEQUENCE designer_orders_id_seq
     CACHE 1;
 
 
-ALTER TABLE designer_orders_id_seq OWNER TO btqcm;
-
 --
--- Name: designer_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: designer_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE designer_orders_id_seq OWNED BY designer_orders.id;
 
 
 --
--- Name: designer_search_aliases; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: designer_search_aliases; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE designer_search_aliases (
@@ -1708,10 +2118,8 @@ CREATE TABLE designer_search_aliases (
 );
 
 
-ALTER TABLE designer_search_aliases OWNER TO btqcm;
-
 --
--- Name: email_contacts; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: email_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_contacts (
@@ -1725,10 +2133,8 @@ CREATE TABLE email_contacts (
 );
 
 
-ALTER TABLE email_contacts OWNER TO btqcm;
-
 --
--- Name: email_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: email_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE email_contacts_id_seq
@@ -1739,17 +2145,15 @@ CREATE SEQUENCE email_contacts_id_seq
     CACHE 1;
 
 
-ALTER TABLE email_contacts_id_seq OWNER TO btqcm;
-
 --
--- Name: email_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: email_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE email_contacts_id_seq OWNED BY email_contacts.id;
 
 
 --
--- Name: email_images; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: email_images; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_images (
@@ -1758,10 +2162,8 @@ CREATE TABLE email_images (
 );
 
 
-ALTER TABLE email_images OWNER TO btqcm;
-
 --
--- Name: email_images_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: email_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE email_images_id_seq
@@ -1772,17 +2174,15 @@ CREATE SEQUENCE email_images_id_seq
     CACHE 1;
 
 
-ALTER TABLE email_images_id_seq OWNER TO btqcm;
-
 --
--- Name: email_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: email_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE email_images_id_seq OWNED BY email_images.id;
 
 
 --
--- Name: email_outbox; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: email_outbox; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_outbox (
@@ -1798,17 +2198,15 @@ CREATE TABLE email_outbox (
 );
 
 
-ALTER TABLE email_outbox OWNER TO btqcm;
-
 --
--- Name: TABLE email_outbox; Type: COMMENT; Schema: public; Owner: btqcm
+-- Name: TABLE email_outbox; Type: COMMENT; Schema: public; Owner: -
 --
 
 COMMENT ON TABLE email_outbox IS 'This is a test comment';
 
 
 --
--- Name: email_outbox_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: email_outbox_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE email_outbox_id_seq
@@ -1819,17 +2217,15 @@ CREATE SEQUENCE email_outbox_id_seq
     CACHE 1;
 
 
-ALTER TABLE email_outbox_id_seq OWNER TO btqcm;
-
 --
--- Name: email_outbox_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: email_outbox_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE email_outbox_id_seq OWNED BY email_outbox.id;
 
 
 --
--- Name: email_queue; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: email_queue; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_queue (
@@ -1840,10 +2236,8 @@ CREATE TABLE email_queue (
 );
 
 
-ALTER TABLE email_queue OWNER TO btqcm;
-
 --
--- Name: email_queue_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: email_queue_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE email_queue_id_seq
@@ -1854,17 +2248,15 @@ CREATE SEQUENCE email_queue_id_seq
     CACHE 1;
 
 
-ALTER TABLE email_queue_id_seq OWNER TO btqcm;
-
 --
--- Name: email_queue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: email_queue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE email_queue_id_seq OWNED BY email_queue.id;
 
 
 --
--- Name: email_send_requests; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: email_send_requests; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_send_requests (
@@ -1876,10 +2268,8 @@ CREATE TABLE email_send_requests (
 );
 
 
-ALTER TABLE email_send_requests OWNER TO btqcm;
-
 --
--- Name: email_send_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: email_send_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE email_send_requests_id_seq
@@ -1890,17 +2280,15 @@ CREATE SEQUENCE email_send_requests_id_seq
     CACHE 1;
 
 
-ALTER TABLE email_send_requests_id_seq OWNER TO btqcm;
-
 --
--- Name: email_send_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: email_send_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE email_send_requests_id_seq OWNED BY email_send_requests.id;
 
 
 --
--- Name: emails; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: emails; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE emails (
@@ -1925,10 +2313,8 @@ CREATE TABLE emails (
 );
 
 
-ALTER TABLE emails OWNER TO btqcm;
-
 --
--- Name: emails_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: emails_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE emails_id_seq
@@ -1939,17 +2325,15 @@ CREATE SEQUENCE emails_id_seq
     CACHE 1;
 
 
-ALTER TABLE emails_id_seq OWNER TO btqcm;
-
 --
--- Name: emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE emails_id_seq OWNED BY emails.id;
 
 
 --
--- Name: emails_sent_xx; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: emails_sent_xx; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE emails_sent_xx (
@@ -1962,10 +2346,8 @@ CREATE TABLE emails_sent_xx (
 );
 
 
-ALTER TABLE emails_sent_xx OWNER TO btqcm;
-
 --
--- Name: emails_sent_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: emails_sent_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE emails_sent_id_seq
@@ -1976,17 +2358,15 @@ CREATE SEQUENCE emails_sent_id_seq
     CACHE 1;
 
 
-ALTER TABLE emails_sent_id_seq OWNER TO btqcm;
-
 --
--- Name: emails_sent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: emails_sent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE emails_sent_id_seq OWNED BY emails_sent_xx.id;
 
 
 --
--- Name: employees; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: employees; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE employees (
@@ -2020,10 +2400,8 @@ CREATE TABLE employees (
 );
 
 
-ALTER TABLE employees OWNER TO btqcm;
-
 --
--- Name: employees_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: employees_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE employees_id_seq
@@ -2034,17 +2412,15 @@ CREATE SEQUENCE employees_id_seq
     CACHE 1;
 
 
-ALTER TABLE employees_id_seq OWNER TO btqcm;
-
 --
--- Name: employees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: employees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE employees_id_seq OWNED BY employees.id;
 
 
 --
--- Name: general_journal; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: general_journal; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE general_journal (
@@ -2058,10 +2434,8 @@ CREATE TABLE general_journal (
 );
 
 
-ALTER TABLE general_journal OWNER TO btqcm;
-
 --
--- Name: general_journal_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: general_journal_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE general_journal_id_seq
@@ -2072,17 +2446,15 @@ CREATE SEQUENCE general_journal_id_seq
     CACHE 1;
 
 
-ALTER TABLE general_journal_id_seq OWNER TO btqcm;
-
 --
--- Name: general_journal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: general_journal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE general_journal_id_seq OWNED BY general_journal.id;
 
 
 --
--- Name: gift_certificates; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: gift_certificates; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE gift_certificates (
@@ -2106,10 +2478,8 @@ CREATE TABLE gift_certificates (
 );
 
 
-ALTER TABLE gift_certificates OWNER TO btqcm;
-
 --
--- Name: gift_certificates_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: gift_certificates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE gift_certificates_id_seq
@@ -2120,17 +2490,15 @@ CREATE SEQUENCE gift_certificates_id_seq
     CACHE 1;
 
 
-ALTER TABLE gift_certificates_id_seq OWNER TO btqcm;
-
 --
--- Name: gift_certificates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: gift_certificates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE gift_certificates_id_seq OWNED BY gift_certificates.id;
 
 
 --
--- Name: inventory_adjustments; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_adjustments; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_adjustments (
@@ -2145,10 +2513,8 @@ CREATE TABLE inventory_adjustments (
 );
 
 
-ALTER TABLE inventory_adjustments OWNER TO btqcm;
-
 --
--- Name: inventory_adjustments_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_adjustments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_adjustments_id_seq
@@ -2159,17 +2525,15 @@ CREATE SEQUENCE inventory_adjustments_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_adjustments_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_adjustments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_adjustments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_adjustments_id_seq OWNED BY inventory_adjustments.id;
 
 
 --
--- Name: inventory_ais_reports; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_ais_reports (
@@ -2191,10 +2555,8 @@ CREATE TABLE inventory_ais_reports (
 );
 
 
-ALTER TABLE inventory_ais_reports OWNER TO btqcm;
-
 --
--- Name: inventory_ais_reports_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_ais_reports_id_seq
@@ -2205,17 +2567,15 @@ CREATE SEQUENCE inventory_ais_reports_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_ais_reports_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_ais_reports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_ais_reports_id_seq OWNED BY inventory_ais_reports.id;
 
 
 --
--- Name: inventory_categories; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_categories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_categories (
@@ -2230,10 +2590,8 @@ CREATE TABLE inventory_categories (
 );
 
 
-ALTER TABLE inventory_categories OWNER TO btqcm;
-
 --
--- Name: inventory_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_categories_id_seq
@@ -2244,17 +2602,15 @@ CREATE SEQUENCE inventory_categories_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_categories_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_categories_id_seq OWNED BY inventory_categories.id;
 
 
 --
--- Name: inventory_cross_sell; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_cross_sell (
@@ -2264,10 +2620,8 @@ CREATE TABLE inventory_cross_sell (
 );
 
 
-ALTER TABLE inventory_cross_sell OWNER TO btqcm;
-
 --
--- Name: inventory_cross_sell_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_cross_sell_id_seq
@@ -2278,17 +2632,15 @@ CREATE SEQUENCE inventory_cross_sell_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_cross_sell_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_cross_sell_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_cross_sell_id_seq OWNED BY inventory_cross_sell.id;
 
 
 --
--- Name: inventory_groupings; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_groupings; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_groupings (
@@ -2302,10 +2654,8 @@ CREATE TABLE inventory_groupings (
 );
 
 
-ALTER TABLE inventory_groupings OWNER TO btqcm;
-
 --
--- Name: inventory_groupings_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_groupings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_groupings_id_seq
@@ -2316,17 +2666,15 @@ CREATE SEQUENCE inventory_groupings_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_groupings_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_groupings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_groupings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_groupings_id_seq OWNED BY inventory_groupings.id;
 
 
 --
--- Name: inventory_item_breakdown; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_item_breakdown (
@@ -2338,10 +2686,8 @@ CREATE TABLE inventory_item_breakdown (
 );
 
 
-ALTER TABLE inventory_item_breakdown OWNER TO btqcm;
-
 --
--- Name: inventory_item_breakdown_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_item_breakdown_id_seq
@@ -2352,17 +2698,15 @@ CREATE SEQUENCE inventory_item_breakdown_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_item_breakdown_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_item_breakdown_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_item_breakdown_id_seq OWNED BY inventory_item_breakdown.id;
 
 
 --
--- Name: inventory_item_categories; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_item_categories (
@@ -2372,10 +2716,8 @@ CREATE TABLE inventory_item_categories (
 );
 
 
-ALTER TABLE inventory_item_categories OWNER TO btqcm;
-
 --
--- Name: inventory_item_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_item_categories_id_seq
@@ -2386,17 +2728,15 @@ CREATE SEQUENCE inventory_item_categories_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_item_categories_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_item_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_item_categories_id_seq OWNED BY inventory_item_categories.id;
 
 
 --
--- Name: inventory_item_colors; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_item_colors (
@@ -2415,10 +2755,8 @@ CREATE TABLE inventory_item_colors (
 );
 
 
-ALTER TABLE inventory_item_colors OWNER TO btqcm;
-
 --
--- Name: inventory_item_colors_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_item_colors_id_seq
@@ -2429,17 +2767,15 @@ CREATE SEQUENCE inventory_item_colors_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_item_colors_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_item_colors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_item_colors_id_seq OWNED BY inventory_item_colors.id;
 
 
 --
--- Name: inventory_item_images; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_item_images; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_item_images (
@@ -2454,10 +2790,8 @@ CREATE TABLE inventory_item_images (
 );
 
 
-ALTER TABLE inventory_item_images OWNER TO btqcm;
-
 --
--- Name: inventory_item_images_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_item_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_item_images_id_seq
@@ -2468,17 +2802,15 @@ CREATE SEQUENCE inventory_item_images_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_item_images_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_item_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_item_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_item_images_id_seq OWNED BY inventory_item_images.id;
 
 
 --
--- Name: inventory_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_items (
@@ -2513,10 +2845,8 @@ CREATE TABLE inventory_items (
 );
 
 
-ALTER TABLE inventory_items OWNER TO btqcm;
-
 --
--- Name: inventory_items_groupings; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_items_groupings (
@@ -2527,10 +2857,8 @@ CREATE TABLE inventory_items_groupings (
 );
 
 
-ALTER TABLE inventory_items_groupings OWNER TO btqcm;
-
 --
--- Name: inventory_items_groupings_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_items_groupings_id_seq
@@ -2541,17 +2869,15 @@ CREATE SEQUENCE inventory_items_groupings_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_items_groupings_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_items_groupings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_items_groupings_id_seq OWNED BY inventory_items_groupings.id;
 
 
 --
--- Name: inventory_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_items_id_seq
@@ -2562,17 +2888,15 @@ CREATE SEQUENCE inventory_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_items_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_items_id_seq OWNED BY inventory_items.id;
 
 
 --
--- Name: inventory_items_popular; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_items_popular; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_items_popular (
@@ -2581,10 +2905,8 @@ CREATE TABLE inventory_items_popular (
 );
 
 
-ALTER TABLE inventory_items_popular OWNER TO btqcm;
-
 --
--- Name: inventory_items_popular_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_items_popular_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_items_popular_id_seq
@@ -2595,17 +2917,15 @@ CREATE SEQUENCE inventory_items_popular_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_items_popular_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_items_popular_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_items_popular_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_items_popular_id_seq OWNED BY inventory_items_popular.id;
 
 
 --
--- Name: inventory_reports; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_reports; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_reports (
@@ -2627,10 +2947,8 @@ CREATE TABLE inventory_reports (
 );
 
 
-ALTER TABLE inventory_reports OWNER TO btqcm;
-
 --
--- Name: inventory_reports_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_reports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_reports_id_seq
@@ -2641,17 +2959,15 @@ CREATE SEQUENCE inventory_reports_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_reports_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_reports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_reports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_reports_id_seq OWNED BY inventory_reports.id;
 
 
 --
--- Name: inventory_search_view; Type: MATERIALIZED VIEW; Schema: public; Owner: btqcm
+-- Name: inventory_search_view; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
 CREATE MATERIALIZED VIEW inventory_search_view AS
@@ -2661,10 +2977,8 @@ CREATE MATERIALIZED VIEW inventory_search_view AS
   WITH NO DATA;
 
 
-ALTER TABLE inventory_search_view OWNER TO btqcm;
-
 --
--- Name: inventory_seasons; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_seasons; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_seasons (
@@ -2673,10 +2987,8 @@ CREATE TABLE inventory_seasons (
 );
 
 
-ALTER TABLE inventory_seasons OWNER TO btqcm;
-
 --
--- Name: inventory_seasons_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_seasons_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_seasons_id_seq
@@ -2687,17 +2999,15 @@ CREATE SEQUENCE inventory_seasons_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_seasons_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_seasons_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_seasons_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_seasons_id_seq OWNED BY inventory_seasons.id;
 
 
 --
--- Name: inventory_shipment_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_shipment_items (
@@ -2710,10 +3020,8 @@ CREATE TABLE inventory_shipment_items (
 );
 
 
-ALTER TABLE inventory_shipment_items OWNER TO btqcm;
-
 --
--- Name: inventory_shipment_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_shipment_items_id_seq
@@ -2724,17 +3032,15 @@ CREATE SEQUENCE inventory_shipment_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_shipment_items_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_shipment_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_shipment_items_id_seq OWNED BY inventory_shipment_items.id;
 
 
 --
--- Name: inventory_shipments; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_shipments; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_shipments (
@@ -2752,10 +3058,8 @@ CREATE TABLE inventory_shipments (
 );
 
 
-ALTER TABLE inventory_shipments OWNER TO btqcm;
-
 --
--- Name: inventory_shipments_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_shipments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_shipments_id_seq
@@ -2766,17 +3070,15 @@ CREATE SEQUENCE inventory_shipments_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_shipments_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_shipments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_shipments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_shipments_id_seq OWNED BY inventory_shipments.id;
 
 
 --
--- Name: inventory_size_scale_sizes; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_size_scale_sizes (
@@ -2787,10 +3089,8 @@ CREATE TABLE inventory_size_scale_sizes (
 );
 
 
-ALTER TABLE inventory_size_scale_sizes OWNER TO btqcm;
-
 --
--- Name: inventory_size_scale_sizes_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_size_scale_sizes_id_seq
@@ -2801,17 +3101,15 @@ CREATE SEQUENCE inventory_size_scale_sizes_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_size_scale_sizes_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_size_scale_sizes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_size_scale_sizes_id_seq OWNED BY inventory_size_scale_sizes.id;
 
 
 --
--- Name: inventory_size_scales; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_size_scales; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_size_scales (
@@ -2823,10 +3121,8 @@ CREATE TABLE inventory_size_scales (
 );
 
 
-ALTER TABLE inventory_size_scales OWNER TO btqcm;
-
 --
--- Name: inventory_size_scales_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_size_scales_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_size_scales_id_seq
@@ -2837,17 +3133,15 @@ CREATE SEQUENCE inventory_size_scales_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_size_scales_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_size_scales_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_size_scales_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_size_scales_id_seq OWNED BY inventory_size_scales.id;
 
 
 --
--- Name: inventory_sizes; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: inventory_sizes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE inventory_sizes (
@@ -2856,10 +3150,8 @@ CREATE TABLE inventory_sizes (
 );
 
 
-ALTER TABLE inventory_sizes OWNER TO btqcm;
-
 --
--- Name: inventory_sizes_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: inventory_sizes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE inventory_sizes_id_seq
@@ -2870,17 +3162,15 @@ CREATE SEQUENCE inventory_sizes_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventory_sizes_id_seq OWNER TO btqcm;
-
 --
--- Name: inventory_sizes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: inventory_sizes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE inventory_sizes_id_seq OWNED BY inventory_sizes.id;
 
 
 --
--- Name: licenses; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: licenses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE licenses (
@@ -2894,10 +3184,8 @@ CREATE TABLE licenses (
 );
 
 
-ALTER TABLE licenses OWNER TO btqcm;
-
 --
--- Name: licenses_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: licenses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE licenses_id_seq
@@ -2908,17 +3196,15 @@ CREATE SEQUENCE licenses_id_seq
     CACHE 1;
 
 
-ALTER TABLE licenses_id_seq OWNER TO btqcm;
-
 --
--- Name: licenses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: licenses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE licenses_id_seq OWNED BY licenses.id;
 
 
 --
--- Name: news; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: news; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE news (
@@ -2933,10 +3219,8 @@ CREATE TABLE news (
 );
 
 
-ALTER TABLE news OWNER TO btqcm;
-
 --
--- Name: news_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: news_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE news_id_seq
@@ -2947,17 +3231,15 @@ CREATE SEQUENCE news_id_seq
     CACHE 1;
 
 
-ALTER TABLE news_id_seq OWNER TO btqcm;
-
 --
--- Name: news_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: news_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE news_id_seq OWNED BY news.id;
 
 
 --
--- Name: news_images; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: news_images; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE news_images (
@@ -2966,10 +3248,8 @@ CREATE TABLE news_images (
 );
 
 
-ALTER TABLE news_images OWNER TO btqcm;
-
 --
--- Name: news_images_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: news_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE news_images_id_seq
@@ -2980,17 +3260,15 @@ CREATE SEQUENCE news_images_id_seq
     CACHE 1;
 
 
-ALTER TABLE news_images_id_seq OWNER TO btqcm;
-
 --
--- Name: news_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: news_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE news_images_id_seq OWNED BY news_images.id;
 
 
 --
--- Name: order_item_status; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: order_item_status; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE order_item_status (
@@ -3006,10 +3284,8 @@ CREATE TABLE order_item_status (
 );
 
 
-ALTER TABLE order_item_status OWNER TO btqcm;
-
 --
--- Name: order_item_status_history; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: order_item_status_history; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE order_item_status_history (
@@ -3027,10 +3303,8 @@ CREATE TABLE order_item_status_history (
 );
 
 
-ALTER TABLE order_item_status_history OWNER TO btqcm;
-
 --
--- Name: order_item_status_history_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: order_item_status_history_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE order_item_status_history_id_seq
@@ -3041,17 +3315,15 @@ CREATE SEQUENCE order_item_status_history_id_seq
     CACHE 1;
 
 
-ALTER TABLE order_item_status_history_id_seq OWNER TO btqcm;
-
 --
--- Name: order_item_status_history_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: order_item_status_history_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE order_item_status_history_id_seq OWNED BY order_item_status_history.id;
 
 
 --
--- Name: order_item_status_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: order_item_status_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE order_item_status_id_seq
@@ -3062,17 +3334,15 @@ CREATE SEQUENCE order_item_status_id_seq
     CACHE 1;
 
 
-ALTER TABLE order_item_status_id_seq OWNER TO btqcm;
-
 --
--- Name: order_item_status_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: order_item_status_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE order_item_status_id_seq OWNED BY order_item_status.id;
 
 
 --
--- Name: order_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: order_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE order_items (
@@ -3095,10 +3365,8 @@ CREATE TABLE order_items (
 );
 
 
-ALTER TABLE order_items OWNER TO btqcm;
-
 --
--- Name: order_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: order_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE order_items_id_seq
@@ -3109,17 +3377,15 @@ CREATE SEQUENCE order_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE order_items_id_seq OWNER TO btqcm;
-
 --
--- Name: order_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: order_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE order_items_id_seq OWNED BY order_items.id;
 
 
 --
--- Name: order_return_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: order_return_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE order_return_items (
@@ -3129,10 +3395,8 @@ CREATE TABLE order_return_items (
 );
 
 
-ALTER TABLE order_return_items OWNER TO btqcm;
-
 --
--- Name: order_return_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: order_return_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE order_return_items_id_seq
@@ -3143,17 +3407,15 @@ CREATE SEQUENCE order_return_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE order_return_items_id_seq OWNER TO btqcm;
-
 --
--- Name: order_return_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: order_return_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE order_return_items_id_seq OWNED BY order_return_items.id;
 
 
 --
--- Name: order_returns; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: order_returns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE order_returns (
@@ -3164,10 +3426,8 @@ CREATE TABLE order_returns (
 );
 
 
-ALTER TABLE order_returns OWNER TO btqcm;
-
 --
--- Name: order_returns_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: order_returns_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE order_returns_id_seq
@@ -3178,17 +3438,15 @@ CREATE SEQUENCE order_returns_id_seq
     CACHE 1;
 
 
-ALTER TABLE order_returns_id_seq OWNER TO btqcm;
-
 --
--- Name: order_returns_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: order_returns_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE order_returns_id_seq OWNED BY order_returns.id;
 
 
 --
--- Name: order_shipment_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: order_shipment_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE order_shipment_items (
@@ -3198,10 +3456,8 @@ CREATE TABLE order_shipment_items (
 );
 
 
-ALTER TABLE order_shipment_items OWNER TO btqcm;
-
 --
--- Name: order_shipment_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: order_shipment_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE order_shipment_items_id_seq
@@ -3212,17 +3468,15 @@ CREATE SEQUENCE order_shipment_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE order_shipment_items_id_seq OWNER TO btqcm;
-
 --
--- Name: order_shipment_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: order_shipment_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE order_shipment_items_id_seq OWNED BY order_shipment_items.id;
 
 
 --
--- Name: order_shipments; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: order_shipments; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE order_shipments (
@@ -3240,10 +3494,8 @@ CREATE TABLE order_shipments (
 );
 
 
-ALTER TABLE order_shipments OWNER TO btqcm;
-
 --
--- Name: order_shipments_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: order_shipments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE order_shipments_id_seq
@@ -3254,17 +3506,15 @@ CREATE SEQUENCE order_shipments_id_seq
     CACHE 1;
 
 
-ALTER TABLE order_shipments_id_seq OWNER TO btqcm;
-
 --
--- Name: order_shipments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: order_shipments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE order_shipments_id_seq OWNED BY order_shipments.id;
 
 
 --
--- Name: orders; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: orders; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE orders (
@@ -3296,10 +3546,8 @@ CREATE TABLE orders (
 );
 
 
-ALTER TABLE orders OWNER TO btqcm;
-
 --
--- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE orders_id_seq
@@ -3310,17 +3558,15 @@ CREATE SEQUENCE orders_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_id_seq OWNER TO btqcm;
-
 --
--- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE orders_id_seq OWNED BY orders.id;
 
 
 --
--- Name: orders_transactions; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: orders_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE orders_transactions (
@@ -3342,10 +3588,8 @@ CREATE TABLE orders_transactions (
 );
 
 
-ALTER TABLE orders_transactions OWNER TO btqcm;
-
 --
--- Name: orders_transactions_cc; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE orders_transactions_cc (
@@ -3372,10 +3616,8 @@ CREATE TABLE orders_transactions_cc (
 );
 
 
-ALTER TABLE orders_transactions_cc OWNER TO btqcm;
-
 --
--- Name: orders_transactions_cc_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE orders_transactions_cc_id_seq
@@ -3386,17 +3628,15 @@ CREATE SEQUENCE orders_transactions_cc_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_transactions_cc_id_seq OWNER TO btqcm;
-
 --
--- Name: orders_transactions_cc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE orders_transactions_cc_id_seq OWNED BY orders_transactions_cc.id;
 
 
 --
--- Name: orders_transactions_deposit_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_deposit_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE orders_transactions_deposit_items (
@@ -3407,10 +3647,8 @@ CREATE TABLE orders_transactions_deposit_items (
 );
 
 
-ALTER TABLE orders_transactions_deposit_items OWNER TO btqcm;
-
 --
--- Name: orders_transactions_deposit_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_deposit_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE orders_transactions_deposit_items_id_seq
@@ -3421,17 +3659,15 @@ CREATE SEQUENCE orders_transactions_deposit_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_transactions_deposit_items_id_seq OWNER TO btqcm;
-
 --
--- Name: orders_transactions_deposit_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: orders_transactions_deposit_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE orders_transactions_deposit_items_id_seq OWNED BY orders_transactions_deposit_items.id;
 
 
 --
--- Name: orders_transactions_gc; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE orders_transactions_gc (
@@ -3441,10 +3677,8 @@ CREATE TABLE orders_transactions_gc (
 );
 
 
-ALTER TABLE orders_transactions_gc OWNER TO btqcm;
-
 --
--- Name: orders_transactions_gc_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE orders_transactions_gc_id_seq
@@ -3455,17 +3689,15 @@ CREATE SEQUENCE orders_transactions_gc_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_transactions_gc_id_seq OWNER TO btqcm;
-
 --
--- Name: orders_transactions_gc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE orders_transactions_gc_id_seq OWNED BY orders_transactions_gc.id;
 
 
 --
--- Name: orders_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE orders_transactions_id_seq
@@ -3476,17 +3708,15 @@ CREATE SEQUENCE orders_transactions_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_transactions_id_seq OWNER TO btqcm;
-
 --
--- Name: orders_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: orders_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE orders_transactions_id_seq OWNED BY orders_transactions.id;
 
 
 --
--- Name: orders_transactions_items; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE orders_transactions_items (
@@ -3496,10 +3726,8 @@ CREATE TABLE orders_transactions_items (
 );
 
 
-ALTER TABLE orders_transactions_items OWNER TO btqcm;
-
 --
--- Name: orders_transactions_items_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE orders_transactions_items_id_seq
@@ -3510,17 +3738,15 @@ CREATE SEQUENCE orders_transactions_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_transactions_items_id_seq OWNER TO btqcm;
-
 --
--- Name: orders_transactions_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: orders_transactions_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE orders_transactions_items_id_seq OWNED BY orders_transactions_items.id;
 
 
 --
--- Name: orders_transactions_sc; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE orders_transactions_sc (
@@ -3530,10 +3756,8 @@ CREATE TABLE orders_transactions_sc (
 );
 
 
-ALTER TABLE orders_transactions_sc OWNER TO btqcm;
-
 --
--- Name: orders_transactions_sc_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE orders_transactions_sc_id_seq
@@ -3544,17 +3768,15 @@ CREATE SEQUENCE orders_transactions_sc_id_seq
     CACHE 1;
 
 
-ALTER TABLE orders_transactions_sc_id_seq OWNER TO btqcm;
-
 --
--- Name: orders_transactions_sc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE orders_transactions_sc_id_seq OWNED BY orders_transactions_sc.id;
 
 
 --
--- Name: payment_failures; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: payment_failures; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE payment_failures (
@@ -3575,10 +3797,8 @@ CREATE TABLE payment_failures (
 );
 
 
-ALTER TABLE payment_failures OWNER TO btqcm;
-
 --
--- Name: payment_failures_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: payment_failures_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE payment_failures_id_seq
@@ -3589,17 +3809,15 @@ CREATE SEQUENCE payment_failures_id_seq
     CACHE 1;
 
 
-ALTER TABLE payment_failures_id_seq OWNER TO btqcm;
-
 --
--- Name: payment_failures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: payment_failures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE payment_failures_id_seq OWNED BY payment_failures.id;
 
 
 --
--- Name: payroll; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: payroll; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE payroll (
@@ -3631,10 +3849,8 @@ CREATE TABLE payroll (
 );
 
 
-ALTER TABLE payroll OWNER TO btqcm;
-
 --
--- Name: payroll_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: payroll_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE payroll_id_seq
@@ -3645,17 +3861,15 @@ CREATE SEQUENCE payroll_id_seq
     CACHE 1;
 
 
-ALTER TABLE payroll_id_seq OWNER TO btqcm;
-
 --
--- Name: payroll_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: payroll_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE payroll_id_seq OWNED BY payroll.id;
 
 
 --
--- Name: promotions; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: promotions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE promotions (
@@ -3682,10 +3896,8 @@ CREATE TABLE promotions (
 );
 
 
-ALTER TABLE promotions OWNER TO btqcm;
-
 --
--- Name: promotions_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: promotions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE promotions_id_seq
@@ -3696,17 +3908,15 @@ CREATE SEQUENCE promotions_id_seq
     CACHE 1;
 
 
-ALTER TABLE promotions_id_seq OWNER TO btqcm;
-
 --
--- Name: promotions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: promotions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE promotions_id_seq OWNED BY promotions.id;
 
 
 --
--- Name: searches; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: searches; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE searches (
@@ -3716,10 +3926,8 @@ CREATE TABLE searches (
 );
 
 
-ALTER TABLE searches OWNER TO btqcm;
-
 --
--- Name: searches_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE searches_id_seq
@@ -3730,17 +3938,15 @@ CREATE SEQUENCE searches_id_seq
     CACHE 1;
 
 
-ALTER TABLE searches_id_seq OWNER TO btqcm;
-
 --
--- Name: searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE searches_id_seq OWNED BY searches.id;
 
 
 --
--- Name: shipping_methods; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: shipping_methods; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE shipping_methods (
@@ -3750,10 +3956,8 @@ CREATE TABLE shipping_methods (
 );
 
 
-ALTER TABLE shipping_methods OWNER TO btqcm;
-
 --
--- Name: shipping_methods_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: shipping_methods_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE shipping_methods_id_seq
@@ -3764,17 +3968,15 @@ CREATE SEQUENCE shipping_methods_id_seq
     CACHE 1;
 
 
-ALTER TABLE shipping_methods_id_seq OWNER TO btqcm;
-
 --
--- Name: shipping_methods_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: shipping_methods_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE shipping_methods_id_seq OWNED BY shipping_methods.id;
 
 
 --
--- Name: store_credits; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: store_credits; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE store_credits (
@@ -3786,10 +3988,8 @@ CREATE TABLE store_credits (
 );
 
 
-ALTER TABLE store_credits OWNER TO btqcm;
-
 --
--- Name: store_credits_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: store_credits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE store_credits_id_seq
@@ -3800,17 +4000,15 @@ CREATE SEQUENCE store_credits_id_seq
     CACHE 1;
 
 
-ALTER TABLE store_credits_id_seq OWNER TO btqcm;
-
 --
--- Name: store_credits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: store_credits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE store_credits_id_seq OWNED BY store_credits.id;
 
 
 --
--- Name: testimonials; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: testimonials; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE testimonials (
@@ -3823,10 +4021,8 @@ CREATE TABLE testimonials (
 );
 
 
-ALTER TABLE testimonials OWNER TO btqcm;
-
 --
--- Name: testimonials_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: testimonials_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE testimonials_id_seq
@@ -3837,17 +4033,15 @@ CREATE SEQUENCE testimonials_id_seq
     CACHE 1;
 
 
-ALTER TABLE testimonials_id_seq OWNER TO btqcm;
-
 --
--- Name: testimonials_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: testimonials_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE testimonials_id_seq OWNED BY testimonials.id;
 
 
 --
--- Name: tracker_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: tracker_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE tracker_id_seq
@@ -3858,10 +4052,8 @@ CREATE SEQUENCE tracker_id_seq
     CACHE 1;
 
 
-ALTER TABLE tracker_id_seq OWNER TO btqcm;
-
 --
--- Name: vendor_designers; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: vendor_designers; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vendor_designers (
@@ -3920,10 +4112,8 @@ CREATE TABLE vendor_designers (
 );
 
 
-ALTER TABLE vendor_designers OWNER TO btqcm;
-
 --
--- Name: vendor_designers_factors; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vendor_designers_factors (
@@ -3933,10 +4123,8 @@ CREATE TABLE vendor_designers_factors (
 );
 
 
-ALTER TABLE vendor_designers_factors OWNER TO btqcm;
-
 --
--- Name: vendor_designers_factors_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE vendor_designers_factors_id_seq
@@ -3947,17 +4135,15 @@ CREATE SEQUENCE vendor_designers_factors_id_seq
     CACHE 1;
 
 
-ALTER TABLE vendor_designers_factors_id_seq OWNER TO btqcm;
-
 --
--- Name: vendor_designers_factors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE vendor_designers_factors_id_seq OWNED BY vendor_designers_factors.id;
 
 
 --
--- Name: vendor_designers_featured_images; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vendor_designers_featured_images (
@@ -3969,10 +4155,8 @@ CREATE TABLE vendor_designers_featured_images (
 );
 
 
-ALTER TABLE vendor_designers_featured_images OWNER TO btqcm;
-
 --
--- Name: vendor_designers_featured_images_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE vendor_designers_featured_images_id_seq
@@ -3983,17 +4167,15 @@ CREATE SEQUENCE vendor_designers_featured_images_id_seq
     CACHE 1;
 
 
-ALTER TABLE vendor_designers_featured_images_id_seq OWNER TO btqcm;
-
 --
--- Name: vendor_designers_featured_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE vendor_designers_featured_images_id_seq OWNED BY vendor_designers_featured_images.id;
 
 
 --
--- Name: vendor_designers_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: vendor_designers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE vendor_designers_id_seq
@@ -4004,17 +4186,15 @@ CREATE SEQUENCE vendor_designers_id_seq
     CACHE 1;
 
 
-ALTER TABLE vendor_designers_id_seq OWNER TO btqcm;
-
 --
--- Name: vendor_designers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: vendor_designers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE vendor_designers_id_seq OWNED BY vendor_designers.id;
 
 
 --
--- Name: vendor_factors; Type: TABLE; Schema: public; Owner: btqcm
+-- Name: vendor_factors; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vendor_factors (
@@ -4034,10 +4214,8 @@ CREATE TABLE vendor_factors (
 );
 
 
-ALTER TABLE vendor_factors OWNER TO btqcm;
-
 --
--- Name: vendor_factors_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
+-- Name: vendor_factors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE vendor_factors_id_seq
@@ -4048,535 +4226,533 @@ CREATE SEQUENCE vendor_factors_id_seq
     CACHE 1;
 
 
-ALTER TABLE vendor_factors_id_seq OWNER TO btqcm;
-
 --
--- Name: vendor_factors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
+-- Name: vendor_factors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE vendor_factors_id_seq OWNED BY vendor_factors.id;
 
 
 --
--- Name: accounts id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq'::regclass);
 
 
 --
--- Name: ad_codes id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: ad_codes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ad_codes ALTER COLUMN id SET DEFAULT nextval('ad_codes_id_seq'::regclass);
 
 
 --
--- Name: admins id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::regclass);
 
 
 --
--- Name: cart_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: cart_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY cart_items ALTER COLUMN id SET DEFAULT nextval('cart_items_id_seq'::regclass);
 
 
 --
--- Name: carts id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: carts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY carts ALTER COLUMN id SET DEFAULT nextval('carts_id_seq'::regclass);
 
 
 --
--- Name: checkout_gcs id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: checkout_gcs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkout_gcs ALTER COLUMN id SET DEFAULT nextval('checkout_gcs_id_seq'::regclass);
 
 
 --
--- Name: checkouts id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: checkouts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkouts ALTER COLUMN id SET DEFAULT nextval('checkouts_id_seq'::regclass);
 
 
 --
--- Name: contact_authnet_payment_profiles id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: contact_authnet_payment_profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_authnet_payment_profiles ALTER COLUMN id SET DEFAULT nextval('contact_authnet_payment_profiles_id_seq'::regclass);
 
 
 --
--- Name: contact_authnet_profiles id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: contact_authnet_profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_authnet_profiles ALTER COLUMN id SET DEFAULT nextval('contact_authnet_profiles_id_seq'::regclass);
 
 
 --
--- Name: contact_requests id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: contact_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_requests ALTER COLUMN id SET DEFAULT nextval('contact_requests_id_seq'::regclass);
 
 
 --
--- Name: contacts id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts ALTER COLUMN id SET DEFAULT nextval('contacts_id_seq'::regclass);
 
 
 --
--- Name: contacts_ml_removes id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: contacts_ml_removes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts_ml_removes ALTER COLUMN id SET DEFAULT nextval('contacts_ml_removes_id_seq'::regclass);
 
 
 --
--- Name: contacts_postcards_sends id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: contacts_postcards_sends id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts_postcards_sends ALTER COLUMN id SET DEFAULT nextval('contacts_postcards_sends_id_seq'::regclass);
 
 
 --
--- Name: customer_appreciation id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: customer_appreciation id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY customer_appreciation ALTER COLUMN id SET DEFAULT nextval('customer_appreciation_id_seq'::regclass);
 
 
 --
--- Name: designer_order_item_status id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_item_status ALTER COLUMN id SET DEFAULT nextval('designer_order_item_status_id_seq'::regclass);
 
 
 --
--- Name: designer_order_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: designer_order_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_items ALTER COLUMN id SET DEFAULT nextval('designer_order_items_id_seq'::regclass);
 
 
 --
--- Name: designer_orders id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: designer_orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders ALTER COLUMN id SET DEFAULT nextval('designer_orders_id_seq'::regclass);
 
 
 --
--- Name: email_contacts id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: email_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_contacts ALTER COLUMN id SET DEFAULT nextval('email_contacts_id_seq'::regclass);
 
 
 --
--- Name: email_images id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: email_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_images ALTER COLUMN id SET DEFAULT nextval('email_images_id_seq'::regclass);
 
 
 --
--- Name: email_outbox id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: email_outbox id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_outbox ALTER COLUMN id SET DEFAULT nextval('email_outbox_id_seq'::regclass);
 
 
 --
--- Name: email_queue id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: email_queue id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_queue ALTER COLUMN id SET DEFAULT nextval('email_queue_id_seq'::regclass);
 
 
 --
--- Name: email_send_requests id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: email_send_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_send_requests ALTER COLUMN id SET DEFAULT nextval('email_send_requests_id_seq'::regclass);
 
 
 --
--- Name: emails id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: emails id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY emails ALTER COLUMN id SET DEFAULT nextval('emails_id_seq'::regclass);
 
 
 --
--- Name: emails_sent_xx id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: emails_sent_xx id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY emails_sent_xx ALTER COLUMN id SET DEFAULT nextval('emails_sent_id_seq'::regclass);
 
 
 --
--- Name: employees id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: employees id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY employees ALTER COLUMN id SET DEFAULT nextval('employees_id_seq'::regclass);
 
 
 --
--- Name: general_journal id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: general_journal id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY general_journal ALTER COLUMN id SET DEFAULT nextval('general_journal_id_seq'::regclass);
 
 
 --
--- Name: gift_certificates id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: gift_certificates id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY gift_certificates ALTER COLUMN id SET DEFAULT nextval('gift_certificates_id_seq'::regclass);
 
 
 --
--- Name: inventory_adjustments id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_adjustments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_adjustments ALTER COLUMN id SET DEFAULT nextval('inventory_adjustments_id_seq'::regclass);
 
 
 --
--- Name: inventory_ais_reports id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_ais_reports ALTER COLUMN id SET DEFAULT nextval('inventory_ais_reports_id_seq'::regclass);
 
 
 --
--- Name: inventory_categories id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_categories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_categories ALTER COLUMN id SET DEFAULT nextval('inventory_categories_id_seq'::regclass);
 
 
 --
--- Name: inventory_cross_sell id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_cross_sell ALTER COLUMN id SET DEFAULT nextval('inventory_cross_sell_id_seq'::regclass);
 
 
 --
--- Name: inventory_groupings id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_groupings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_groupings ALTER COLUMN id SET DEFAULT nextval('inventory_groupings_id_seq'::regclass);
 
 
 --
--- Name: inventory_item_breakdown id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_breakdown ALTER COLUMN id SET DEFAULT nextval('inventory_item_breakdown_id_seq'::regclass);
 
 
 --
--- Name: inventory_item_categories id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_categories ALTER COLUMN id SET DEFAULT nextval('inventory_item_categories_id_seq'::regclass);
 
 
 --
--- Name: inventory_item_colors id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_colors ALTER COLUMN id SET DEFAULT nextval('inventory_item_colors_id_seq'::regclass);
 
 
 --
--- Name: inventory_item_images id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_item_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_images ALTER COLUMN id SET DEFAULT nextval('inventory_item_images_id_seq'::regclass);
 
 
 --
--- Name: inventory_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items ALTER COLUMN id SET DEFAULT nextval('inventory_items_id_seq'::regclass);
 
 
 --
--- Name: inventory_items_groupings id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_groupings ALTER COLUMN id SET DEFAULT nextval('inventory_items_groupings_id_seq'::regclass);
 
 
 --
--- Name: inventory_items_popular id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_items_popular id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_popular ALTER COLUMN id SET DEFAULT nextval('inventory_items_popular_id_seq'::regclass);
 
 
 --
--- Name: inventory_reports id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_reports id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_reports ALTER COLUMN id SET DEFAULT nextval('inventory_reports_id_seq'::regclass);
 
 
 --
--- Name: inventory_seasons id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_seasons id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_seasons ALTER COLUMN id SET DEFAULT nextval('inventory_seasons_id_seq'::regclass);
 
 
 --
--- Name: inventory_shipment_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipment_items ALTER COLUMN id SET DEFAULT nextval('inventory_shipment_items_id_seq'::regclass);
 
 
 --
--- Name: inventory_shipments id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_shipments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipments ALTER COLUMN id SET DEFAULT nextval('inventory_shipments_id_seq'::regclass);
 
 
 --
--- Name: inventory_size_scale_sizes id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_size_scale_sizes ALTER COLUMN id SET DEFAULT nextval('inventory_size_scale_sizes_id_seq'::regclass);
 
 
 --
--- Name: inventory_size_scales id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_size_scales id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_size_scales ALTER COLUMN id SET DEFAULT nextval('inventory_size_scales_id_seq'::regclass);
 
 
 --
--- Name: inventory_sizes id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: inventory_sizes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_sizes ALTER COLUMN id SET DEFAULT nextval('inventory_sizes_id_seq'::regclass);
 
 
 --
--- Name: licenses id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: licenses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY licenses ALTER COLUMN id SET DEFAULT nextval('licenses_id_seq'::regclass);
 
 
 --
--- Name: news id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: news id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY news ALTER COLUMN id SET DEFAULT nextval('news_id_seq'::regclass);
 
 
 --
--- Name: news_images id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: news_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY news_images ALTER COLUMN id SET DEFAULT nextval('news_images_id_seq'::regclass);
 
 
 --
--- Name: order_item_status id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: order_item_status id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_item_status ALTER COLUMN id SET DEFAULT nextval('order_item_status_id_seq'::regclass);
 
 
 --
--- Name: order_item_status_history id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: order_item_status_history id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_item_status_history ALTER COLUMN id SET DEFAULT nextval('order_item_status_history_id_seq'::regclass);
 
 
 --
--- Name: order_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: order_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_items ALTER COLUMN id SET DEFAULT nextval('order_items_id_seq'::regclass);
 
 
 --
--- Name: order_return_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: order_return_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_return_items ALTER COLUMN id SET DEFAULT nextval('order_return_items_id_seq'::regclass);
 
 
 --
--- Name: order_returns id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: order_returns id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_returns ALTER COLUMN id SET DEFAULT nextval('order_returns_id_seq'::regclass);
 
 
 --
--- Name: order_shipment_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: order_shipment_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipment_items ALTER COLUMN id SET DEFAULT nextval('order_shipment_items_id_seq'::regclass);
 
 
 --
--- Name: order_shipments id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: order_shipments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipments ALTER COLUMN id SET DEFAULT nextval('order_shipments_id_seq'::regclass);
 
 
 --
--- Name: orders id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders ALTER COLUMN id SET DEFAULT nextval('orders_id_seq'::regclass);
 
 
 --
--- Name: orders_transactions id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: orders_transactions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions ALTER COLUMN id SET DEFAULT nextval('orders_transactions_id_seq'::regclass);
 
 
 --
--- Name: orders_transactions_cc id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_cc ALTER COLUMN id SET DEFAULT nextval('orders_transactions_cc_id_seq'::regclass);
 
 
 --
--- Name: orders_transactions_deposit_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_deposit_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_deposit_items ALTER COLUMN id SET DEFAULT nextval('orders_transactions_deposit_items_id_seq'::regclass);
 
 
 --
--- Name: orders_transactions_gc id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_gc ALTER COLUMN id SET DEFAULT nextval('orders_transactions_gc_id_seq'::regclass);
 
 
 --
--- Name: orders_transactions_items id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_items ALTER COLUMN id SET DEFAULT nextval('orders_transactions_items_id_seq'::regclass);
 
 
 --
--- Name: orders_transactions_sc id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_sc ALTER COLUMN id SET DEFAULT nextval('orders_transactions_sc_id_seq'::regclass);
 
 
 --
--- Name: payment_failures id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: payment_failures id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payment_failures ALTER COLUMN id SET DEFAULT nextval('payment_failures_id_seq'::regclass);
 
 
 --
--- Name: payroll id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: payroll id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payroll ALTER COLUMN id SET DEFAULT nextval('payroll_id_seq'::regclass);
 
 
 --
--- Name: promotions id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: promotions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY promotions ALTER COLUMN id SET DEFAULT nextval('promotions_id_seq'::regclass);
 
 
 --
--- Name: searches id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: searches id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY searches ALTER COLUMN id SET DEFAULT nextval('searches_id_seq'::regclass);
 
 
 --
--- Name: shipping_methods id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: shipping_methods id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY shipping_methods ALTER COLUMN id SET DEFAULT nextval('shipping_methods_id_seq'::regclass);
 
 
 --
--- Name: store_credits id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: store_credits id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY store_credits ALTER COLUMN id SET DEFAULT nextval('store_credits_id_seq'::regclass);
 
 
 --
--- Name: testimonials id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: testimonials id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY testimonials ALTER COLUMN id SET DEFAULT nextval('testimonials_id_seq'::regclass);
 
 
 --
--- Name: vendor_designers id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: vendor_designers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers ALTER COLUMN id SET DEFAULT nextval('vendor_designers_id_seq'::regclass);
 
 
 --
--- Name: vendor_designers_factors id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_factors ALTER COLUMN id SET DEFAULT nextval('vendor_designers_factors_id_seq'::regclass);
 
 
 --
--- Name: vendor_designers_featured_images id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_featured_images ALTER COLUMN id SET DEFAULT nextval('vendor_designers_featured_images_id_seq'::regclass);
 
 
 --
--- Name: vendor_factors id; Type: DEFAULT; Schema: public; Owner: btqcm
+-- Name: vendor_factors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_factors ALTER COLUMN id SET DEFAULT nextval('vendor_factors_id_seq'::regclass);
 
 
 --
--- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts
@@ -4584,7 +4760,7 @@ ALTER TABLE ONLY accounts
 
 
 --
--- Name: accounts accountunique; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: accounts accountunique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts
@@ -4592,7 +4768,7 @@ ALTER TABLE ONLY accounts
 
 
 --
--- Name: ad_codes ad_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: ad_codes ad_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ad_codes
@@ -4600,7 +4776,7 @@ ALTER TABLE ONLY ad_codes
 
 
 --
--- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admins
@@ -4608,7 +4784,7 @@ ALTER TABLE ONLY admins
 
 
 --
--- Name: admins admins_username_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: admins admins_username_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admins
@@ -4616,7 +4792,7 @@ ALTER TABLE ONLY admins
 
 
 --
--- Name: cart_items cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: cart_items cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY cart_items
@@ -4624,7 +4800,7 @@ ALTER TABLE ONLY cart_items
 
 
 --
--- Name: carts carts_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: carts carts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY carts
@@ -4632,7 +4808,7 @@ ALTER TABLE ONLY carts
 
 
 --
--- Name: checkout_gcs checkout_gcs_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkout_gcs checkout_gcs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkout_gcs
@@ -4640,7 +4816,7 @@ ALTER TABLE ONLY checkout_gcs
 
 
 --
--- Name: checkouts checkouts_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkouts checkouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkouts
@@ -4648,7 +4824,7 @@ ALTER TABLE ONLY checkouts
 
 
 --
--- Name: contact_authnet_payment_profiles contact_authnet_payment_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contact_authnet_payment_profiles contact_authnet_payment_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_authnet_payment_profiles
@@ -4656,7 +4832,7 @@ ALTER TABLE ONLY contact_authnet_payment_profiles
 
 
 --
--- Name: contact_authnet_profiles contact_authnet_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contact_authnet_profiles contact_authnet_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_authnet_profiles
@@ -4664,7 +4840,7 @@ ALTER TABLE ONLY contact_authnet_profiles
 
 
 --
--- Name: contact_requests contact_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contact_requests contact_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_requests
@@ -4672,7 +4848,7 @@ ALTER TABLE ONLY contact_requests
 
 
 --
--- Name: contacts_ml_removes contacts_ml_removes_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contacts_ml_removes contacts_ml_removes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts_ml_removes
@@ -4680,7 +4856,7 @@ ALTER TABLE ONLY contacts_ml_removes
 
 
 --
--- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts
@@ -4688,7 +4864,7 @@ ALTER TABLE ONLY contacts
 
 
 --
--- Name: contacts_postcards_sends contacts_postcards_sends_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contacts_postcards_sends contacts_postcards_sends_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts_postcards_sends
@@ -4696,7 +4872,7 @@ ALTER TABLE ONLY contacts_postcards_sends
 
 
 --
--- Name: customer_appreciation customer_appreciation_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: customer_appreciation customer_appreciation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY customer_appreciation
@@ -4704,7 +4880,7 @@ ALTER TABLE ONLY customer_appreciation
 
 
 --
--- Name: designer_order_item_status designer_order_item_status_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status designer_order_item_status_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_item_status
@@ -4712,7 +4888,7 @@ ALTER TABLE ONLY designer_order_item_status
 
 
 --
--- Name: designer_order_items designer_order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_order_items designer_order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_items
@@ -4720,7 +4896,7 @@ ALTER TABLE ONLY designer_order_items
 
 
 --
--- Name: designer_orders designer_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_orders designer_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders
@@ -4728,7 +4904,7 @@ ALTER TABLE ONLY designer_orders
 
 
 --
--- Name: email_contacts email_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_contacts email_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_contacts
@@ -4736,7 +4912,7 @@ ALTER TABLE ONLY email_contacts
 
 
 --
--- Name: email_images email_images_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_images email_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_images
@@ -4744,7 +4920,7 @@ ALTER TABLE ONLY email_images
 
 
 --
--- Name: email_outbox email_outbox_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_outbox email_outbox_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_outbox
@@ -4752,7 +4928,7 @@ ALTER TABLE ONLY email_outbox
 
 
 --
--- Name: email_queue email_queue_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_queue email_queue_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_queue
@@ -4760,7 +4936,7 @@ ALTER TABLE ONLY email_queue
 
 
 --
--- Name: email_send_requests email_send_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_send_requests email_send_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_send_requests
@@ -4768,7 +4944,7 @@ ALTER TABLE ONLY email_send_requests
 
 
 --
--- Name: emails emails_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: emails emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY emails
@@ -4776,7 +4952,7 @@ ALTER TABLE ONLY emails
 
 
 --
--- Name: employees employees_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: employees employees_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY employees
@@ -4784,7 +4960,7 @@ ALTER TABLE ONLY employees
 
 
 --
--- Name: general_journal general_journal_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: general_journal general_journal_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY general_journal
@@ -4792,7 +4968,7 @@ ALTER TABLE ONLY general_journal
 
 
 --
--- Name: gift_certificates gift_certificates_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: gift_certificates gift_certificates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY gift_certificates
@@ -4800,7 +4976,7 @@ ALTER TABLE ONLY gift_certificates
 
 
 --
--- Name: inventory_adjustments inventory_adjustments_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_adjustments inventory_adjustments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_adjustments
@@ -4808,7 +4984,7 @@ ALTER TABLE ONLY inventory_adjustments
 
 
 --
--- Name: inventory_ais_reports inventory_ais_reports_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports inventory_ais_reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_ais_reports
@@ -4816,7 +4992,7 @@ ALTER TABLE ONLY inventory_ais_reports
 
 
 --
--- Name: inventory_categories inventory_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_categories inventory_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_categories
@@ -4824,7 +5000,7 @@ ALTER TABLE ONLY inventory_categories
 
 
 --
--- Name: inventory_cross_sell inventory_cross_sell_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell inventory_cross_sell_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_cross_sell
@@ -4832,7 +5008,7 @@ ALTER TABLE ONLY inventory_cross_sell
 
 
 --
--- Name: inventory_groupings inventory_groupings_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_groupings inventory_groupings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_groupings
@@ -4840,7 +5016,7 @@ ALTER TABLE ONLY inventory_groupings
 
 
 --
--- Name: inventory_item_breakdown inventory_item_breakdown_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown inventory_item_breakdown_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_breakdown
@@ -4848,7 +5024,7 @@ ALTER TABLE ONLY inventory_item_breakdown
 
 
 --
--- Name: inventory_item_categories inventory_item_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories inventory_item_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_categories
@@ -4856,7 +5032,7 @@ ALTER TABLE ONLY inventory_item_categories
 
 
 --
--- Name: inventory_item_colors inventory_item_colors_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors inventory_item_colors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_colors
@@ -4864,7 +5040,7 @@ ALTER TABLE ONLY inventory_item_colors
 
 
 --
--- Name: inventory_item_images inventory_item_images_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_images inventory_item_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_images
@@ -4872,7 +5048,7 @@ ALTER TABLE ONLY inventory_item_images
 
 
 --
--- Name: inventory_items_groupings inventory_items_groupings_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings inventory_items_groupings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_groupings
@@ -4880,7 +5056,7 @@ ALTER TABLE ONLY inventory_items_groupings
 
 
 --
--- Name: inventory_items inventory_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items inventory_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items
@@ -4888,7 +5064,7 @@ ALTER TABLE ONLY inventory_items
 
 
 --
--- Name: inventory_items_popular inventory_items_popular_item_id_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items_popular inventory_items_popular_item_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_popular
@@ -4896,7 +5072,7 @@ ALTER TABLE ONLY inventory_items_popular
 
 
 --
--- Name: inventory_items_popular inventory_items_popular_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items_popular inventory_items_popular_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_popular
@@ -4904,7 +5080,7 @@ ALTER TABLE ONLY inventory_items_popular
 
 
 --
--- Name: inventory_reports inventory_reports_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_reports inventory_reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_reports
@@ -4912,7 +5088,7 @@ ALTER TABLE ONLY inventory_reports
 
 
 --
--- Name: inventory_seasons inventory_seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_seasons inventory_seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_seasons
@@ -4920,7 +5096,7 @@ ALTER TABLE ONLY inventory_seasons
 
 
 --
--- Name: inventory_shipment_items inventory_shipment_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items inventory_shipment_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipment_items
@@ -4928,7 +5104,7 @@ ALTER TABLE ONLY inventory_shipment_items
 
 
 --
--- Name: inventory_shipments inventory_shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_shipments inventory_shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipments
@@ -4936,7 +5112,7 @@ ALTER TABLE ONLY inventory_shipments
 
 
 --
--- Name: inventory_size_scale_sizes inventory_size_scale_sizes_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes inventory_size_scale_sizes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_size_scale_sizes
@@ -4944,7 +5120,7 @@ ALTER TABLE ONLY inventory_size_scale_sizes
 
 
 --
--- Name: inventory_size_scales inventory_size_scales_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_size_scales inventory_size_scales_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_size_scales
@@ -4952,7 +5128,7 @@ ALTER TABLE ONLY inventory_size_scales
 
 
 --
--- Name: inventory_sizes inventory_sizes_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_sizes inventory_sizes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_sizes
@@ -4960,7 +5136,7 @@ ALTER TABLE ONLY inventory_sizes
 
 
 --
--- Name: inventory_sizes inventory_sizes_size_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_sizes inventory_sizes_size_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_sizes
@@ -4968,7 +5144,7 @@ ALTER TABLE ONLY inventory_sizes
 
 
 --
--- Name: licenses licenses_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: licenses licenses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY licenses
@@ -4976,7 +5152,7 @@ ALTER TABLE ONLY licenses
 
 
 --
--- Name: news_images news_images_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: news_images news_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY news_images
@@ -4984,7 +5160,7 @@ ALTER TABLE ONLY news_images
 
 
 --
--- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY news
@@ -4992,7 +5168,7 @@ ALTER TABLE ONLY news
 
 
 --
--- Name: order_item_status_history order_item_status_history_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_item_status_history order_item_status_history_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_item_status_history
@@ -5000,7 +5176,7 @@ ALTER TABLE ONLY order_item_status_history
 
 
 --
--- Name: order_item_status order_item_status_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_item_status order_item_status_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_item_status
@@ -5008,7 +5184,7 @@ ALTER TABLE ONLY order_item_status
 
 
 --
--- Name: order_items order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_items order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_items
@@ -5016,7 +5192,7 @@ ALTER TABLE ONLY order_items
 
 
 --
--- Name: order_return_items order_return_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_return_items order_return_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_return_items
@@ -5024,7 +5200,7 @@ ALTER TABLE ONLY order_return_items
 
 
 --
--- Name: order_returns order_returns_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_returns order_returns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_returns
@@ -5032,7 +5208,7 @@ ALTER TABLE ONLY order_returns
 
 
 --
--- Name: order_shipment_items order_shipment_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipment_items order_shipment_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipment_items
@@ -5040,7 +5216,7 @@ ALTER TABLE ONLY order_shipment_items
 
 
 --
--- Name: order_shipments order_shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipments order_shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipments
@@ -5048,7 +5224,7 @@ ALTER TABLE ONLY order_shipments
 
 
 --
--- Name: order_shipments order_shipments_tracking_number_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipments order_shipments_tracking_number_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipments
@@ -5056,7 +5232,7 @@ ALTER TABLE ONLY order_shipments
 
 
 --
--- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders
@@ -5064,7 +5240,7 @@ ALTER TABLE ONLY orders
 
 
 --
--- Name: orders_transactions_cc orders_transactions_cc_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc orders_transactions_cc_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_cc
@@ -5072,7 +5248,7 @@ ALTER TABLE ONLY orders_transactions_cc
 
 
 --
--- Name: orders_transactions_deposit_items orders_transactions_deposit_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_deposit_items orders_transactions_deposit_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_deposit_items
@@ -5080,7 +5256,7 @@ ALTER TABLE ONLY orders_transactions_deposit_items
 
 
 --
--- Name: orders_transactions_gc orders_transactions_gc_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc orders_transactions_gc_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_gc
@@ -5088,7 +5264,7 @@ ALTER TABLE ONLY orders_transactions_gc
 
 
 --
--- Name: orders_transactions_gc orders_transactions_gc_transactions_id_gift_certificates_id_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc orders_transactions_gc_transactions_id_gift_certificates_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_gc
@@ -5096,7 +5272,7 @@ ALTER TABLE ONLY orders_transactions_gc
 
 
 --
--- Name: orders_transactions_items orders_transactions_items_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_items orders_transactions_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_items
@@ -5104,7 +5280,7 @@ ALTER TABLE ONLY orders_transactions_items
 
 
 --
--- Name: orders_transactions orders_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions orders_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions
@@ -5112,7 +5288,7 @@ ALTER TABLE ONLY orders_transactions
 
 
 --
--- Name: orders_transactions_sc orders_transactions_sc_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc orders_transactions_sc_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_sc
@@ -5120,7 +5296,7 @@ ALTER TABLE ONLY orders_transactions_sc
 
 
 --
--- Name: orders_transactions_sc orders_transactions_sc_transactions_id_store_credits_id_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc orders_transactions_sc_transactions_id_store_credits_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_sc
@@ -5128,7 +5304,7 @@ ALTER TABLE ONLY orders_transactions_sc
 
 
 --
--- Name: payment_failures payment_failures_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: payment_failures payment_failures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payment_failures
@@ -5136,7 +5312,7 @@ ALTER TABLE ONLY payment_failures
 
 
 --
--- Name: payroll payroll_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: payroll payroll_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payroll
@@ -5144,7 +5320,7 @@ ALTER TABLE ONLY payroll
 
 
 --
--- Name: promotions promotions_code_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: promotions promotions_code_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY promotions
@@ -5152,7 +5328,7 @@ ALTER TABLE ONLY promotions
 
 
 --
--- Name: promotions promotions_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: promotions promotions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY promotions
@@ -5160,7 +5336,7 @@ ALTER TABLE ONLY promotions
 
 
 --
--- Name: searches searches_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: searches searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY searches
@@ -5168,7 +5344,7 @@ ALTER TABLE ONLY searches
 
 
 --
--- Name: shipping_methods shipping_methods_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: shipping_methods shipping_methods_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY shipping_methods
@@ -5176,7 +5352,7 @@ ALTER TABLE ONLY shipping_methods
 
 
 --
--- Name: store_credits store_credits_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: store_credits store_credits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY store_credits
@@ -5184,7 +5360,7 @@ ALTER TABLE ONLY store_credits
 
 
 --
--- Name: testimonials testimonials_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: testimonials testimonials_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY testimonials
@@ -5192,7 +5368,7 @@ ALTER TABLE ONLY testimonials
 
 
 --
--- Name: vendor_designers_factors vendor_designers_factors_designer_id_factor_id_key; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors vendor_designers_factors_designer_id_factor_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_factors
@@ -5200,7 +5376,7 @@ ALTER TABLE ONLY vendor_designers_factors
 
 
 --
--- Name: vendor_designers_factors vendor_designers_factors_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors vendor_designers_factors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_factors
@@ -5208,7 +5384,7 @@ ALTER TABLE ONLY vendor_designers_factors
 
 
 --
--- Name: vendor_designers_featured_images vendor_designers_featured_images_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images vendor_designers_featured_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_featured_images
@@ -5216,7 +5392,7 @@ ALTER TABLE ONLY vendor_designers_featured_images
 
 
 --
--- Name: vendor_designers vendor_designers_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers vendor_designers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers
@@ -5224,7 +5400,7 @@ ALTER TABLE ONLY vendor_designers
 
 
 --
--- Name: vendor_factors vendor_factors_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_factors vendor_factors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_factors
@@ -5232,700 +5408,700 @@ ALTER TABLE ONLY vendor_factors
 
 
 --
--- Name: accounts_account_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: accounts_account_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX accounts_account_idx ON accounts USING btree (account);
 
 
 --
--- Name: accounts_account_type_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: accounts_account_type_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX accounts_account_type_idx ON accounts USING btree (account_type);
 
 
 --
--- Name: accounts_parent_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: accounts_parent_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX accounts_parent_idx ON accounts USING btree (parent);
 
 
 --
--- Name: cart_items_cart_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: cart_items_cart_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX cart_items_cart_id_idx ON cart_items USING btree (cart_id);
 
 
 --
--- Name: cart_items_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: cart_items_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX cart_items_item_id_idx ON cart_items USING btree (item_id);
 
 
 --
--- Name: carts_tracker_cookie_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: carts_tracker_cookie_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX carts_tracker_cookie_id_idx ON carts USING btree (tracker_cookie_id);
 
 
 --
--- Name: checkout_gcs_checkout_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: checkout_gcs_checkout_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX checkout_gcs_checkout_id_idx ON checkout_gcs USING btree (checkout_id);
 
 
 --
--- Name: checkout_gcs_gc_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: checkout_gcs_gc_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX checkout_gcs_gc_id_idx ON checkout_gcs USING btree (gc_id);
 
 
 --
--- Name: checkouts_cart_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: checkouts_cart_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX checkouts_cart_id_idx ON checkouts USING btree (cart_id);
 
 
 --
--- Name: checkouts_order_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: checkouts_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX checkouts_order_id_idx ON checkouts USING btree (order_id);
 
 
 --
--- Name: contact_authnet_payment_profiles_authnet_payment_profile_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contact_authnet_payment_profiles_authnet_payment_profile_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX contact_authnet_payment_profiles_authnet_payment_profile_id_idx ON contact_authnet_payment_profiles USING btree (authnet_payment_profile_id);
 
 
 --
--- Name: contact_authnet_profiles_authnet_customer_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contact_authnet_profiles_authnet_customer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX contact_authnet_profiles_authnet_customer_id_idx ON contact_authnet_profiles USING btree (authnet_customer_id);
 
 
 --
--- Name: contact_requests_contact_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contact_requests_contact_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX contact_requests_contact_id_idx ON contact_requests USING btree (contact_id);
 
 
 --
--- Name: contacts_email_idx1; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contacts_email_idx1; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX contacts_email_idx1 ON contacts USING btree (email);
 
 
 --
--- Name: contacts_email_list_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contacts_email_list_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX contacts_email_list_idx ON contacts USING btree (email_list);
 
 
 --
--- Name: contacts_ml_removes_contact_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contacts_ml_removes_contact_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX contacts_ml_removes_contact_id_idx ON contacts_ml_removes USING btree (contact_id);
 
 
 --
--- Name: contacts_name_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contacts_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX contacts_name_idx ON contacts USING btree (name);
 
 
 --
--- Name: contacts_postcards_sends_contact_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contacts_postcards_sends_contact_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX contacts_postcards_sends_contact_id_idx ON contacts_postcards_sends USING btree (contact_id);
 
 
 --
--- Name: contacts_state_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: contacts_state_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX contacts_state_idx ON contacts USING btree (state);
 
 
 --
--- Name: email_contacts_contact_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: email_contacts_contact_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX email_contacts_contact_id_idx ON email_contacts USING btree (contact_id);
 
 
 --
--- Name: email_contacts_email_id_contact_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: email_contacts_email_id_contact_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX email_contacts_email_id_contact_id_idx ON email_contacts USING btree (email_id, contact_id);
 
 
 --
--- Name: email_contacts_email_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: email_contacts_email_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX email_contacts_email_id_idx ON email_contacts USING btree (email_id);
 
 
 --
--- Name: email_contacts_request_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: email_contacts_request_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX email_contacts_request_id_idx ON email_contacts USING btree (request_id);
 
 
 --
--- Name: emails_ad_code_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: emails_ad_code_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX emails_ad_code_id_idx ON emails USING btree (ad_code_id);
 
 
 --
--- Name: emails_on_email_list_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: emails_on_email_list_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX emails_on_email_list_idx ON emails USING btree (on_email_list);
 
 
 --
--- Name: emails_send_contact_type_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: emails_send_contact_type_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX emails_send_contact_type_idx ON emails USING btree (send_contact_type);
 
 
 --
--- Name: emails_sent_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: emails_sent_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX emails_sent_id_idx ON emails_sent_xx USING btree (id);
 
 
 --
--- Name: general_journal_account_credit_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: general_journal_account_credit_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX general_journal_account_credit_idx ON general_journal USING btree (account_credit);
 
 
 --
--- Name: general_journal_account_debit_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: general_journal_account_debit_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX general_journal_account_debit_idx ON general_journal USING btree (account_debit);
 
 
 --
--- Name: general_journal_ref_number_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: general_journal_ref_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX general_journal_ref_number_idx ON general_journal USING btree (ref_number);
 
 
 --
--- Name: gift_certificates_gc_number_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: gift_certificates_gc_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX gift_certificates_gc_number_idx ON gift_certificates USING btree (gc_number);
 
 
 --
--- Name: gift_certificates_order_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: gift_certificates_order_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX gift_certificates_order_item_id_idx ON gift_certificates USING btree (order_item_id);
 
 
 --
--- Name: gift_certificates_redemption_code_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: gift_certificates_redemption_code_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX gift_certificates_redemption_code_idx ON gift_certificates USING btree (redemption_code);
 
 
 --
--- Name: inventory_adjustments_item_breakdown_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_adjustments_item_breakdown_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_adjustments_item_breakdown_id_idx ON inventory_adjustments USING btree (item_breakdown_id);
 
 
 --
--- Name: inventory_ais_reports_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_ais_reports_item_id_idx ON inventory_ais_reports USING btree (item_id);
 
 
 --
--- Name: inventory_ais_reports_report_date_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports_report_date_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_ais_reports_report_date_idx ON inventory_ais_reports USING btree (report_date);
 
 
 --
--- Name: inventory_cross_sell_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_cross_sell_item_id_idx ON inventory_cross_sell USING btree (item_id);
 
 
 --
--- Name: inventory_groupings_designer_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_groupings_designer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_groupings_designer_id_idx ON inventory_groupings USING btree (designer_id);
 
 
 --
--- Name: inventory_groupings_season_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_groupings_season_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_groupings_season_id_idx ON inventory_groupings USING btree (season_id);
 
 
 --
--- Name: inventory_item_breakdown_item_color_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown_item_color_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_breakdown_item_color_id_idx ON inventory_item_breakdown USING btree (item_color_id);
 
 
 --
--- Name: inventory_item_breakdown_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_breakdown_item_id_idx ON inventory_item_breakdown USING btree (item_id);
 
 
 --
--- Name: inventory_item_breakdown_size_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown_size_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_breakdown_size_id_idx ON inventory_item_breakdown USING btree (size_id);
 
 
 --
--- Name: inventory_item_categories_category_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories_category_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_categories_category_id_idx ON inventory_item_categories USING btree (category_id);
 
 
 --
--- Name: inventory_item_categories_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_categories_item_id_idx ON inventory_item_categories USING btree (item_id);
 
 
 --
--- Name: inventory_item_colors_color_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors_color_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_colors_color_idx ON inventory_item_colors USING btree (color);
 
 
 --
--- Name: inventory_item_colors_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_colors_item_id_idx ON inventory_item_colors USING btree (item_id);
 
 
 --
--- Name: inventory_item_images_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_item_images_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_item_images_item_id_idx ON inventory_item_images USING btree (item_id);
 
 
 --
--- Name: inventory_items_designer_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_items_designer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_items_designer_id_idx ON inventory_items USING btree (designer_id);
 
 
 --
--- Name: inventory_items_grouping_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_items_grouping_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_items_grouping_id_idx ON inventory_items USING btree (grouping_id);
 
 
 --
--- Name: inventory_items_groupings_grouping_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings_grouping_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_items_groupings_grouping_id_idx ON inventory_items_groupings USING btree (grouping_id);
 
 
 --
--- Name: inventory_items_groupings_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_items_groupings_item_id_idx ON inventory_items_groupings USING btree (item_id);
 
 
 --
--- Name: inventory_items_season_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_items_season_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_items_season_id_idx ON inventory_items USING btree (season_id);
 
 
 --
--- Name: inventory_items_style_number_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_items_style_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_items_style_number_idx ON inventory_items USING btree (style_number);
 
 
 --
--- Name: inventory_search_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_search_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_search_idx ON inventory_search_view USING gin (ts_vec);
 
 
 --
--- Name: inventory_shipment_items_item_breakdown_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items_item_breakdown_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_shipment_items_item_breakdown_id_idx ON inventory_shipment_items USING btree (item_breakdown_id);
 
 
 --
--- Name: inventory_shipment_items_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_shipment_items_item_id_idx ON inventory_shipment_items USING btree (item_id);
 
 
 --
--- Name: inventory_shipment_items_shipment_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items_shipment_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_shipment_items_shipment_id_idx ON inventory_shipment_items USING btree (shipment_id);
 
 
 --
--- Name: inventory_shipments_designer_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_shipments_designer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_shipments_designer_id_idx ON inventory_shipments USING btree (designer_id);
 
 
 --
--- Name: inventory_shipments_packing_slip_number_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_shipments_packing_slip_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_shipments_packing_slip_number_idx ON inventory_shipments USING btree (packing_slip_number);
 
 
 --
--- Name: inventory_size_scale_sizes_size_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes_size_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_size_scale_sizes_size_id_idx ON inventory_size_scale_sizes USING btree (size_id);
 
 
 --
--- Name: inventory_size_scale_sizes_size_scale_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes_size_scale_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX inventory_size_scale_sizes_size_scale_id_idx ON inventory_size_scale_sizes USING btree (size_scale_id);
 
 
 --
--- Name: news_event_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: news_event_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX news_event_idx ON news USING btree (event);
 
 
 --
--- Name: news_status_event_date_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: news_status_event_date_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX news_status_event_date_id_idx ON news USING btree (status, event_date, id);
 
 
 --
--- Name: order_item_status_history_order_item_status_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_item_status_history_order_item_status_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_item_status_history_order_item_status_id_idx ON order_item_status_history USING btree (order_item_status_id);
 
 
 --
--- Name: order_item_status_history_order_item_status_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_item_status_history_order_item_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_item_status_history_order_item_status_idx ON order_item_status_history USING btree (order_item_status);
 
 
 --
--- Name: order_item_status_history_shipped_from_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_item_status_history_shipped_from_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_item_status_history_shipped_from_idx ON order_item_status_history USING btree (shipped_from);
 
 
 --
--- Name: order_item_status_order_item_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_item_status_order_item_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_item_status_order_item_id_idx ON order_item_status USING btree (order_item_id);
 
 
 --
--- Name: order_item_status_order_item_status_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_item_status_order_item_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_item_status_order_item_status_idx ON order_item_status USING btree (order_item_status);
 
 
 --
--- Name: order_item_status_shipped_from_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_item_status_shipped_from_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_item_status_shipped_from_idx ON order_item_status USING btree (shipped_from);
 
 
 --
--- Name: order_items_item_bd_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_items_item_bd_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_items_item_bd_id_idx ON order_items USING btree (item_bd_id);
 
 
 --
--- Name: order_items_order_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_items_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_items_order_id_idx ON order_items USING btree (order_id);
 
 
 --
--- Name: order_shipments_carrier_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: order_shipments_carrier_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX order_shipments_carrier_idx ON order_shipments USING btree (carrier);
 
 
 --
--- Name: orders_ad_code_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_ad_code_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_ad_code_idx ON orders USING btree (ad_code);
 
 
 --
--- Name: orders_order_status_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_order_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_order_status_idx ON orders USING btree (order_status);
 
 
 --
--- Name: orders_promotion_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_promotion_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_promotion_id_idx ON orders USING btree (promotion_id);
 
 
 --
--- Name: orders_salesperson1_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_salesperson1_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_salesperson1_idx ON orders USING btree (salesperson1);
 
 
 --
--- Name: orders_salesperson2_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_salesperson2_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_salesperson2_idx ON orders USING btree (salesperson2);
 
 
 --
--- Name: orders_store_receipt_number_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_store_receipt_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_store_receipt_number_idx ON orders USING btree (store_receipt_number);
 
 
 --
--- Name: orders_transactions_cc_cc_type_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_cc_type_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_cc_cc_type_idx ON orders_transactions_cc USING btree (cc_type);
 
 
 --
--- Name: orders_transactions_cc_gateway_action_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_gateway_action_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_cc_gateway_action_idx ON orders_transactions_cc USING btree (gateway_action);
 
 
 --
--- Name: orders_transactions_cc_gateway_ref_trans_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_gateway_ref_trans_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_cc_gateway_ref_trans_id_idx ON orders_transactions_cc USING btree (gateway_ref_trans_id);
 
 
 --
--- Name: orders_transactions_cc_gateway_trans_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_gateway_trans_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_cc_gateway_trans_id_idx ON orders_transactions_cc USING btree (gateway_trans_id);
 
 
 --
--- Name: orders_transactions_cc_status_cctr_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_status_cctr_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_cc_status_cctr_idx ON orders_transactions_cc USING btree (status_cctr);
 
 
 --
--- Name: orders_transactions_cc_transactions_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc_transactions_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_cc_transactions_id_idx ON orders_transactions_cc USING btree (transactions_id);
 
 
 --
--- Name: orders_transactions_gc_gift_certificates_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc_gift_certificates_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_gc_gift_certificates_id_idx ON orders_transactions_gc USING btree (gift_certificates_id);
 
 
 --
--- Name: orders_transactions_method_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_method_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_method_idx ON orders_transactions USING btree (method);
 
 
 --
--- Name: orders_transactions_order_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_order_id_idx ON orders_transactions USING btree (order_id);
 
 
 --
--- Name: orders_transactions_sc_store_credits_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc_store_credits_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_sc_store_credits_id_idx ON orders_transactions_sc USING btree (store_credits_id);
 
 
 --
--- Name: orders_transactions_status_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: orders_transactions_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX orders_transactions_status_idx ON orders_transactions USING btree (status);
 
 
 --
--- Name: payment_failures_checkout_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: payment_failures_checkout_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX payment_failures_checkout_id_idx ON payment_failures USING btree (checkout_id);
 
 
 --
--- Name: shipping_methods_carrier_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: shipping_methods_carrier_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX shipping_methods_carrier_idx ON shipping_methods USING btree (carrier);
 
 
 --
--- Name: store_credits_contacts_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: store_credits_contacts_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX store_credits_contacts_id_idx ON store_credits USING btree (contacts_id);
 
 
 --
--- Name: store_credits_order_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: store_credits_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX store_credits_order_id_idx ON store_credits USING btree (order_id);
 
 
 --
--- Name: vendor_designers_featured_images_designer_id_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images_designer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX vendor_designers_featured_images_designer_id_idx ON vendor_designers_featured_images USING btree (designer_id);
 
 
 --
--- Name: vendor_designers_shortname_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: vendor_designers_shortname_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX vendor_designers_shortname_idx ON vendor_designers USING btree (shortname);
 
 
 --
--- Name: vendor_designers_status_featured_idx; Type: INDEX; Schema: public; Owner: btqcm
+-- Name: vendor_designers_status_featured_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX vendor_designers_status_featured_idx ON vendor_designers USING btree (status_featured);
 
 
 --
--- Name: contacts email_lower_trigger; Type: TRIGGER; Schema: public; Owner: btqcm
+-- Name: contacts email_lower_trigger; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER email_lower_trigger BEFORE INSERT OR UPDATE OF email ON contacts FOR EACH ROW EXECUTE PROCEDURE on_contacts_email_change();
 
 
 --
--- Name: inventory_items update_search_view_trigger; Type: TRIGGER; Schema: public; Owner: btqcm
+-- Name: inventory_items update_search_view_trigger; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_search_view_trigger AFTER INSERT OR DELETE OR UPDATE OF name, description, keywords, designer_id ON inventory_items FOR EACH STATEMENT EXECUTE PROCEDURE on_inventory_change();
 
 
 --
--- Name: designer_search_aliases update_search_view_trigger; Type: TRIGGER; Schema: public; Owner: btqcm
+-- Name: designer_search_aliases update_search_view_trigger; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_search_view_trigger AFTER INSERT OR DELETE OR UPDATE OF id, alias ON designer_search_aliases FOR EACH STATEMENT EXECUTE PROCEDURE on_inventory_change();
 
 
 --
--- Name: accounts accounts_parent_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: accounts accounts_parent_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts
@@ -5933,7 +6109,7 @@ ALTER TABLE ONLY accounts
 
 
 --
--- Name: admins admins_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: admins admins_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admins
@@ -5941,7 +6117,7 @@ ALTER TABLE ONLY admins
 
 
 --
--- Name: cart_items cart_items_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: cart_items cart_items_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY cart_items
@@ -5949,7 +6125,7 @@ ALTER TABLE ONLY cart_items
 
 
 --
--- Name: cart_items cart_items_gift_certificate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: cart_items cart_items_gift_certificate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY cart_items
@@ -5957,7 +6133,7 @@ ALTER TABLE ONLY cart_items
 
 
 --
--- Name: cart_items cart_items_item_color_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: cart_items cart_items_item_color_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY cart_items
@@ -5965,7 +6141,7 @@ ALTER TABLE ONLY cart_items
 
 
 --
--- Name: cart_items cart_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: cart_items cart_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY cart_items
@@ -5973,7 +6149,7 @@ ALTER TABLE ONLY cart_items
 
 
 --
--- Name: cart_items cart_items_size_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: cart_items cart_items_size_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY cart_items
@@ -5981,7 +6157,7 @@ ALTER TABLE ONLY cart_items
 
 
 --
--- Name: carts carts_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: carts carts_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY carts
@@ -5989,7 +6165,7 @@ ALTER TABLE ONLY carts
 
 
 --
--- Name: category_search_aliases category_search_aliases_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: category_search_aliases category_search_aliases_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY category_search_aliases
@@ -5997,7 +6173,7 @@ ALTER TABLE ONLY category_search_aliases
 
 
 --
--- Name: checkout_gcs checkout_gcs_checkout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkout_gcs checkout_gcs_checkout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkout_gcs
@@ -6005,7 +6181,7 @@ ALTER TABLE ONLY checkout_gcs
 
 
 --
--- Name: checkout_gcs checkout_gcs_gc_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkout_gcs checkout_gcs_gc_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkout_gcs
@@ -6013,7 +6189,7 @@ ALTER TABLE ONLY checkout_gcs
 
 
 --
--- Name: checkouts checkouts_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkouts checkouts_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkouts
@@ -6021,7 +6197,7 @@ ALTER TABLE ONLY checkouts
 
 
 --
--- Name: checkouts checkouts_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkouts checkouts_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkouts
@@ -6029,7 +6205,7 @@ ALTER TABLE ONLY checkouts
 
 
 --
--- Name: checkouts checkouts_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkouts checkouts_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkouts
@@ -6037,7 +6213,7 @@ ALTER TABLE ONLY checkouts
 
 
 --
--- Name: checkouts checkouts_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: checkouts checkouts_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY checkouts
@@ -6045,7 +6221,7 @@ ALTER TABLE ONLY checkouts
 
 
 --
--- Name: contact_authnet_payment_profiles contact_authnet_payment_profile_contact_authnet_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contact_authnet_payment_profiles contact_authnet_payment_profile_contact_authnet_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_authnet_payment_profiles
@@ -6053,7 +6229,7 @@ ALTER TABLE ONLY contact_authnet_payment_profiles
 
 
 --
--- Name: contact_authnet_profiles contact_authnet_profiles_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contact_authnet_profiles contact_authnet_profiles_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_authnet_profiles
@@ -6061,7 +6237,7 @@ ALTER TABLE ONLY contact_authnet_profiles
 
 
 --
--- Name: contact_requests contact_requests_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contact_requests contact_requests_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_requests
@@ -6069,7 +6245,7 @@ ALTER TABLE ONLY contact_requests
 
 
 --
--- Name: promotions contacts_id; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: promotions contacts_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY promotions
@@ -6077,7 +6253,7 @@ ALTER TABLE ONLY promotions
 
 
 --
--- Name: contacts_ml_removes contacts_ml_removes_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: contacts_ml_removes contacts_ml_removes_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts_ml_removes
@@ -6085,7 +6261,7 @@ ALTER TABLE ONLY contacts_ml_removes
 
 
 --
--- Name: customer_appreciation customer_appreciation_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: customer_appreciation customer_appreciation_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY customer_appreciation
@@ -6093,7 +6269,7 @@ ALTER TABLE ONLY customer_appreciation
 
 
 --
--- Name: customer_appreciation customer_appreciation_season_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: customer_appreciation customer_appreciation_season_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY customer_appreciation
@@ -6101,7 +6277,7 @@ ALTER TABLE ONLY customer_appreciation
 
 
 --
--- Name: designer_order_item_status designer_order_item_status_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status designer_order_item_status_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_item_status
@@ -6109,7 +6285,7 @@ ALTER TABLE ONLY designer_order_item_status
 
 
 --
--- Name: designer_order_item_status designer_order_item_status_received_shipment_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status designer_order_item_status_received_shipment_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_item_status
@@ -6117,7 +6293,7 @@ ALTER TABLE ONLY designer_order_item_status
 
 
 --
--- Name: designer_order_items designer_order_items_item_breakdown_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_order_items designer_order_items_item_breakdown_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_items
@@ -6125,7 +6301,7 @@ ALTER TABLE ONLY designer_order_items
 
 
 --
--- Name: designer_orders designer_orders_approved_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_orders designer_orders_approved_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders
@@ -6133,7 +6309,7 @@ ALTER TABLE ONLY designer_orders
 
 
 --
--- Name: designer_orders designer_orders_cancelled_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_orders designer_orders_cancelled_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders
@@ -6141,7 +6317,7 @@ ALTER TABLE ONLY designer_orders
 
 
 --
--- Name: designer_orders designer_orders_confirmation_received_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_orders designer_orders_confirmation_received_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders
@@ -6149,7 +6325,7 @@ ALTER TABLE ONLY designer_orders
 
 
 --
--- Name: designer_orders designer_orders_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_orders designer_orders_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders
@@ -6157,7 +6333,7 @@ ALTER TABLE ONLY designer_orders
 
 
 --
--- Name: designer_orders designer_orders_entered_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_orders designer_orders_entered_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders
@@ -6165,7 +6341,7 @@ ALTER TABLE ONLY designer_orders
 
 
 --
--- Name: designer_orders designer_orders_placed_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_orders designer_orders_placed_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_orders
@@ -6173,7 +6349,7 @@ ALTER TABLE ONLY designer_orders
 
 
 --
--- Name: designer_search_aliases designer_search_aliases_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_search_aliases designer_search_aliases_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_search_aliases
@@ -6181,7 +6357,7 @@ ALTER TABLE ONLY designer_search_aliases
 
 
 --
--- Name: designer_order_items dori_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_order_items dori_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_items
@@ -6189,7 +6365,7 @@ ALTER TABLE ONLY designer_order_items
 
 
 --
--- Name: designer_order_item_status doris_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: designer_order_item_status doris_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designer_order_item_status
@@ -6197,7 +6373,7 @@ ALTER TABLE ONLY designer_order_item_status
 
 
 --
--- Name: email_contacts email_contacts_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_contacts email_contacts_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_contacts
@@ -6205,7 +6381,7 @@ ALTER TABLE ONLY email_contacts
 
 
 --
--- Name: email_contacts email_contacts_email_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_contacts email_contacts_email_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_contacts
@@ -6213,7 +6389,7 @@ ALTER TABLE ONLY email_contacts
 
 
 --
--- Name: email_queue email_queue_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_queue email_queue_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_queue
@@ -6221,7 +6397,7 @@ ALTER TABLE ONLY email_queue
 
 
 --
--- Name: email_queue email_queue_email_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: email_queue email_queue_email_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_queue
@@ -6229,7 +6405,7 @@ ALTER TABLE ONLY email_queue
 
 
 --
--- Name: emails emails_ad_code_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: emails emails_ad_code_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY emails
@@ -6237,7 +6413,7 @@ ALTER TABLE ONLY emails
 
 
 --
--- Name: emails_sent_xx emails_sent_email_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: emails_sent_xx emails_sent_email_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY emails_sent_xx
@@ -6245,7 +6421,7 @@ ALTER TABLE ONLY emails_sent_xx
 
 
 --
--- Name: emails_sent_xx emails_sent_request_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: emails_sent_xx emails_sent_request_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY emails_sent_xx
@@ -6253,7 +6429,7 @@ ALTER TABLE ONLY emails_sent_xx
 
 
 --
--- Name: general_journal general_journal_account_credit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: general_journal general_journal_account_credit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY general_journal
@@ -6261,7 +6437,7 @@ ALTER TABLE ONLY general_journal
 
 
 --
--- Name: general_journal general_journal_account_debit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: general_journal general_journal_account_debit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY general_journal
@@ -6269,7 +6445,7 @@ ALTER TABLE ONLY general_journal
 
 
 --
--- Name: gift_certificates gift_certificates_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: gift_certificates gift_certificates_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY gift_certificates
@@ -6277,7 +6453,7 @@ ALTER TABLE ONLY gift_certificates
 
 
 --
--- Name: inventory_adjustments inventory_adjustments_item_breakdown_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_adjustments inventory_adjustments_item_breakdown_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_adjustments
@@ -6285,7 +6461,7 @@ ALTER TABLE ONLY inventory_adjustments
 
 
 --
--- Name: inventory_ais_reports inventory_ais_reports_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_ais_reports inventory_ais_reports_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_ais_reports
@@ -6293,7 +6469,7 @@ ALTER TABLE ONLY inventory_ais_reports
 
 
 --
--- Name: inventory_cross_sell inventory_cross_sell_cross_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell inventory_cross_sell_cross_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_cross_sell
@@ -6301,7 +6477,7 @@ ALTER TABLE ONLY inventory_cross_sell
 
 
 --
--- Name: inventory_cross_sell inventory_cross_sell_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_cross_sell inventory_cross_sell_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_cross_sell
@@ -6309,7 +6485,7 @@ ALTER TABLE ONLY inventory_cross_sell
 
 
 --
--- Name: inventory_groupings inventory_groupings_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_groupings inventory_groupings_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_groupings
@@ -6317,7 +6493,7 @@ ALTER TABLE ONLY inventory_groupings
 
 
 --
--- Name: inventory_groupings inventory_groupings_season_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_groupings inventory_groupings_season_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_groupings
@@ -6325,7 +6501,7 @@ ALTER TABLE ONLY inventory_groupings
 
 
 --
--- Name: inventory_item_breakdown inventory_item_breakdown_item_color_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown inventory_item_breakdown_item_color_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_breakdown
@@ -6333,7 +6509,7 @@ ALTER TABLE ONLY inventory_item_breakdown
 
 
 --
--- Name: inventory_item_breakdown inventory_item_breakdown_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown inventory_item_breakdown_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_breakdown
@@ -6341,7 +6517,7 @@ ALTER TABLE ONLY inventory_item_breakdown
 
 
 --
--- Name: inventory_item_breakdown inventory_item_breakdown_size_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_breakdown inventory_item_breakdown_size_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_breakdown
@@ -6349,7 +6525,7 @@ ALTER TABLE ONLY inventory_item_breakdown
 
 
 --
--- Name: inventory_item_categories inventory_item_categories_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories inventory_item_categories_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_categories
@@ -6357,7 +6533,7 @@ ALTER TABLE ONLY inventory_item_categories
 
 
 --
--- Name: inventory_item_categories inventory_item_categories_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_categories inventory_item_categories_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_categories
@@ -6365,7 +6541,7 @@ ALTER TABLE ONLY inventory_item_categories
 
 
 --
--- Name: inventory_item_colors inventory_item_colors_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_colors inventory_item_colors_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_colors
@@ -6373,7 +6549,7 @@ ALTER TABLE ONLY inventory_item_colors
 
 
 --
--- Name: inventory_item_images inventory_item_images_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_item_images inventory_item_images_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_item_images
@@ -6381,7 +6557,7 @@ ALTER TABLE ONLY inventory_item_images
 
 
 --
--- Name: inventory_items inventory_items_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items inventory_items_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items
@@ -6389,7 +6565,7 @@ ALTER TABLE ONLY inventory_items
 
 
 --
--- Name: inventory_items inventory_items_grouping_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items inventory_items_grouping_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items
@@ -6397,7 +6573,7 @@ ALTER TABLE ONLY inventory_items
 
 
 --
--- Name: inventory_items_groupings inventory_items_groupings_grouping_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings inventory_items_groupings_grouping_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_groupings
@@ -6405,7 +6581,7 @@ ALTER TABLE ONLY inventory_items_groupings
 
 
 --
--- Name: inventory_items_groupings inventory_items_groupings_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items_groupings inventory_items_groupings_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_groupings
@@ -6413,7 +6589,7 @@ ALTER TABLE ONLY inventory_items_groupings
 
 
 --
--- Name: inventory_items_popular inventory_items_popular_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items_popular inventory_items_popular_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items_popular
@@ -6421,7 +6597,7 @@ ALTER TABLE ONLY inventory_items_popular
 
 
 --
--- Name: inventory_items inventory_items_season_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items inventory_items_season_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items
@@ -6429,7 +6605,7 @@ ALTER TABLE ONLY inventory_items
 
 
 --
--- Name: inventory_items inventory_items_size_scale_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_items inventory_items_size_scale_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_items
@@ -6437,7 +6613,7 @@ ALTER TABLE ONLY inventory_items
 
 
 --
--- Name: inventory_shipment_items inventory_shipment_items_item_breakdown_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items inventory_shipment_items_item_breakdown_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipment_items
@@ -6445,7 +6621,7 @@ ALTER TABLE ONLY inventory_shipment_items
 
 
 --
--- Name: inventory_shipment_items inventory_shipment_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items inventory_shipment_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipment_items
@@ -6453,7 +6629,7 @@ ALTER TABLE ONLY inventory_shipment_items
 
 
 --
--- Name: inventory_shipment_items inventory_shipment_items_shipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_shipment_items inventory_shipment_items_shipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipment_items
@@ -6461,7 +6637,7 @@ ALTER TABLE ONLY inventory_shipment_items
 
 
 --
--- Name: inventory_shipments inventory_shipments_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_shipments inventory_shipments_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_shipments
@@ -6469,7 +6645,7 @@ ALTER TABLE ONLY inventory_shipments
 
 
 --
--- Name: inventory_size_scale_sizes inventory_size_scale_sizes_size_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes inventory_size_scale_sizes_size_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_size_scale_sizes
@@ -6477,7 +6653,7 @@ ALTER TABLE ONLY inventory_size_scale_sizes
 
 
 --
--- Name: inventory_size_scale_sizes inventory_size_scale_sizes_size_scale_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: inventory_size_scale_sizes inventory_size_scale_sizes_size_scale_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY inventory_size_scale_sizes
@@ -6485,7 +6661,7 @@ ALTER TABLE ONLY inventory_size_scale_sizes
 
 
 --
--- Name: order_item_status_history order_item_status_history_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_item_status_history order_item_status_history_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_item_status_history
@@ -6493,7 +6669,7 @@ ALTER TABLE ONLY order_item_status_history
 
 
 --
--- Name: order_item_status_history order_item_status_history_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_item_status_history order_item_status_history_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_item_status_history
@@ -6501,7 +6677,7 @@ ALTER TABLE ONLY order_item_status_history
 
 
 --
--- Name: order_item_status order_item_status_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_item_status order_item_status_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_item_status
@@ -6509,7 +6685,7 @@ ALTER TABLE ONLY order_item_status
 
 
 --
--- Name: order_items order_items_item_bd_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_items order_items_item_bd_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_items
@@ -6517,7 +6693,7 @@ ALTER TABLE ONLY order_items
 
 
 --
--- Name: order_items order_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_items order_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_items
@@ -6525,7 +6701,7 @@ ALTER TABLE ONLY order_items
 
 
 --
--- Name: order_items order_items_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_items order_items_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_items
@@ -6533,7 +6709,7 @@ ALTER TABLE ONLY order_items
 
 
 --
--- Name: order_return_items order_return_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_return_items order_return_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_return_items
@@ -6541,7 +6717,7 @@ ALTER TABLE ONLY order_return_items
 
 
 --
--- Name: order_return_items order_return_items_order_return_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_return_items order_return_items_order_return_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_return_items
@@ -6549,7 +6725,7 @@ ALTER TABLE ONLY order_return_items
 
 
 --
--- Name: order_returns order_returns_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_returns order_returns_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_returns
@@ -6557,7 +6733,7 @@ ALTER TABLE ONLY order_returns
 
 
 --
--- Name: order_returns order_returns_received_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_returns order_returns_received_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_returns
@@ -6565,7 +6741,7 @@ ALTER TABLE ONLY order_returns
 
 
 --
--- Name: order_shipment_items order_shipment_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipment_items order_shipment_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipment_items
@@ -6573,7 +6749,7 @@ ALTER TABLE ONLY order_shipment_items
 
 
 --
--- Name: order_shipment_items order_shipment_items_order_shipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipment_items order_shipment_items_order_shipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipment_items
@@ -6581,7 +6757,7 @@ ALTER TABLE ONLY order_shipment_items
 
 
 --
--- Name: order_shipments order_shipments_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipments order_shipments_by_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipments
@@ -6589,7 +6765,7 @@ ALTER TABLE ONLY order_shipments
 
 
 --
--- Name: order_shipments order_shipments_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipments order_shipments_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipments
@@ -6597,7 +6773,7 @@ ALTER TABLE ONLY order_shipments
 
 
 --
--- Name: order_shipments order_shipments_shipping_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: order_shipments order_shipments_shipping_method_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY order_shipments
@@ -6605,7 +6781,7 @@ ALTER TABLE ONLY order_shipments
 
 
 --
--- Name: orders orders_ad_code_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders orders_ad_code_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders
@@ -6613,7 +6789,7 @@ ALTER TABLE ONLY orders
 
 
 --
--- Name: orders orders_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders orders_contact_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders
@@ -6621,7 +6797,7 @@ ALTER TABLE ONLY orders
 
 
 --
--- Name: orders orders_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders orders_promotion_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders
@@ -6629,7 +6805,7 @@ ALTER TABLE ONLY orders
 
 
 --
--- Name: orders_transactions_cc orders_transactions_cc_contact_authnet_payment_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc orders_transactions_cc_contact_authnet_payment_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_cc
@@ -6637,7 +6813,7 @@ ALTER TABLE ONLY orders_transactions_cc
 
 
 --
--- Name: orders_transactions_cc orders_transactions_cc_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_cc orders_transactions_cc_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_cc
@@ -6645,7 +6821,7 @@ ALTER TABLE ONLY orders_transactions_cc
 
 
 --
--- Name: orders_transactions_deposit_items orders_transactions_deposit_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_deposit_items orders_transactions_deposit_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_deposit_items
@@ -6653,7 +6829,7 @@ ALTER TABLE ONLY orders_transactions_deposit_items
 
 
 --
--- Name: orders_transactions_deposit_items orders_transactions_deposit_items_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_deposit_items orders_transactions_deposit_items_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_deposit_items
@@ -6661,7 +6837,7 @@ ALTER TABLE ONLY orders_transactions_deposit_items
 
 
 --
--- Name: orders_transactions_gc orders_transactions_gc_gift_certificates_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc orders_transactions_gc_gift_certificates_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_gc
@@ -6669,7 +6845,7 @@ ALTER TABLE ONLY orders_transactions_gc
 
 
 --
--- Name: orders_transactions_gc orders_transactions_gc_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_gc orders_transactions_gc_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_gc
@@ -6677,7 +6853,7 @@ ALTER TABLE ONLY orders_transactions_gc
 
 
 --
--- Name: orders_transactions_items orders_transactions_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_items orders_transactions_items_order_item_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_items
@@ -6685,7 +6861,7 @@ ALTER TABLE ONLY orders_transactions_items
 
 
 --
--- Name: orders_transactions_items orders_transactions_items_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_items orders_transactions_items_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_items
@@ -6693,7 +6869,7 @@ ALTER TABLE ONLY orders_transactions_items
 
 
 --
--- Name: orders_transactions orders_transactions_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions orders_transactions_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions
@@ -6701,7 +6877,7 @@ ALTER TABLE ONLY orders_transactions
 
 
 --
--- Name: orders_transactions_sc orders_transactions_sc_store_credits_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc orders_transactions_sc_store_credits_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_sc
@@ -6709,7 +6885,7 @@ ALTER TABLE ONLY orders_transactions_sc
 
 
 --
--- Name: orders_transactions_sc orders_transactions_sc_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: orders_transactions_sc orders_transactions_sc_transactions_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY orders_transactions_sc
@@ -6717,7 +6893,7 @@ ALTER TABLE ONLY orders_transactions_sc
 
 
 --
--- Name: payment_failures payment_failures_checkout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: payment_failures payment_failures_checkout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payment_failures
@@ -6725,7 +6901,7 @@ ALTER TABLE ONLY payment_failures
 
 
 --
--- Name: payroll payroll_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: payroll payroll_employee_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payroll
@@ -6733,7 +6909,7 @@ ALTER TABLE ONLY payroll
 
 
 --
--- Name: store_credits store_credits_contacts_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: store_credits store_credits_contacts_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY store_credits
@@ -6741,7 +6917,7 @@ ALTER TABLE ONLY store_credits
 
 
 --
--- Name: store_credits store_credits_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: store_credits store_credits_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY store_credits
@@ -6749,7 +6925,7 @@ ALTER TABLE ONLY store_credits
 
 
 --
--- Name: store_credits store_credits_order_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: store_credits store_credits_order_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY store_credits
@@ -6757,7 +6933,7 @@ ALTER TABLE ONLY store_credits
 
 
 --
--- Name: vendor_designers_factors vendor_designers_factors_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors vendor_designers_factors_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_factors
@@ -6765,7 +6941,7 @@ ALTER TABLE ONLY vendor_designers_factors
 
 
 --
--- Name: vendor_designers_factors vendor_designers_factors_factor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_factors vendor_designers_factors_factor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_factors
@@ -6773,7 +6949,7 @@ ALTER TABLE ONLY vendor_designers_factors
 
 
 --
--- Name: vendor_designers_featured_images vendor_designers_featured_images_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images vendor_designers_featured_images_designer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_featured_images
@@ -6781,7 +6957,7 @@ ALTER TABLE ONLY vendor_designers_featured_images
 
 
 --
--- Name: vendor_designers_featured_images vendor_designers_featured_images_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: btqcm
+-- Name: vendor_designers_featured_images vendor_designers_featured_images_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vendor_designers_featured_images
