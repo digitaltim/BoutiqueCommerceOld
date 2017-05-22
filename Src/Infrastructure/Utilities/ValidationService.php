@@ -11,6 +11,7 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\Utilities;
 class ValidationService
 {
     private $errors;
+    private $formFields;
 
     public function __construct()
     {
@@ -31,6 +32,9 @@ class ValidationService
 
     public function validate(array $input, array $rules): bool
     {
+        // save for special case where confirming two fields match, ex. password creation confirmation field
+        $this->formFields = $input;
+
         foreach ($input as $fieldName => $fieldValue) {
             if (array_key_exists($fieldName, $rules)) {
                 foreach ($rules[$fieldName] as $rule) {
@@ -89,7 +93,22 @@ class ValidationService
                     $this->setError($fieldName, $rule);
                     return false;
                 }
-                break;             
+                break;
+
+            case 'confirm':
+                // convention prepends 'confirm_' to the second field for confirmation... remove to find other field to compare with
+                $fieldNameToConfirm = trim($fieldName, 'confirm_');
+                $fieldValueToConfirm = $this->formFields[$fieldNameToConfirm];
+
+                if ($fieldValue !== $fieldValueToConfirm) {
+                    // put error on both fields as they do not carry forward their data... actually this means this must be somehow specified to be excluded!
+                    $this->setError($fieldNameToConfirm, $rule, $fieldNameToConfirm . 's must match');
+                    $this->setError($fieldName, $rule, $fieldNameToConfirm . 's must match');
+                    // generate a general form error as well
+                    $_SESSION['generalFormError'] = 'Passwords to not match';
+                    return false;
+                }
+                break;
 
             default:
                 throw new \Exception("Undefined rule $rule");

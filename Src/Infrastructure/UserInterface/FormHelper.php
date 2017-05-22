@@ -38,7 +38,7 @@ class FormHelper
                         self::$fields[$fieldName]['value'] = $_SESSION['formInput'][$fieldName];
                         break;
                     case 'select':
-                        throw new \Exception('finish insertValues for select');
+                        self::$fields[$fieldName]['selected'] = $_SESSION['formInput'][$fieldName];
                         break;
                     default:
                         self::$fields[$fieldName]['attributes']['value'] = $_SESSION['formInput'][$fieldName];

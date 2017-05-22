@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DbTable;
+use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
+use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 
 class AdminsModel extends DbTable
@@ -16,9 +18,23 @@ class AdminsModel extends DbTable
         $this->allowDelete = false;
     }
 
-    public function getFields()
+    public function getFormFieldsArray()
     {
         return [
+
+            'name' => [
+                'tag' => 'input',
+                'label' => 'Name',
+                'validation' => ['required'],
+                'attributes' => [
+                    'id' => 'name',
+                    'name' => 'name',
+                    'type' => 'text',
+                    'size' => '15',
+                    'maxlength' => '100',
+                    'value' => ''
+                ]
+            ],
 
             'username' => [
                 'tag' => 'input',
@@ -34,6 +50,23 @@ class AdminsModel extends DbTable
                 ]
             ],
 
+            'role' => [
+                'tag' => 'select',
+                'label' => 'Role',
+                'validation' => ['required'],
+                'attributes' => [
+                    'id' => 'role',
+                    'name' => 'role',
+                    'type' => 'select',
+                    'value' => ''
+                ],
+                'options' => [
+                    'admin' => 'admin',
+                    'owner' => 'owner'
+                ],
+                'selected' => 'owner'
+            ],
+
             'password' => [
                 'tag' => 'input',
                 'label' => 'Password',
@@ -41,6 +74,18 @@ class AdminsModel extends DbTable
                 'attributes' => [
                     'type' => 'password',
                     'name' => 'password',
+                    'size' => '15',
+                    'maxlength' => '100',
+                ],
+            ],
+
+            'confirm_password' => [
+                'tag' => 'input',
+                'label' => 'Confirm Password',
+                'validation' => ['required', 'confirm'],
+                'attributes' => [
+                    'type' => 'password',
+                    'name' => 'confirm_password',
                     'size' => '15',
                     'maxlength' => '100',
                 ],
@@ -55,6 +100,17 @@ class AdminsModel extends DbTable
                 ]
             ]
         ];
+    }
+
+    public function getFormFields()
+    {
+        $fields = $this->getFormFieldsArray();
+        return FormHelper::insertValuesErrors($fields, ['password', 'confirm_password']);
+    }
+
+    public function getValidationRules()
+    {
+        return ValidationService::getRules($this->getFormFieldsArray());
     }
 
     public function checkRecordExistsForUsername(string $username)
