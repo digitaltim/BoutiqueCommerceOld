@@ -431,24 +431,6 @@ CREATE TYPE pay_type AS ENUM (
 ALTER TYPE pay_type OWNER TO btqcm;
 
 --
--- Name: permissions_type; Type: TYPE; Schema: public; Owner: btqcm
---
-
-CREATE TYPE permissions_type AS ENUM (
-    'owner',
-    'director',
-    'manager',
-    'admin',
-    'user',
-    'store',
-    'vendor',
-    'bookkeeper'
-);
-
-
-ALTER TYPE permissions_type OWNER TO btqcm;
-
---
 -- Name: send_contact_type; Type: TYPE; Schema: public; Owner: btqcm
 --
 
@@ -1080,7 +1062,7 @@ CREATE TABLE ad_codes (
     start_dt timestamp without time zone NOT NULL,
     end_dt timestamp without time zone,
     description text NOT NULL,
-    results text NOT NULL
+    results text
 );
 
 
@@ -1108,41 +1090,6 @@ ALTER SEQUENCE ad_codes_id_seq OWNED BY ad_codes.id;
 
 
 --
--- Name: admin_roles; Type: TABLE; Schema: public; Owner: btqcm
---
-
-CREATE TABLE admin_roles (
-    id integer NOT NULL,
-    name character varying(255) NOT NULL,
-    created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone
-);
-
-
-ALTER TABLE admin_roles OWNER TO btqcm;
-
---
--- Name: admin_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: btqcm
---
-
-CREATE SEQUENCE admin_roles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE admin_roles_id_seq OWNER TO btqcm;
-
---
--- Name: admin_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: btqcm
---
-
-ALTER SEQUENCE admin_roles_id_seq OWNED BY admin_roles.id;
-
-
---
 -- Name: admins; Type: TABLE; Schema: public; Owner: btqcm
 --
 
@@ -1150,9 +1097,9 @@ CREATE TABLE admins (
     id bigint NOT NULL,
     name character varying(50),
     username character varying(20) NOT NULL,
-    permissions permissions_type DEFAULT 'admin'::permissions_type NOT NULL,
     employee_id bigint,
-    password_hash character varying(255)
+    password_hash character varying(255),
+    role character varying(50) DEFAULT 'admin'::character varying NOT NULL
 );
 
 
@@ -4125,13 +4072,6 @@ ALTER TABLE ONLY ad_codes ALTER COLUMN id SET DEFAULT nextval('ad_codes_id_seq':
 
 
 --
--- Name: admin_roles id; Type: DEFAULT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY admin_roles ALTER COLUMN id SET DEFAULT nextval('admin_roles_id_seq'::regclass);
-
-
---
 -- Name: admins id; Type: DEFAULT; Schema: public; Owner: btqcm
 --
 
@@ -4644,27 +4584,19 @@ ALTER TABLE ONLY accounts
 
 
 --
+-- Name: accounts accountunique; Type: CONSTRAINT; Schema: public; Owner: btqcm
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT accountunique UNIQUE (account);
+
+
+--
 -- Name: ad_codes ad_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
 --
 
 ALTER TABLE ONLY ad_codes
     ADD CONSTRAINT ad_codes_pkey PRIMARY KEY (id);
-
-
---
--- Name: admin_roles admin_roles_name_unique; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY admin_roles
-    ADD CONSTRAINT admin_roles_name_unique UNIQUE (name);
-
-
---
--- Name: admin_roles admin_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: btqcm
---
-
-ALTER TABLE ONLY admin_roles
-    ADD CONSTRAINT admin_roles_pkey PRIMARY KEY (id);
 
 
 --
