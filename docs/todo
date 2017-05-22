@@ -12,7 +12,9 @@ finish infrastructure functionality
 -- have a config var for # failed login attempts that causes action
 
 - ADD NEW ADMIN
--- add the other db fields to the page
+-- needs nav
+-- Name should get focus not Username
+-- better to have <option value="" disabled selected>-- select --</option> as top option for Role to force a decision rather than default (especially not to owner). refactor fields array and twig formFields to make the option attributes possible.
 
 - EDIT ADMIN
 -- create the page

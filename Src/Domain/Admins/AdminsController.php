@@ -23,13 +23,13 @@ class AdminsController extends Controller
             $adminsModel->getValidationRules())
         ) {
             // redisplay the form with input values and error(s)
-            return $response->withRedirect($this->router->pathFor('admins.insert'));
+            return (new AdminsView($this->container))->getInsert($request, $response, $args);
         }
 
         if ($adminsModel->checkRecordExistsForUsername($request->getParam('username'))) {
             $_SESSION['generalFormError'] = 'Username already exists';
             // redisplay the form with input values and error(s)
-            return $response->withRedirect($this->router->pathFor('admins.insert'));
+            return (new AdminsView($this->container))->getInsert($request, $response, $args);
         }
 
         $username = $request->getParam('username');
@@ -53,6 +53,6 @@ class AdminsController extends Controller
         //
         $_SESSION['generalFormError'] = 'Query Failure';
         // redisplay the form with input values and error(s)
-        return $response->withRedirect($this->router->pathFor('admins.insert'));
+        return (new AdminsView($this->container))->getInsert($request, $response, $args);
     }
 }
