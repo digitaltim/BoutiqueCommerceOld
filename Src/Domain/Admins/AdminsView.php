@@ -10,17 +10,12 @@ class AdminsView extends AdminView
 {
     public function getInsert($request, $response, $args)
     {
-        $model = new AdminsModel();
-        $fields = $model->getFields();
-        $fields = FormHelper::insertValuesErrors($fields, ['password']);
-
-        // render page
         return $this->view->render(
             $response,
             'admin/admins/insert.twig',
             [
                 'title' => '::Insert Admin',
-                'formFields' => $fields,
+                'formFields' => (new AdminsModel)->getFormFields(),
                 'generalFormError' => FormHelper::getGeneralFormError()
             ]
         );

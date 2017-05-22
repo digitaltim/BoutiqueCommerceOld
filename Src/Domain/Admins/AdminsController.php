@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Controller;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
 class AdminsController extends Controller
 {
@@ -21,7 +20,7 @@ class AdminsController extends Controller
 
         if (!$this->validator->validate(
             $request->getParsedBody(),
-            ValidationService::getRules($adminsModel->getFields()))
+            $adminsModel->getValidationRules())
         ) {
             // redisplay the form with input values and error(s)
             return $response->withRedirect($this->router->pathFor('admins.insert'));
@@ -36,7 +35,9 @@ class AdminsController extends Controller
         $username = $request->getParam('username');
 
         $res = $adminsModel->insert([
+            'name' => $request->getParam('name'),
             'username' => $username,
+            'role' => $request->getParam('role'),
             'password_hash' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
         ]);
 
