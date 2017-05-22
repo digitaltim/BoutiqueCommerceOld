@@ -16,7 +16,8 @@ class AuthenticationController extends Controller
                 $this->authentication->getLoginFieldsValidationRules())
         ) {
             // redisplay the form with input values and error(s)
-            return $response->withRedirect($this->router->pathFor('authentication.login'));
+            $av = new AuthenticationView($this->container);
+            return $av->getLogin($request, $response, $args);
         }
 
         $authentication = $this->authentication->attemptLogin(

@@ -20,6 +20,10 @@ finish infrastructure functionality
 - DELETE ADMIN
 -- create the ability
 
+-CSRF
+-- edit the failure message - see https://github.com/slimphp/Slim-Csrf#token-persistence ('after a failed CSRF check. In this case, you will probably want to detect this condition and instruct your users to reload the page in their legitimate browser tab (or automatically reload on the next failed request).'
+-- do we need to redirect?
+
 - AUTHORIZATION
 -- (page level, admin nav, functionality - ie only owner/director can enter new admins - see DbTable::hasInsertPermission())
 -- create ADMINS page like old system to change passwords and add new users
