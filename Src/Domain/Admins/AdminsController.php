@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\Controller;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
 class AdminsController extends Controller

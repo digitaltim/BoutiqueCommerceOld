@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure\Database;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
