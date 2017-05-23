@@ -92,6 +92,7 @@ class AuthenticationService
                     'size' => '15',
                     'maxlength' => '100',
                 ],
+                'persist' => false,
             ],
 
             'submit' => [

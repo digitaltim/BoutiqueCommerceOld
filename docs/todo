@@ -10,6 +10,7 @@ finish infrastructure functionality
 - AUTHENTICATION
 -- decide what to do if there are too many failed login attempts
 -- have a config var for # failed login attempts that causes action
+-- Why does the AuthenticationService interface differ from the AdminsModel, ex. getFormFields vs. getLoginFields? Should these be made similar?
 
 - ADD NEW ADMIN
 -- needs nav
@@ -42,7 +43,6 @@ finish infrastructure functionality
 -- Consider refactoring
 --- 'generalFormError' => FormHelper::getGeneralFormError()
 ---- possibly put directly into getFormFields() so we have a single larger array that we pass into twig and iterate through.
---- persistance exclusion in getFormFieldsArray instead of passing the form field names to FormHelper::insertValuesErrors
 --- Validator::isDbDate() and isDbTimestamp using Regex
 
 

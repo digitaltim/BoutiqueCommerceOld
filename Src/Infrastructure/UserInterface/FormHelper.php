@@ -29,10 +29,12 @@ class FormHelper
         }
     }
 
-    static private function insertValues(array $skipFields)
+    static private function insertValues()
     {
         foreach (self::$fields as $fieldName => $fieldInfo) {
-            if (!in_array($fieldName, $skipFields) && (isset($_SESSION['formInput'][$fieldName]))) {
+            if (!((array_key_exists('persist', $fieldInfo)) &&
+                  ($fieldInfo['persist'] === false)) &&
+                (isset($_SESSION['formInput'][$fieldName]))) {
                 switch ($fieldInfo['tag']) {
                     case 'textarea':
                         self::$fields[$fieldName]['value'] = $_SESSION['formInput'][$fieldName];
@@ -48,10 +50,10 @@ class FormHelper
         unset($_SESSION['formInput']);
     }
 
-    static public function insertValuesErrors(array &$fields, array $skipFieldsInsert): array
+    static public function insertValuesErrors(array &$fields): array
     {
         self::$fields = $fields;
-        self::insertValues($skipFieldsInsert);
+        self::insertValues();
         self::insertErrors();
         return self::$fields;
     }

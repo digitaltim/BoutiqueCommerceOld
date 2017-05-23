@@ -21,7 +21,7 @@ class AuthenticationView extends AdminView
         }
 
         $fields = $this->authentication->getLoginFields();
-        $fields = FormHelper::insertValuesErrors($fields, ['password']);
+        $fields = FormHelper::insertValuesErrors($fields);
 
         // render page
         return $this->view->render(

@@ -77,6 +77,7 @@ class AdminsModel extends DbTable
                     'size' => '15',
                     'maxlength' => '100',
                 ],
+                'persist' => false,
             ],
 
             'confirm_password' => [
@@ -89,6 +90,7 @@ class AdminsModel extends DbTable
                     'size' => '15',
                     'maxlength' => '100',
                 ],
+                'persist' => false,
             ],
 
             'submit' => [
@@ -105,7 +107,7 @@ class AdminsModel extends DbTable
     public function getFormFields()
     {
         $fields = $this->getFormFieldsArray();
-        return FormHelper::insertValuesErrors($fields, ['password', 'confirm_password']);
+        return FormHelper::insertValuesErrors($fields);
     }
 
     public function getValidationRules()
