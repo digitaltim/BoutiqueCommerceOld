@@ -6,18 +6,8 @@
 {% endblock %}
 
 {% block htmlBodyContent %}
-    <body onload='document.getElementById("username").focus();'>
-    <header id='pageHeader'>
-        <div id='topLineContainer'>
-            <div id='headerTitle'>
-                <h1><a href="{{ path_for('home')}}">{{ storeName }}</a>    &nbsp;
-                    {% if not isLive %}
-                        <span style='color: grey;'>{LOCAL TESTING}</span>
-                    {% endif %}
-                </h1>
-            </div>
-        </div>
-    </header>
+    {% include 'admin/partials/navigation.twig' %}
+    <body onload='document.getElementById("name").focus();'>
     <main>
         <div id='mainContainerSmall'>
             <h1>Insert New Admin User</h1>

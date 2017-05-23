@@ -13,8 +13,6 @@ finish infrastructure functionality
 -- Why does the AuthenticationService interface differ from the AdminsModel, ex. getFormFields vs. getLoginFields? Should these be made similar?
 
 - ADD NEW ADMIN
--- needs nav
--- Name should get focus not Username
 -- better to have <option value="" disabled selected>-- select --</option> as top option for Role to force a decision rather than default (especially not to owner). refactor fields array and twig formFields to make the option attributes possible.
 
 - EDIT ADMIN

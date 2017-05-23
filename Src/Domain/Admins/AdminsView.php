@@ -16,7 +16,8 @@ class AdminsView extends AdminView
             [
                 'title' => '::Insert Admin',
                 'formFields' => (new AdminsModel)->getFormFields(),
-                'generalFormError' => FormHelper::getGeneralFormError()
+                'generalFormError' => FormHelper::getGeneralFormError(),
+                'navigationItems' => $this->navigationItems
             ]
         );
     }
