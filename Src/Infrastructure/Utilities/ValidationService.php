@@ -11,7 +11,7 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\Utilities;
 class ValidationService
 {
     private $errors;
-    private $formFields;
+    private $postFormFieldsWithValues;
 
     public function __construct()
     {
@@ -30,21 +30,29 @@ class ValidationService
         return $rules;
     }
 
-    public function validate(array $input, array $rules): bool
+    // Handles case for form fields which are not submitted in POST
+    // by using underlying form structure to check for rules
+    // (ex. contains 'disabled' attribute from select, checkbox, radio...)
+    public function validate(array $formInputData, array $rules): bool
     {
         // save for special case where confirming two fields match, ex. password creation confirmation field
-        $this->formFields = $input;
+        $this->postFormFieldsWithValues = $formInputData;
 
-        foreach ($input as $fieldName => $fieldValue) {
-            if (array_key_exists($fieldName, $rules)) {
-                foreach ($rules[$fieldName] as $rule) {
-                    // if field is not required and value is empty stop validating
-                    if (!in_array('required', $rules[$fieldName]) && self::isBlankOrNull($fieldValue)) {
-                        break;
-                    }
-                    if (!$this->validateRule($fieldName, $fieldValue, $rule)) {
-                        break; // stop validating further rules upon error
-                    }
+        foreach ($rules as $ruleFieldName => $ruleFieldValue) {
+            // assume empty string was submitted
+            $fieldValue = '';
+            // check for name of form field found in rules in submitted data set
+            if (array_key_exists($ruleFieldName, $formInputData)) {
+                // grab actual data submitted
+                $fieldValue = $formInputData[$ruleFieldName];
+            }
+            // if field is not required and value is empty stop validating
+            if (!in_array('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {
+                break;
+            }
+            foreach ($ruleFieldValue as $rule) {
+                if (!$this->validateRule($ruleFieldName, $fieldValue, $rule)) {
+                    break; // stop validating further rules upon error
                 }
             }
         }
@@ -98,7 +106,7 @@ class ValidationService
             case 'confirm':
                 // convention prepends 'confirm_' to the second field for confirmation... remove to find other field to compare with
                 $fieldNameToConfirm = trim($fieldName, 'confirm_');
-                $fieldValueToConfirm = $this->formFields[$fieldNameToConfirm];
+                $fieldValueToConfirm = $this->postFormFieldsWithValues[$fieldNameToConfirm];
 
                 if ($fieldValue !== $fieldValueToConfirm) {
                     // put error on both fields as they do not carry forward their data... actually this means this must be somehow specified to be excluded!

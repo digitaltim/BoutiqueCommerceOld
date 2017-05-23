@@ -35,7 +35,6 @@ finish infrastructure functionality
 -- use a middleware to put posted vars into a session var instead of $_SESSION['formInput'] = $request->getParams(); in every post controller method.
 
 - VALIDATION
--- Fix validate method to find disabled form fields that won't post upon form submission and still check for rules like "required"
 -- Consider refactoring
 --- 'generalFormError' => FormHelper::getGeneralFormError()
 ---- possibly put directly into getFormFields() so we have a single larger array that we pass into twig and iterate through.
