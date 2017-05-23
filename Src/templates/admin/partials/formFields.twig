@@ -16,6 +16,9 @@
         {{ htmlElement.open(fieldInfo.tag, fieldInfo.attributes) }}
         {% for k,v in fieldInfo.options %}
             {% set optionAttributes = {'value': v} %}
+            {% if 'disabled' == v %}
+                {% set optionAttributes = optionAttributes|merge({'disabled': 'disabled'}) %}
+            {% endif %}
             {% if fieldInfo.selected == v %}
                 {% set optionAttributes = optionAttributes|merge({'selected': 'selected'}) %}
             {% endif %}

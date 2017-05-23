@@ -61,10 +61,11 @@ class AdminsModel extends DbTable
                     'value' => ''
                 ],
                 'options' => [
+                    '-- select --' => 'disabled',
                     'admin' => 'admin',
                     'owner' => 'owner'
                 ],
-                'selected' => 'owner'
+                'selected' => 'disabled'
             ],
 
             'password' => [

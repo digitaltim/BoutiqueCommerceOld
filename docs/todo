@@ -12,9 +12,6 @@ finish infrastructure functionality
 -- have a config var for # failed login attempts that causes action
 -- Why does the AuthenticationService interface differ from the AdminsModel, ex. getFormFields vs. getLoginFields? Should these be made similar?
 
-- ADD NEW ADMIN
--- better to have <option value="" disabled selected>-- select --</option> as top option for Role to force a decision rather than default (especially not to owner). refactor fields array and twig formFields to make the option attributes possible.
-
 - EDIT ADMIN
 -- create the page
 
@@ -38,6 +35,7 @@ finish infrastructure functionality
 -- use a middleware to put posted vars into a session var instead of $_SESSION['formInput'] = $request->getParams(); in every post controller method.
 
 - VALIDATION
+-- Fix validate method to find disabled form fields that won't post upon form submission and still check for rules like "required"
 -- Consider refactoring
 --- 'generalFormError' => FormHelper::getGeneralFormError()
 ---- possibly put directly into getFormFields() so we have a single larger array that we pass into twig and iterate through.
