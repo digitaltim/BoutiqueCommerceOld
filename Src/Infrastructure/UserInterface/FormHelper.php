@@ -5,14 +5,14 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface;
 
 class FormHelper
 {
-    static private $fields;
+    private static $fields;
 
     /**
      * @param array $fields
      * @return array
      * for each field with a validation error, this adds the 'error' key and message and an error class attribute to fieldName
      */
-    static private function insertErrors()
+    private static function insertErrors()
     {
         if (isset($_SESSION['validationErrors'])) {
             foreach ($_SESSION['validationErrors'] as $fieldName => $errorMessage) {
@@ -29,7 +29,7 @@ class FormHelper
         }
     }
 
-    static private function insertValues()
+    private static function insertValues()
     {
         foreach (self::$fields as $fieldName => $fieldInfo) {
             if (!((array_key_exists('persist', $fieldInfo)) &&
@@ -50,7 +50,7 @@ class FormHelper
         unset($_SESSION['formInput']);
     }
 
-    static public function insertValuesErrors(array &$fields): array
+    public static function insertValuesErrors(array &$fields): array
     {
         self::$fields = $fields;
         self::insertValues();
@@ -58,7 +58,7 @@ class FormHelper
         return self::$fields;
     }
 
-    static public function getGeneralFormError()
+    public static function getGeneralFormError()
     {
         $generalFormError = $_SESSION['generalFormError'] ?? '';
         unset($_SESSION['generalFormError']);

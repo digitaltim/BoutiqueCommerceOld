@@ -8,7 +8,7 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Postgres;
 
 class CrudHelper
 {
-    static public function getModel(string $tableName, Postgres $db)
+    public static function getModel(string $tableName, Postgres $db)
     {
         $class = 'It_All\BoutiqueCommerce\Models\\'.ucfirst($tableName);
         try {
