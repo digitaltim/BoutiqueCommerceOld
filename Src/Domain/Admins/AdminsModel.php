@@ -18,7 +18,7 @@ class AdminsModel extends DbTable
         $this->allowDelete = false;
     }
 
-    public function getFormFieldsArray()
+    public function getFormFields(): array
     {
         return [
 
@@ -105,13 +105,7 @@ class AdminsModel extends DbTable
         ];
     }
 
-    public function getFormFields()
-    {
-        $fields = $this->getFormFieldsArray();
-        return FormHelper::insertValuesErrors($fields);
-    }
-
-    public function getValidationRules()
+    public function getValidationRules(): array
     {
         return ValidationService::getRules($this->getFormFieldsArray());
     }
@@ -141,5 +135,4 @@ class AdminsModel extends DbTable
         $q = new QueryBuilder("SELECT a.id as admin_id, a.username, a.role, e.fname, e.lname FROM admins a LEFT OUTER JOIN employees e ON a.employee_id = e.id  ORDER BY username");
         return $q->execute();
     }
-
 }

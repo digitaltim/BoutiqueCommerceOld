@@ -8,8 +8,6 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
 class AuthenticationService
 {
-    private $loginFields;
-
     public function user()
     {
         if (isset($_SESSION['user'])) {
@@ -64,9 +62,9 @@ class AuthenticationService
         unset($_SESSION['user']);
     }
 
-    private function setLoginFields()
+    public function getLoginFields(): array
     {
-        $this->loginFields = [
+        return [
 
             'username' => [
                 'tag' => 'input',
@@ -78,7 +76,7 @@ class AuthenticationService
                     'type' => 'text',
                     'size' => '15',
                     'maxlength' => '100',
-                    'value' => 'temp'
+                    'value' => ''
                 ]
             ],
 
@@ -106,21 +104,8 @@ class AuthenticationService
         ];
     }
 
-    public function getLoginFields(): array
-    {
-        if (!isset($this->loginFields)) {
-            $this->setLoginFields();
-        }
-
-        return $this->loginFields;
-    }
-
     public function getLoginFieldsValidationRules(): array
     {
-        if (!isset($this->loginFields)) {
-            $this->setLoginFields();
-        }
-
-        return ValidationService::getRules($this->loginFields);
+        return ValidationService::getRules($this->getLoginFields());
     }
 }
