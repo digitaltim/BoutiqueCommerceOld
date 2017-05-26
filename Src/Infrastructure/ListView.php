@@ -36,10 +36,12 @@ class ListView
     public function output($request, $response, $args)
     {
         // Instantiate the domain model
-        $domainModelName = "It_All\\BoutiqueCommerce\\Models\\".ucwords($args['table']);
+        $domainModelName = "It_All\\BoutiqueCommerce\\Src\\Domain\\".ucwords($args['table'])."\\".ucwords($args['table'])."Model";
         $domainModel = new $domainModelName($this->db);
         // Instantiate the model (glue between domain model and view)
-        $linkingModelName = "It_All\\BoutiqueCommerce\\Models\\Every".ucwords($args['table'])."List";
+        $linkingModelName = "It_All\\BoutiqueCommerce\\Src\\Domain\\".ucwords($args['table'])."\\Every".ucwords($args['table'])."List";
+        // var_dump($linkingModelName);
+        // die();
         $this->linkingModel = new $linkingModelName($domainModel);
         // Use model to call common interface method "getRecords"
         return $this->view->render($response, 'admin/list.twig', ['title' => $args['table'], 'results' => $this->linkingModel->getRecords()]);

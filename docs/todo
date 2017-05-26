@@ -12,6 +12,9 @@ finish infrastructure functionality
 -- have a config var for # failed login attempts that causes action
 -- Why does the AuthenticationService interface differ from the AdminsModel, ex. getFormFields vs. getLoginFields? Should these be made similar?
 
+- VIEW ADMIN
+-- with edit and delete...
+
 - EDIT ADMIN
 -- create the page
 

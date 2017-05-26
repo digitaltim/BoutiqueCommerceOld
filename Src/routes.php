@@ -38,6 +38,10 @@ $slim->get('/' . $config['dirs']['admin'] . '/logout',
     ->setName('authentication.logout');
 
 // admins
+$slim->get('/' . $config['dirs']['admin'] . '/admins',
+    'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:show')
+    ->setName('admins.show');
+
 $slim->get('/' . $config['dirs']['admin'] . '/admins/insert',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:getInsert')
     ->setName('admins.insert');
@@ -45,6 +49,14 @@ $slim->get('/' . $config['dirs']['admin'] . '/admins/insert',
 $slim->post('/' . $config['dirs']['admin'] . '/admins/insert',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsController:postInsert')
     ->setName('admins.post.insert');
+
+$slim->get('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
+    'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:getUpdate')
+    ->setName('admins.update');
+
+$slim->post('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
+    'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsController:postUpdate')
+    ->setName('admins.post.update');
 
 // CRUD
 $slim->get('/CRUD/{table}',

@@ -142,4 +142,13 @@ class AdminsModel extends DbTable
         return $q->execute();
     }
 
+    public function findAll() {
+        $rows = [];
+        $rs = $this->select();
+        while ($row = pg_fetch_assoc($rs)) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
 }
