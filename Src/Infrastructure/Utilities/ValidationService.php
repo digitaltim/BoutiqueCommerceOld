@@ -18,7 +18,7 @@ class ValidationService
         $this->errors = [];
     }
 
-    static public function getRules(array $fields): array
+    public static function getRules(array $fields): array
     {
         $rules = [];
         foreach ($fields as $fieldName => $fieldInfo) {
@@ -151,12 +151,12 @@ class ValidationService
      * note 4.00 returns true but "4.00" returns false
      * @return bool
      */
-    static public function isInteger($check): bool
+    public static function isInteger($check): bool
     {
         return (filter_var($check, FILTER_VALIDATE_INT) === false) ? false : true;
     }
 
-    static public function isWholeNumber($check): bool
+    public static function isWholeNumber($check): bool
     {
         return (!self::isInteger($check) || $check < 0) ? false : true;
     }
@@ -168,7 +168,7 @@ class ValidationService
      * @param bool $trim
      * @return bool
      */
-    static public function isBlankOrNull($check, bool $trim = true): bool
+    public static function isBlankOrNull($check, bool $trim = true): bool
     {
         if ($trim) {
             $check = trim($check);
@@ -182,7 +182,7 @@ class ValidationService
      * @param string $check
      * @return bool
      */
-    static public function isBlankOrZero(string $check, bool $trim = true): bool
+    public static function isBlankOrZero(string $check, bool $trim = true): bool
     {
         if ($trim) {
             $check = trim($check);
@@ -195,13 +195,13 @@ class ValidationService
      * @param string $check
      * @return bool
      */
-    static public function isPositiveInteger(string $check): bool
+    public static function isPositiveInteger(string $check): bool
     {
         return (self::isInteger($check) && $check > 0);
     }
 
 
-    static public function isNumericPositive($check): bool
+    public static function isNumericPositive($check): bool
     {
         if (!is_numeric($check) || $check <= 0) {
             return false;
@@ -214,7 +214,7 @@ class ValidationService
      * @return bool
      * format YYYY-mm-dd
      */
-    static public function isDbDate(string $check): bool
+    public static function isDbDate(string $check): bool
     {
         if (strlen($check) != 10) {
             return false;
@@ -245,12 +245,12 @@ class ValidationService
      * @param $dbDate has already been verified to be isDbDate()
      * @return bool
      */
-    static public function isDbDateInPast(string $dbDate):bool
+    public static function isDbDateInPast(string $dbDate):bool
     {
         return self::dbDateCompare($dbDate) < 0;
     }
 
-    static public function isDigit($check)
+    public static function isDigit($check)
     {
         if (strlen($check) != 1 || !self::isInteger($check)) {
             return false;
@@ -258,7 +258,7 @@ class ValidationService
         return true;
     }
 
-    static public function isTwoCharNumber($check, $max = 99, $leadingZeroOk = true): bool
+    public static function isTwoCharNumber($check, $max = 99, $leadingZeroOk = true): bool
     {
         if (strlen($check) != 2) {
             return false;
@@ -276,19 +276,19 @@ class ValidationService
         return true;
     }
 
-    static public function isDbMilitaryHours($check): bool
+    public static function isDbMilitaryHours($check): bool
     {
         // 00 - 23
         return self::isTwoCharNumber($check, 23);
     }
 
-    static public function isMinutes($check): bool
+    public static function isMinutes($check): bool
     {
         // 00 - 59
         return self::isTwoCharNumber($check, 59);
     }
 
-    static public function isSeconds($check): bool
+    public static function isSeconds($check): bool
     {
         // 00 - 59
         return self::isMinutes($check);
@@ -300,7 +300,7 @@ class ValidationService
      * d1, d2 already verified to be isDbDate()
      * @return int
      */
-    static public function dbDateCompare($d1, $d2 = null): int
+    public static function dbDateCompare($d1, $d2 = null): int
     {
         // inputs 2 mysql dates and returns d1 - d2 in seconds
         if ($d2 === null) {
@@ -313,12 +313,12 @@ class ValidationService
      * @param $dbDate already been verified to be isDbDate()
      * @return int
      */
-    static public function convertDateMktime($dbDate): int
+    public static function convertDateMktime($dbDate): int
     {
         return mktime(0, 0, 0, substr($dbDate, 5, 2), substr($dbDate, 8, 2), substr($dbDate, 0, 4));
     }
 
-    static public function isDbTimestamp($check): bool
+    public static function isDbTimestamp($check): bool
     {
         if (!self::isDbDate(substr($check, 0, 10))) {
             return false;
@@ -353,7 +353,7 @@ class ValidationService
         return true;
     }
 
-    static public function isEmail(string $check): bool
+    public static function isEmail(string $check): bool
     {
         return filter_var($check, FILTER_VALIDATE_EMAIL);
     }

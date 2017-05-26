@@ -18,7 +18,7 @@ class AdminsModel extends DbTable
         $this->allowDelete = false;
     }
 
-    public function getFormFieldsArray()
+    public function getFormFields(): array
     {
         return [
 
@@ -105,13 +105,7 @@ class AdminsModel extends DbTable
         ];
     }
 
-    public function getFormFields()
-    {
-        $fields = $this->getFormFieldsArray();
-        return FormHelper::insertValuesErrors($fields);
-    }
-
-    public function getValidationRules()
+    public function getValidationRules(): array
     {
         return ValidationService::getRules($this->getFormFieldsArray());
     }

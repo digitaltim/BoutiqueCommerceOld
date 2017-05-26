@@ -7,7 +7,7 @@ use It_All\FormFormer\Form;
 
 class CsrfFormFormerHelper
 {
-    static public function addCsrfFields(Form $form, $request, $container)
+    public static function addCsrfFields(Form $form, $request, $container)
     {
         // CSRF token name and value
         $csrfNameKey = $container->csrf->getTokenNameKey();

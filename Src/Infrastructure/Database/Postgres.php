@@ -83,7 +83,7 @@ Class Postgres
      * @return recordset
      * note: NOT enough info given by pg_meta_data($tableName);
      */
-    static public function getTableMetaData(string $tableName)
+    public static function getTableMetaData(string $tableName)
     {
         $q = new QueryBuilder("SELECT column_name, data_type, column_default, is_nullable, character_maximum_length, numeric_precision, udt_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = $1", $tableName);
 
