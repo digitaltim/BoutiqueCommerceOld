@@ -12,8 +12,8 @@ class CsrfFormFormerHelper
         // CSRF token name and value
         $csrfNameKey = $container->csrf->getTokenNameKey();
         $csrfValueKey = $container->csrf->getTokenValueKey();
-        $csrfNameValue = $request->getAttribute($csrfNameKey);
-        $csrfValuevalue = $request->getAttribute($csrfValueKey);
+        $csrfNameValue = $container->csrf->getTokenName();
+        $csrfValuevalue = $container->csrf->getTokenValue();
 
         // Render HTML form which POSTs to /bar with two hidden input fields for the
 // name and value:

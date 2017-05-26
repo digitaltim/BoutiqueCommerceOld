@@ -8,8 +8,6 @@ class FormHelper
     private static $fields;
 
     /**
-     * @param array $fields
-     * @return array
      * for each field with a validation error, this adds the 'error' key and message and an error class attribute to fieldName
      */
     private static function insertErrors()

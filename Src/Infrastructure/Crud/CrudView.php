@@ -158,6 +158,10 @@ class CrudView extends AdminView
                 $errorMessage = (array_key_exists($columnName, $fieldErrors)) ? $fieldErrors[$columnName] : '';
                 $isDisabled = (in_array($columnName, $disabledColumns)) ? true : false;
                 $hiddenValue = (array_key_exists($columnName, $hiddenColumnValues)) ? $hiddenColumnValues[$columnName] : null;
+
+                if (is_bool($initialValue)) {
+                    echo 'bool '.$columnName.'<br>';
+                }
                 getFormFieldFromDbColumn($form, $column, $errorMessage, $initialValue, null, null, null, $isDisabled, $hiddenValue);
             }
         }

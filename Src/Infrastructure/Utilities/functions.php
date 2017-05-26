@@ -354,19 +354,9 @@ function convertDbDateDbTimestamp($dbDate, $time = 'end')
 }
 
 /**
- * @param Form $form
- * @param DbColumn $column
- * @param string $initialValue
- * @param null $label
- * @param null $placeholder
- * @param null $fieldName
- * @param bool $isDisabled
- * @param null $hiddenValue
- * @return mixed
- * @throws \Exception
  * Note also capable of creating a field group (radio buttons) for enum fields
  */
-function getFormFieldFromDbColumn(Form $form, DbColumn $column, $errorMessage = null, $initialValue = '', $label = null, $placeholder=null, $fieldName = null, $isDisabled = false, $hiddenValue = null)
+function getFormFieldFromDbColumn(Form $form, \It_All\BoutiqueCommerce\Src\Infrastructure\Database\DbColumn $column, $errorMessage = null, $initialValue = '', $label = null, $placeholder=null, $fieldName = null, $isDisabled = false, $hiddenValue = null)
 {
     $defaultTextareaRows = 2;
     $defaultTextareaCols = 40;
@@ -472,7 +462,6 @@ function getFormFieldFromDbColumn(Form $form, DbColumn $column, $errorMessage = 
                         $choices = array();
                         while ($row = pg_fetch_assoc($res)) {
                             $choiceText = (strlen($row['enum_value']) == 0) ? '{N/A}' : $row['enum_value'];
-
                             $choices[$choiceText] = ($row['enum_value'] == $initialValue) ? [$row['enum_value'], true] : $row['enum_value'];
                         }
                         $newField['name'] = $columnName;

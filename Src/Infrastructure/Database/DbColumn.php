@@ -51,9 +51,9 @@ class DbColumn
         $this->name = $columnInfo['column_name'];
         $this->type = $columnInfo['data_type'];
         $this->isNullable  = $columnInfo['is_nullable'] == 'YES';
-        $this->defaultValue = $columnInfo['column_default'];
         $this->characterMaximumLength = $columnInfo['character_maximum_length'];
         $this->udtName = $columnInfo['udt_name'];
+        $this->setDefaultValue($columnInfo['column_default']);
         $this->setIsUnique();
         $this->setIsBlankable();
     }
@@ -85,30 +85,36 @@ class DbColumn
     }
 
 
+    private function setDefaultValue($columnDefault)
+    {
+        if ($columnDefault === null) {
+            $this->defaultValue = '';
+        } else {
+            switch ($this->type) {
+                case 'character':
+                case 'character varying':
+                case 'text':
+                    // formatted like 'default'::text
+                case 'USER-DEFINED':
+                    // formatted like 'default'::tableName_columnName
+                    // parse out default
+                    $parseColDef = explode("'", $columnDefault);
+                    return $parseColDef[1];
+                    break;
+                default:
+                    return $columnDefault;
+            }
+        }
+    }
+
     public function getDefaultValue()
     {
-        if ($this->defaultValue === null) {
-            return false;
-        }
-        switch ($this->type) {
-            case 'character':
-            case 'character varying':
-            case 'text':
-                // formatted like 'default'::text
-            case 'USER-DEFINED':
-                // formatted like 'default'::tableName_columnName
-                // parse out default
-                $parseColDef = explode("'", $this->defaultValue);
-                return $parseColDef[1];
-                break;
-            default:
-                return $this->defaultValue;
-        }
+        return $this->defaultValue;
     }
 
     public function isRequired(): bool
     {
-        return !$this->isNullable && ($this->getDefaultValue() === false || strlen($this->getDefaultValue()) > 0);
+        return !$this->isNullable;
     }
 
     public function getName(): string
