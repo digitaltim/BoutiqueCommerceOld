@@ -16,10 +16,10 @@ var onError = function (err) {
     this.emit('end');
 };
 
-var scssSrc = 'prebuild/scss/';
-var jsSrc = 'prebuild/js/';
-var cssDest = 'public/css';
-var jsDest = 'public/js';
+var scssSrc = 'scss/';
+var jsSrc = 'js/';
+var cssDest = '../Src/public/css';
+var jsDest = '../Src/public/js';
 var jsFile = 'scripts.min.js'; // use this only if concatenating all js wiht .pipe(concat(jsFile))
 
 gulp.task('sass', function() {

@@ -24,19 +24,6 @@ function toggleNavSubSection(sectionNumber) {
     }
 }
 
-function toggleNavSubSectionOLD(id) {
-    var navSection = document.getElementById(id);
-    var showNavSubSection = document.getElementById('showNavSubSection');
-    var navSectionDisplay = navSection.style.display;
-    if (navSectionDisplay == '' || navSectionDisplay == 'none') {
-        navSection.style.display = 'block';
-        showNavSubSection.innerHTML = " <a href='#' onclick='toggleNavSubSection(id);'>-</a>";
-    } else if (navSectionDisplay == 'block') {
-        navSection.style.display = 'none';
-        showNavSubSection.innerHTML = " <a href='#' onclick='toggleNavSubSection(id);'>+ </a>";
-    }
-}
-
 function toggleDisplay(el) {
     if (el.style.display == '' || el.style.display == 'none') {
         el.style.display = 'block';
