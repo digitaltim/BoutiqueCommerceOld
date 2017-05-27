@@ -7,7 +7,7 @@ abstract class InsertUpdateBuilder extends QueryBuilder
 {
     public $dbTable;
 
-    function __construct($dbTable)
+    function __construct(string $dbTable)
     {
         $this->dbTable = $dbTable;
     }

@@ -73,12 +73,12 @@ class AdminsController extends Controller
 
         $username = $request->getParam('username');
 
-        $res = $adminsModel->insert([
-            'name' => $request->getParam('name'),
-            'username' => $username,
-            'role' => $request->getParam('role'),
-            'password_hash' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
-        ]);
+        $res = $adminsModel->insert(
+            $request->getParam('name'),
+            $username,
+            $request->getParam('role'),
+            $request->getParam('password')
+        );
 
         if ($res) {
             unset($_SESSION['formInput']);

@@ -10,7 +10,7 @@ class AdminsView extends AdminView
 {
     public function show($request, $response, $args)
     {
-        $res = (new AdminsModel)->select();
+        $res = (new AdminsModel)->select('id, name, username, role');
         $rows = [];
         while ($row = pg_fetch_assoc($res)) {
             $rows[] = $row;
@@ -21,7 +21,7 @@ class AdminsView extends AdminView
             $response,
             'admin/list.twig',
             [
-                'title' => '::Insert Admin',
+                'title' => 'Admins',
                 'results' => $results,
                 'navigationItems' => $this->navigationItems
             ]

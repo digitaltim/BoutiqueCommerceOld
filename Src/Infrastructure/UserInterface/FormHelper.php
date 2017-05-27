@@ -15,7 +15,7 @@ class FormHelper
         if (isset($_SESSION['validationErrors'])) {
             foreach ($_SESSION['validationErrors'] as $fieldName => $errorMessage) {
                 if (array_key_exists($fieldName, self::$fields)) {
-                    if (isset($fields[$fieldName]['attributes']['class'])) {
+                    if (isset(self::$fields[$fieldName]['attributes']['class'])) {
                         self::$fields[$fieldName]['attributes']['class'] .= " formFieldError";
                     } else {
                         self::$fields[$fieldName]['attributes']['class'] = "formFieldError";

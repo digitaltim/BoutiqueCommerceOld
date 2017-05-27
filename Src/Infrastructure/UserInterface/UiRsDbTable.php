@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DbTable;
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DbTableORM;
 
 /**
  * Class UiRsDbTable
@@ -13,7 +13,7 @@ class UiRsDbTable extends UiRsTable
 {
     protected $dbTableModel;
 
-    function __construct(DbTable $dbTableModel, $outputColumns = [])
+    function __construct(DbTableORM $dbTableModel, $outputColumns = [])
     {
         $this->dbTableModel = $dbTableModel;
         // create output columns

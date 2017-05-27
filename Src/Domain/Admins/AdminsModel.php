@@ -3,21 +3,11 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DbTable;
-use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 
-class AdminsModel extends DbTable
+class AdminsModel
 {
-    function __construct()
-    {
-        parent::__construct('admins');
-        $this->allowInsert = true;
-        $this->allowUpdate = false;
-        $this->allowDelete = false;
-    }
-
     public function getFormFields(): array
     {
         return [
@@ -107,7 +97,19 @@ class AdminsModel extends DbTable
 
     public function getValidationRules(): array
     {
-        return ValidationService::getRules($this->getFormFieldsArray());
+        return ValidationService::getRules($this->getFormFields());
+    }
+
+    public function select(string $columns = '*')
+    {
+        $q = new QueryBuilder("SELECT $columns FROM admins");
+        return $q->execute();
+    }
+
+    public function insert(string $name, string $username, string $password, string $role)
+    {
+        $q = new QueryBuilder("INSERT INTO admins (name, username, password_hash, role) VALUES(\$1, \$2, \$3, \$4)", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role);
+        return $q->execute();
     }
 
     public function checkRecordExistsForUsername(string $username)
@@ -144,5 +146,4 @@ class AdminsModel extends DbTable
         }
         return $rows;
     }
-
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure\Utilities;
 
-use It_All\BoutiqueCommerce\Models\DbColumn;
 use It_All\FormFormer\Form;
 
 /**
@@ -33,71 +32,6 @@ function emailNotify($to, string $subject, string $body)
         return true;
     }
     return false;
-}
-
-function getBaseUrl()
-{
-    global $config;
-    $baseUrl = "https://";
-    if ($config['domainUseWww']) {
-        $baseUrl .= "www.";
-    }
-    $baseUrl .= $_SERVER['SERVER_NAME'];
-    return $baseUrl;
-}
-
-/**
- * @param string $toPage page and query string only.
- * @param bool $addAdminDir
- * if called with no args, redirects to current page with proper protocol, www or not based on config, and query string
- * to redirect to the current page with no qs call Utilities::redirect(Utilities::getCurrentPage(false)) or Utilities:: redirectCurrentPageNoQs()
- * suppress redirect if on dev server and there's a page error and we're in debug mode so any errors can be echoed
- */
-function redirect($toPage = null, $addAdminDir = false)
-{
-    global $config;
-    if (is_null($toPage)) {
-        $toPage = getCurrentPage(true, false);
-    }
-    // add / if nec
-    if (substr($toPage, 0, 1) != "/") {
-        $toPage = "/" . $toPage;
-    }
-    if ($addAdminDir) {
-        $toPage = "/" . $config['dirs']['admin'] . $toPage;
-    }
-    $to = getBaseUrl() . $toPage;
-    header("Location: $to");
-    exit();
-}
-
-function redirectCurrentPageNoQs()
-{
-    redirect(Utilities::getCurrentPage(false));
-}
-
-/**
- * returns the current path, file, and query string (if set)
- * @param bool $includeIndex if set false index.php will not be included
- */
-function getCurrentPage($includeQueryString = true, $includeIndex = true): string
-{
-    $page = (!$includeIndex && $_SERVER['SCRIPT_NAME'] == '/index.php') ? "/" : $_SERVER['SCRIPT_NAME'];
-    if ($includeQueryString && isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])) {
-        $page .= "?" . $_SERVER['QUERY_STRING'];
-    }
-    return $page;
-}
-
-/**
- * @return mixed
- * returns the url after /adminDir/ not incl query string
- * useful for comparing to Config::$adminPages
- */
-function getCurrentAdminPage()
-{
-    global $config;
-    return substr(getCurrentPage(false), strlen($config['dirs']['admin']) + 2);
 }
 
 /**
@@ -138,11 +72,6 @@ function sessionValidId($sessionId, $isEmptyIdValid = true): bool
         return true;
     }
     return preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $sessionId) > 0;
-}
-
-function isLoggedIn()
-{
-    return isset($_SESSION['username']) && isset($_SESSION['permissions']);
 }
 
 /**
@@ -190,44 +119,6 @@ function getFileExt(string $fileName)
     }
     $fileNameParts = explode('.', $fileName);
     return $fileNameParts[count($fileNameParts) - 1];
-}
-
-/**
- * determines if this is an admin dir
- * @return bool
- */
-function isAdminDir()
-{
-    global $config;
-    return (getTopScriptDir() == $config['dirs']['admin']);
-}
-
-///**
-// * determines if this is the login page
-// * @return bool
-// */
-//function isLoginPage()
-//{
-//    return ($_SERVER['SCRIPT_NAME'] == Config::$loginPage);
-//}
-
-/**
- * gets all the dirs in path of current page
- * @return array
- */
-function getScriptDirs(): array
-{
-    return explode(DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_NAME']);
-}
-
-/**
- * gets the top directory of current page
- * @return string
- */
-function getTopScriptDir(): string
-{
-    $scriptParts = getScriptDirs();
-    return isset($scriptParts[1]) ? $scriptParts[1] : '/';
 }
 
 /**
@@ -319,7 +210,7 @@ function deleteCookie(string $cookieName)
  */
 function dbDateCompare($d1, $d2 = null): int
 {
-    // inputs 2 mysql dates and returns d1 - d2 in seconds
+    // inputs 2 dates (Y-m-d) and returns d1 - d2 in seconds
     if ($d2 === null) {
         $d2 = date('Y-m-d');
     }
@@ -356,7 +247,7 @@ function convertDbDateDbTimestamp($dbDate, $time = 'end')
 /**
  * Note also capable of creating a field group (radio buttons) for enum fields
  */
-function getFormFieldFromDbColumn(Form $form, \It_All\BoutiqueCommerce\Src\Infrastructure\Database\DbColumn $column, $errorMessage = null, $initialValue = '', $label = null, $placeholder=null, $fieldName = null, $isDisabled = false, $hiddenValue = null)
+function getFormFieldFromDbColumn(Form $form, \It_All\BoutiqueCommerce\Src\Infrastructure\Database\DbColumnORM $column, $errorMessage = null, $initialValue = '', $label = null, $placeholder=null, $fieldName = null, $isDisabled = false, $hiddenValue = null)
 {
     $defaultTextareaRows = 2;
     $defaultTextareaCols = 40;

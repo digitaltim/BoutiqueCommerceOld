@@ -6,7 +6,6 @@
         "league/oauth2-google": "^2.0",
         "phpmailer/phpmailer": "^5.2",
         "slim/flash": "^0.2.0",
-        "it-all/form-former": "*@dev",
         "slim/twig-view": "^2.2",
         "slim/csrf": "^0.8.1"
     },
