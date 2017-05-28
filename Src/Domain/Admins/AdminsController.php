@@ -42,7 +42,7 @@ class AdminsController extends Controller
             $this->logger->addInfo($message);
             $this->flash->addMessage('info', $message);
 
-            return $response->withRedirect($this->router->pathFor('crud.show', ['table' => 'admins']));
+            return $response->withRedirect($this->router->pathFor('admins.show'));
         }
 
         //
@@ -86,7 +86,7 @@ class AdminsController extends Controller
             $this->logger->addInfo($message);
             $this->flash->addMessage('info', $message);
 
-            return $response->withRedirect($this->router->pathFor('crud.show', ['table' => 'admins']));
+            return $response->withRedirect($this->router->pathFor('admins.show'));
         }
 
         //

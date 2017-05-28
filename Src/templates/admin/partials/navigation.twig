@@ -1,33 +1,32 @@
 <header id='pageHeader'>
 	<div id='topLineContainer'>
-		<div id='adminNavWrapper'>
+		<div id='adminNavContainer'>
 			<div id='showNav'><a href='#' onclick='toggleNav();'>+ nav</a></div>
-				<nav id='adminNavMain'>
-					{% for key, navigationItem in navigationItems %}
-						{% set navigationItemIndex = loop.index %}
-						{% if navigationItem.subSection %}
-							{% if navigationItem.link %}
-								<h3 class='navItem'><a href="{{ navigationItem.link }}">{{ key }}</a><div class='showNavSubSection' id='showNavSubSection{{ navigationItemIndex }}'> <a href='#' onclick='toggleNavSubSection("{{ navigationItemIndex }}")'>+</a></div></h3>
-							{% else %}
-								<h3 class='navItem'>{{ key }}<div class='showNavSubSection' id='showNavSubSection{{ navigationItemIndex }}'> <a href='#' onclick='toggleNavSubSection("{{ navigationItemIndex }}")'>+</a></div></h3>
-							{% endif %}
-							<div class='adminNavMainSubSection' id='adminNavMainSubSection{{ navigationItemIndex }}'>
-							{% for key, subSectionItem in navigationItem.subSection %}
-								<h3 class='subNavItem'><a href="{{ subSectionItem.link }}">{{ key }}</a></h3>
-							{% endfor %}
-							</div>
-						{% else %}
-							{% if navigationItem.link %}
-								<h3 class='navItem'><a href="{{ navigationItem.link }}">{{ key }}</a></h3>
-							{% else %}
-								<h3 class='navItem'>{{ key }}</h3>
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				</nav>
-			</div>
+            <nav id='adminNavMain'>
+                {% for key, navigationItem in navigationItems %}
+                    {% set navigationItemIndex = loop.index %}
+                    {% if navigationItem.subSection %}
+                        {% if navigationItem.link %}
+                            <h3 class='navItem'><a href="{{ navigationItem.link }}">{{ key }}</a><div class='showNavSubSection' id='showNavSubSection{{ navigationItemIndex }}'> <a href='#' onclick='toggleNavSubSection("{{ navigationItemIndex }}")'>+</a></div></h3>
+                        {% else %}
+                            <h3 class='navItem'>{{ key }}<div class='showNavSubSection' id='showNavSubSection{{ navigationItemIndex }}'> <a href='#' onclick='toggleNavSubSection("{{ navigationItemIndex }}")'>+</a></div></h3>
+                        {% endif %}
+                        <div class='adminNavMainSubSection' id='adminNavMainSubSection{{ navigationItemIndex }}'>
+                        {% for key, subSectionItem in navigationItem.subSection %}
+                            <h3 class='subNavItem'><a href="{{ subSectionItem.link }}">{{ key }}</a></h3>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        {% if navigationItem.link %}
+                            <h3 class='navItem'><a href="{{ navigationItem.link }}">{{ key }}</a></h3>
+                        {% else %}
+                            <h3 class='navItem'>{{ key }}</h3>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </nav>
 			<div id='headerTitle'>
-				<h1><a href="{{ path_for('home')}}">{{ storeName }}</a>    &nbsp;
+				<h1><a href="{{ path_for('home')}}">{{ storeName }}</a> {{ title }}
 					{% if not isLive %}
 						<span style='color: grey;'>{LOCAL TESTING}</span>
 					{% endif %}
@@ -42,9 +41,9 @@
 					<h4 class='headerGreeting'><a href="{{ path_for('authentication.login')}}">Login</a></h4>
 				</div>
 			{% endif %}
-		</div>
-		 </div>
-		 <h1 id='adminPageHeading'>{{ title }}</h1>
+            <div id='headerMessage'>
+                <h2 class="adminNoticeSuccess">&raquo; Test Success Message &laquo;</h2>
+            </div>
 		</div>
 	</div>
 </header>

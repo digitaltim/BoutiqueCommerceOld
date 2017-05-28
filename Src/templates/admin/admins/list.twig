@@ -7,7 +7,8 @@
 
 {% block htmlBodyContent %}
     {% include 'admin/partials/navigation.twig' %}
-    {{ title }}
-    {{ form | raw }}
+    Insert Admin
+    {% include 'admin/partials/list.twig' %}
     <script type='text/javascript' src='/js/uiHelper.js'></script>
 {% endblock %}
+

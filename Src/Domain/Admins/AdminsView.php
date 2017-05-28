@@ -19,7 +19,7 @@ class AdminsView extends AdminView
 
         return $this->view->render(
             $response,
-            'admin/list.twig',
+            'admin/admins/list.twig',
             [
                 'title' => 'Admins',
                 'results' => $results,

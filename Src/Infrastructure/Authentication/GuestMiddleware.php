@@ -11,7 +11,7 @@ class GuestMiddleware extends Middleware
     {
         // if user signed in redirect to admin home
         if ($this->container->authentication->check()) {
-            return $response->withRedirect($this->container->router->pathFor('crud.show', ['table' => 'admins']));
+            return $response->withRedirect($this->container->router->pathFor('admins.show'));
         }
 
         $response = $next($request, $response);

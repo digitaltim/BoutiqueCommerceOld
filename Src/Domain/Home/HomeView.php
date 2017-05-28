@@ -9,6 +9,10 @@ class HomeView extends View
 {
     public function index($request, $response)
     {
-        return $this->view->render($response, 'frontend/home.twig', ['title' => 'BoutiqueCommerce']);
+        return $this->view->render(
+            $response,
+            'frontend/home.twig',
+            ['title' => 'BoutiqueCommerce', 'pageType' => 'public']
+        );
     }
 }
