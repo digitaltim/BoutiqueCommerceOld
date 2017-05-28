@@ -27,31 +27,41 @@ class FormHelper
         }
     }
 
-    private static function insertValues()
+    private static function insertValues(array $values)
     {
         foreach (self::$fields as $fieldName => $fieldInfo) {
             if (!((array_key_exists('persist', $fieldInfo)) &&
                   ($fieldInfo['persist'] === false)) &&
-                (isset($_SESSION['formInput'][$fieldName]))) {
+                (isset($values[$fieldName]))) {
                 switch ($fieldInfo['tag']) {
                     case 'textarea':
-                        self::$fields[$fieldName]['value'] = $_SESSION['formInput'][$fieldName];
+                        self::$fields[$fieldName]['value'] = $values[$fieldName];
                         break;
                     case 'select':
-                        self::$fields[$fieldName]['selected'] = $_SESSION['formInput'][$fieldName];
+                        self::$fields[$fieldName]['selected'] = $values[$fieldName];
                         break;
                     default:
-                        self::$fields[$fieldName]['attributes']['value'] = $_SESSION['formInput'][$fieldName];
+                        self::$fields[$fieldName]['attributes']['value'] = $values[$fieldName];
                 }
             }
         }
-        unset($_SESSION['formInput']);
     }
 
-    public static function insertValuesErrors(array &$fields): array
+    /**
+     * @param array $fields
+     * @param array|null $values (could be db record)
+     * @return array
+     * if values input is array use that to insert values, if not and values are in session, use that then unset it
+     */
+    public static function insertValuesErrors(array &$fields, array $values = null): array
     {
         self::$fields = $fields;
-        self::insertValues();
+        if (is_array($values)) {
+            self::insertValues($values);
+        } elseif (isset($_SESSION['formInput']) && is_array($_SESSION['formInput'])) {
+            self::insertValues($_SESSION['formInput']);
+            unset($_SESSION['formInput']);
+        }
         self::insertErrors();
         return self::$fields;
     }

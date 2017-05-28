@@ -6,10 +6,9 @@
 {% endblock %}
 
 {% block htmlBodyContent %}
-    {% include 'admin/partials/navigation.twig' %}
+    {% include 'admin/partials/pageHeader.twig' %}
 
-
-
+    <a href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
     <div id='scrollingTableContainer'>
         <table class='scrollingTable'>
             <thead>
@@ -28,7 +27,7 @@
                 <tr>
                     {% for column in row %}
                         {% if loop.first %}
-                            <td><a href='{{ path_for('admins.show') }}/{{ column }}' title='update' target='' onclick=''>{{ column }}</a></td>
+                            <td><a href='{{ path_for(updateRoute, {'primaryKey': column}) }}' title='update'>{{ column }}</a></td>
                         {% else %}
                             <td>{{ column }}</td>
                         {% endif %}

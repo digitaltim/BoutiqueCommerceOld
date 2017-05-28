@@ -6,12 +6,12 @@
 {% endblock %}
 
 {% block htmlBodyContent %}
-    {% include 'admin/partials/navigation.twig' %}
+    {% include 'admin/partials/pageHeader.twig' %}
     <body onload='document.getElementById("name").focus();'>
     <main>
         <div id='mainContainerSmall'>
-            <h1>Insert Admin User</h1>
-            <form name="f1" method="post" action="{{ path_for('admins.post.insert')}}">
+            <h1>{{ title }}</h1>
+            <form name="f1" method="post" action="{{ path_for(formActionRoute, {'primaryKey': primaryKey})}}">
                 {% if generalFormError %}
                     <span class="generalFormError">{{ generalFormError }}</span>
                 {% endif %}

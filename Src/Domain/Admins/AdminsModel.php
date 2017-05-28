@@ -108,7 +108,13 @@ class AdminsModel
 
     public function insert(string $name, string $username, string $password, string $role)
     {
-        $q = new QueryBuilder("INSERT INTO admins (name, username, password_hash, role) VALUES(\$1, \$2, \$3, \$4)", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role);
+        $q = new QueryBuilder("INSERT INTO admins (name, username, password_hash, role) VALUES($1, $2, $3, $4)", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role);
+        return $q->execute();
+    }
+
+    public function update(string $name, string $username, string $password, string $role, int $id)
+    {
+        $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, password_hash = $3, role = $4 WHERE id = $5", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role, $id);
         return $q->execute();
     }
 
@@ -119,23 +125,17 @@ class AdminsModel
         return $q->checkRecordsExist();
     }
 
-    public function getAdminDataForUsername(string $username)
+    public function selectForUsername(string $username)
     {
-        $q = new QueryBuilder("SELECT a.id as admin_id, a.role, a.password_hash, e.id as employee_id, e.fname, e.lname FROM admins a LEFT OUTER JOIN employees e ON a.employee_id = e.id  WHERE a.username = $1", $username);
+        $q = new QueryBuilder("SELECT * FROM admins WHERE username = $1", $username);
         return $q->execute();
     }
 
-    public function getAdminDataForId(int $id)
+    public function selectForId(int $id)
     {
-        $q = new QueryBuilder("SELECT a.username, a.role, e.id as employee_id, e.fname, e.lname FROM admins a LEFT OUTER JOIN employees e ON a.employee_id = e.id  WHERE a.id = $1", $id);
-        $Res = $q->execute();
-        return pg_fetch_assoc($Res);
-    }
-
-    public function getAdminsData()
-    {
-        $q = new QueryBuilder("SELECT a.id as admin_id, a.username, a.role, e.fname, e.lname FROM admins a LEFT OUTER JOIN employees e ON a.employee_id = e.id  ORDER BY username");
-        return $q->execute();
+        $q = new QueryBuilder("SELECT * FROM admins WHERE id = $1", $id);
+        $res = $q->execute();
+        return pg_fetch_assoc($res);
     }
 
     public function findAll() {

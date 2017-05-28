@@ -19,9 +19,11 @@ class AdminsView extends AdminView
 
         return $this->view->render(
             $response,
-            'admin/admins/list.twig',
+            'admin/list.twig',
             [
                 'title' => 'Admins',
+                'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
+                'updateRoute' => 'admins.post.update',
                 'results' => $results,
                 'navigationItems' => $this->navigationItems
             ]
@@ -34,9 +36,10 @@ class AdminsView extends AdminView
 
         return $this->view->render(
             $response,
-            'admin/admins/insert.twig',
+            'admin/form.twig',
             [
                 'title' => 'Insert Admin',
+                'formActionRoute' => 'admins.post.insert',
                 'formFields' => FormHelper::insertValuesErrors($fields),
                 'generalFormError' => FormHelper::getGeneralFormError(),
                 'navigationItems' => $this->navigationItems
@@ -46,40 +49,22 @@ class AdminsView extends AdminView
 
     public function getUpdate($request, $response, $args)
     {
-        $rows[] = (new AdminsModel)->getAdminDataForId(intval($args['primaryKey']));
-        $results = $rows;
+        $adminData = (new AdminsModel)->selectForId(intval($args['primaryKey']));
 
-        $fields = (new AdminsModel)->getFormFields(); // TODO: create new form that matches DB columns
-
-        foreach ($fields as $fieldName => $fieldInfo) {
-            if (isset($results[0][$fieldName])) {
-                var_dump($fieldName);
-                switch ($fieldInfo['tag']) {
-                    case 'textarea':
-                        $fields[$fieldName]['value'] = $results[0][$fieldName];
-                        break;
-                    case 'select':
-                        $fields[$fieldName]['selected'] = $results[0][$fieldName];
-                        break;
-                    default:
-                        $fields[$fieldName]['attributes']['value'] = $results[0][$fieldName];
-                }
-            }
-        }
+        $fields = (new AdminsModel)->getFormFields();
+        $fields = FormHelper::insertValuesErrors($fields, $adminData);
 
         return $this->view->render(
             $response,
-            // 'admin/list.twig',
-            'admin/admins/insert.twig', // TODO: create new template 'Modify Admin User'
+            'admin/form.twig',
             [
-                'title' => '::Insert Admin',
-                'results' => $results,
+                'title' => 'Update Admin',
+                'formActionRoute' => 'admins.post.update',
+                'primaryKey' => $args['primaryKey'],
                 'formFields' => $fields,
                 'generalFormError' => FormHelper::getGeneralFormError(),
-                'navigationItems' => $this->navigationItems,
-                'path' => 'show' // TODO: dynamically set the path
+                'navigationItems' => $this->navigationItems
             ]
         );
     }
-
 }
