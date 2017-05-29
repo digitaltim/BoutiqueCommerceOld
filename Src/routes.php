@@ -35,27 +35,33 @@ $slim->post('/' . $config['dirs']['admin'],
 
 $slim->get('/' . $config['dirs']['admin'] . '/logout',
     'It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationView:getLogout')
+    ->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationMiddleware($container))
     ->setName('authentication.logout');
 
 // admins
 $slim->get('/' . $config['dirs']['admin'] . '/admins',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:show')
+    ->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationMiddleware($container))
     ->setName('admins.show');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/insert',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:getInsert')
+    ->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationMiddleware($container))
     ->setName('admins.insert');
 
 $slim->post('/' . $config['dirs']['admin'] . '/admins/insert',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsController:postInsert')
+    ->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationMiddleware($container))
     ->setName('admins.post.insert');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:getUpdate')
+    ->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationMiddleware($container))
     ->setName('admins.update');
 
 $slim->post('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsController:postUpdate')
+    ->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationMiddleware($container))
     ->setName('admins.post.update');
 
 /////////////////////////////////////////
