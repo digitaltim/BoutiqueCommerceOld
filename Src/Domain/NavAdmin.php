@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Infrastructure;
+namespace It_All\BoutiqueCommerce\Src\Domain;
 
 /**
  * navigation for admin pages

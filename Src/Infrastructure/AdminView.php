@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure;
 
+use It_All\BoutiqueCommerce\Src\Domain\NavAdmin;
 use Slim\Container;
 
 class AdminView
@@ -20,7 +21,7 @@ class AdminView
         $container['flash'];
 
         // Instantiate navigation navbar contents
-        $navAdmin = new NavAdmin($this->db);
+        $navAdmin = new NavAdmin();
         $this->navigationItems = $navAdmin->getSections();
     }
 
