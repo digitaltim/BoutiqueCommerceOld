@@ -5,6 +5,50 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\Utilities;
 
 use It_All\FormFormer\Form;
 
+function getBaseUrl()
+{
+    global $config;
+    $baseUrl = "https://";
+    if ($config['domainUseWww']) {
+        $baseUrl .= "www.";
+    }
+    $baseUrl .= $_SERVER['SERVER_NAME'];
+    return $baseUrl;
+}
+
+function getCurrentPage($includeQueryString = true, $includeIndex = true): string
+{
+    $page = (!$includeIndex && $_SERVER['SCRIPT_NAME'] == '/index.php') ? "/" : $_SERVER['SCRIPT_NAME'];
+    if ($includeQueryString && isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])) {
+        $page .= "?" . $_SERVER['QUERY_STRING'];
+    }
+    return $page;
+}
+
+/**
+ * @param string $toPage page and query string only.
+ * @param bool $addAdminDir
+ * if called with no args, redirects to current page with proper protocol, www or not based on config, and query string
+ * suppress redirect if on dev server and there's a page error and we're in debug mode so any errors can be echoed
+ */
+function redirect($toPage = null, $addAdminDir = false)
+{
+    global $config;
+    if (is_null($toPage)) {
+        $toPage = getCurrentPage(true, false);
+    }
+    // add / if nec
+    if (substr($toPage, 0, 1) != "/") {
+        $toPage = "/" . $toPage;
+    }
+    if ($addAdminDir) {
+        $toPage = "/" . $config['dirs']['admin'] . $toPage;
+    }
+    $to = getBaseUrl() . $toPage;
+    header("Location: $to");
+    exit();
+}
+
 /**
  * @param $to mixed array of emails or string of email
  * @param $subject string
