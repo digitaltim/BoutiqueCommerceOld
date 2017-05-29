@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Infrastructure\Authentication;
+namespace It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authentication;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Controller;
 

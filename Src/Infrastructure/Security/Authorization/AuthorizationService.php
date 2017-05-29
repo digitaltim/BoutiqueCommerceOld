@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Infrastructure\Authorization;
+namespace It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authorization;
 
 use Psr\Log\InvalidArgumentException;
 

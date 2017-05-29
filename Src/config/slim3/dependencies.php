@@ -23,12 +23,12 @@ $container['db'] = function($container) use ($db) {
 
 // Authentication
 $container['authentication'] = function($container) {
-    return new It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationService;
+    return new It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authentication\AuthenticationService;
 };
 
 // Authorization
 $container['authorization'] = function($container) {
-    return new It_All\BoutiqueCommerce\Src\Infrastructure\Authorization\AuthorizationService;
+    return new It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authorization\AuthorizationService;
 };
 
 // Flash messages
@@ -106,5 +106,5 @@ unset($container['phpErrorHandler']);
 // -----------------------------------------------------------------------------
 // Middleware registration
 // -----------------------------------------------------------------------------
-$slim->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Csrf\CsrfViewMiddleware($container));
+$slim->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Security\CsrfViewMiddleware($container));
 $slim->add($container->csrf);
