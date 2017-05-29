@@ -10,11 +10,6 @@ class NavAdmin
 {
     private $sections;
 
-    const NAV_LI_STYLE = 'navListItem';
-    const SUBNAV_LI_STYLE = 'subNavListItem';
-    const NAV_ITEM_STYLE = 'navItem';
-    const SUBNAV_ITEM_STYLE = 'subNavItem';
-
     function __construct()
     {
         $this->setSections();
