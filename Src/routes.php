@@ -33,6 +33,7 @@ $slim->post('/' . $config['dirs']['admin'],
 
 /////////////////////////////////////////
 // Routes that only authenticated users access
+// Note, if route needs authorization as well, the authorization is added prior to authentication, so that authentication is performed first
 
 $slim->get('/' . $config['dirs']['admin'] . '/logout',
     'It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationView:getLogout')
@@ -42,27 +43,31 @@ $slim->get('/' . $config['dirs']['admin'] . '/logout',
 // admins
 $slim->get('/' . $config['dirs']['admin'] . '/admins',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:show')
+    ->add(new AuthorizationMiddleware($container, 'director'))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.show');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/insert',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:getInsert')
+    ->add(new AuthorizationMiddleware($container, 'director'))
     ->add(new AuthenticationMiddleware($container))
-    ->add(new AuthorizationMiddleware($container, 'owner'))
     ->setName('admins.insert');
 
 $slim->post('/' . $config['dirs']['admin'] . '/admins/insert',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsController:postInsert')
+    ->add(new AuthorizationMiddleware($container, 'director'))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.post.insert');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsView:getUpdate')
+    ->add(new AuthorizationMiddleware($container, 'director'))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.update');
 
 $slim->post('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     'It_All\BoutiqueCommerce\Src\Domain\Admins\AdminsController:postUpdate')
+    ->add(new AuthorizationMiddleware($container, 'director'))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.post.update');
 
