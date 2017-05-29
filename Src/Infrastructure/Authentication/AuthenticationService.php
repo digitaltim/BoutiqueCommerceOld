@@ -24,7 +24,7 @@ class AuthenticationService
     public function attemptLogin(string $username, string $password): bool
     {
         $admins = new AdminsModel('admins');
-        $rs = $admins->getAdminDataForUsername($username);
+        $rs = $admins->selectForUsername($username);
         $user = pg_fetch_assoc($rs);
 
         // check if user exists
