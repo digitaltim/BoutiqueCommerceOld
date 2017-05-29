@@ -26,14 +26,14 @@ $container['authentication'] = function($container) {
     return new It_All\BoutiqueCommerce\Src\Infrastructure\Authentication\AuthenticationService;
 };
 
+// Authorization
+$container['authorization'] = function($container) {
+    return new It_All\BoutiqueCommerce\Src\Infrastructure\Authorization\AuthorizationService;
+};
+
 // Flash messages
 $container['flash'] = function ($container) {
     return new \Slim\Flash\Messages();
-};
-
-// Form Former
-$container['form'] = function ($container) {
-    return new \It_All\FormFormer\Form();
 };
 
 // Twig

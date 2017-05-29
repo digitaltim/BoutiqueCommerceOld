@@ -10,39 +10,24 @@ finish infrastructure functionality
 - AUTHENTICATION
 -- decide what to do if there are too many failed login attempts
 -- have a config var for # failed login attempts that causes action
--- Why does the AuthenticationService interface differ from the AdminsModel, ex. getFormFields vs. getLoginFields? Should these be made similar?
+-- add middleware check failures to event log (ie unauthenticated user tries to access page)
 
 - VIEW ADMIN
--- with edit and delete...
+-- add delete (owner only)
 
-- EDIT ADMIN
--- create the page
-
-- DELETE ADMIN
--- create the ability
-
--CSRF
--- edit the failure message - see https://github.com/slimphp/Slim-Csrf#token-persistence ('after a failed CSRF check. In this case, you will probably want to detect this condition and instruct your users to reload the page in their legitimate browser tab (or automatically reload on the next failed request).'
--- do we need to redirect?
+- EDIT/INSERT ADMIN
+-- if passwords match values should be repopulated
 
 - AUTHORIZATION
--- (page level, admin nav, functionality - ie only owner/director can enter new admins - see DbTable::hasInsertPermission())
--- create ADMINS page like old system to change passwords and add new users
--- change admins.permissions to admins.role as a varchar (50) that is controlled in the app - enum var with options: (Owner, Director, Manager, Admin, Store, Vendor, Bookkeeper) Shipper(?)
--- only owner/director can insert new admins (see Authorization)
-
-- OUTPUT
--- change all twig output files to extend base.twig
+-- add middleware check failures to event log  (ie unauthorized user tries to access page)
+-- only owner,director can add/edit/delete admins (director cannot delete owner, owner cannot delete himself). page level so only authorized users can access page, block level as necessary so links only appear for authorized users.
 
 - OLD INPUT
 -- use a middleware to put posted vars into a session var instead of $_SESSION['formInput'] = $request->getParams(); in every post controller method.
 
-- VALIDATION
--- Consider refactoring
---- 'generalFormError' => FormHelper::getGeneralFormError()
----- possibly put directly into getFormFields() so we have a single larger array that we pass into twig and iterate through.
---- Validator::isDbDate() and isDbTimestamp using Regex
-
+-CSRF
+-- edit the failure message - see https://github.com/slimphp/Slim-Csrf#token-persistence ('after a failed CSRF check. In this case, you will probably want to detect this condition and instruct your users to reload the page in their legitimate browser tab (or automatically reload on the next failed request).'
+-- do we need to redirect?
 
 - DO I UNDERSTAND THE FRAMEWORK
 -- What does registering controller / factories in dependencies do? When they are commented out the script still runs. it makes them available to use in controllers or views (wherever the container is passed). some testing probably still in order on this.
@@ -61,11 +46,7 @@ finish infrastructure functionality
 
 - Configure application/apache to ignore trailing slashes in URLs
 
-- Use pathFor() functionality to create named routes. Ex. in CrudView index function for new UiRsDbTable?
-
 - In /utilities/functions.php
--- Remove unused functions. remove functions based on old page controller model that don't apply to front controller.
--- Find a better place for getFormFieldFromDbColumn(). update - will do when improving directory structure.
 --- isLiveServer() ?
 
 - CODING STANDARDS
@@ -79,99 +60,6 @@ finish infrastructure functionality
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
 -- fork infrastructure to a new repo
 -- the schema should only contain the admins table and maybe a test table in the forked repo
-
-- Improve directory structure: (?) *, **
-* possible directory structure
-BoutiqueCommerce
-.gitignore
-composer.json
-composer.lock
-gulpfile.js
-LICENSE.md
-postgresDump.sql
--app
--routes.php
---config
---controllers
---infrastructure
---Auth.php
----database
----services
---middleware
---models
---public
---services
---ui
---utilities
--docs
--node_modules
--prebuild
--storage
--vendor
-
-** alternate possible dir struct
-BoutiqueCommerce
-.gitignore
-composer.json
-composer.lock
-LICENSE.md
-README.md
-pgDbSchemaDump.sql
--src
- -public
-  .htaccess
-  index.php
-  -css..
-  -js..
- -infrastructure
-  NavAdmin.php
-  -CRUD
-   CrudController.php
-   CrudView.php
-  -Authentication
-   AuthenticationController.php
-   AuthenticationView.php
-   AuthenticationMiddleware.php
-   GuestMiddleware.php
-  -Authorization..
-  -Database
-   DbTable.php
-   DbColumn.php
-   PgDbAccessService.php
-   -QueryBuilder
-    QueryBuilder.php
-    InsertUpdateBuilder.php
-    InsertBuilder.php
-    UpdateBuilder.php
-  -Utilities
-   ValidatorService.php
-   PhpMailerService.php
-   MessagingAdmin.php (? - flash)
- -config..
-  routes.php
- -domain (ie biz)
-  Nav.php
-  -BusinessObjects
-   OrdersModel.php
-   CustomersModel.php
-   ..
-  -Views
-   -Admin.. (pages ie OrdersListView.php)
-   -Public.. (pages ie AboutUsView.php)
- -templates
--docs..
--prebuild
- gulpfile.js
- -node_modules
- -js..
- -scss..
-
--vendor..
--storage
- -cache..
- -logs..
--ignored
-
 
 OTHER
 - Explore https://pages.github.com/

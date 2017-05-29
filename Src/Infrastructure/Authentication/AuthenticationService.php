@@ -16,7 +16,7 @@ class AuthenticationService
         return false;
     }
 
-    public function check()
+    public function check(): bool
     {
         return isset($_SESSION['user']);
     }
