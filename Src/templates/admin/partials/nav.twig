@@ -1,0 +1,21 @@
+<nav id="adminNav">
+    <ul>
+        {% for key, navigationItem in navigationItems %}
+        <li>
+            {% if navigationItem.link %}
+                <a href="{{ navigationItem.link }}">{{ key }}</a>
+            {% else %}
+                {{ key }}
+            {% endif %}
+
+            {% if navigationItem.subSection %}
+                <ul>
+                {% for key, subSectionItem in navigationItem.subSection %}
+                    <li><a href="{{ subSectionItem.link }}">{{ key }}</a></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</nav>

@@ -1,0 +1,22 @@
+{% extends "base.twig" %}
+
+{% block htmlHeadCss %}
+    <link href="/css/grid.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block htmlBodyContent %}
+
+    {% include 'admin/partials/header.twig' %}
+
+    {% include 'admin/partials/nav.twig' %}
+
+    <main>
+        {% include 'admin/partials/scrollingTable.twig' %}
+    </main>
+
+    {% include 'admin/partials/footer.twig' %}
+
+{% endblock %}
+{% block htmlBodyJs %}
+    <script type="text/javascript" src="/js/uiHelper.js"></script>
+{% endblock %}

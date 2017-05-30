@@ -31,6 +31,14 @@ finish infrastructure functionality
 
 - Do we still need ListView.php and ListViewModel.php?
 
+- DIRECTORY STRUCTURE
+-- should prebuild be inside Src?
+-- should public be outside Src? Perhaps with index.php remaining inside somewhere...
+-- where will we put js files for admin functionality and how would that be secure?
+-- where should we put css files for admin?
+
+- clean up SCSS/CSS
+
 - DO I UNDERSTAND THE FRAMEWORK
 -- What does registering controller / factories in dependencies do? When they are commented out the script still runs. it makes them available to use in controllers or views (wherever the container is passed). some testing probably still in order on this.
 -- What services need instantiation in base classes, ex. Controller and AdminView? (plus DRY)

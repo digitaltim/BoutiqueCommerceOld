@@ -21,10 +21,10 @@ class NavAdmin
         global $config;
 
         $this->sections = [
-            'Admin Users' => [
+            'Admins' => [
                 'link' => '/'.$config['dirs']['admin'].'/admins',
                 'subSection' => [
-                    'Add New Admin' => [
+                    'Insert' => [
                         'link' => '/'.$config['dirs']['admin'].'/admins/insert'
                     ]
                 ]

@@ -1,0 +1,15 @@
+<header id="adminPageHeaderGrid">
+    <div>
+        {{ storeName }}
+        {% if not isLive %}
+            <span style="color: grey;">{LOCAL TESTING}</span>
+        {% endif %}
+    </div>
+    <div>
+        <span class="adminNoticeSuccess">&raquo; Test Success Message &laquo;</span>
+    </div>
+    <div>
+        Hello {{ authentication.user.username }}
+        [<a href="{{ path_for("authentication.logout")}}">logout</a>]
+    </div>
+</header>

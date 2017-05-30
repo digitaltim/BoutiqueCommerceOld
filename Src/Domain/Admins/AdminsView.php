@@ -11,15 +11,15 @@ class AdminsView extends AdminView
     public function show($request, $response, $args)
     {
         $res = (new AdminsModel)->select('id, name, username, role');
-        $rows = [];
+        $results = [];
         while ($row = pg_fetch_assoc($res)) {
-            $rows[] = $row;
+            $results[] = $row;
         }
-        $results = $rows;
+        $results = array_merge($results, $results, $results);
 
         return $this->view->render(
             $response,
-            'admin/list.twig',
+            'admin/listGrid.twig',
             [
                 'title' => 'Admins',
                 'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],

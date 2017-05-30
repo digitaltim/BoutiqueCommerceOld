@@ -77,14 +77,6 @@ button {
     border: 0;
 }
 
-/*
-:focus {
-    outline: 0;
-}
-Be carefull with this! It removes the gross user agent default outline that appears when focusing interactive
-elements. For accessibility only do this if you are absolutely sure you have custom focus state
-styles set everywhere.
-*/
 img {
     max-width: 100%;
     height: auto;
