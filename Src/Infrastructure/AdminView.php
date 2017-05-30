@@ -21,7 +21,7 @@ class AdminView
         $container['flash'];
 
         // Instantiate navigation navbar contents
-        $navAdmin = new NavAdmin();
+        $navAdmin = new NavAdmin($container);
         $this->navigationItems = $navAdmin->getSections();
     }
 
