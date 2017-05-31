@@ -26,10 +26,8 @@ class AuthorizationService
     }
 
     /**
-     * @param string $minimumRole
+     * @param string $minimumPermission
      * @return bool
-     *
-     *
      */
     public function check(string $minimumPermission): bool
     {

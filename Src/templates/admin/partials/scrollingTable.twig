@@ -10,7 +10,7 @@
             </th>
         </tr>
         {% set break = false %}
-        {% for row in results if not break %}
+        {% for row in table if not break %}
             <tr>
                 {% for key in row|keys %}
                     <th>{{ key }}</th>
@@ -20,11 +20,14 @@
         {% endfor %}
         </thead>
         <tbody>
-        {% for row in results %}
+        {% for row in table %}
             <tr>
                 {% for column in row %}
                     {% if loop.first %}
+                        {% set primaryKey = column %}
                         <td><a href="{{ path_for(updateRoute, {"primaryKey": column}) }}" title="update">{{ column }}</a></td>
+                    {% elseif loop.last %}
+                        <td><a href="{{ path_for(column, {"primaryKey": primaryKey}) }}" title="delete">X</a></td>
                     {% else %}
                         <td>{{ column }}</td>
                     {% endif %}

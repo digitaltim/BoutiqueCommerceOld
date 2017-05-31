@@ -128,6 +128,12 @@ class AdminsModel
         return $q->execute();
     }
 
+    public function delete(int $id)
+    {
+        $q = new QueryBuilder("DELETE FROM admins WHERE id = $1", $id);
+        return $q->execute();
+    }
+
     public function checkRecordExistsForUsername(string $username)
     {
         $q = new QueryBuilder("SELECT id FROM admins WHERE username = $1", $username);

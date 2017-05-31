@@ -14,7 +14,6 @@ abstract class Controller
         $this->container = $container;
         // Instantiate services/dependencies
         $container['db'];
-        $container['authorization'];
         $container['view'];
         $container['mailer'];
         $container['flash'];

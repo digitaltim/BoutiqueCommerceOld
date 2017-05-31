@@ -104,14 +104,13 @@ class NavAdmin
 
     public function getSectionsForUser(AuthorizationService $autho)
     {
-        $sections = []; // rebuild nav sections based on authorization
+        $sections = []; // rebuild nav sections based on authorization for this user
 
         foreach ($this->sections as $sectionName => $sectionInfo) {
 
             $updatedSection = $this->getSectionForUser($autho, $sectionName);
             // CAREFUL, apparently empty arrays evaluate to false
             if ($updatedSection !== false) {
-                echo $sectionName;
                 $sections[$sectionName] = $updatedSection;
             }
         }

@@ -79,3 +79,9 @@ $slim->post('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.update']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.post.update');
+
+$slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
+    $domainNs.'\Admins\AdminsController:getDelete')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.delete']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('admins.delete');

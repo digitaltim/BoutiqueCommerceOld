@@ -13,9 +13,8 @@ class AdminsView extends AdminView
         $res = (new AdminsModel)->select('id, name, username, role');
         $results = [];
         while ($row = pg_fetch_assoc($res)) {
-            $results[] = $row;
+            $results[] = array_merge($row, ['delete' => 'admins.delete']);
         }
-        $results = array_merge($results, $results, $results);
 
         return $this->view->render(
             $response,
@@ -24,7 +23,7 @@ class AdminsView extends AdminView
                 'title' => 'Admins',
                 'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
                 'updateRoute' => 'admins.post.update',
-                'results' => $results,
+                'table' => $results,
                 'navigationItems' => $this->navigationItems
             ]
         );

@@ -9,6 +9,10 @@ class AdminsController extends Controller
 {
     function postUpdate($request, $response, $args)
     {
+        if (!$this->authorization->checkFunctionality('admins.update')) {
+            throw new \Exception('No permission.');
+        }
+
         $_SESSION['formInput'] = $request->getParsedBody();
         $adminsModel = new AdminsModel();
 
@@ -54,12 +58,12 @@ class AdminsController extends Controller
 
     function postInsert($request, $response, $args)
     {
+        if (!$this->authorization->checkFunctionality('admins.insert')) {
+            throw new \Exception('No permission.');
+        }
+
         $_SESSION['formInput'] = $request->getParsedBody();
         $adminsModel = new AdminsModel();
-
-        if (!$this->authorization->checkFunctionality('admins.insert')) {
-            throw new \Exception('Permission denied.');
-        }
 
         $error = false;
 
@@ -102,6 +106,31 @@ class AdminsController extends Controller
         if ($error) {
             // redisplay the form with input values and error(s)
             return (new AdminsView($this->container))->getInsert($request, $response, $args);
+        }
+    }
+
+    function getDelete($request, $response, $args)
+    {
+        if (!$this->authorization->checkFunctionality('admins.delete')) {
+            throw new \Exception('No permission.');
+        }
+
+        $adminsModel = new AdminsModel();
+
+        $res = $adminsModel->delete(intval($args['primaryKey']));
+
+        if ($res) {
+            $message = 'Admin deleted.';
+            $this->logger->addInfo($message);
+            $this->flash->addMessage('info', $message);
+
+            return $response->withRedirect($this->router->pathFor('admins.index'));
+
+        } else {
+
+            // redisplay the form with input values and error(s)
+            $this->flash->addMessage('error', 'Admin deletion failure.');
+            return $response->withRedirect($this->router->pathFor('admins.index'));
         }
     }
 }
