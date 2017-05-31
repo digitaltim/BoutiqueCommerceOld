@@ -22,7 +22,7 @@ class AdminView
 
         // Instantiate navigation navbar contents
         $navAdmin = new NavAdmin($container);
-        $this->navigationItems = $navAdmin->getSections();
+        $this->navigationItems = $navAdmin->getSectionsForUser($container->authorization);
     }
 
     public function __get($name)

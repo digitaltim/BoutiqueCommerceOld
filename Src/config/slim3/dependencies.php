@@ -28,7 +28,8 @@ $container['authentication'] = function($container) {
 
 // Authorization
 $container['authorization'] = function($container) {
-    return new It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authorization\AuthorizationService;
+    $settings = $container->get('settings');
+    return new It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authorization\AuthorizationService($settings['authorization']);
 };
 
 // Flash messages

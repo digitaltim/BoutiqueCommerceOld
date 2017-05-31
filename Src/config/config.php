@@ -45,5 +45,12 @@ return [
         'owner' => "owner@domainName",
         'programmer' => "programmer@domainName",
         'service' => "service@domainName"
+    ],
+
+    'adminMinimumPermissions' => [
+        'admins.index' => 'director',
+        'admins.insert' => 'director',
+        'admins.update' => 'owner',
+        'admins.delete' => 'owner'
     ]
 ];

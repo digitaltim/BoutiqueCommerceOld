@@ -52,8 +52,13 @@ class AdminsModel
                 ],
                 'options' => [
                     '-- select --' => 'disabled',
+                    'owner' => 'owner',
+                    'director' => 'director',
+                    'manager' => 'manager',
+                    'shipper' => 'shipper',
                     'admin' => 'admin',
-                    'owner' => 'owner'
+                    'store' => 'store',
+                    'bookkeeper' => 'bookkeeper'
                 ],
                 'selected' => 'disabled'
             ],
@@ -104,6 +109,11 @@ class AdminsModel
     {
         $q = new QueryBuilder("SELECT $columns FROM admins");
         return $q->execute();
+    }
+
+    public function getMinimumPermissionsInsert()
+    {
+        return $this->minimumPermissionsInsert;
     }
 
     public function insert(string $name, string $username, string $password, string $role)

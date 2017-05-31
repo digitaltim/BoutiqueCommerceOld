@@ -39,7 +39,7 @@ class AdminsController extends Controller
                 $this->logger->addInfo($message);
                 $this->flash->addMessage('info', $message);
 
-                return $response->withRedirect($this->router->pathFor('admins.show'));
+                return $response->withRedirect($this->router->pathFor('admins.index'));
             } else {
                 $_SESSION['generalFormError'] = 'Query Failure';
                 $error = true;
@@ -56,6 +56,10 @@ class AdminsController extends Controller
     {
         $_SESSION['formInput'] = $request->getParsedBody();
         $adminsModel = new AdminsModel();
+
+        if (!$this->authorization->checkFunctionality('admins.insert')) {
+            throw new \Exception('Permission denied.');
+        }
 
         $error = false;
 
@@ -88,7 +92,7 @@ class AdminsController extends Controller
                 $this->logger->addInfo($message);
                 $this->flash->addMessage('info', $message);
 
-                return $response->withRedirect($this->router->pathFor('admins.show'));
+                return $response->withRedirect($this->router->pathFor('admins.index'));
             } else {
                 $_SESSION['generalFormError'] = 'Query Failure';
                 $error = true;

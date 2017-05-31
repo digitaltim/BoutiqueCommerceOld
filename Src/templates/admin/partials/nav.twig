@@ -8,9 +8,9 @@
                 {{ key }}
             {% endif %}
 
-            {% if navigationItem.subSection %}
+            {% if navigationItem.subSections %}
                 <ul>
-                {% for key, subSectionItem in navigationItem.subSection %}
+                {% for key, subSectionItem in navigationItem.subSections %}
                     <li><a href="{{ subSectionItem.link }}">{{ key }}</a></li>
                 {% endfor %}
                 </ul>

@@ -8,7 +8,7 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 
 class AdminsView extends AdminView
 {
-    public function show($request, $response, $args)
+    public function index($request, $response, $args)
     {
         $res = (new AdminsModel)->select('id, name, username, role');
         $results = [];

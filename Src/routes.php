@@ -39,6 +39,11 @@ $slim->post('/' . $config['dirs']['admin'],
 // Routes that only authenticated users access
 // Note, if route needs authorization as well, the authorization is added prior to authentication, so that authentication is performed first
 
+$slim->get('/' . $config['dirs']['admin'] . '/home',
+    $domainNs.'\AdminHome\AdminHomeView:index')
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('admin.home');
+
 $slim->get('/' . $config['dirs']['admin'] . '/logout',
     $securityNs.'\Authentication\AuthenticationView:getLogout')
     ->add(new AuthenticationMiddleware($container))
@@ -46,31 +51,31 @@ $slim->get('/' . $config['dirs']['admin'] . '/logout',
 
 // admins
 $slim->get('/' . $config['dirs']['admin'] . '/admins',
-    $domainNs.'\Admins\AdminsView:show')
-    ->add(new AuthorizationMiddleware($container, 'director'))
+    $domainNs.'\Admins\AdminsView:index')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.index']))
     ->add(new AuthenticationMiddleware($container))
-    ->setName('admins.show');
+    ->setName('admins.index');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/insert',
     $domainNs.'\Admins\AdminsView:getInsert')
-    ->add(new AuthorizationMiddleware($container, 'director'))
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.insert']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.insert');
 
 $slim->post('/' . $config['dirs']['admin'] . '/admins/insert',
     $domainNs.'\Admins\AdminsController:postInsert')
-    ->add(new AuthorizationMiddleware($container, 'director'))
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.insert']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.post.insert');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     $domainNs.'\Admins\AdminsView:getUpdate')
-    ->add(new AuthorizationMiddleware($container, 'director'))
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.update']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.update');
 
 $slim->post('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     $domainNs.'\Admins\AdminsController:postUpdate')
-    ->add(new AuthorizationMiddleware($container, 'director'))
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.update']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.post.update');

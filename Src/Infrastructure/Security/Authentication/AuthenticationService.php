@@ -37,7 +37,7 @@ class AuthenticationService
         if (password_verify($password, $user['password_hash'])) {
             // set session for user
             $_SESSION['user'] = [
-                'id' => $user['admin_id'],
+                'id' => $user['id'],
                 'username' => $username,
                 'role' => $user['role']
             ];

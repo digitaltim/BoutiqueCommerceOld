@@ -28,7 +28,7 @@ class AuthenticationController extends Controller
         if ($authentication) {
             unset($_SESSION['formInput']);
             $this->logger->addInfo($request->getParam('username').' logged in.');
-            return $response->withRedirect($this->router->pathFor('admins.show'));
+            return $response->withRedirect($this->router->pathFor('admin.home'));
         }
 
         // redisplay the form with input values and error(s)

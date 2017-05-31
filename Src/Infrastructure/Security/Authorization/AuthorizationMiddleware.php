@@ -17,10 +17,10 @@ class AuthorizationMiddleware extends Middleware
 
     public function __invoke($request, $response, $next)
 	{
-        // check if the user is not signed in
+        // check if the user is not authorized
         if (!$this->container->authorization->check($this->minimumRole)) {
-            $this->container->flash->addMessage('error', 'Please sign in before doing that.');
-            return $response->withRedirect($this->container->router->pathFor('admins.show'));
+            $this->container->flash->addMessage('error', 'No permission.');
+            return $response->withRedirect($this->container->router->pathFor('admin.home'));
         }
 
 		$response = $next($request, $response);
