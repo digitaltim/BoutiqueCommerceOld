@@ -34,5 +34,15 @@ return [
         // General settings
         'isLive' => $config['isLive'],
         'storeName' => $config['storeName']
-    ]
+    ],
+
+    //Override the default Not Found Handler
+    'notFoundHandler' => function ($c) {
+        return function ($request, $response) use ($c) {
+            return $c['response']
+                ->withStatus(404)
+                ->withHeader('Content-Type', 'text/html')
+                ->withRedirect($c->router->pathFor('pageNotFound'));
+        };
+    }
 ];

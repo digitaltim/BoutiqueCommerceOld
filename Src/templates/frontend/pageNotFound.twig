@@ -1,0 +1,13 @@
+{%  extends 'base.twig' %}
+
+{%  block htmlHeadCss %}
+    <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+    <link href='/css/test.css' rel='stylesheet' type='text/css'>
+{%  endblock %}
+
+{%  block htmlBodyContent %}
+    {% include 'frontend/partials/navigation.twig' %}
+    <section class="main">
+        <h1>Your requested page was not found.</h1>
+    </section>
+{%  endblock %}

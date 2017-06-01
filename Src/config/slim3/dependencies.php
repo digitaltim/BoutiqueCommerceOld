@@ -93,15 +93,3 @@ $container['csrf'] = function ($container) {
     // setting the persistentTokenMode parameter true allows redisplaying a form with errors with a render rather than redirect call and will not cause CSRF failure if the page is refreshed (http://blog.ircmaxell.com/2013/02/preventing-csrf-attacks.html)
     return new \Slim\Csrf\Guard('csrf', $storage, null, 200, 16, true);
 };
-
-// End Services (Dependencies)
-
-// Error Handling - remove Slim's Error Handling
-unset($container['errorHandler']);
-unset($container['phpErrorHandler']);
-
-// -----------------------------------------------------------------------------
-// Middleware registration
-// -----------------------------------------------------------------------------
-$slim->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Security\CsrfViewMiddleware($container));
-$slim->add($container->csrf);

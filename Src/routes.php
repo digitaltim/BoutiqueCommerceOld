@@ -18,6 +18,7 @@ $domainNs = 'It_All\BoutiqueCommerce\Src\Domain';
 $slim->get('/',
     'It_All\BoutiqueCommerce\Src\Domain\Home\HomeView:index')
     ->setName('home');
+
 /////////////////////////////////////////
 
 /////////////////////////////////////////
@@ -85,3 +86,7 @@ $slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.delete']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.delete');
+
+$slim->get('/{otherpage}',
+    'It_All\BoutiqueCommerce\Src\Domain\PageNotFound\PageNotFoundView:index')
+    ->setName('pageNotFound');
