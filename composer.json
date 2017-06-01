@@ -2,10 +2,8 @@
     "require": {
         "slim/slim": "^3.0",
         "monolog/monolog": "^1.22",
-        "slim/php-view": "^2.2",
         "league/oauth2-google": "^2.0",
         "phpmailer/phpmailer": "^5.2",
-        "slim/flash": "^0.2.0",
         "slim/twig-view": "^2.2",
         "slim/csrf": "^0.8.1"
     },

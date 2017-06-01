@@ -39,9 +39,9 @@ class AdminsController extends Controller
 
             if ($res) {
                 unset($_SESSION['formInput']);
-                $message = 'New admin user ' . $username . ' inserted.';
+                $message = 'Admin ' . $username . ' updated.';
                 $this->logger->addInfo($message);
-                $this->flash->addMessage('info', $message);
+                $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 
                 return $response->withRedirect($this->router->pathFor('admins.index'));
             } else {
@@ -92,9 +92,9 @@ class AdminsController extends Controller
 
             if ($res) {
                 unset($_SESSION['formInput']);
-                $message = 'New admin user ' . $username . ' inserted.';
+                $message = 'Admin ' . $username . ' inserted';
                 $this->logger->addInfo($message);
-                $this->flash->addMessage('info', $message);
+                $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 
                 return $response->withRedirect($this->router->pathFor('admins.index'));
             } else {
@@ -120,16 +120,16 @@ class AdminsController extends Controller
         $res = $adminsModel->delete(intval($args['primaryKey']));
 
         if ($res) {
-            $message = 'Admin deleted.';
+            $message = 'Admin deleted';
             $this->logger->addInfo($message);
-            $this->flash->addMessage('info', $message);
+            $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 
             return $response->withRedirect($this->router->pathFor('admins.index'));
 
         } else {
 
             // redisplay the form with input values and error(s)
-            $this->flash->addMessage('error', 'Admin deletion failure.');
+            $_SESSION['adminNotice'] = [$message, 'adminNoticeFailure'];
             return $response->withRedirect($this->router->pathFor('admins.index'));
         }
     }

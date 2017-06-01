@@ -22,6 +22,7 @@ class AdminsView extends AdminView
             [
                 'title' => 'Admins',
                 'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
+                'updateColumn' => 'id',
                 'updateRoute' => 'admins.post.update',
                 'table' => $results,
                 'navigationItems' => $this->navigationItems

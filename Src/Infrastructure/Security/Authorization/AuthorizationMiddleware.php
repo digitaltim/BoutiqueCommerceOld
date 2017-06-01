@@ -19,7 +19,8 @@ class AuthorizationMiddleware extends Middleware
 	{
         // check if the user is not authorized
         if (!$this->container->authorization->check($this->minimumRole)) {
-            $this->container->flash->addMessage('error', 'No permission.');
+            $_SESSION['adminNotice'] = ['No permission', 'adminNoticeFailure'];
+
             return $response->withRedirect($this->container->router->pathFor('admin.home'));
         }
 

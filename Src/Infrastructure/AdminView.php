@@ -18,7 +18,9 @@ class AdminView
         $container['db'];
         $container['view'];
         $container['mailer'];
-        $container['flash'];
+
+        // initialize
+        $_SESSION['adminNotice'] = [];
 
         // Instantiate navigation navbar contents
         $navAdmin = new NavAdmin($container);

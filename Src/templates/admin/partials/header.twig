@@ -6,7 +6,9 @@
         {% endif %}
     </div>
     <div>
-        <span class="adminNoticeSuccess">&raquo; Test Success Message &laquo;</span>
+        {% if adminNotice %}
+            <span class="{{ adminNotice.1 }}">&raquo; {{ adminNotice.0 }} &laquo;</span>
+        {% endif %}
     </div>
     <div>
         Hello {{ authentication.user.username }}

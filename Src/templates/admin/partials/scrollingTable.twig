@@ -22,14 +22,14 @@
         <tbody>
         {% for row in table %}
             <tr>
-                {% for column in row %}
-                    {% if loop.first %}
-                        {% set primaryKey = column %}
-                        <td><a href="{{ path_for(updateRoute, {"primaryKey": column}) }}" title="update">{{ column }}</a></td>
-                    {% elseif loop.last %}
-                        <td><a href="{{ path_for(column, {"primaryKey": primaryKey}) }}" title="delete">X</a></td>
+                {% for key, value in row %}
+                    {% if key == updateColumn %}
+                        {% set primaryKey = value %}
+                        <td><a href="{{ path_for(updateRoute, {"primaryKey": value}) }}" title="update">{{ value }}</a></td>
+                    {% elseif key == 'delete' %}
+                        <td><a href="{{ path_for(value, {"primaryKey": primaryKey}) }}" title="delete">X</a></td>
                     {% else %}
-                        <td>{{ column }}</td>
+                        <td>{{ value }}</td>
                     {% endif %}
                 {% endfor %}
             </tr>

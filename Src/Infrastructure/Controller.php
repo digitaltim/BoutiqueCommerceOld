@@ -16,7 +16,10 @@ abstract class Controller
         $container['db'];
         $container['view'];
         $container['mailer'];
-        $container['flash'];
+
+        // initialize
+        $_SESSION['adminNotice'] = [];
+
     }
 
     public function __get($name)

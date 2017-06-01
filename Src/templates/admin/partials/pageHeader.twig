@@ -42,7 +42,9 @@
 				</div>
 			{% endif %}
             <div id='headerMessage'>
-                <h2 class="adminNoticeSuccess">&raquo; Test Success Message &laquo;</h2>
+                {% if adminMessage %}
+                    <h2 class="adminNoticeSuccess">&raquo; {{ adminMessage }} &laquo;</h2>
+                {% endif %}
             </div>
 		</div>
 	</div>

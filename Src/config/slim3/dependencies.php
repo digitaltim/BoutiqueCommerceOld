@@ -32,11 +32,6 @@ $container['authorization'] = function($container) {
     return new It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authorization\AuthorizationService($settings['authorization']);
 };
 
-// Flash messages
-$container['flash'] = function ($container) {
-    return new \Slim\Flash\Messages();
-};
-
 // Twig
 $container['view'] = function ($container) {
     $settings = $container->get('settings');
@@ -61,8 +56,9 @@ $container['view'] = function ($container) {
         'user' => $container->authentication->user()
     ]);
 
-    // make flash messages available inside templates
-    $view->getEnvironment()->addGlobal('flash', $container->flash);
+    if (isset($_SESSION['adminNotice'])) {
+        $view->getEnvironment()->addGlobal('adminNotice', $_SESSION['adminNotice']);
+    }
 
     // make some config setting available inside templates
     $view->getEnvironment()->addGlobal('isLive', $settings['isLive']);
@@ -100,7 +96,7 @@ $container['csrf'] = function ($container) {
 
 // End Services (Dependencies)
 
-// Error Handling
+// Error Handling - remove Slim's Error Handling
 unset($container['errorHandler']);
 unset($container['phpErrorHandler']);
 
