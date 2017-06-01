@@ -1,11 +1,7 @@
 1) work on todo list
 
-finish infrastructure functionality
-
-- ADMIN NAVIGATION
--- fix html errors - many bottom </div> match nothing
--- messaging (flash? may be able to simply pass from controller to view). update: flash messages only work on redirect, try using $_SESSION['adminMessages'][] (array so we can have multiple). another update, not sure whether we should use flash messaging for this or at all. may be more useful (and pretty easy) to populate $_SESSION['adminMessages'][] and make it globally available to twig, then spit it back and empty it.
--- use named paths for links
+- finish infrastructure functionality
+-- make a nicer change pw for update admin
 
 - AUTHENTICATION
 -- decide what to do if there are too many failed login attempts

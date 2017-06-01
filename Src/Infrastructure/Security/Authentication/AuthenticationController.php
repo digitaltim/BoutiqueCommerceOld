@@ -31,8 +31,9 @@ class AuthenticationController extends Controller
             return $response->withRedirect($this->router->pathFor('admin.home'));
         }
 
+        $this->logger->addWarning('Unsuccessful login for username: '. $request->getParam('username'));
         // redisplay the form with input values and error(s)
-        $_SESSION['generalFormError'] = 'Login Unsuccessful.';
+        $_SESSION['generalFormError'] = 'Login Unsuccessful';
         return $response->withRedirect($this->router->pathFor('authentication.login'));
     }
 }

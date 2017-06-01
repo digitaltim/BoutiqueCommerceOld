@@ -85,6 +85,7 @@ class AuthenticationService
                 'label' => 'Password',
                 'validation' => ['required'],
                 'attributes' => [
+                    'id' => 'password',
                     'type' => 'password',
                     'name' => 'password',
                     'size' => '15',
@@ -102,6 +103,16 @@ class AuthenticationService
                 ]
             ]
         ];
+    }
+
+    public function getFocusField()
+    {
+        if (isset($_SESSION['validationErrors']) && !isset($_SESSION['validationErrors']['username'])) {
+            return 'password';
+        } elseif (isset($_SESSION['generalFormError'])) {
+            return ''; // no focus field set
+        }
+        return 'username';
     }
 
     public function getLoginFieldsValidationRules(): array

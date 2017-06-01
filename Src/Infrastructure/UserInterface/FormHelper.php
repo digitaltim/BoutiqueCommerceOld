@@ -6,6 +6,7 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface;
 class FormHelper
 {
     private static $fields;
+    private static $focusField;
 
     /**
      * for each field with a validation error, this adds the 'error' key and message and an error class attribute to fieldName
@@ -13,7 +14,13 @@ class FormHelper
     private static function insertErrors()
     {
         if (isset($_SESSION['validationErrors'])) {
+            $eCount = 0;
             foreach ($_SESSION['validationErrors'] as $fieldName => $errorMessage) {
+                $eCount++;
+                if ($eCount == 1) {
+                    // sets to the first error field
+                    self::$focusField = $fieldName;
+                }
                 if (array_key_exists($fieldName, self::$fields)) {
                     if (isset(self::$fields[$fieldName]['attributes']['class'])) {
                         self::$fields[$fieldName]['attributes']['class'] .= " formFieldError";
@@ -51,7 +58,8 @@ class FormHelper
      * @param array $fields
      * @param array|null $values (could be db record)
      * @return array
-     * if values input is array use that to insert values, if not and values are in session, use that then unset it
+     * if values input is array use that to insert values, if not and values are in session (ie form was submitted), use that then unset the session var
+     * also sets the focus field to either the first field (if no errors), or the first field with an error
      */
     public static function insertValuesErrors(array &$fields, array $values = null): array
     {
@@ -61,9 +69,20 @@ class FormHelper
         } elseif (isset($_SESSION['formInput']) && is_array($_SESSION['formInput'])) {
             self::insertValues($_SESSION['formInput']);
             unset($_SESSION['formInput']);
+        } else {
+            self::setFocusField();
         }
         self::insertErrors();
         return self::$fields;
+    }
+
+    // sets to the first field
+    private static function setFocusField()
+    {
+        foreach (self::$fields as $fieldName => $fieldInfo) {
+            self::$focusField = $fieldName;
+            break;
+        }
     }
 
     public static function getGeneralFormError()
@@ -71,5 +90,13 @@ class FormHelper
         $generalFormError = $_SESSION['generalFormError'] ?? '';
         unset($_SESSION['generalFormError']);
         return $generalFormError;
+    }
+
+    public static function getFocusField()
+    {
+        if (isset(self::$focusField)) {
+            return self::$focusField;
+        }
+        return '';
     }
 }

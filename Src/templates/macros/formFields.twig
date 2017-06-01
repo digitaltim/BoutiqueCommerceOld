@@ -1,0 +1,44 @@
+{% macro render(formFields) %}
+
+    {% import 'macros/htmlElement.twig' as htmlElement %}
+    {% for fieldName, fieldInfo in formFields %}
+        {% if fieldInfo.label %}
+            {% if fieldInfo.attributes.id %}
+                <label for="{{ fieldInfo.attributes.id }}">{{ fieldInfo.label }}</label>
+            {% else %}
+                <label>{{ fieldInfo.label }}</label>
+            {% endif %}
+        {% endif %}
+
+        {% if fieldInfo.error %}
+            <span class="formErrorMsg">{{ fieldInfo.error }}</span>
+        {% endif %}
+
+        {% if fieldInfo.tag == 'select' %}
+            {{ htmlElement.open(fieldInfo.tag, fieldInfo.attributes) }}
+            {% for k,v in fieldInfo.options %}
+                {% set optionAttributes = {'value': v} %}
+                {% if 'disabled' == v %}
+                    {% set optionAttributes = optionAttributes|merge({'disabled': 'disabled'}) %}
+                {% endif %}
+                {% if fieldInfo.selected == v %}
+                    {% set optionAttributes = optionAttributes|merge({'selected': 'selected'}) %}
+                {% endif %}
+                {{ htmlElement.complete('option', optionAttributes, true, k) }}
+            {% endfor %}
+            {{ htmlElement.close('select') }}
+
+        {% elseif fieldInfo.tag == 'textarea' %}
+            {{ htmlElement.complete('textarea', fieldInfo.attributes, true, fieldInfo.value) }}
+
+        {%  else %}
+            {{ htmlElement.open(fieldInfo.tag, fieldInfo.attributes) }}
+            {% if fieldInfo.tag == 'input' and (fieldInfo.attributes.type == 'checkbox' or fieldInfo.attributes.type == 'radio') and fieldInfo.text %}
+                {{ fieldInfo.text }}
+            {% endif %}
+
+        {% endif %}
+
+    {% endfor %}
+    {{ csrf.fields|raw }}
+{% endmacro %}

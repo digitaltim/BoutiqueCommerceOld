@@ -18,7 +18,7 @@ class AdminsView extends AdminView
 
         return $this->view->render(
             $response,
-            'admin/listGrid.twig',
+            'admin/scrollingTableList.twig',
             [
                 'title' => 'Admins',
                 'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
@@ -41,6 +41,7 @@ class AdminsView extends AdminView
                 'title' => 'Insert Admin',
                 'formActionRoute' => 'admins.post.insert',
                 'formFields' => FormHelper::insertValuesErrors($fields),
+                'focusField' => FormHelper::getFocusField(),
                 'generalFormError' => FormHelper::getGeneralFormError(),
                 'navigationItems' => $this->navigationItems
             ]

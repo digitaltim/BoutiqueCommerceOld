@@ -1,17 +1,19 @@
-<header id="adminPageHeaderGrid">
-    <div>
+<header id="adminPageHeader">
+    <div id="adminPageHeaderLogo">
         {{ storeName }}
         {% if not isLive %}
             <span style="color: grey;">{LOCAL}</span>
         {% endif %}
     </div>
-    <div>
-        {% if adminNotice %}
-            <span class="{{ adminNotice.1 }}">&raquo; {{ adminNotice.0 }} &laquo;</span>
-        {% endif %}
-    </div>
-    <div>
-        Hello {{ authentication.user.username }}
-        [<a href="{{ path_for("authentication.logout")}}">logout</a>]
-    </div>
+    {% if (authentication.check) %}
+        <div id="adminPageHeaderNotice">
+            {% if adminNotice %}
+                <span class="{{ adminNotice.1 }}">&raquo; {{ adminNotice.0 }} &laquo;</span>
+            {% endif %}
+        </div>
+        <div id="adminPageHeaderGreeting">
+            Hello {{ authentication.user.username }}
+            [<a href="{{ path_for("authentication.logout")}}">logout</a>]
+        </div>
+    {% endif %}
 </header>

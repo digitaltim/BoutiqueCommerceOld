@@ -39,12 +39,11 @@ class ValidationService
         $this->postFormFieldsWithValues = $formInputData;
 
         foreach ($rules as $ruleFieldName => $ruleFieldValue) {
-            // assume empty string was submitted
-            $fieldValue = '';
             // check for name of form field found in rules in submitted data set
             if (array_key_exists($ruleFieldName, $formInputData)) {
-                // grab actual data submitted
                 $fieldValue = $formInputData[$ruleFieldName];
+            } else {
+                $fieldValue = '';
             }
             // if field is not required and value is empty stop validating
             if (!in_array('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {

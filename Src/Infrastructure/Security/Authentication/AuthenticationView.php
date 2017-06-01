@@ -21,7 +21,6 @@ class AuthenticationView extends AdminView
         }
 
         $fields = $this->authentication->getLoginFields();
-        $fields = FormHelper::insertValuesErrors($fields);
 
         // render page
         return $this->view->render(
@@ -29,7 +28,8 @@ class AuthenticationView extends AdminView
             'admin/authentication/login.twig',
             [
                 'title' => '::Login',
-                'formFields' => $fields,
+                'focusField' => $this->authentication->getFocusField(),
+                'formFields' => FormHelper::insertValuesErrors($fields),
                 'generalFormError' => FormHelper::getGeneralFormError()
             ]
         );

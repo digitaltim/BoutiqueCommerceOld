@@ -28,27 +28,8 @@ class NavAdmin
                     'Insert' => [
                         'minimumPermissions' => $container->authorization->getMinimumPermission('admins.insert'),
                         'link' => $container->router->pathFor('admins.post.insert'),
-                    ],
-                    'Update' => [
-                        'minimumPermissions' => $container->authorization->getMinimumPermission('admins.update'),
-                        'link' => $container->router->pathFor('admins.post.insert'),
                     ]
                 ]
-            ],
-            'Orders' => [
-                'minimumPermissions' => 'owner',
-            ],
-            'Customers' => [
-
-            ],
-            'Products' => [
-
-            ],
-            'Designers' => [
-
-            ],
-            'Marketing' => [
-
             ]
         ];
     }
