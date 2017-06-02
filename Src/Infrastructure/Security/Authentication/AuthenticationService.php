@@ -69,13 +69,13 @@ class AuthenticationService
             'username' => [
                 'tag' => 'input',
                 'label' => 'Username',
-                'validation' => ['required'],
+                'validation' => ['required' => null],
                 'attributes' => [
                     'id' => 'username',
                     'name' => 'username',
                     'type' => 'text',
-                    'size' => '15',
-                    'maxlength' => '100',
+                    'size' => '20',
+                    'maxlength' => '20',
                     'value' => ''
                 ]
             ],
@@ -83,13 +83,13 @@ class AuthenticationService
             'password' => [
                 'tag' => 'input',
                 'label' => 'Password',
-                'validation' => ['required'],
+                'validation' => ['required' => null],
                 'attributes' => [
                     'id' => 'password',
                     'type' => 'password',
                     'name' => 'password',
-                    'size' => '15',
-                    'maxlength' => '100',
+                    'size' => '20',
+                    'maxlength' => '30',
                 ],
                 'persist' => false,
             ],

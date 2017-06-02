@@ -46,11 +46,11 @@ class ValidationService
                 $fieldValue = '';
             }
             // if field is not required and value is empty stop validating
-            if (!in_array('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {
+            if (!array_key_exists('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {
                 break;
             }
-            foreach ($ruleFieldValue as $rule) {
-                if (!$this->validateRule($ruleFieldName, $fieldValue, $rule)) {
+            foreach ($ruleFieldValue as $rule => $ruleContext) {
+                if (!$this->validateRule($ruleFieldName, $fieldValue, $rule, $ruleContext)) {
                     break; // stop validating further rules upon error
                 }
             }
@@ -63,9 +63,43 @@ class ValidationService
         return true;
     }
 
-    private function validateRule(string $fieldName, string $fieldValue, string $rule): bool
+    // note regex delimiter must be %.
+    private function validateRule(string $fieldName, string $fieldValue, string $rule, $context = null): bool
     {
+        // special case, regex ie [a-z]
+        if (substr($rule, 0, 1) == '%') {
+            $regex = $rule;
+            $rule = 'regex';
+        }
+
         switch ($rule) {
+
+            case 'minlength':
+                if (strlen($fieldValue) < $context) {
+                    $this->setError($fieldName, $rule, "Must be $context characters or more");
+                    return false;
+                }
+                break;
+
+            case 'maxlength':
+                if (strlen($fieldValue) > $context) {
+                    $this->setError($fieldName, $rule, "Must be $context characters or less");
+                    return false;
+                }
+                break;
+
+            case 'regex':
+                if (!filter_var(
+                        $fieldValue,
+                        FILTER_VALIDATE_REGEXP,
+                        array(
+                            "options"=>array("regexp" => "$regex")
+                        )
+                )) {
+                    $this->setError($fieldName, $context);
+                    return false;
+                }
+                break;
 
             case 'required':
                 if (self::isBlankOrNull($fieldValue)) {
