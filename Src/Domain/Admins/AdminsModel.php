@@ -5,11 +5,28 @@ namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
+use Psr\Log\InvalidArgumentException;
 
 class AdminsModel
 {
-    public function getFormFields(): array
+    public function getFormFields(string $formType = 'insert'): array
     {
+        if ($formType != 'insert' && $formType != 'update') {
+            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        }
+
+        if ($formType == 'insert') {
+            $passwordLabel = 'Password';
+            $passwordValidation = ['required'];
+            $passwordConfirmLabel = 'Confirm Password';
+            $passwordConfirmValidation = ['required', 'confirm'];
+        } else {
+            $passwordLabel = 'Change Password (leave blank to keep existing password)';
+            $passwordValidation = [];
+            $passwordConfirmLabel = 'Confirm New Password';
+            $passwordConfirmValidation = ['confirm'];
+        }
+
         return [
 
             'name' => [
@@ -65,9 +82,10 @@ class AdminsModel
 
             'password' => [
                 'tag' => 'input',
-                'label' => 'Password',
-                'validation' => ['required'],
+                'label' => $passwordLabel,
+                'validation' => $passwordValidation,
                 'attributes' => [
+                    'id' => 'password',
                     'type' => 'password',
                     'name' => 'password',
                     'size' => '15',
@@ -78,8 +96,8 @@ class AdminsModel
 
             'confirm_password' => [
                 'tag' => 'input',
-                'label' => 'Confirm Password',
-                'validation' => ['required', 'confirm'],
+                'label' => $passwordConfirmLabel,
+                'validation' => $passwordConfirmValidation,
                 'attributes' => [
                     'type' => 'password',
                     'name' => 'confirm_password',
@@ -100,9 +118,13 @@ class AdminsModel
         ];
     }
 
-    public function getValidationRules(): array
+    public function getValidationRules($formType = 'insert'): array
     {
-        return ValidationService::getRules($this->getFormFields());
+        if ($formType != 'insert' && $formType != 'update') {
+            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        }
+
+        return ValidationService::getRules($this->getFormFields($formType));
     }
 
     public function select(string $columns = '*')
@@ -111,20 +133,31 @@ class AdminsModel
         return $q->execute();
     }
 
-    public function getMinimumPermissionsInsert()
-    {
-        return $this->minimumPermissionsInsert;
-    }
-
     public function insert(string $name, string $username, string $password, string $role)
     {
         $q = new QueryBuilder("INSERT INTO admins (name, username, password_hash, role) VALUES($1, $2, $3, $4)", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role);
         return $q->execute();
     }
 
-    public function update(string $name, string $username, string $password, string $role, int $id)
+    /**
+     * If a null password is passed, the password field is not updated
+     * @param string $name
+     * @param string $username
+     * @param string $password
+     * @param string $role
+     * @param int $id
+     * @return \It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\recordset
+     */
+    public function update(int $id, string $name, string $username, string $role, string $password = null)
     {
-        $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, password_hash = $3, role = $4 WHERE id = $5", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role, $id);
+        $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, role = $3", $name, $username, $role);
+        $argNum = 4;
+        if ($password !== null) {
+            $q->add(", password_hash = $$argNum", password_hash($password, PASSWORD_DEFAULT));
+            $argNum++;
+        }
+        $q->add(" WHERE id = $$argNum", $id);
+//        $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, password_hash = $3, role = $4 WHERE id = $5", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role, $id);
         return $q->execute();
     }
 
@@ -154,12 +187,26 @@ class AdminsModel
         return pg_fetch_assoc($res);
     }
 
-    public function findAll() {
-        $rows = [];
-        $rs = $this->select();
-        while ($row = pg_fetch_assoc($rs)) {
-            $rows[] = $row;
+    /**
+     * If a null password is passed, the password field is not checked
+     * @param int $id
+     * @param string $name
+     * @param string $username
+     * @param string $role
+     * @param string|null $password
+     * @return bool
+     */
+    public function recordChanged(int $id, string $name, string $username, string $role, string $password = null): bool
+    {
+        $record = $this->selectForId($id);
+
+        if ($name != $record['name'] || $username != $record['username'] || $role != $record['role']) {
+            return true;
         }
-        return $rows;
+        if ($password !== null && password_hash($password, PASSWORD_DEFAULT) != $record['password']) {
+            return true;
+        }
+
+        return false;
     }
 }

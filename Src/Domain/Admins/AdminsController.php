@@ -20,26 +20,35 @@ class AdminsController extends Controller
 
         if (!$this->validator->validate(
             $request->getParsedBody(),
-            $adminsModel->getValidationRules())
+            $adminsModel->getValidationRules('update'))
         ) {
             $error = true;
         }
 
         if (!$error) {
-            // attempt to update the model
+            $id = intval($args['primaryKey']);
+            $name = $request->getParam('name');
             $username = $request->getParam('username');
+            $role = $request->getParam('role');
+            // set password to null to pass in to various model functions to test if the record has changed or to update
+            $password = ($request->getParam('password') == '') ?
+                null : $request->getParam('password');
 
-            $res = $adminsModel->update(
-                $request->getParam('name'),
-                $username,
-                $request->getParam('password'),
-                $request->getParam('role'),
-                intval($args['primaryKey'])
-            );
+            // check for no changes made, if so, redirect to list with red notice
+            if (!$adminsModel->recordChanged($id, $name, $username, $role, $password)) {
+                $_SESSION['adminNotice'] = [
+                    "No changes made to admin $username",
+                    'adminNoticeFailure'
+                ];
+                return $response->withRedirect($this->router->pathFor('admins.index'));
+            }
+
+            // attempt to update the model
+            $res = $adminsModel->update($id, $name, $username, $role, $password);
 
             if ($res) {
                 unset($_SESSION['formInput']);
-                $message = 'Admin ' . $username . ' updated.';
+                $message = 'Admin ' . $username . ' updated';
                 $this->logger->addInfo($message);
                 $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 

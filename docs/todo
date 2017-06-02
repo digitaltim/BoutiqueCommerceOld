@@ -13,6 +13,7 @@
 
 - EDIT/INSERT ADMIN
 -- if passwords match values should be repopulated
+-- validate fields
 
 - AUTHORIZATION
 -- add middleware check failures to event log  (ie unauthorized user tries to access page)

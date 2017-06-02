@@ -10,7 +10,7 @@ class AdminsView extends AdminView
 {
     public function index($request, $response, $args)
     {
-        $res = (new AdminsModel)->select('id, name, username, role');
+        $res = (new AdminsModel)->select('id, username, name, role');
         $results = [];
         while ($row = pg_fetch_assoc($res)) {
             $results[] = array_merge($row, ['delete' => 'admins.delete']);
@@ -52,8 +52,7 @@ class AdminsView extends AdminView
     {
         $adminData = (new AdminsModel)->selectForId(intval($args['primaryKey']));
 
-        $fields = (new AdminsModel)->getFormFields();
-        $fields = FormHelper::insertValuesErrors($fields, $adminData);
+        $fields = (new AdminsModel)->getFormFields('update');
 
         return $this->view->render(
             $response,
@@ -62,7 +61,7 @@ class AdminsView extends AdminView
                 'title' => 'Update Admin',
                 'formActionRoute' => 'admins.post.update',
                 'primaryKey' => $args['primaryKey'],
-                'formFields' => $fields,
+                'formFields' => FormHelper::insertValuesErrors($fields, $adminData),
                 'generalFormError' => FormHelper::getGeneralFormError(),
                 'navigationItems' => $this->navigationItems
             ]
