@@ -1,8 +1,5 @@
 1) work on todo list
 
-- In /utilities/functions.php
---- isLiveServer() ?
-
 - DIRECTORY STRUCTURE
 -- should prebuild be inside Src?
 -- should public be outside Src? Perhaps with index.php remaining inside somewhere...

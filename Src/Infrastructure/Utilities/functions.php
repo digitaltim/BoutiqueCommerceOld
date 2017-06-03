@@ -137,15 +137,6 @@ function isWww(): bool
 }
 
 /**
- * @return bool
- */
-function isLiveServer(): bool
-{
-    global $config;
-    return $config['env'] == 'live';
-}
-
-/**
  * Returns true if the current script is running from the command line (ie, CLI).
  */
 function isRunningFromCommandLine(): bool
