@@ -8,17 +8,23 @@ return [
     ],
 
     'database' => [
-        'name' => 'dbname',
-        'username' => 'dbuser',
-        'password' => 'dbpw',
+        'name' => '',
+        'username' => '',
+        'password' => '',
         'host' => '127.0.0.1',
         'port' => 5432
     ],
 
     'phpmailer' => [
         'protocol' => 'smtp',
-        'smtpHost' => 'smtphost.com',
+        'smtpHost' => '',
         'smtpPort' => 2525
-    ]
+    ],
 
+    'emails' => [
+        'owner' => '',
+        'programmer' => ''
+    ],
+
+    'twigAutoReload' => true
 ];
