@@ -7,7 +7,10 @@
 
 {%  block htmlBodyContent %}
     {% include 'frontend/partials/navigation.twig' %}
-    <section class="main">
+    <main>
         <h1>Welcome to BoutiqueCommerce</h1>
-    </section>
+        {% if notice %}
+            <span class="{{ notice.1 }}">&raquo; {{ notice.0 }} &laquo;</span>
+        {% endif %}
+    </main>
 {%  endblock %}

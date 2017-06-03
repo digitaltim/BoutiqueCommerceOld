@@ -19,9 +19,6 @@ class AdminView
         $container['view'];
         $container['mailer'];
 
-        // initialize
-        $_SESSION['adminNotice'] = [];
-
         // Instantiate navigation navbar contents
         $navAdmin = new NavAdmin($container);
         $this->navigationItems = $navAdmin->getSectionsForUser($container->authorization);

@@ -1,11 +1,5 @@
 1) work on todo list
 
--- can formhelper not be static?
-
--CSRF
--- edit the failure message - see https://github.com/slimphp/Slim-Csrf#token-persistence ('after a failed CSRF check. In this case, you will probably want to detect this condition and instruct your users to reload the page in their legitimate browser tab (or automatically reload on the next failed request).'
--- do we need to redirect?
-
 - In /utilities/functions.php
 --- isLiveServer() ?
 

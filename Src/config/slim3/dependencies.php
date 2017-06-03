@@ -59,6 +59,13 @@ $container['view'] = function ($container) {
 
     if (isset($_SESSION['adminNotice'])) {
         $view->getEnvironment()->addGlobal('adminNotice', $_SESSION['adminNotice']);
+        unset($_SESSION['adminNotice']);
+    }
+
+    // frontend
+    if (isset($_SESSION['notice'])) {
+        $view->getEnvironment()->addGlobal('notice', $_SESSION['notice']);
+        unset($_SESSION['notice']);
     }
 
     // make some config setting available inside templates
@@ -92,5 +99,10 @@ $container['validator'] = function ($container) {
 $container['csrf'] = function ($container) {
     $storage = null; // cannot directly pass null because received by reference.
     // setting the persistentTokenMode parameter true allows redisplaying a form with errors with a render rather than redirect call and will not cause CSRF failure if the page is refreshed (http://blog.ircmaxell.com/2013/02/preventing-csrf-attacks.html)
-    return new \Slim\Csrf\Guard('csrf', $storage, null, 200, 16, true);
+    $guard = new \Slim\Csrf\Guard('csrf', $storage, null, 200, 16, true);
+    $guard->setFailureCallable(function ($request, $response, $next) {
+        $request = $request->withAttribute("csrf_status", false);
+        return $next($request, $response);
+    });
+    return $guard;
 };

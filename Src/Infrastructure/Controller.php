@@ -16,10 +16,6 @@ abstract class Controller
         $container['db'];
         $container['view'];
         $container['mailer'];
-
-        // initialize
-        $_SESSION['adminNotice'] = [];
-
     }
 
     public function __get($name)

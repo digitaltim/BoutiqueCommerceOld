@@ -17,7 +17,9 @@ unset($container['errorHandler']);
 unset($container['phpErrorHandler']);
 
 // Middleware registration
-$slim->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Security\CsrfViewMiddleware($container));
+// handle CSRF check failures and allow Twig to access and insert CSRF fields to form
+$slim->add(new \It_All\BoutiqueCommerce\Src\Infrastructure\Security\CsrfMiddleware($container));
+// slim CSRF check middleware
 $slim->add($container->csrf);
 
 // Register routes
