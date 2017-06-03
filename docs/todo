@@ -4,13 +4,15 @@
 -- decide what to do if there are too many failed login attempts
 -- have a config var for # failed login attempts that causes action
 -- add middleware check failures to event log (ie unauthenticated user tries to access page)
+- MONOLOG EVENT LOGGING
+- for: admin log in attempts exceeded
+
 
 - VALIDATION
 -- what does the following mean in confirm section? '// put error on both fields as they do not carry forward their data... actually this means this must be somehow specified to be excluded!'
 
 - AUTHORIZATION
 -- add middleware check failures to event log  (ie unauthorized user tries to access page)
--- only owner,director can add/edit/delete admins (director cannot delete owner, owner cannot delete himself). page level so only authorized users can access page, block level as necessary so links only appear for authorized users.
 
 - OLD INPUT
 -- use a middleware to put posted vars into a session var instead of $_SESSION['formInput'] = $request->getParams(); in every post controller method.
@@ -19,15 +21,14 @@
 -- edit the failure message - see https://github.com/slimphp/Slim-Csrf#token-persistence ('after a failed CSRF check. In this case, you will probably want to detect this condition and instruct your users to reload the page in their legitimate browser tab (or automatically reload on the next failed request).'
 -- do we need to redirect?
 
-- Do we still need ListView.php and ListViewModel.php?
+- In /utilities/functions.php
+--- isLiveServer() ?
 
 - DIRECTORY STRUCTURE
 -- should prebuild be inside Src?
 -- should public be outside Src? Perhaps with index.php remaining inside somewhere...
 -- where will we put js files for admin functionality and how would that be secure?
 -- where should we put css files for admin?
-
-- clean up SCSS/CSS
 
 - DO I UNDERSTAND THE FRAMEWORK
 -- What does registering controller / factories in dependencies do? When they are commented out the script still runs. it makes them available to use in controllers or views (wherever the container is passed). some testing probably still in order on this.
@@ -42,19 +43,11 @@
 
 - Create database backup script by modifying existing script. Add instructions how to use. Ex. (cron?)
 
-- Create custom 'Page Not Found' error page that gives the name of the store (config[store_name] and additional detail as needed. Ex. https://btq/CRUD/testimonials/delete/
-
 - Configure application/apache to ignore trailing slashes in URLs
-
-- In /utilities/functions.php
---- isLiveServer() ?
 
 - CODING STANDARDS
 -- Should we use docblocks for all classes, methods, properties (?)
 -- use typehints on params and return params
-
-- MONOLOG EVENT LOGGING
-- for: admin log in attempts exceeded
 
 - INFRASTRUCTURE
 -- how to prevent xss from rogue admins? (chunk of html problem: https://www.perl.com/pub/2002/02/20/css.html). does twig prevent it or does |raw thwart that? => using |raw is potentiall unsafe: https://vivait.co.uk/labs/safely-escape-twigs-json_encode-without-using-raw
