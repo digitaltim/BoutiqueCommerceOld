@@ -35,20 +35,6 @@ class AdminsModel
             throw new InvalidArgumentException("formType must be insert or update ".$formType);
         }
 
-        // common for insert and update
-        $passwordValidation = ['minlength' => 12];
-        $passwordConfirmValidation = ['minlength' => 12, 'confirm' => null];
-
-        if ($formType == 'insert') {
-            $passwordLabel = 'Password';
-            $passwordValidation['required'] = null;
-            $passwordConfirmLabel = 'Confirm Password';
-            $passwordConfirmValidation['required'] = null;
-        } else {
-            $passwordLabel = 'Change Password (leave blank to keep existing password)';
-            $passwordConfirmLabel = 'Confirm New Password';
-        }
-
         // create role options array based on roles property
         $roleOptions = [];
         $roleOptions['-- select --'] = 'disabled';
@@ -56,7 +42,7 @@ class AdminsModel
             $roleOptions[$role] = $role;
         }
 
-        return [
+        $fields = [
 
             'username' => [
                 'tag' => 'input',
@@ -83,7 +69,6 @@ class AdminsModel
                 'validation' => [
                     'required' => null,
                     'alphaspace' => null,
-//                    '%^[a-zA-Z\s]+$%' => 'only letters and spaces',
                     'maxlength' => 50
                 ],
                 'attributes' => [
@@ -112,8 +97,8 @@ class AdminsModel
 
             'password' => [
                 'tag' => 'input',
-                'label' => $passwordLabel,
-                'validation' => $passwordValidation,
+                'label' => 'Password',
+                'validation' => ['minlength' => 12],
                 'attributes' => [
                     'id' => 'password',
                     'type' => 'password',
@@ -126,8 +111,8 @@ class AdminsModel
 
             'confirm_password' => [
                 'tag' => 'input',
-                'label' => $passwordConfirmLabel,
-                'validation' => $passwordConfirmValidation,
+                'label' => 'Confirm Password',
+                'validation' => ['minlength' => 12, 'confirm' => null],
                 'attributes' => [
                     'type' => 'password',
                     'name' => 'confirm_password',
@@ -146,6 +131,26 @@ class AdminsModel
                 ]
             ]
         ];
+
+
+        if ($formType == 'insert') {
+            $fields['password']['validation']['required'] = null;
+            $fields['confirm_password']['validation']['required'] = null;
+        } else { // update
+            $fields['password']['label'] = 'Change Password (leave blank to keep existing password)';
+            $fields['confirm_password']['label'] = 'Confirm New Password';
+            // override post method
+            $fields['_METHOD'] = [
+                'tag' => 'input',
+                'attributes' => [
+                    'type' => 'hidden',
+                    'name' => '_METHOD',
+                    'value' => 'PUT'
+                ]
+            ];
+        }
+
+        return $fields;
     }
 
     private function validateRole(string $roleCheck): bool

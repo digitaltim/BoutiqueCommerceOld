@@ -7,7 +7,7 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Controller;
 
 class AdminsController extends Controller
 {
-    function postUpdate($request, $response, $args)
+    function putUpdate($request, $response, $args)
     {
         if (!$this->authorization->checkFunctionality('admins.update')) {
             throw new \Exception('No permission.');

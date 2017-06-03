@@ -23,7 +23,7 @@ class AdminsView extends AdminView
                 'title' => 'Admins',
                 'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
                 'updateColumn' => 'username',
-                'updateRoute' => 'admins.post.update',
+                'updateRoute' => 'admins.put.update',
                 'table' => $results,
                 'navigationItems' => $this->navigationItems
             ]
@@ -60,7 +60,7 @@ class AdminsView extends AdminView
             'admin/form.twig',
             [
                 'title' => 'Update Admin',
-                'formActionRoute' => 'admins.post.update',
+                'formActionRoute' => 'admins.put.update',
                 'primaryKey' => $args['primaryKey'],
                 'formFields' => FormHelper::insertValuesErrors($fields, $fieldData),
                 'focusField' => FormHelper::getFocusField(),

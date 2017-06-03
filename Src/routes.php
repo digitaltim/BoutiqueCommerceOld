@@ -75,11 +75,11 @@ $slim->get('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.update');
 
-$slim->post('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
-    $domainNs.'\Admins\AdminsController:postUpdate')
+$slim->put('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
+    $domainNs.'\Admins\AdminsController:putUpdate')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.update']))
     ->add(new AuthenticationMiddleware($container))
-    ->setName('admins.post.update');
+    ->setName('admins.put.update');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
     $domainNs.'\Admins\AdminsController:getDelete')
