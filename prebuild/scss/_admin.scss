@@ -1,0 +1,25 @@
+body {
+  background-color: #222;
+  color: #dcd4c2;
+  font-family: Courier;
+  font-size: 1em;
+  line-height: 1.4em;
+}
+
+a {
+  color: #2ba6cb;
+  text-decoration: none;
+  padding: .1em;
+}
+
+a:hover {
+  background-color: #9a9b9a;
+  color: #0A246A;
+}
+
+@media print {
+  body {
+    background-color: white;
+    color: black;
+  }
+}

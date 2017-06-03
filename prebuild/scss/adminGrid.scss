@@ -1,0 +1,14 @@
+@import 'foundation';
+@import 'admin';
+@import 'adminHeaderLoggedIn';
+@import 'adminNav';
+@import 'adminFooter';
+@import 'layoutGrid';
+@import 'scrollingTable';
+@import 'forms';
+
+main {
+  padding: 0 1em 0 0;
+  grid-area: main;
+}
+

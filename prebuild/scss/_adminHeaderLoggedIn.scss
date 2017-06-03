@@ -1,0 +1,45 @@
+#adminPageHeader {
+  grid-area: header;
+  padding: .3em;
+  justify-self: stretch;
+  background-color: #000;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+}
+
+#adminPageHeaderLogo {
+  justify-self: start;
+}
+
+#adminPageHeaderNotice {
+  justify-self: center;
+}
+
+#adminPageHeaderGreeting {
+  justify-self: end;
+}
+
+.adminNoticeSuccess {
+  color: green;
+  font-weight: bold;
+}
+
+.adminNoticeFailure {
+  color: red;
+  font-weight: bold;
+}
+
+.adminNoticeCaution {
+  color: yellow;
+  font-weight: bold;
+}
+
+.adminNoticeMuted {
+  color: grey;
+  font-weight: bold;
+}
+
+.headerGreeting {
+  color: #6BE897;
+}

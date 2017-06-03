@@ -1,0 +1,13 @@
+@import 'foundation';
+@import 'admin';
+@import 'adminHeader';
+@import 'adminFooter';
+@import 'forms';
+@import 'layoutSimpleGrid';
+
+main {
+  width: 18em;
+  grid-area: main;
+  justify-self: center;
+}
+
