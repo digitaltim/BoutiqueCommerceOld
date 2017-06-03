@@ -46,7 +46,7 @@ $slim->get('/' . $config['dirs']['admin'] . '/home',
     ->setName('admin.home');
 
 $slim->get('/' . $config['dirs']['admin'] . '/logout',
-    $securityNs.'\Authentication\AuthenticationView:getLogout')
+    $securityNs.'\Authentication\AuthenticationController:getLogout')
     ->add(new AuthenticationMiddleware($container))
     ->setName('authentication.logout');
 

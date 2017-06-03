@@ -27,7 +27,7 @@ class AuthenticationController extends Controller
 
         if ($authentication) {
             unset($_SESSION['formInput']);
-            $this->logger->addInfo($request->getParam('username').' logged in.');
+            $this->logger->addInfo($request->getParam('username').' logged in');
             return $response->withRedirect($this->router->pathFor('admin.home'));
         }
 
@@ -35,5 +35,12 @@ class AuthenticationController extends Controller
         // redisplay the form with input values and error(s)
         $_SESSION['generalFormError'] = 'Login Unsuccessful';
         return $response->withRedirect($this->router->pathFor('authentication.login'));
+    }
+
+    public function getLogout($request, $response)
+    {
+        $this->logger->addInfo($_SESSION['user']['username'].' logged out');
+        $this->authentication->logout();
+        return $response->withRedirect($this->router->pathFor('home'));
     }
 }
