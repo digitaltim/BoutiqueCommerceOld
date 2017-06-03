@@ -32,6 +32,14 @@ class AuthenticationController extends Controller
         }
 
         $this->logger->addWarning('Unsuccessful login for username: '. $request->getParam('username'));
+
+        if ($this->authentication->tooManyFailedLogins()) {
+            $this->logger->addWarning(
+                $this->authentication->getNumFailedLogins() . ' unsuccessful login attempts for IP: '
+                . $_SERVER['REMOTE_ADDR']);
+            return $response->withRedirect($this->router->pathFor('home'));
+        }
+
         // redisplay the form with input values and error(s)
         $_SESSION['generalFormError'] = 'Login Unsuccessful';
         return $response->withRedirect($this->router->pathFor('authentication.login'));

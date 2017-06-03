@@ -52,5 +52,7 @@ return [
         'admins.insert' => 'director',
         'admins.update' => 'owner',
         'admins.delete' => 'owner'
-    ]
+    ],
+
+    'maxFailedLogins' => 5
 ];

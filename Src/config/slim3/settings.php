@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 return [
     'settings' => [
+
         // Slim Settings
         'outputBuffering' => false, // just to uncomplicate things for now.
 
         'addContentLengthHeader' => false, // if this is not disabled, slim/App.php line 585 triggered an exception related to error handling, when the php set_error_handler() function was triggered
 
-        // Authorization Settings
+        'authentication' => $config['maxFailedLogins'],
+
         'authorization' => $config['adminMinimumPermissions'],
 
         // Twig Settings
@@ -22,11 +24,11 @@ return [
         // phpMailer Settings
         'mailer' => $mailer,
 
-        // Storage Settings
         'storage' => [
             'pathLogs' => $config['storage']['logs']['pathEvents'],
             'pathTwigCache' => $config['storage']['pathCache'].'twig/',
         ],
+
         'dirs' => [
             'admin' => $config['dirs']['admin']
         ],

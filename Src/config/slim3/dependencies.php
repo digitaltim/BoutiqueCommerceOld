@@ -23,7 +23,8 @@ $container['db'] = function($container) use ($db) {
 
 // Authentication
 $container['authentication'] = function($container) {
-    return new It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authentication\AuthenticationService;
+    $settings = $container->get('settings');
+    return new It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authentication\AuthenticationService($settings['authentication']);
 };
 
 // Authorization

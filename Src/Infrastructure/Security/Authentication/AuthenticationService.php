@@ -8,6 +8,13 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
 class AuthenticationService
 {
+    private $maxFailedLogins;
+
+    public function __construct(int $maxFailedLogins)
+    {
+        $this->maxFailedLogins = $maxFailedLogins;
+    }
+
     public function user()
     {
         if (isset($_SESSION['user'])) {
@@ -55,6 +62,17 @@ class AuthenticationService
         } else {
             $_SESSION['numFailedLogins'] = 1;
         }
+    }
+
+    public function tooManyFailedLogins(): bool
+    {
+        return isset($_SESSION['numFailedLogins']) &&
+            $_SESSION['numFailedLogins'] > $this->maxFailedLogins;
+    }
+
+    public function getNumFailedLogins(): int
+    {
+        return (isset($_SESSION['numFailedLogins'])) ? $_SESSION['numFailedLogins'] : 0;
     }
 
     public function logout()

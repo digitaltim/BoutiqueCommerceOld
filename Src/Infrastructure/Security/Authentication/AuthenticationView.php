@@ -10,8 +10,8 @@ class AuthenticationView extends AdminView
 {
     public function getLogin($request, $response, $args)
     {
-        if (isset($_SESSION['numFailedLogins']) && $_SESSION['numFailedLogins'] > 10) {
-            die ('Too many attempts.');
+        if ($this->authentication->tooManyFailedLogins()) {
+            return $response->withRedirect($this->router->pathFor('home'));
         }
 
         $fields = $this->authentication->getLoginFields();
