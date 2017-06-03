@@ -16,11 +16,11 @@ var onError = function (err) {
     this.emit('end');
 };
 
-var scssSrc = 'scss/';
-var jsSrc = 'js/';
+var scssSrc = '../Src/prebuild/scss/';
+var jsSrc = '../Src/prebuild/js/';
 var cssDest = '../Src/public/css';
 var jsDest = '../Src/public/js';
-var jsFile = 'scripts.min.js'; // use this only if concatenating all js wiht .pipe(concat(jsFile))
+var jsFile = 'scripts.min.js'; // use this only if concatenating all js with .pipe(concat(jsFile))
 
 gulp.task('sass', function() {
     return gulp.src(scssSrc+'*.scss')

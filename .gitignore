@@ -1,7 +1,7 @@
 .gitignore~
 Src/config/env.php
 .idea/
-prebuild/node_modules/
+buildTool/node_modules/
 storage/
 vendor/
 ignored/
