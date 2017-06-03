@@ -1,0 +1,73 @@
+{% extends "base.twig" %}
+
+{% block htmlHeadCss %}
+    <link href="/css/adminGrid.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block htmlBodyContent %}
+
+    {% include 'admin/partials/header.twig' %}
+
+    {% include 'admin/partials/nav.twig' %}
+
+    <main>
+        <div id="scrollingTableContainer">
+            <table class="scrollingTable">
+                <thead>
+                <tr>
+                    <th colspan="10">
+                        {{ title }}
+                        <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
+                    </th>
+                </tr>
+                {% set break = false %}
+                {% for row in table if not break %}
+                    <tr>
+                        {% for key in row|keys %}
+                            {% if key != 'id' %}
+                                <th>{{ key }}</th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% set break = true %}
+                {% endfor %}
+                </thead>
+                <tbody>
+                {% for row in table %}
+                    <tr>
+                        {% for key, value in row %}
+
+                            {% if key == 'id' %} {# no display #}
+                                {% set primaryKey = value %}
+
+                            {% elseif key == updateColumn %}
+                                {% if authentication.user.role == 'owner' or attribute(row, 'role') != 'owner' %}
+                                <td><a href="{{ path_for(updateRoute, {"primaryKey": attribute(row, 'id')}) }}" title="update">{{ value }}</a></td>
+                                {% else %}
+                                    <td>{{ value }}</td>
+                                    {% endif %}
+                            {% elseif key == 'delete' %}
+                                {# do not show delete link for the current user (cannot delete self) or for owner rows if the current user is not and owner #}
+                                {% if attribute(row, 'username') != authentication.user.username and (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner') %}
+                                    <td><a href="{{ path_for(value, {"primaryKey": primaryKey}) }}" title="delete" onclick="return confirm('Are you sure you want to delete admin {{ attribute(row, 'username') }}?');">X</a></td>
+                                {% else %}
+                                    <td>&nbsp;</td>
+                                {% endif %}
+
+                            {% else %}
+                                <td>{{ value }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    {% include 'admin/partials/footer.twig' %}
+
+{% endblock %}
+{% block htmlBodyJs %}
+    <script type="text/javascript" src="/js/uiHelper.js"></script>
+{% endblock %}

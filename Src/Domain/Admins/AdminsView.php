@@ -18,11 +18,11 @@ class AdminsView extends AdminView
 
         return $this->view->render(
             $response,
-            'admin/scrollingTableList.twig',
+            'admin/adminsList.twig',
             [
                 'title' => 'Admins',
                 'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
-                'updateColumn' => 'id',
+                'updateColumn' => 'username',
                 'updateRoute' => 'admins.post.update',
                 'table' => $results,
                 'navigationItems' => $this->navigationItems
@@ -50,7 +50,8 @@ class AdminsView extends AdminView
 
     public function getUpdate($request, $response, $args)
     {
-        $adminData = (new AdminsModel)->selectForId(intval($args['primaryKey']));
+        $fieldData = (isset($_SESSION['formInput']) && is_array($_SESSION['formInput'])) ?
+            null : (new AdminsModel)->selectForId(intval($args['primaryKey']));
 
         $fields = (new AdminsModel)->getFormFields('update');
 
@@ -61,7 +62,8 @@ class AdminsView extends AdminView
                 'title' => 'Update Admin',
                 'formActionRoute' => 'admins.post.update',
                 'primaryKey' => $args['primaryKey'],
-                'formFields' => FormHelper::insertValuesErrors($fields, $adminData),
+                'formFields' => FormHelper::insertValuesErrors($fields, $fieldData),
+                'focusField' => FormHelper::getFocusField(),
                 'generalFormError' => FormHelper::getGeneralFormError(),
                 'navigationItems' => $this->navigationItems
             ]

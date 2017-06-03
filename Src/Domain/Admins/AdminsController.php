@@ -30,7 +30,7 @@ class AdminsController extends Controller
             $name = $request->getParam('name');
             $username = $request->getParam('username');
             $role = $request->getParam('role');
-            // set password to null to pass in to various model functions to test if the record has changed or to update
+            // set password to null to send to various model functions ie to test if the record has changed or to update
             $password = ($request->getParam('password') == '') ?
                 null : $request->getParam('password');
 
@@ -81,9 +81,7 @@ class AdminsController extends Controller
             $adminsModel->getValidationRules())
         ) {
             $error = true;
-        }
-
-        if ($adminsModel->checkRecordExistsForUsername($request->getParam('username'))) {
+        } elseif ($adminsModel->checkRecordExistsForUsername($request->getParam('username'))) {
             $_SESSION['generalFormError'] = 'Username already exists';
             $error = true;
         }

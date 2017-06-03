@@ -37,9 +37,13 @@ class FormHelper
     private static function insertValues(array $values)
     {
         foreach (self::$fields as $fieldName => $fieldInfo) {
-            if (!((array_key_exists('persist', $fieldInfo)) &&
-                  ($fieldInfo['persist'] === false)) &&
-                (isset($values[$fieldName]))) {
+
+            if (isset($values[$fieldName]) && (
+                (!array_key_exists('persist', $fieldInfo) || $fieldInfo['persist']) ||
+                    ($fieldInfo['tag'] == 'input' &&
+                        $fieldInfo['attributes']['type'] == 'password' &&
+                            !isset($_SESSION['validationErrors'][$fieldName])) ) ) {
+
                 switch ($fieldInfo['tag']) {
                     case 'textarea':
                         self::$fields[$fieldName]['value'] = $values[$fieldName];

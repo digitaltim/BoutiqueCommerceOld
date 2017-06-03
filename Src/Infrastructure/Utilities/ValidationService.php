@@ -45,13 +45,13 @@ class ValidationService
             } else {
                 $fieldValue = '';
             }
-            // if field is not required and value is empty stop validating
-            if (!array_key_exists('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {
+            // if field is not required and value is empty stop validating this field (unless it has a confirm rule)
+            if (!array_key_exists('confirm', $rules[$ruleFieldName]) && !array_key_exists('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {
                 break;
             }
             foreach ($ruleFieldValue as $rule => $ruleContext) {
                 if (!$this->validateRule($ruleFieldName, $fieldValue, $rule, $ruleContext)) {
-                    break; // stop validating further rules upon error
+                    break; // stop validating further rules for this field upon error
                 }
             }
         }
@@ -101,6 +101,19 @@ class ValidationService
                 }
                 break;
 
+            case 'alphaspace':
+                if (!filter_var(
+                    $fieldValue,
+                    FILTER_VALIDATE_REGEXP,
+                    array(
+                        "options"=>array("regexp" => "%^[a-zA-Z\s]+$%")
+                    )
+                )) {
+                    $this->setError($fieldName, $rule, 'Only letters and spaces allowed');
+                    return false;
+                }
+                break;
+
             case 'required':
                 if (self::isBlankOrNull($fieldValue)) {
                     $this->setError($fieldName, $rule, $rule);
@@ -137,16 +150,19 @@ class ValidationService
                 break;
 
             case 'confirm':
+                // if there's already an error on the confirm field then do not validate the confirmation
+
                 // convention prepends 'confirm_' to the second field for confirmation... remove to find other field to compare with
                 $fieldNameToConfirm = trim($fieldName, 'confirm_');
+                if (isset($this->errors[$fieldNameToConfirm])) {
+                    break;
+                }
                 $fieldValueToConfirm = $this->postFormFieldsWithValues[$fieldNameToConfirm];
 
                 if ($fieldValue !== $fieldValueToConfirm) {
                     // put error on both fields as they do not carry forward their data... actually this means this must be somehow specified to be excluded!
                     $this->setError($fieldNameToConfirm, $rule, $fieldNameToConfirm . 's must match');
                     $this->setError($fieldName, $rule, $fieldNameToConfirm . 's must match');
-                    // generate a general form error as well
-                    $_SESSION['generalFormError'] = 'Passwords to not match';
                     return false;
                 }
                 break;

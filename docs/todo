@@ -1,19 +1,12 @@
 1) work on todo list
 
-- finish infrastructure functionality
--- make a nicer change pw for update admin
-
 - AUTHENTICATION
 -- decide what to do if there are too many failed login attempts
 -- have a config var for # failed login attempts that causes action
 -- add middleware check failures to event log (ie unauthenticated user tries to access page)
 
-- VIEW ADMIN
--- add delete (owner only)
-
-- EDIT/INSERT ADMIN
--- if passwords match values should be repopulated
--- validate fields
+- VALIDATION
+-- what does the following mean in confirm section? '// put error on both fields as they do not carry forward their data... actually this means this must be somehow specified to be excluded!'
 
 - AUTHORIZATION
 -- add middleware check failures to event log  (ie unauthorized user tries to access page)

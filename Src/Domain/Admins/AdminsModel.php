@@ -35,19 +35,18 @@ class AdminsModel
             throw new InvalidArgumentException("formType must be insert or update ".$formType);
         }
 
+        // common for insert and update
+        $passwordValidation = ['minlength' => 12];
+        $passwordConfirmValidation = ['minlength' => 12, 'confirm' => null];
+
         if ($formType == 'insert') {
             $passwordLabel = 'Password';
-            $passwordValidation = [
-                'required' => null,
-                'minlength' => 12,
-            ];
+            $passwordValidation['required'] = null;
             $passwordConfirmLabel = 'Confirm Password';
-            $passwordConfirmValidation = ['required' => null, 'confirm' => null];
+            $passwordConfirmValidation['required'] = null;
         } else {
             $passwordLabel = 'Change Password (leave blank to keep existing password)';
-            $passwordValidation = [];
             $passwordConfirmLabel = 'Confirm New Password';
-            $passwordConfirmValidation = ['confirm' => null];
         }
 
         // create role options array based on roles property
@@ -58,24 +57,6 @@ class AdminsModel
         }
 
         return [
-
-            'name' => [
-                'tag' => 'input',
-                'label' => 'Name',
-                'validation' => [
-                    'required' => null,
-                    '%^[a-zA-Z\s]+$%' => 'only letters and spaces',
-                    'maxlength' => 50
-                ],
-                'attributes' => [
-                    'id' => 'name',
-                    'name' => 'name',
-                    'type' => 'text',
-                    'size' => '15',
-                    'maxlength' => '50',
-                    'value' => ''
-                ]
-            ],
 
             'username' => [
                 'tag' => 'input',
@@ -92,6 +73,25 @@ class AdminsModel
                     'type' => 'text',
                     'size' => '15',
                     'maxlength' => '20',
+                    'value' => ''
+                ]
+            ],
+
+            'name' => [
+                'tag' => 'input',
+                'label' => 'Name',
+                'validation' => [
+                    'required' => null,
+                    'alphaspace' => null,
+//                    '%^[a-zA-Z\s]+$%' => 'only letters and spaces',
+                    'maxlength' => 50
+                ],
+                'attributes' => [
+                    'id' => 'name',
+                    'name' => 'name',
+                    'type' => 'text',
+                    'size' => '15',
+                    'maxlength' => '50',
                     'value' => ''
                 ]
             ],
