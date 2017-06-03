@@ -28,7 +28,16 @@ class AuthenticationController extends Controller
         if ($authentication) {
             unset($_SESSION['formInput']);
             $this->logger->addInfo($request->getParam('username').' logged in');
-            return $response->withRedirect($this->router->pathFor('admin.home'));
+
+            // redirect to proper resource
+            if (isset($_SESSION['gotoAdminPage'])) {
+                $redirect = $_SESSION['gotoAdminPage'];
+                unset($_SESSION['gotoAdminPage']);
+            } else {
+                $redirect = $this->router->pathFor('admin.home');
+            }
+
+            return $response->withRedirect($redirect);
         }
 
         $this->logger->addWarning('Unsuccessful login for username: '.

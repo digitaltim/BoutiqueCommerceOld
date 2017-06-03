@@ -12,7 +12,7 @@ $container = $slim->getContainer();
 // Set up Slim dependencies
 require APP_ROOT . 'config/slim3/dependencies.php';
 
-// Error Handling - remove Slim's Error Handling
+// remove Slim's Error Handling
 unset($container['errorHandler']);
 unset($container['phpErrorHandler']);
 
