@@ -30,9 +30,15 @@ class AdminsView extends AdminView
         );
     }
 
+    private function getPersistPasswords()
+    {
+        return !isset($_SESSION['validationErrors']['password']) && !isset($_SESSION['validationErrors']['confirm_password']);
+    }
+
     public function getInsert($request, $response, $args)
     {
-        $fields = (new AdminsModel)->getFormFields();
+        $fields = (new AdminsModel)->
+            getFormFields('insert', $this->getPersistPasswords());
 
         return $this->view->render(
             $response,
@@ -51,7 +57,8 @@ class AdminsView extends AdminView
     public function getUpdate($request, $response, $args)
     {
         $adminsModel = new AdminsModel();
-        $fields = $adminsModel->getFormFields('update');
+        $fields = $adminsModel->
+            getFormFields('update', $this->getPersistPasswords());
 
         /**
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.

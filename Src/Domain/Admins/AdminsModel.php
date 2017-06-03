@@ -29,7 +29,7 @@ class AdminsModel
         return $this->roles;
     }
 
-    public function getFormFields(string $formType = 'insert'): array
+    public function getFormFields(string $formType = 'insert', bool $persistPasswords = false): array
     {
         if ($formType != 'insert' && $formType != 'update') {
             throw new InvalidArgumentException("formType must be insert or update ".$formType);
@@ -106,7 +106,7 @@ class AdminsModel
                     'size' => '20',
                     'maxlength' => '30',
                 ],
-                'persist' => false,
+                'persist' => $persistPasswords,
             ],
 
             'confirm_password' => [
@@ -119,7 +119,7 @@ class AdminsModel
                     'size' => '20',
                     'maxlength' => '30',
                 ],
-                'persist' => false,
+                'persist' => $persistPasswords,
             ],
 
             'submit' => [

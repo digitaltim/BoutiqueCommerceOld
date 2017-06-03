@@ -39,10 +39,8 @@ class FormHelper
         foreach (self::$fields as $fieldName => $fieldInfo) {
 
             if (isset($values[$fieldName]) && (
-                (!array_key_exists('persist', $fieldInfo) || $fieldInfo['persist']) ||
-                    ($fieldInfo['tag'] == 'input' &&
-                        $fieldInfo['attributes']['type'] == 'password' &&
-                            !isset($_SESSION['validationErrors'][$fieldName])) ) ) {
+                (!array_key_exists('persist', $fieldInfo) ||
+                    $fieldInfo['persist']) ) ) {
 
                 switch ($fieldInfo['tag']) {
                     case 'textarea':
