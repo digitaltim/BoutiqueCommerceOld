@@ -14,10 +14,6 @@ class AdminView
     public function __construct(Container $container)
     {
         $this->container = $container;
-        // Instantiate services/dependencies
-        $container['db'];
-        $container['view'];
-        $container['mailer'];
 
         // Instantiate navigation navbar contents
         $navAdmin = new NavAdmin($container);
