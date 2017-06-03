@@ -68,14 +68,15 @@ class FormHelper
     public static function insertValuesErrors(array &$fields, array $values = null): array
     {
         self::$fields = $fields;
+
         if (is_array($values)) {
             self::insertValues($values);
         } elseif (isset($_SESSION['formInput']) && is_array($_SESSION['formInput'])) {
             self::insertValues($_SESSION['formInput']);
             unset($_SESSION['formInput']);
-        } else {
-            self::setFocusField();
         }
+
+        self::setFocusField();
         self::insertErrors();
         return self::$fields;
     }

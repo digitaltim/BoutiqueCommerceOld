@@ -160,7 +160,6 @@ class ValidationService
                 $fieldValueToConfirm = $this->postFormFieldsWithValues[$fieldNameToConfirm];
 
                 if ($fieldValue !== $fieldValueToConfirm) {
-                    // put error on both fields as they do not carry forward their data... actually this means this must be somehow specified to be excluded!
                     $this->setError($fieldNameToConfirm, $rule, $fieldNameToConfirm . 's must match');
                     $this->setError($fieldName, $rule, $fieldNameToConfirm . 's must match');
                     return false;

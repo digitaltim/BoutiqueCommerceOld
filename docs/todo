@@ -1,13 +1,6 @@
 1) work on todo list
 
-- VALIDATION
--- what does the following mean in confirm section? '// put error on both fields as they do not carry forward their data... actually this means this must be somehow specified to be excluded!'
-
-- AUTHORIZATION
--- add middleware check failures to event log  (ie unauthorized user tries to access page)
-
-- OLD INPUT
--- use a middleware to put posted vars into a session var instead of $_SESSION['formInput'] = $request->getParams(); in every post controller method.
+-- login, fix pw persistence
 
 -CSRF
 -- edit the failure message - see https://github.com/slimphp/Slim-Csrf#token-persistence ('after a failed CSRF check. In this case, you will probably want to detect this condition and instruct your users to reload the page in their legitimate browser tab (or automatically reload on the next failed request).'

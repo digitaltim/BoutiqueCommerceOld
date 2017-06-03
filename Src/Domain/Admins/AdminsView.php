@@ -50,10 +50,14 @@ class AdminsView extends AdminView
 
     public function getUpdate($request, $response, $args)
     {
-        $fieldData = (isset($_SESSION['formInput']) && is_array($_SESSION['formInput'])) ?
-            null : (new AdminsModel)->selectForId(intval($args['primaryKey']));
+        $adminsModel = new AdminsModel();
+        $fields = $adminsModel->getFormFields('update');
 
-        $fields = (new AdminsModel)->getFormFields('update');
+        /**
+         * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.
+         * note, this works for post/put because controller calls this method directly in case of errors instead of redirecting
+         */
+        $fieldData = ($request->isGet()) ? $adminsModel->selectForId(intval($args['primaryKey'])) : null;
 
         return $this->view->render(
             $response,
