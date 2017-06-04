@@ -1,6 +1,6 @@
 <header id="adminPageHeader">
     <div id="adminPageHeaderLogo">
-        {{ storeName }}
+        <a href="{{ path_for('home') }}">{{ businessName }}</a>
         {% if not isLive %}
             <span style="color: grey;">{LOCAL}</span>
         {% endif %}

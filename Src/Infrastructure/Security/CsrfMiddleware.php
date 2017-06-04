@@ -10,11 +10,10 @@ class CsrfMiddleware extends Middleware
 	public function __invoke($request, $response, $next)
 	{
         if (false === $request->getAttribute('csrf_status')) {
-            $this->container->logger->addWarning('CSRF Check Failure on resource: ' .
-                $request->getUri()->getPath() . ' for IP: ' . $_SERVER['REMOTE_ADDR']);
-
-            $_SESSION['notice'] = ['CSRF Check Failure', 'error'];
-            return $response->withRedirect($this->container->router->pathFor('home'));
+            $errorMessage = 'CSRF Check Failure on resource: ' .
+                $request->getUri()->getPath() . ' for IP: ' . $_SERVER['REMOTE_ADDR'];
+            $this->logger->addWarning($errorMessage);
+            throw new \Exception($errorMessage);
         }
 
 		$this->container->view->getEnvironment()->addGlobal('csrf', [

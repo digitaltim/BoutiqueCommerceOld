@@ -5,18 +5,13 @@ $domainName = 'boutiquecommerce.org';
 
 return [
 
-    'storeName' => 'BoutiqueCommerce',
+    'businessName' => 'Boutique Commerce',
 
     'domainName' => $domainName,
 
-    'projectsUrl' => 'https://www.' . $domainName . '/redmine/',
+    'hostName' => $domainName,
 
     'domainUseWww' => false,
-
-    'storeEmails' => [
-        'defaultFromEmail' => 'service@'.$domainName,
-        'defaultFromName' => 'Boutique Commerce'
-    ],
 
     'session' => [
         'ttlHours' => 24,
@@ -38,7 +33,7 @@ return [
         'emailTo' => ['owner', 'programmer'], // emails must be set in 'emails' section
         'fatalMessage' => 'Apologies, there has been an error on our site. We have been alerted and will correct it as soon as possible.',
         'echoDev' => true, // echo on dev servers (note, live server will never echo)
-        'emailDev' => false // email on dev servers (note, live server will always email)
+        'emailDev' => true // email on dev servers (note, live server will always email)
     ],
 
     'emails' => [

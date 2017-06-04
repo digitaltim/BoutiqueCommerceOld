@@ -44,10 +44,9 @@ class AuthenticationController extends Controller
             $request->getParam('username') . ' from IP: '. $_SERVER['REMOTE_ADDR']);
 
         if ($this->authentication->tooManyFailedLogins()) {
-            $this->logger->addWarning(
-                $this->authentication->getNumFailedLogins() . ' unsuccessful login attempts for IP: '
-                . $_SERVER['REMOTE_ADDR']);
-            return $response->withRedirect($this->router->pathFor('home'));
+            $errorMessage = $this->authentication->getNumFailedLogins() . ' unsuccessful login attempts for IP: ' . $_SERVER['REMOTE_ADDR'];
+            $this->logger->addWarning($errorMessage);
+            throw new \Exception($errorMessage);
         }
 
         // redisplay the form with input values and error(s)

@@ -10,7 +10,7 @@
 
     <main>
         <h1>Login</h1>
-        <h5>Authorized for use by {{ storeName }} employees and associates only.</h5>
+        <h5>Authorized for use by {{ businessName }} employees and associates only.</h5>
         <form name="loginForm" method="post" action="{{ path_for('authentication.post.login')}}">
             {% if generalFormError %}
                 <span class="generalFormError">{{ generalFormError }}</span>

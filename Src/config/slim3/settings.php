@@ -35,7 +35,7 @@ return [
 
         // General settings
         'isLive' => $config['isLive'],
-        'storeName' => $config['storeName']
+        'businessName' => $config['businessName']
     ],
 
     //Override the default Not Found Handler

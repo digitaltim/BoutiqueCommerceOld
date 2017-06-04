@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\PageNotFound;
-
-use It_All\BoutiqueCommerce\Src\Infrastructure\View;
+namespace It_All\BoutiqueCommerce\Src\Infrastructure;
 
 class PageNotFoundView extends View
 {

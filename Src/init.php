@@ -17,8 +17,8 @@ $config = array_merge(
 
 // instantiate mailer, which is used in error handler and container
 $mailer = new \It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\PhpMailerService(
-    $config['storeEmails']['defaultFromEmail'],
-    $config['storeEmails']['defaultFromName'],
+    $config['emails']['service'],
+    $config['businessName'],
     $config['phpmailer']['protocol'],
     $config['phpmailer']['smtpHost'],
     $config['phpmailer']['smtpPort']
@@ -31,8 +31,8 @@ foreach ($config['errors']['emailTo'] as $roleEmail) {
 }
 $errorHandler = new Utilities\ErrorHandler(
     $config['storage']['logs']['pathPhpErrors'],
+    $config['hostName']."/",
     $config['isLive'],
-    $config['errors']['echoDev'],
     $config['errors']['emailDev'],
     $mailer,
     $emailErrorsTo

@@ -6,18 +6,26 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\Utilities;
 class ErrorHandler
 {
     private $logPath;
+    private $redirectPage;
     private $isLiveServer;
-    private $echoDev;
     private $emailDev;
     private $mailer;
     private $emailTo;
     private $fatalMessage;
 
-    public function __construct(string $logPath, bool $isLiveServer, bool $echoDev, bool $emailDev, PhpMailerService $m, array $emailTo, $fatalMessage = 'Apologies, there has been an error on our site. We have been alerted and will correct it as soon as possible.')
+    public function __construct(
+        string $logPath,
+        string $redirectPage,
+        bool $isLiveServer,
+        bool $emailDev,
+        PhpMailerService $m,
+        array $emailTo,
+        $fatalMessage = 'Apologies, there has been an error on our site. We have been alerted and will correct it as soon as possible.'
+    )
     {
         $this->logPath = $logPath;
+        $this->redirectPage = $redirectPage;
         $this->isLiveServer = $isLiveServer;
-        $this->echoDev = $echoDev;
         $this->emailDev = $emailDev;
         $this->mailer = $m;
         $this->emailTo = $emailTo;
@@ -42,13 +50,6 @@ class ErrorHandler
         // log
         error_log($errorMessage, 3, $this->logPath);
 
-        // echo
-        if (!$this->isLiveServer && $this->echoDev) {
-            echo nl2br($errorMessage, false);
-        } else {
-            echo 'An error has occurred<br>';
-        }
-
         // email
         if ($this->isLiveServer || $this->emailDev) {
             $this->email();
@@ -57,6 +58,34 @@ class ErrorHandler
         if ($die) {
             die($this->fatalMessage);
         }
+
+        if (!$this->isLiveServer) {
+            $this->renderError(nl2br($errorMessage, false));
+        } else {
+            $_SESSION['notice'] = ['An error has occurred<br>', 'error'];
+            header("Location: https://$this->redirectPage");
+            exit();
+        }
+    }
+
+    private function renderError(string $errorMessage)
+    {
+        echo <<< EOT
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>{{ Error }}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex, nofollow">
+        <link href='/css/home.css' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        $errorMessage
+    </body>
+</html>                    
+EOT;
     }
 
     /**

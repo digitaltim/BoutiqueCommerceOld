@@ -12,10 +12,6 @@ class View
     public function __construct(Container $container)
     {
         $this->container = $container;
-        // Instantiate services/dependencies
-        $container['db'];
-        $container['view'];
-        $container['mailer'];
     }
 
     public function __get($name)

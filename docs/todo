@@ -1,5 +1,9 @@
 1) work on todo list
 
+move from settings //Override the default Not Found Handler
+
+email owner upon creation and deletion of new admin
+
 - Create database backup script by modifying existing script. Add instructions how to use. Ex. (cron?)
 
 - INFRASTRUCTURE

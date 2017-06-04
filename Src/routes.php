@@ -87,6 +87,6 @@ $slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.delete');
 
-$slim->get('/{otherpage}',
-    'It_All\BoutiqueCommerce\Src\Domain\PageNotFound\PageNotFoundView:index')
+$slim->get('/notFound',
+    'It_All\BoutiqueCommerce\Src\Infrastructure\PageNotFoundView:index')
     ->setName('pageNotFound');

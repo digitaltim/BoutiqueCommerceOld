@@ -10,7 +10,7 @@
     <main>
         <h1>Welcome to BoutiqueCommerce</h1>
         {% if notice %}
-            <span class="{{ notice.1 }}">&raquo; {{ notice.0 }} &laquo;</span>
+            <div class="{{ notice.1 }}">{{ notice.0|raw }}</div>
         {% endif %}
     </main>
 {%  endblock %}

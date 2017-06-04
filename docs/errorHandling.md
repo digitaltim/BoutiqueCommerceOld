@@ -9,7 +9,7 @@ Reporting Methods:
 
 2. Echo
     Live Servers*
-    Error details are never echoed, except fatal errors, which cause display of the text set in $config['errors']['fatalMessage'] prior to termination.
+    Error details are never echoed, rather, a generic error message is echoed. For fatal errors, this message is set in $config['errors']['fatalMessage'].
     *Test for live server: $config['isLive'] is true, set in config/env.php
 
     Dev Servers*
