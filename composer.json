@@ -1,4 +1,7 @@
 {
+    "name": "it-all/BoutiqueCommerce",
+    "description": "eCommerce and Point-Of-Sale Platform for Apparel Boutiques",
+    "license": "GPL-3.0",
     "require": {
         "slim/slim": "^3.0",
         "monolog/monolog": "^1.22",
