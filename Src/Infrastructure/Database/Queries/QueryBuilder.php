@@ -9,7 +9,6 @@ class QueryBuilder
 {
     public $sql;
     public $args = array();
-    private $numberResultRows;
 
     /**
      * QueryBuilder constructor. like add, for convenience
@@ -20,29 +19,6 @@ class QueryBuilder
         if (count($args) > 0) {
             call_user_func_array(array($this, 'add'), $args);
         }
-    }
-
-    /** must be called after execute() */
-    public function getNumberResultRows()
-    {
-        if (!isset($this->numberResultRows)) {
-            throw new \Exception("execute() must be called prior");
-        }
-        return $this->numberResultRows;
-    }
-
-    /** must be called after execute() */
-    public function checkRecordsExist(): bool
-    {
-        if (!isset($this->numberResultRows)) {
-            throw new \Exception("execute() must be called prior");
-        }
-        return ($this->numberResultRows > 0);
-    }
-
-    private function setNumberResultRows($rs)
-    {
-        $this->numberResultRows = pg_num_rows($rs);
     }
 
     /**
@@ -86,25 +62,15 @@ class QueryBuilder
         $this->args = $args;
     }
 
-    /**
-     * executes query
-     * @return recordset
-     */
     public function execute() {
-//        echo '<pre>'.$this->sql;print_r($this->args);echo '</pre>';
-        $res = pg_query_params($this->sql, $this->args);
-        if (!$res) {
-            $msg = $this->sql . arrayWalkToStringRecursive($this->args);
+        // suppress errors as they are thrown below
+        if (!$res = @pg_query_params($this->sql, $this->args)) {
+            $msg = $this->sql . " args: [" . arrayWalkToStringRecursive($this->args) . "]";
             throw new \Exception('Query Execution Failure: '.$msg);
         }
-        $this->setNumberResultRows($res);
         return $res;
     }
 
-    /**
-     * @param null $newPgConn
-     * @return mixed will return the first RETURNING colName
-     */
     public function executeReturning() {
         $res = $this->execute();
         return pg_fetch_row($res)[0];

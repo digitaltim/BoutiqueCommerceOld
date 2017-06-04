@@ -201,7 +201,7 @@ class AdminsModel
 
     public function delete(int $id): bool
     {
-        $q = new QueryBuilder("DELETE FROM admins WHERE id = $1", $id);
+        $q = new QueryBuilder("DELETE FROM adminsa WHERE id = $1", $id);
         $res = $q->execute();
         $numRowsDeleted = pg_affected_rows($res);
         if ($numRowsDeleted == 1) {
@@ -213,11 +213,11 @@ class AdminsModel
         }
     }
 
-    public function checkRecordExistsForUsername(string $username)
+    public function checkRecordExistsForUsername(string $username): bool
     {
         $q = new QueryBuilder("SELECT id FROM admins WHERE username = $1", $username);
-        $q->execute();
-        return $q->checkRecordsExist();
+        $res = $q->execute();
+        return pg_num_rows($res) > 0;
     }
 
     public function selectForUsername(string $username)

@@ -164,27 +164,25 @@ function getFileExt(string $fileName)
  */
 function arrayWalkToStringRecursive(array $arr, int $level = 0): string
 {
+    $maxNestingLevel = 10;
     $out = "";
     $tabs = " ";
     for ($i = 0; $i < $level; $i++) {
         $tabs .= " ";
     }
     foreach ($arr as $k => $v) {
-        // GLOBALS can be too big for memory and can cause an infinite loop GLOBALS: GLOBALS: ...
-        if ($k != 'GLOBALS') {
-            $out .= "$tabs$k: ";
-            if (is_object($v)) {
-                $out .= 'object type: '.get_class($v);
-            } elseif (is_array($v)) {
-                $newLevel = $level + 1;
-                if ($newLevel > 10) {
-                    $out .= ' array, too deep, quitting';
-                } else {
-                    $out .= arrayWalkToStringRecursive($v, $newLevel);
-                }
+        $out .= "$tabs$k: ";
+        if (is_object($v)) {
+            $out .= 'object type: '.get_class($v);
+        } elseif (is_array($v)) {
+            $newLevel = $level + 1;
+            if ($newLevel > $maxNestingLevel) {
+                $out .= ' array, too deep, quitting';
             } else {
-                $out .= (string)$v;
+                $out .= arrayWalkToStringRecursive($v, $newLevel);
             }
+        } else {
+            $out .= (string)$v;
         }
     }
     return $out;

@@ -1,7 +1,5 @@
 1) work on todo list
 
-do query failures cause exception? see if($res){}else{} in AdminsC postInsert
-
 - Create database backup script by modifying existing script. Add instructions how to use. Ex. (cron?)
 
 - INFRASTRUCTURE
