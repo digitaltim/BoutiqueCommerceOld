@@ -4752,6 +4752,1162 @@ ALTER TABLE ONLY vendor_factors ALTER COLUMN id SET DEFAULT nextval('vendor_fact
 
 
 --
+-- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY accounts (id, account, account_type, descrip, parent) FROM stdin;
+1	test	Bank	abc	\N
+3	ab	Bank	\N	\N
+4	a	Bank	\N	\N
+6	afsdfsd	Bank	\N	\N
+7	fsd	Bank	\N	\N
+8	sdfds	Bank	\N	\N
+9	asfasdf	Bank	\N	\N
+10	sdfsdf	Bank	\N	\N
+11	sdfsdfsdfsfd	Bank	\N	\N
+13	avc	Bank	\N	\N
+14	dsfsfsd	Bank	\N	\N
+15	dsfdssd	Bank	\N	\N
+16	xxx	Bank	\N	\N
+17	xx	Bank	\N	\N
+23	xxyyzz	Bank	\N	\N
+25	sfdsdsfsdxxxx77	Bank	aa	\N
+\.
+
+
+--
+-- Name: accounts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('accounts_id_seq', 26, true);
+
+
+--
+-- Data for Name: ad_codes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY ad_codes (id, start_dt, end_dt, description, results) FROM stdin;
+1	2017-12-12 12:12:12	2017-12-12 12:12:12	xyzaa	aaaa
+\.
+
+
+--
+-- Name: ad_codes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('ad_codes_id_seq', 1, true);
+
+
+--
+-- Data for Name: admins; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY admins (id, name, username, employee_id, password_hash, role) FROM stdin;
+32	btqbtq	btqbtq	\N	$2y$10$Vh.SL5STsnplIJI908ToWOs5YMaYFolSyVjWJ5qu6kdUBVsP2I03C	owner
+\.
+
+
+--
+-- Name: admins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('admins_id_seq', 32, true);
+
+
+--
+-- Data for Name: cart_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY cart_items (id, cart_id, item_id, item_qty, item_color_id, size_id, gift_certificate_id, enter_dt) FROM stdin;
+\.
+
+
+--
+-- Name: cart_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('cart_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: carts; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY carts (id, enter_dt, tracker_cookie_id, contact_id) FROM stdin;
+\.
+
+
+--
+-- Name: carts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('carts_id_seq', 1, false);
+
+
+--
+-- Data for Name: category_search_aliases; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY category_search_aliases (id, alias) FROM stdin;
+\.
+
+
+--
+-- Data for Name: checkout_gcs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY checkout_gcs (id, checkout_id, gc_id) FROM stdin;
+\.
+
+
+--
+-- Name: checkout_gcs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('checkout_gcs_id_seq', 1, false);
+
+
+--
+-- Data for Name: checkouts; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY checkouts (id, enter_dt, cart_id, ship_name, ship_method, contact_id, promotion_id, comments_customer, order_id) FROM stdin;
+\.
+
+
+--
+-- Name: checkouts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('checkouts_id_seq', 1, false);
+
+
+--
+-- Data for Name: contact_authnet_payment_profiles; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY contact_authnet_payment_profiles (id, contact_authnet_profile_id, authnet_payment_profile_id, created) FROM stdin;
+\.
+
+
+--
+-- Name: contact_authnet_payment_profiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('contact_authnet_payment_profiles_id_seq', 1, false);
+
+
+--
+-- Data for Name: contact_authnet_profiles; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY contact_authnet_profiles (id, contact_id, authnet_customer_id, created) FROM stdin;
+\.
+
+
+--
+-- Name: contact_authnet_profiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('contact_authnet_profiles_id_seq', 1, false);
+
+
+--
+-- Data for Name: contact_requests; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY contact_requests (id, contact_id, search, message, dt) FROM stdin;
+\.
+
+
+--
+-- Name: contact_requests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('contact_requests_id_seq', 1, false);
+
+
+--
+-- Data for Name: contacts; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY contacts (id, name, company, address1, address2, city, state, postal, country, phone, cell_phone, fax, email, email_confirmed, local_signup, birthday, email_list, email_use_name, mailing_list, top_size, bottom_size, create_date, notes, notes_contact, tickler, source, shipping_problems) FROM stdin;
+\.
+
+
+--
+-- Name: contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('contacts_id_seq', 1, false);
+
+
+--
+-- Data for Name: contacts_ml_removes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY contacts_ml_removes (id, contact_id, remove_date) FROM stdin;
+\.
+
+
+--
+-- Name: contacts_ml_removes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('contacts_ml_removes_id_seq', 1, false);
+
+
+--
+-- Data for Name: contacts_postcards_sends; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY contacts_postcards_sends (id, contact_id, title, descrip) FROM stdin;
+\.
+
+
+--
+-- Name: contacts_postcards_sends_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('contacts_postcards_sends_id_seq', 1, false);
+
+
+--
+-- Data for Name: customer_appreciation; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY customer_appreciation (id, contact_id, cust_type, season_id, current_season_sales, last_season_sales, discount) FROM stdin;
+\.
+
+
+--
+-- Name: customer_appreciation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('customer_appreciation_id_seq', 1, false);
+
+
+--
+-- Data for Name: designer_order_item_status; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY designer_order_item_status (id, designer_order_item_id, received_date, received_shipment_item_id, item_cxl_date, item_cxl_reason, order_item_status_id) FROM stdin;
+\.
+
+
+--
+-- Name: designer_order_item_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('designer_order_item_status_id_seq', 1, false);
+
+
+--
+-- Data for Name: designer_order_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY designer_order_items (id, designer_order_id, item_breakdown_id, item_name, item_color_name, size_name, quantity, cost, list_cost) FROM stdin;
+\.
+
+
+--
+-- Name: designer_order_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('designer_order_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: designer_orders; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY designer_orders (id, designer_id, designer_po_number, start_ship_date, cancel_ship_date, payment_terms, discount_pct, discount_dollars, free_shipping, placed_date, placed_by_employee_id, placed_method, confirmed_date, confirmed_by, confirmed_method, confirmation_received_by_employee_id, cxl_date, cxl_reason, cxl_notes, enter_dt, entered_by_employee_id, description, notes, approved_by_employee_id, approved_dt, placed_notes, placed_with, cxl_by_employee_id) FROM stdin;
+\.
+
+
+--
+-- Name: designer_orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('designer_orders_id_seq', 32468, false);
+
+
+--
+-- Data for Name: designer_search_aliases; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY designer_search_aliases (id, alias) FROM stdin;
+\.
+
+
+--
+-- Data for Name: email_contacts; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY email_contacts (id, email_id, contact_id, send_dt, email, request_id, is_test) FROM stdin;
+\.
+
+
+--
+-- Name: email_contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('email_contacts_id_seq', 1, false);
+
+
+--
+-- Data for Name: email_images; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY email_images (id, file) FROM stdin;
+\.
+
+
+--
+-- Name: email_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('email_images_id_seq', 1, false);
+
+
+--
+-- Data for Name: email_outbox; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY email_outbox (id, email, email_id, contact_id, request_id, inserted_dt, status, sending_dt, error) FROM stdin;
+\.
+
+
+--
+-- Name: email_outbox_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('email_outbox_id_seq', 1, false);
+
+
+--
+-- Data for Name: email_queue; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY email_queue (id, email_id, contact_id, dt) FROM stdin;
+\.
+
+
+--
+-- Name: email_queue_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('email_queue_id_seq', 1, false);
+
+
+--
+-- Data for Name: email_send_requests; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY email_send_requests (id, note, request_dt, notify_when_done, num) FROM stdin;
+\.
+
+
+--
+-- Name: email_send_requests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('email_send_requests_id_seq', 1, false);
+
+
+--
+-- Data for Name: emails; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY emails (id, create_dt, ad_code_id, sent_to_deprecated, send_contact_type, on_email_list, targeted_des, excludes, email_type, subject, middle_html, landing_html, logo_link, plain_text, from_email, from_name, reply_to_email, purpose) FROM stdin;
+\.
+
+
+--
+-- Name: emails_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('emails_id_seq', 1, false);
+
+
+--
+-- Name: emails_sent_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('emails_sent_id_seq', 1, false);
+
+
+--
+-- Data for Name: emails_sent_xx; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY emails_sent_xx (id, email, email_id, contact_id, request_id, sent_dt) FROM stdin;
+\.
+
+
+--
+-- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY employees (id, fname, mi, lname, soc_sec, dob, address, city, state, zip, phone, email, pay_type, starting_pay, pay_rate, starting_position, "position", marital_status, fed_additional_withholding, fed_allowances, fed_exempt, state_code, vacations_paid, healthcare_deduction, start_date, end_date, state_additional_withholding) FROM stdin;
+\.
+
+
+--
+-- Name: employees_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('employees_id_seq', 1, false);
+
+
+--
+-- Data for Name: general_journal; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY general_journal (id, trans_date, amount, notes, ref_number, account_debit, account_credit) FROM stdin;
+\.
+
+
+--
+-- Name: general_journal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('general_journal_id_seq', 1, false);
+
+
+--
+-- Data for Name: gift_certificates; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY gift_certificates (id, order_item_id, gc_number, original_amount, balance, create_date, notes, redemption_code, to_name, to_address, to_city, to_state, to_country, to_postal, from_name, message, status) FROM stdin;
+\.
+
+
+--
+-- Name: gift_certificates_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('gift_certificates_id_seq', 5, true);
+
+
+--
+-- Data for Name: inventory_adjustments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_adjustments (id, item_breakdown_id, qty, cost, action, reason, dt) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_adjustments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_adjustments_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_ais_reports; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_ais_reports (id, report_date, item_id, time_period_months, num_units_sold, return_pct, num_units_inst, num_units_spec, retail_amount, profit_pct, num_units_colors, num_units_sizes, ais_store_colors, ais_web_colors, sales) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_ais_reports_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_ais_reports_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_categories; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_categories (id, name, description, taxable, taxable_under50, name_image, sort_order, status_web) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_categories_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_cross_sell; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_cross_sell (id, item_id, cross_item_id) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_cross_sell_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_cross_sell_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_groupings; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_groupings (id, designer_id, season_id, title, description, sortorder, status) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_groupings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_groupings_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_item_breakdown; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_item_breakdown (id, item_id, item_color_id, size_id, qty_instock) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_item_breakdown_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_item_breakdown_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_item_categories; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_item_categories (id, item_id, category_id) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_item_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_item_categories_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_item_colors; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_item_colors (id, item_id, color, color_hex, color_description, swatch, swatch_thumb, ais_web, ais_store, available_date, sale_price, color_alias) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_item_colors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_item_colors_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_item_images; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_item_images (id, item_id, imagefile, caption, color, show_xlarge, imageorder, statusimg) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_item_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_item_images_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_items (id, style_number, season_id, grouping_id, name, short_name, special_text, description, keywords, designer_id, fabrication, fabric_name, measurements, care, cost, price, sale_price, price_web, sale_price_web, size_scale_id, size_chart_img, status_web, preorder_cutoff_date, available_date, enter_date, sort_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: inventory_items_groupings; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_items_groupings (id, item_id, grouping_id, sortorder) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_items_groupings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_items_groupings_id_seq', 1, false);
+
+
+--
+-- Name: inventory_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_items_popular; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_items_popular (id, item_id) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_items_popular_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_items_popular_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_reports; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_reports (id, create_dt, total_cost, total_retail, total_num, fullprice_cost, fullprice_retail, fullprice_num, onsale_cost, onsale_retail, onsale_num, by_season, by_category, by_designer, comments) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_reports_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_reports_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_seasons; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_seasons (id, season) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_seasons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_seasons_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_shipment_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_shipment_items (id, shipment_id, item_id, item_breakdown_id, quantity, unit_cost) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_shipment_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_shipment_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_shipments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_shipments (id, designer_id, receive_date, received_by, enter_date, order_number, packing_slip_number, invoice_number, invoice_due_date, invoice_paid_date, notes) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_shipments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_shipments_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_size_scale_sizes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_size_scale_sizes (id, size_scale_id, size_id, sort_order) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_size_scale_sizes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_size_scale_sizes_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_size_scales; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_size_scales (id, name, description, chart_file, sort_order) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_size_scales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_size_scales_id_seq', 1, false);
+
+
+--
+-- Data for Name: inventory_sizes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY inventory_sizes (id, size) FROM stdin;
+\.
+
+
+--
+-- Name: inventory_sizes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('inventory_sizes_id_seq', 1, false);
+
+
+--
+-- Data for Name: licenses; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY licenses (id, authority, license_name, licensce_number, issue_date, expiration_date, notes) FROM stdin;
+\.
+
+
+--
+-- Name: licenses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('licenses_id_seq', 1, false);
+
+
+--
+-- Data for Name: news; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY news (id, event, event_date, event_title, event_text, event_image, ref_id, status) FROM stdin;
+\.
+
+
+--
+-- Name: news_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('news_id_seq', 1, false);
+
+
+--
+-- Data for Name: news_images; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY news_images (id, file) FROM stdin;
+\.
+
+
+--
+-- Name: news_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('news_images_id_seq', 1, false);
+
+
+--
+-- Data for Name: order_item_status; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY order_item_status (id, order_item_id, order_item_status, bck_date, bck_expected_date, order_item_delivery_date, shipped_from, order_item_return_date, order_item_notes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: order_item_status_history; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY order_item_status_history (id, order_item_status_id, order_item_id, change_dt, order_item_status, bck_date, bck_expected_date, order_item_delivery_date, shipped_from, order_item_return_date, order_item_notes) FROM stdin;
+\.
+
+
+--
+-- Name: order_item_status_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('order_item_status_history_id_seq', 1, false);
+
+
+--
+-- Name: order_item_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('order_item_status_id_seq', 1, false);
+
+
+--
+-- Data for Name: order_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY order_items (id, order_id, item_id, item_action, item_price, item_tax, item_qty, item_bd_id, item_color, item_size, item_designer_name, item_name, item_description, final_sale, item_list_price, item_order_dt) FROM stdin;
+\.
+
+
+--
+-- Name: order_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('order_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: order_return_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY order_return_items (id, order_return_id, order_item_status_id) FROM stdin;
+\.
+
+
+--
+-- Name: order_return_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('order_return_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: order_returns; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY order_returns (id, order_id, receive_date, received_by) FROM stdin;
+\.
+
+
+--
+-- Name: order_returns_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('order_returns_id_seq', 1, false);
+
+
+--
+-- Data for Name: order_shipment_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY order_shipment_items (id, order_shipment_id, order_item_status_id) FROM stdin;
+\.
+
+
+--
+-- Name: order_shipment_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('order_shipment_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: order_shipments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY order_shipments (id, order_id, shipped_from, carrier, tracking_number, price, cost, ship_date, deliver_date, by_employee_id, shipping_method_id) FROM stdin;
+\.
+
+
+--
+-- Name: order_shipments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('order_shipments_id_seq', 1, false);
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY orders (id, order_dt, order_type, contact_id, store_receipt_number, ship_amount, ship_method, ship_name, ship_company, ship_address1, ship_address2, ship_city, ship_state, ship_country, ship_postal, ship_phone, salesperson1, salesperson2, checkoutperson, ad_code, promotion_id, comments_customer, notes, tickler, order_status) FROM stdin;
+\.
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('orders_id_seq', 1, false);
+
+
+--
+-- Data for Name: orders_transactions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY orders_transactions (id, order_id, trans_dt, trans_type, amount, method, notes, status, amount_items, amount_gc, amount_shipping, amount_tax, amount_deposit, amount_restocking_fee, amount_misc) FROM stdin;
+\.
+
+
+--
+-- Data for Name: orders_transactions_cc; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY orders_transactions_cc (id, transactions_id, cc_type, cc_exp, cc_name, cc_street, cc_postal, cc_gateway, gateway_action, gateway_ref_trans_id, gateway_trans_id, gateway_approval_code, gateway_avs_code, gateway_cvv2_code, gateway_cardholder_code, gateway_raw_data, status_cctr, capture_date, contact_authnet_payment_profile_id, cc_num_last4) FROM stdin;
+\.
+
+
+--
+-- Name: orders_transactions_cc_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('orders_transactions_cc_id_seq', 1, false);
+
+
+--
+-- Data for Name: orders_transactions_deposit_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY orders_transactions_deposit_items (id, transactions_id, order_item_status_id, deposit_amount) FROM stdin;
+\.
+
+
+--
+-- Name: orders_transactions_deposit_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('orders_transactions_deposit_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: orders_transactions_gc; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY orders_transactions_gc (id, transactions_id, gift_certificates_id) FROM stdin;
+\.
+
+
+--
+-- Name: orders_transactions_gc_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('orders_transactions_gc_id_seq', 1, false);
+
+
+--
+-- Name: orders_transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('orders_transactions_id_seq', 1, false);
+
+
+--
+-- Data for Name: orders_transactions_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY orders_transactions_items (id, transactions_id, order_item_status_id) FROM stdin;
+\.
+
+
+--
+-- Name: orders_transactions_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('orders_transactions_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: orders_transactions_sc; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY orders_transactions_sc (id, transactions_id, store_credits_id) FROM stdin;
+\.
+
+
+--
+-- Name: orders_transactions_sc_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('orders_transactions_sc_id_seq', 1, false);
+
+
+--
+-- Data for Name: payment_failures; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY payment_failures (id, checkout_id, cc_exp, cc_name, cc_street, cc_postal, avs_code, cvv2_code, cardholder_code, response_reason_code, response_reason_text, error_msg, raw_data, dt) FROM stdin;
+\.
+
+
+--
+-- Name: payment_failures_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('payment_failures_id_seq', 1, false);
+
+
+--
+-- Data for Name: payroll; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY payroll (id, employee_id, pdate, period_start, period_end, num_hours, num_hours_reg, num_hours_ot, rate_hourly, gross_hourly, bonus, commission, healthcare_deduction, taxable, ss_tax, med_tax, fedw_tax, statew_tax, net, bonus_breakdown, commission_breakdown, vacation_hours, garnishment, fourzeroonek_deduction, num_hours_juryduty) FROM stdin;
+\.
+
+
+--
+-- Name: payroll_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('payroll_id_seq', 1, false);
+
+
+--
+-- Data for Name: promotions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY promotions (id, title, code, discount_pct, discount_dol, free_shipping, description, designer_ids, category_ids, grouping_ids, in_stock_only, full_price_only, on_sale_only, gift_certificates, minimum_items, fallback_pct, fallback_dol, date_start, date_end, contact_id) FROM stdin;
+\.
+
+
+--
+-- Name: promotions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('promotions_id_seq', 1, false);
+
+
+--
+-- Data for Name: searches; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY searches (id, term, tracker_id) FROM stdin;
+\.
+
+
+--
+-- Name: searches_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('searches_id_seq', 1, false);
+
+
+--
+-- Data for Name: shipping_methods; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY shipping_methods (id, carrier, method) FROM stdin;
+\.
+
+
+--
+-- Name: shipping_methods_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('shipping_methods_id_seq', 1, false);
+
+
+--
+-- Data for Name: store_credits; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY store_credits (id, order_id, contacts_id, issue_date, notes) FROM stdin;
+\.
+
+
+--
+-- Name: store_credits_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('store_credits_id_seq', 1, false);
+
+
+--
+-- Data for Name: testimonials; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY testimonials (id, enter_date, text, person, place, status) FROM stdin;
+3	2017-05-08	abcdefgh	a	a	active
+6	2017-05-17	abc	acdc	d	active
+7	2017-05-01	abcdef	greta	dc	active
+5	2017-05-08	abc	b	c	inactive
+18	2017-05-03	xyzabcde	gene	fra	active
+\.
+
+
+--
+-- Name: testimonials_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('testimonials_id_seq', 19, true);
+
+
+--
+-- Name: tracker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('tracker_id_seq', 1, false);
+
+
+--
+-- Data for Name: vendor_designers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY vendor_designers (id, name, shortname, description, picfile, catalog_name_image, showroom_text, showroom_instock_link, showroom_specialorder_link, special_order_text, designers_page_link, status_web, status_store, status_featured, featured_text, ais_delay, ais_delay_text, size_scale_ids, keywords, des_address, des_address2, des_city, des_state, des_country, des_postalcode, des_phone, des_fax, des_email, des_ra_address, des_ra_address2, des_ra_city, des_ra_state, des_ra_country, des_ra_postalcode, des_ra_phone, des_ra_fax, des_ra_email, des_pay_address, des_pay_address2, des_pay_city, des_pay_state, des_pay_country, des_pay_postalcode, des_pay_phone, des_pay_fax, des_pay_email, des_account, payto, des_terms, des_acceptcc, des_url, notes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: vendor_designers_factors; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY vendor_designers_factors (id, designer_id, factor_id) FROM stdin;
+\.
+
+
+--
+-- Name: vendor_designers_factors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('vendor_designers_factors_id_seq', 1, false);
+
+
+--
+-- Data for Name: vendor_designers_featured_images; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY vendor_designers_featured_images (id, designer_id, image_file, image_order, item_id) FROM stdin;
+\.
+
+
+--
+-- Name: vendor_designers_featured_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('vendor_designers_featured_images_id_seq', 1, false);
+
+
+--
+-- Name: vendor_designers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('vendor_designers_id_seq', 1, false);
+
+
+--
+-- Data for Name: vendor_factors; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY vendor_factors (id, name, fac_pay_address, fac_pay_address2, fac_pay_city, fac_pay_state, fac_pay_country, fac_pay_postalcode, fac_pay_phone, fac_pay_fax, fac_pay_email, fac_account, notes) FROM stdin;
+\.
+
+
+--
+-- Name: vendor_factors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('vendor_factors_id_seq', 1, false);
+
+
+--
 -- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
