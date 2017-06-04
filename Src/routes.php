@@ -88,5 +88,5 @@ $slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
     ->setName('admins.delete');
 
 $slim->get('/notFound',
-    'It_All\BoutiqueCommerce\Src\Infrastructure\PageNotFoundView:index')
+    'It_All\BoutiqueCommerce\Src\Infrastructure\View:pageNotFound')
     ->setName('pageNotFound');

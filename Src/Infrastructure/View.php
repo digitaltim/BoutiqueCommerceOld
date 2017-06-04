@@ -18,4 +18,13 @@ class View
     {
         return $this->container->{$name};
     }
+
+    public function pageNotFound($request, $response)
+    {
+        return $this->view->render(
+            $response,
+            'frontend/pageNotFound.twig',
+            ['title' => 'BoutiqueCommerce', 'pageType' => 'public']
+        );
+    }
 }
