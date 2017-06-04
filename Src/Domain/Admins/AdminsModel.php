@@ -199,10 +199,18 @@ class AdminsModel
         return $q->execute();
     }
 
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         $q = new QueryBuilder("DELETE FROM admins WHERE id = $1", $id);
-        return $q->execute();
+        $res = $q->execute();
+        $numRowsDeleted = pg_affected_rows($res);
+        if ($numRowsDeleted == 1) {
+            return true;
+        } elseif ($numRowsDeleted == 0) {
+            return false;
+        } else {
+            throw new \Exception("Multiple admins rows deleted for id: $id");
+        }
     }
 
     public function checkRecordExistsForUsername(string $username)

@@ -8,6 +8,7 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\Utilities;
  */
 class PhpMailerService {
 
+    private $logPath;
     private $defaultFromEmail;
     private $defaultFromName;
     private $protocol;
@@ -15,8 +16,9 @@ class PhpMailerService {
     private $smtpPort;
     private $phpMailer;
 
-    public function __construct(string $defaultFromEmail, string $defaultFromName, string $protocol, string $smtpHost = null, int $smtpPort = null)
+    public function __construct(string $logPath, string $defaultFromEmail, string $defaultFromName, string $protocol, string $smtpHost = null, int $smtpPort = null)
     {
+        $this->logPath = $logPath;
         $this->defaultFromEmail = $defaultFromEmail;
         $this->defaultFromName = $defaultFromName;
         $this->protocol = $protocol;
@@ -29,7 +31,9 @@ class PhpMailerService {
     {
         $this->phpMailer->Subject = $subject;
         $this->phpMailer->Body = $body;
+        $toEmailsString = '';
         foreach ($toEmails as $email) {
+            $toEmailsString .= "$email ";
             $this->phpMailer->addAddress($email);
         }
         if ($fromEmail == null) {
@@ -39,7 +43,15 @@ class PhpMailerService {
             $fromName = $this->defaultFromName;
         }
         $this->phpMailer->setFrom($fromEmail, $fromName);
-        $this->phpMailer->send();
+        if (!$this->phpMailer->send()) {
+            // note do not throw exception here because could get stuck in loop trying to email
+            $errorMessage = "\nPhpMailer::send() failed: ".$this->phpMailer->ErrorInfo."\n".
+                "subject: $subject\n".
+                "body: $body\n".
+                "to: $toEmailsString\n".
+                "from: $fromEmail\n";
+                error_log($errorMessage, 3, $this->logPath);
+        }
         $this->clear();
     }
 

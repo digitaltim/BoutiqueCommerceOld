@@ -17,6 +17,7 @@ $config = array_merge(
 
 // instantiate mailer, which is used in error handler and container
 $mailer = new \It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\PhpMailerService(
+    $config['storage']['logs']['pathPhpErrors'],
     $config['emails']['service'],
     $config['businessName'],
     $config['phpmailer']['protocol'],

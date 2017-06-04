@@ -35,7 +35,8 @@ return [
 
         // General settings
         'isLive' => $config['isLive'],
-        'businessName' => $config['businessName']
+        'businessName' => $config['businessName'],
+        'emails' => $config['emails']
     ],
 
     //Override the default Not Found Handler

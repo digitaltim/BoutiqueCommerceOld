@@ -100,6 +100,7 @@ class AdminsController extends Controller
             if ($res) {
                 unset($_SESSION['formInput']);
                 $message = 'Admin ' . $username . ' inserted';
+                $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", $message, [$settings['emails']['owner']]);
                 $this->logger->addInfo($message);
                 $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 
@@ -123,20 +124,21 @@ class AdminsController extends Controller
         }
 
         $adminsModel = new AdminsModel();
+        $adminData = $adminsModel->selectForId(intval($args['primaryKey']));
 
-        $res = $adminsModel->delete(intval($args['primaryKey']));
-
-        if ($res) {
-            $message = 'Admin deleted';
+        if ($adminsModel->delete(intval($adminData['id']))) {
+            $message = 'Admin '.$adminData['username'].' deleted';
             $this->logger->addInfo($message);
+            $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", $message, [$settings['emails']['owner']]);
             $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 
             return $response->withRedirect($this->router->pathFor('admins.index'));
 
         } else {
-
-            // redisplay the form with input values and error(s)
-            $_SESSION['adminNotice'] = [$message, 'adminNoticeFailure'];
+            $this->logger->addWarning("admins.id: " . $args['primaryKey'] . " not found for deletion. IP: " . $_SERVER['REMOTE_ADDR']);
+            $settings = $this->container->get('settings');
+            $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", "admins id not found for deletion. Check events log for details.", [$settings['emails']['programmer']]);
+            $_SESSION['adminNotice'] = ['Admin not found', 'adminNoticeFailure'];
             return $response->withRedirect($this->router->pathFor('admins.index'));
         }
     }
