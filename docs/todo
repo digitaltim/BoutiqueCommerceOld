@@ -2,10 +2,6 @@
 
 - Create database backup script by modifying existing script. Add instructions how to use. Ex. (cron?)
 
-- INFRASTRUCTURE
--- fork infrastructure to a new repo
--- the schema should only contain the admins table and maybe a test table in the forked repo
-
 OTHER
 - Explore https://pages.github.com/
 - Explore https://github.com/features/project-management/

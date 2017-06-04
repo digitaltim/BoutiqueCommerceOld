@@ -71,11 +71,6 @@ class QueryBuilder
         return $res;
     }
 
-    public function executeReturning() {
-        $res = $this->execute();
-        return pg_fetch_row($res)[0];
-    }
-
     /**
      * returns the value of the one column in one record
      * or false if 0 or multiple records result

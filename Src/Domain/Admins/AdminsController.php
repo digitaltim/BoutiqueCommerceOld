@@ -124,10 +124,11 @@ class AdminsController extends Controller
         }
 
         $adminsModel = new AdminsModel();
-        $adminData = $adminsModel->selectForId(intval($args['primaryKey']));
+//        $adminData = $adminsModel->selectForId(intval($args['primaryKey']));
 
-        if ($adminsModel->delete(intval($adminData['id']))) {
-            $message = 'Admin '.$adminData['username'].' deleted';
+        if ($res = $adminsModel->delete(intval($args['primaryKey']))) {
+            $returned = pg_fetch_all($res);
+            $message = 'Admin '.$returned[0]['username'].' deleted';
             $this->logger->addInfo($message);
             $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", $message, [$settings['emails']['owner']]);
             $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
@@ -135,10 +136,14 @@ class AdminsController extends Controller
             return $response->withRedirect($this->router->pathFor('admins.index'));
 
         } else {
+
             $this->logger->addWarning("admins.id: " . $args['primaryKey'] . " not found for deletion. IP: " . $_SERVER['REMOTE_ADDR']);
+
             $settings = $this->container->get('settings');
             $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", "admins id not found for deletion. Check events log for details.", [$settings['emails']['programmer']]);
+
             $_SESSION['adminNotice'] = ['Admin not found', 'adminNoticeFailure'];
+
             return $response->withRedirect($this->router->pathFor('admins.index'));
         }
     }

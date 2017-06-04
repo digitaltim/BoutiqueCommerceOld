@@ -194,23 +194,14 @@ class AdminsModel
             $q->add(", password_hash = $$argNum", password_hash($password, PASSWORD_DEFAULT));
             $argNum++;
         }
-        $q->add(" WHERE id = $$argNum", $id);
-//        $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, password_hash = $3, role = $4 WHERE id = $5", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role, $id);
+        $q->add(" WHERE id = $$argNum RETURNING username", $id);
         return $q->execute();
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id)
     {
-        $q = new QueryBuilder("DELETE FROM adminsa WHERE id = $1", $id);
-        $res = $q->execute();
-        $numRowsDeleted = pg_affected_rows($res);
-        if ($numRowsDeleted == 1) {
-            return true;
-        } elseif ($numRowsDeleted == 0) {
-            return false;
-        } else {
-            throw new \Exception("Multiple admins rows deleted for id: $id");
-        }
+        $q = new QueryBuilder("DELETE FROM admins WHERE id = $1 RETURNING username", $id);
+        return $q->execute();
     }
 
     public function checkRecordExistsForUsername(string $username): bool
