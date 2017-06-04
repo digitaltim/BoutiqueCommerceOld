@@ -39,12 +39,12 @@ return [
     ],
 
     //Override the default Not Found Handler
-    'notFoundHandler' => function ($c) {
-        return function ($request, $response) use ($c) {
-            return $c['response']
+    'notFoundHandler' => function ($container) {
+        return function ($request, $response) use ($container) {
+            return $container['response']
                 ->withStatus(404)
                 ->withHeader('Content-Type', 'text/html')
-                ->withRedirect($c->router->pathFor('pageNotFound'));
+                ->withRedirect($container->router->pathFor('pageNotFound'));
         };
     }
 ];
