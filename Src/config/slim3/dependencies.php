@@ -99,7 +99,7 @@ $container['validator'] = function ($container) {
 $container['csrf'] = function ($container) {
     $storage = null; // cannot directly pass null because received by reference.
     // setting the persistentTokenMode parameter true allows redisplaying a form with errors with a render rather than redirect call and will not cause CSRF failure if the page is refreshed (http://blog.ircmaxell.com/2013/02/preventing-csrf-attacks.html)
-    $guard = new \Slim\Csrf\Guard('csrf', $storage, null, 200, 16, false);
+    $guard = new \Slim\Csrf\Guard('csrf', $storage, null, 200, 16, true);
     $guard->setFailureCallable(function ($request, $response, $next) {
         $request = $request->withAttribute("csrf_status", false);
         return $next($request, $response);

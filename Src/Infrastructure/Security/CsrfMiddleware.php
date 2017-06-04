@@ -12,7 +12,7 @@ class CsrfMiddleware extends Middleware
         if (false === $request->getAttribute('csrf_status')) {
             $errorMessage = 'CSRF Check Failure on resource: ' .
                 $request->getUri()->getPath() . ' for IP: ' . $_SERVER['REMOTE_ADDR'];
-            $this->logger->addWarning($errorMessage);
+            $this->container->logger->addWarning($errorMessage);
             throw new \Exception($errorMessage);
         }
 
