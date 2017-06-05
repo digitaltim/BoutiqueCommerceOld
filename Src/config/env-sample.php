@@ -22,8 +22,9 @@ return [
     ],
 
     'emails' => [
-        'owner' => '',
-        'programmer' => ''
+        'owner' => 'someone@example.com',
+        'programmer' => 'someone@example.com',
+        'service' => 'someone@example.com'
     ],
 
     'twigAutoReload' => true

@@ -37,9 +37,9 @@ return [
     ],
 
     'emails' => [
-        'owner' => "owner@domainName",
-        'programmer' => "programmer@domainName",
-        'service' => "service@domainName"
+        'owner' => "owner@$domainName",
+        'programmer' => "programmer@$domainName",
+        'service' => "service@$domainName"
     ],
 
     'adminMinimumPermissions' => [
