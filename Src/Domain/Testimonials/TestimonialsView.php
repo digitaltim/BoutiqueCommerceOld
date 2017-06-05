@@ -10,7 +10,12 @@ class TestimonialsView extends AdminView
 {
     public function index($request, $response, $args)
     {
-        $res = (new TestimonialsModel)->select('id, text');
+        /*
+        I would prefer to have the ID be always listed in the first column and
+        used to edit the row. Otherwise there should be an edit button. This
+        would make the UI consistent for every list view.
+        */
+        $res = (new TestimonialsModel)->select('id, enter_date, person, text, place, status');
         $results = [];
         while ($row = pg_fetch_assoc($res)) {
             $results[] = array_merge($row, ['delete' => 'testimonials.delete']);
@@ -22,7 +27,7 @@ class TestimonialsView extends AdminView
             [
                 'title' => 'Testimonials',
                 'insertLink' => ['text' => 'Insert Testimonial', 'route' => 'testimonials.insert'],
-                'updateColumn' => 'id',
+                'updateColumn' => 'enter_date',
                 'updateRoute' => 'testimonials.put.update',
                 'table' => $results,
                 'navigationItems' => $this->navigationItems
@@ -51,29 +56,28 @@ class TestimonialsView extends AdminView
 
     public function getUpdate($request, $response, $args)
     {
-        $adminsModel = new AdminsModel();
-        $fields = $adminsModel->
-            getFormFields('update', $this->getPersistPasswords());
+        $testimonialsModel = new TestimonialsModel();
+        $fields = $testimonialsModel->getFormFields('update');
 
         /**
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.
          * note, this works for post/put because controller calls this method directly in case of errors instead of redirecting
          */
         if ($request->isGet()) {
-            if (!$fieldData = $adminsModel->selectForId(intval($args['primaryKey']))) {
-                throw new \Exception('Invalid primary key for admins: '.$args['primaryKey']);
+            if (!$fieldData = $testimonialsModel->selectForId(intval($args['primaryKey']))) {
+                throw new \Exception('Invalid primary key for testimonials: '.$args['primaryKey']);
             }
         } else {
             $fieldData = null;
         }
-        $fieldData = ($request->isGet()) ? $adminsModel->selectForId(intval($args['primaryKey'])) : null;
+        $fieldData = ($request->isGet()) ? $testimonialsModel->selectForId(intval($args['primaryKey'])) : null;
 
         return $this->view->render(
             $response,
             'admin/form.twig',
             [
-                'title' => 'Update Admin',
-                'formActionRoute' => 'admins.put.update',
+                'title' => 'Update Testimonial',
+                'formActionRoute' => 'testimonials.put.update',
                 'primaryKey' => $args['primaryKey'],
                 'formFields' => FormHelper::insertValuesErrors($fields, $fieldData),
                 'focusField' => FormHelper::getFocusField(),

@@ -9,30 +9,33 @@ use Psr\Log\InvalidArgumentException;
 
 class TestimonialsModel
 {
-    private $roles;
+    private $status;
 
     public function __construct()
     {
-        $this->roles = [
-            'owner',
-            'director',
-            'manager',
-            'shipper',
-            'admin',
-            'store',
-            'bookkeeper'
+        $this->status = [
+            'active',
+            'inactive'
         ];
     }
 
-    public function getRoles()
+    public function getStatus()
     {
-        return $this->roles;
+        return $this->status;
     }
 
     public function getFormFields(string $formType = 'insert'): array
     {
         if ($formType != 'insert' && $formType != 'update') {
             throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        }
+
+        // create status options array based on status property
+        // TODO maybe just do this statically in the constructor?
+        $statusOptions = [];
+        $statusOptions['-- select --'] = 'disabled';
+        foreach ($this->status as $status) {
+            $statusOptions[$status] = $status;
         }
 
         $fields = [
@@ -50,6 +53,56 @@ class TestimonialsModel
                     'cols' => '60',
                     'value' => ''
                 ]
+            ],
+
+            'person' => [
+                'tag' => 'input',
+                'label' => 'Person',
+                'validation' => [
+                    'required' => null,
+                    'alphaspace' => null,
+                    'maxlength' => 50
+                ],
+                'attributes' => [
+                    'id' => 'person',
+                    'name' => 'person',
+                    'type' => 'text',
+                    'size' => '15',
+                    'maxlength' => '50',
+                    'value' => ''
+                ]
+            ],
+
+            'place' => [
+                'tag' => 'input',
+                'label' => 'Place',
+                'validation' => [
+                    'required' => null,
+                    'alphaspace' => null,
+                    'maxlength' => 100
+                ],
+                'attributes' => [
+                    'id' => 'place',
+                    'name' => 'place',
+                    'type' => 'text',
+                    'size' => '15',
+                    'maxlength' => '100',
+                    'value' => ''
+                ]
+            ],
+
+            'status' => [
+                'tag' => 'select',
+                'label' => 'Status',
+                'validation' => ['required' => null],
+                'attributes' => [
+                    'id' => 'status',
+                    'name' => 'status',
+                    'type' => 'select',
+                    'value' => ''
+                ],
+                'options' => $statusOptions,
+                'selected' => 'disabled'
             ],
 
             'submit' => [
@@ -94,48 +147,42 @@ class TestimonialsModel
         return $q->execute();
     }
 
-    public function insert()
+    public function insert(string $text, string $person, string $place, string $status)
     {
-        $q = new QueryBuilder("INSERT INTO testimonials () VALUES()");
+        $today = date("Y-m-d");
+
+        $q = new QueryBuilder("INSERT INTO testimonials (enter_date, text, person, place, status) VALUES($1, $2, $3, $4, $5)", $today, $text, $person, $place, $status);
         return $q->execute();
     }
 
-    public function update()
+    public function update(int $id, string $text, string $person, string $place, string $status)
     {
-        $q = new QueryBuilder("UPDATE testimonials SET name = $1, username = $2, role = $3", $name, $username, $role);
-        $argNum = 4;
-        if ($password !== null) {
-            $q->add(", password_hash = $$argNum", password_hash($password, PASSWORD_DEFAULT));
-            $argNum++;
-        }
-        $q->add(" WHERE id = $$argNum RETURNING username", $id);
+        $q = new QueryBuilder("UPDATE testimonials SET text = $1, person = $2, place = $3, status = $4", $text, $person, $place, $status);
+
+        $q->add(" WHERE id = $5 RETURNING person", $id);
         return $q->execute();
     }
 
     public function delete(int $id)
     {
-        $q = new QueryBuilder("DELETE FROM testimonials WHERE id = $1 RETURNING username", $id);
+        $q = new QueryBuilder("DELETE FROM testimonials WHERE id = $1 RETURNING person", $id);
         return $q->execute();
     }
 
     public function selectForId(int $id)
     {
-        $q = new QueryBuilder("SELECT text FROM testimonials WHERE id = $1", $id);
+        $q = new QueryBuilder("SELECT * FROM testimonials WHERE id = $1", $id);
         $res = $q->execute();
         return pg_fetch_assoc($res);
     }
 
-    // If a null password is passed, the password field is not checked
-    public function recordChanged(int $id, string $name, string $username, string $role, string $password = null): bool
+    public function recordChanged(int $id, string $text, string $person, string $place, string $password = null): bool
     {
         if (!$record = $this->selectForId($id)) {
             throw new \Exception("No admins record for id $id");
         }
 
-        if ($name != $record['name'] || $username != $record['username'] || $role != $record['role']) {
-            return true;
-        }
-        if ($password !== null && password_hash($password, PASSWORD_DEFAULT) != $record['password']) {
+        if ($text != $record['text'] || $person != $record['person'] || $place != $record['place'] || $status != $record['status']) {
             return true;
         }
 

@@ -96,13 +96,31 @@ $slim->get('/' . $config['dirs']['admin'] . '/testimonials',
     ->setName('testimonials.index');
 
 $slim->get('/' . $config['dirs']['admin'] . '/testimonials/insert',
-    $domainNs.'\Admins\TestimonialsView:getInsert')
+    $domainNs.'\Testimonials\TestimonialsView:getInsert')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.insert']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.insert');
 
+$slim->post('/' . $config['dirs']['admin'] . '/testimonials/insert',
+    $domainNs.'\Testimonials\TestimonialsController:postInsert')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.insert']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('testimonials.post.insert');
+
+$slim->get('/' . $config['dirs']['admin'] . '/testimonials/{primaryKey}',
+    $domainNs.'\Testimonials\TestimonialsView:getUpdate')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.update']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('testimonials.update');
+
+$slim->put('/' . $config['dirs']['admin'] . '/testimonials/{primaryKey}',
+    $domainNs.'\Testimonials\TestimonialsController:putUpdate')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.update']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('testimonials.put.update');
+
 $slim->get('/' . $config['dirs']['admin'] . '/testimonials/delete/{primaryKey}',
-    $domainNs.'\Admins\TestimonialsController:getDelete')
+    $domainNs.'\Testimonials\TestimonialsController:getDelete')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.delete']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.delete');
