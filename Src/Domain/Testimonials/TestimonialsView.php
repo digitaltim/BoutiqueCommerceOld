@@ -1,51 +1,46 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
+namespace It_All\BoutiqueCommerce\Src\Domain\Testimonials;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 
-class AdminsView extends AdminView
+class TestimonialsView extends AdminView
 {
     public function index($request, $response, $args)
     {
-        $res = (new AdminsModel)->select('id, username, name, role');
+        $res = (new TestimonialsModel)->select('id, text');
         $results = [];
         while ($row = pg_fetch_assoc($res)) {
-            $results[] = array_merge($row, ['delete' => 'admins.delete']);
+            $results[] = array_merge($row, ['delete' => 'testimonials.delete']);
         }
 
         return $this->view->render(
             $response,
             'admin/list.twig',
             [
-                'title' => 'Admins',
-                'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
-                'updateColumn' => 'username',
-                'updateRoute' => 'admins.put.update',
+                'title' => 'Testimonials',
+                'insertLink' => ['text' => 'Insert Testimonial', 'route' => 'testimonials.insert'],
+                'updateColumn' => 'id',
+                'updateRoute' => 'testimonials.put.update',
                 'table' => $results,
                 'navigationItems' => $this->navigationItems
             ]
         );
     }
 
-    private function getPersistPasswords():  bool
-    {
-        return !isset($_SESSION['validationErrors']['password']) && !isset($_SESSION['validationErrors']['confirm_password']);
-    }
-
     public function getInsert($request, $response, $args)
     {
-        $fields = (new AdminsModel)->
-            getFormFields('insert', $this->getPersistPasswords());
+        $fields = (new TestimonialsModel())->
+            getFormFields('insert');
 
         return $this->view->render(
             $response,
             'admin/form.twig',
             [
-                'title' => 'Insert Admin',
-                'formActionRoute' => 'admins.post.insert',
+                'title' => 'Insert Testimonial',
+                'formActionRoute' => 'testimonials.post.insert',
                 'formFields' => FormHelper::insertValuesErrors($fields),
                 'focusField' => FormHelper::getFocusField(),
                 'generalFormError' => FormHelper::getGeneralFormError(),

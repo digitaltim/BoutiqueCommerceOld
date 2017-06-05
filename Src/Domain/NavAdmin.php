@@ -27,7 +27,18 @@ class NavAdmin
                 'subSections' => [
                     'Insert' => [
                         'minimumPermissions' => $container->authorization->getMinimumPermission('admins.insert'),
-                        'link' => $container->router->pathFor('admins.post.insert'),
+                        'link' => $container->router->pathFor('admins.insert'),
+                    ]
+                ]
+            ],
+            'Testimonials' => [
+                'minimumPermissions' => $container->authorization
+                    ->getMinimumPermission('testimonials.index'),
+                'link' => $container->router->pathFor('testimonials.index'),
+                'subSections' => [
+                    'Insert' => [
+                        'minimumPermissions' => $container->authorization->getMinimumPermission('testimonials.insert'),
+                        'link' => $container->router->pathFor('testimonials.insert'),
                     ]
                 ]
             ]

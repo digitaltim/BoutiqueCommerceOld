@@ -87,6 +87,29 @@ $slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.delete');
 
+////////////////////////////////////////////////////////////////////////////////
+// testimonials
+$slim->get('/' . $config['dirs']['admin'] . '/testimonials',
+    $domainNs.'\Testimonials\TestimonialsView:index')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.index']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('testimonials.index');
+
+$slim->get('/' . $config['dirs']['admin'] . '/testimonials/insert',
+    $domainNs.'\Admins\TestimonialsView:getInsert')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.insert']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('testimonials.insert');
+
+$slim->get('/' . $config['dirs']['admin'] . '/testimonials/delete/{primaryKey}',
+    $domainNs.'\Admins\TestimonialsController:getDelete')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.delete']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('testimonials.delete');
+
+
+
+
 $slim->get('/notFound',
     'It_All\BoutiqueCommerce\Src\Infrastructure\View:pageNotFound')
     ->setName('pageNotFound');

@@ -46,7 +46,11 @@ return [
         'admins.index' => 'director',
         'admins.insert' => 'director',
         'admins.update' => 'owner',
-        'admins.delete' => 'owner'
+        'admins.delete' => 'owner',
+        'testimonials.index' => 'admin',
+        'testimonials.insert' => 'admin',
+        'testimonials.update' => 'admin',
+        'testimonials.delete' => 'admin',
     ],
 
     'maxFailedLogins' => 5
