@@ -100,6 +100,7 @@ class AdminsController extends Controller
             if ($res) {
                 unset($_SESSION['formInput']);
                 $message = 'Admin ' . $username . ' inserted';
+                $settings = $this->container->get('settings');
                 $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", $message, [$settings['emails']['owner']]);
                 $this->logger->addInfo($message);
                 $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
@@ -124,12 +125,12 @@ class AdminsController extends Controller
         }
 
         $adminsModel = new AdminsModel();
-//        $adminData = $adminsModel->selectForId(intval($args['primaryKey']));
 
         if ($res = $adminsModel->delete(intval($args['primaryKey']))) {
             $returned = pg_fetch_all($res);
             $message = 'Admin '.$returned[0]['username'].' deleted';
             $this->logger->addInfo($message);
+            $settings = $this->container->get('settings');
             $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", $message, [$settings['emails']['owner']]);
             $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 
