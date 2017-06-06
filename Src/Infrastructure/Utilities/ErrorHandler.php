@@ -55,12 +55,11 @@ class ErrorHandler
             $this->email();
         }
 
-        if ($die) {
-            die($this->fatalMessage);
-        }
-
         if (!$this->isLiveServer) {
             $this->renderError(nl2br($errorMessage, false));
+            if ($die) {
+                die($this->fatalMessage);
+            }
         } else {
             $_SESSION['notice'] = ['An error has occurred<br>', 'error'];
             header("Location: https://$this->redirectPage");
@@ -97,7 +96,7 @@ EOT;
         $error = error_get_last();
         $fatalErrorTypes = [E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR];
         if (in_array($error["type"], $fatalErrorTypes)) {
-            $this->handleError($this->generateMessageBodyCommon($error["type"], $error["message"], $error["file"], $error["line"]),true, true);
+            $this->handleError($this->generateMessageBodyCommon($error["type"], $error["message"], $error["file"], $error["line"]),true);
         }
     }
 

@@ -27,24 +27,19 @@ class TestimonialsController extends Controller
 
         if (!$error) {
             $id = intval($args['primaryKey']);
-            $text = $request->getParam('text');
             $person = $request->getParam('person');
-            $place = $request->getParam('place');
-            $status = $request->getParam('status');
 
             // check for no changes made, if so, redirect to list with red notice
-            if (!$testimonialsModel->recordChanged($id, $text, $person, $place, $status)) {
+            if (!$testimonialsModel->hasRecordChanged($request->getParsedBody(), $id)) {
                 $_SESSION['adminNotice'] = [
-                    "No changes made to $person\'s testimonial",
+                    "No changes made to $person's testimonial",
                     'adminNoticeFailure'
                 ];
                 return $response->withRedirect($this->router->pathFor('testimonials.index'));
             }
 
             // attempt to update the model
-            $res = $testimonialsModel->update($id, $text, $person, $place, $status);
-
-            if ($res) {
+            if ($testimonialsModel->updateByPrimaryKey($request->getParsedBody(), $id)) {
                 unset($_SESSION['formInput']);
                 $message = $person . '\'s testimonial updated';
                 $this->logger->addInfo($message);
@@ -83,18 +78,9 @@ class TestimonialsController extends Controller
 
         if (!$error) {
             // attempt insert
-            $person = $request->getParam('person');
-
-            $res = $testimonialsModel->insert(
-                $request->getParam('text'),
-                $person,
-                $request->getParam('place'),
-                $request->getParam('status')
-            );
-
-            if ($res) {
+            if ($testimonialsModel->insert($request->getParsedBody())) {
                 unset($_SESSION['formInput']);
-                $message = $person . '\'s testimonial inserted';
+                $message = $request->getParam('person') . '\'s testimonial inserted';
                 $settings = $this->container->get('settings');
                 $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", $message, [$settings['emails']['owner']]);
                 $this->logger->addInfo($message);

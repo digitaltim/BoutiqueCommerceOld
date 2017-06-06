@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Testimonials;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
+use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
-class TestimonialsModel
+class TestimonialsModel extends Model
 {
     private $statusSelectFieldOptions;
 
@@ -19,15 +21,21 @@ class TestimonialsModel
             'active' => 'active',
             'inactive' => 'inactive'
         ];
+        parent::__construct('testimonials');
     }
 
-    public function getFormFields(string $formType = 'insert'): array
+    protected function setColumns()
     {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
+        $this->columns = [
 
-        $fields = [
+            'enter_date' => [
+            'tag' => 'input',
+                'attributes' => [
+                    'name' => 'enter_date',
+                    'type' => 'hidden',
+                    'value' => date('Y-m-d')
+                ]
+            ],
 
             'text' => [
                 'tag' => 'textarea',
@@ -92,30 +100,21 @@ class TestimonialsModel
                 ],
                 'options' => $this->statusSelectFieldOptions,
                 'selected' => 'disabled'
-            ],
-
-            'submit' => [
-                'tag' => 'input',
-                'attributes' => [
-                    'type' => 'submit',
-                    'name' => 'submit',
-                    'value' => 'Go!'
-                ]
             ]
         ];
+    }
 
+    public function getFormFields(string $formType = 'insert'): array
+    {
+        if ($formType != 'insert' && $formType != 'update') {
+            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        }
 
-        if ($formType == 'insert') {
-        } else { // update
-            // override post method
-            $fields['_METHOD'] = [
-                'tag' => 'input',
-                'attributes' => [
-                    'type' => 'hidden',
-                    'name' => '_METHOD',
-                    'value' => 'PUT'
-                ]
-            ];
+        $fields = array_merge($this->columns, ['submit' => FormHelper::getSubmitField()]);
+
+        if ($formType == 'update') {
+            // override post method to put
+            $fields['_METHOD'] = FormHelper::getPutMethodField();
         }
 
         return $fields;
@@ -130,51 +129,8 @@ class TestimonialsModel
         return ValidationService::getRules($this->getFormFields($formType));
     }
 
-    public function select(string $columns = '*')
-    {
-        $q = new QueryBuilder("SELECT $columns FROM testimonials");
-        return $q->execute();
-    }
-
-    public function insert(string $text, string $person, string $place, string $status)
-    {
-        $today = date("Y-m-d");
-
-        $q = new QueryBuilder("INSERT INTO testimonials (enter_date, text, person, place, status) VALUES($1, $2, $3, $4, $5)", $today, $text, $person, $place, $status);
-        return $q->execute();
-    }
-
-    public function update(int $id, string $text, string $person, string $place, string $status)
-    {
-        $q = new QueryBuilder("UPDATE testimonials SET text = $1, person = $2, place = $3, status = $4", $text, $person, $place, $status);
-
-        $q->add(" WHERE id = $5 RETURNING person", $id);
-        return $q->execute();
-    }
-
     public function delete(int $id)
     {
-        $q = new QueryBuilder("DELETE FROM testimonials WHERE id = $1 RETURNING person, place", $id);
-        return $q->execute();
-    }
-
-    public function selectForId(int $id)
-    {
-        $q = new QueryBuilder("SELECT * FROM testimonials WHERE id = $1", $id);
-        $res = $q->execute();
-        return pg_fetch_assoc($res);
-    }
-
-    public function recordChanged(int $id, string $text, string $person, string $place, string $password = null): bool
-    {
-        if (!$record = $this->selectForId($id)) {
-            throw new \Exception("No admins record for id $id");
-        }
-
-        if ($text != $record['text'] || $person != $record['person'] || $place != $record['place'] || $status != $record['status']) {
-            return true;
-        }
-
-        return false;
+        return $this->deleteByPrimaryKey($id, 'id', 'person, place');
     }
 }

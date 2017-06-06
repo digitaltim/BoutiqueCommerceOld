@@ -32,8 +32,7 @@ class TestimonialsView extends AdminView
 
     public function getInsert($request, $response, $args)
     {
-        $fields = (new TestimonialsModel())->
-            getFormFields('insert');
+        $fields = (new TestimonialsModel())->getFormFields('insert');
 
         return $this->view->render(
             $response,
@@ -58,14 +57,7 @@ class TestimonialsView extends AdminView
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.
          * note, this works for post/put because controller calls this method directly in case of errors instead of redirecting
          */
-        if ($request->isGet()) {
-            if (!$fieldData = $testimonialsModel->selectForId(intval($args['primaryKey']))) {
-                throw new \Exception('Invalid primary key for testimonials: '.$args['primaryKey']);
-            }
-        } else {
-            $fieldData = null;
-        }
-        $fieldData = ($request->isGet()) ? $testimonialsModel->selectForId(intval($args['primaryKey'])) : null;
+        $fieldData = ($request->isGet()) ? $testimonialsModel->selectForPrimaryKey(intval($args['primaryKey'])) : null;
 
         return $this->view->render(
             $response,

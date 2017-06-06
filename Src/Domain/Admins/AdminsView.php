@@ -11,13 +11,6 @@ class AdminsView extends AdminView
     public function index($request, $response, $args)
     {
         $res = (new AdminsModel)->select('id, username, name, role');
-        $results = [];
-        // add on proper delete keys based on rules:
-        //
-        while ($row = pg_fetch_assoc($res)) {
-            // if
-            $results[] = $row; //array_merge($row, ['delete' => 'admins.delete']);
-        }
 
         $insertLink = ($this->authorization->check($this->container->settings['authorization']['admins.insert'])) ? ['text' => 'Insert Admin', 'route' => 'admins.insert'] : false;
         return $this->view->render(
@@ -33,7 +26,7 @@ class AdminsView extends AdminView
                 'updateRoute' => 'admins.put.update',
                 'addDeleteColumn' => true,
                 'deleteRoute' => 'admins.delete',
-                'table' => $results,
+                'table' => pg_fetch_all($res),
                 'navigationItems' => $this->navigationItems
             ]
         );
@@ -41,7 +34,7 @@ class AdminsView extends AdminView
 
     private function getPersistPasswords():  bool
     {
-        return !isset($_SESSION['validationErrors']['password']) && !isset($_SESSION['validationErrors']['confirm_password']);
+        return !isset($_SESSION['validationErrors']['password_hash']) && !isset($_SESSION['validationErrors']['confirm_password_hash']);
     }
 
     public function getInsert($request, $response, $args)
@@ -73,14 +66,7 @@ class AdminsView extends AdminView
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.
          * note, this works for post/put because controller calls this method directly in case of errors instead of redirecting
          */
-        if ($request->isGet()) {
-            if (!$fieldData = $adminsModel->selectForId(intval($args['primaryKey']))) {
-                throw new \Exception('Invalid primary key for admins: '.$args['primaryKey']);
-            }
-        } else {
-            $fieldData = null;
-        }
-        $fieldData = ($request->isGet()) ? $adminsModel->selectForId(intval($args['primaryKey'])) : null;
+        $fieldData = ($request->isGet()) ? $adminsModel->selectForPrimaryKey(intval($args['primaryKey'])) : null;
 
         return $this->view->render(
             $response,

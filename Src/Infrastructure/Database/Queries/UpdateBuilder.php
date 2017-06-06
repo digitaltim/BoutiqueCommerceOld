@@ -8,7 +8,7 @@ class UpdateBuilder extends InsertUpdateBuilder {
     public $updateOnColumnValue;
     public $setColumnsValues;
 
-    function __construct(string $dbTable, string $updateOnColumnName, string $updateOnColumnValue)
+    function __construct(string $dbTable, string $updateOnColumnName, $updateOnColumnValue)
     {
         $this->updateOnColumnName = $updateOnColumnName;
         $this->updateOnColumnValue = $updateOnColumnValue;
@@ -47,6 +47,6 @@ class UpdateBuilder extends InsertUpdateBuilder {
     {
         $this->args[] = $this->updateOnColumnValue;
         $lastArgNum = count($this->args);
-        $this->sql = "UPDATE $this->dbTable SET $this->setColumnsValues WHERE $this->updateOnColumnName = \$".$lastArgNum;
+        $this->sql = "UPDATE $this->dbTable SET $this->setColumnsValues WHERE $this->updateOnColumnName = $".$lastArgNum;
     }
 }

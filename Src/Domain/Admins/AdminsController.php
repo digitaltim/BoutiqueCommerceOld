@@ -26,6 +26,8 @@ class AdminsController extends Controller
         }
 
         if (!$error) {
+
+
             $id = intval($args['primaryKey']);
             $name = $request->getParam('name');
             $username = $request->getParam('username');
@@ -88,16 +90,7 @@ class AdminsController extends Controller
 
         if (!$error) {
             // attempt insert
-            $username = $request->getParam('username');
-
-            $res = $adminsModel->insert(
-                $request->getParam('name'),
-                $username,
-                $request->getParam('password'),
-                $request->getParam('role')
-            );
-
-            if ($res) {
+            if ($res = $adminsModel->insert($request->getParsedBody())) {
                 unset($_SESSION['formInput']);
                 $message = 'Admin ' . $username . ' inserted';
                 $settings = $this->container->get('settings');

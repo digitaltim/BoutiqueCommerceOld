@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
+use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
-class AdminsModel
+class AdminsModel extends Model
 {
     private $rolesSelectFieldOptions;
 
@@ -24,15 +26,12 @@ class AdminsModel
             'store' => 'store',
             'bookkeeper' => 'bookkeeper'
         ];
+        parent::__construct('admins');
     }
 
-    public function getFormFields(string $formType = 'insert', bool $persistPasswords = false): array
+    protected function setColumns()
     {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
-
-        $fields = [
+        $this->columns = [
 
             'username' => [
                 'tag' => 'input',
@@ -85,50 +84,53 @@ class AdminsModel
                 'selected' => 'disabled'
             ],
 
-            'password' => [
+            'password_hash' => [
                 'tag' => 'input',
                 'label' => 'Password',
                 'validation' => ['minlength' => 12],
                 'attributes' => [
                     'id' => 'password',
                     'type' => 'password',
-                    'name' => 'password',
+                    'name' => 'password_hash',
                     'size' => '20',
                     'maxlength' => '30',
                 ],
-                'persist' => $persistPasswords,
-            ],
+            ]
+        ];
+    }
 
-            'confirm_password' => [
+    public function getFormFields(string $formType = 'insert', bool $persistPasswords = false): array
+    {
+        if ($formType != 'insert' && $formType != 'update') {
+            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        }
+
+        $fields = array_merge($this->columns, [
+
+            'confirm_password_hash' => [
                 'tag' => 'input',
                 'label' => 'Confirm Password',
                 'validation' => ['minlength' => 12, 'confirm' => null],
                 'attributes' => [
                     'type' => 'password',
-                    'name' => 'confirm_password',
+                    'name' => 'confirm_password_hash',
                     'size' => '20',
                     'maxlength' => '30',
                 ],
                 'persist' => $persistPasswords,
             ],
 
-            'submit' => [
-                'tag' => 'input',
-                'attributes' => [
-                    'type' => 'submit',
-                    'name' => 'submit',
-                    'value' => 'Go!'
-                ]
-            ]
-        ];
+            'submit' => FormHelper::getSubmitField()
+        ]);
 
+        $fields['password_hash']['persist'] = $persistPasswords;
 
         if ($formType == 'insert') {
-            $fields['password']['validation']['required'] = null;
-            $fields['confirm_password']['validation']['required'] = null;
+            $fields['password_hash']['validation']['required'] = null;
+            $fields['confirm_password_hash']['validation']['required'] = null;
         } else { // update
-            $fields['password']['label'] = 'Change Password (leave blank to keep existing password)';
-            $fields['confirm_password']['label'] = 'Confirm New Password';
+            $fields['password_hash']['label'] = 'Change Password (leave blank to keep existing password)';
+            $fields['confirm_password_hash']['label'] = 'Confirm New Password';
             // override post method
             $fields['_METHOD'] = [
                 'tag' => 'input',
@@ -157,22 +159,7 @@ class AdminsModel
         return ValidationService::getRules($this->getFormFields($formType));
     }
 
-    public function select(string $columns = '*')
-    {
-        $q = new QueryBuilder("SELECT $columns FROM admins");
-        return $q->execute();
-    }
-
-    public function insert(string $name, string $username, string $password, string $role)
-    {
-        if (!$this->validateRole($role)) {
-            throw new \Exception("Admin being inserted with invalid role $role");
-        }
-        $q = new QueryBuilder("INSERT INTO admins (name, username, password_hash, role) VALUES($1, $2, $3, $4)", $name, $username, password_hash($password, PASSWORD_DEFAULT), $role);
-        return $q->execute();
-    }
-
-     // If a null password is passed, the password field is not updated
+//    If a null password is passed, the password field is not updated
     public function update(int $id, string $name, string $username, string $role, string $password = null)
     {
         if (!$this->validateRole($role)) {
@@ -190,8 +177,7 @@ class AdminsModel
 
     public function delete(int $id)
     {
-        $q = new QueryBuilder("DELETE FROM admins WHERE id = $1 RETURNING username", $id);
-        return $q->execute();
+        return $this->deleteByPrimaryKey($id, 'id', 'username');
     }
 
     public function checkRecordExistsForUsername(string $username): bool
@@ -207,17 +193,10 @@ class AdminsModel
         return $q->execute();
     }
 
-    public function selectForId(int $id)
-    {
-        $q = new QueryBuilder("SELECT * FROM admins WHERE id = $1", $id);
-        $res = $q->execute();
-        return pg_fetch_assoc($res);
-    }
-
     // If a null password is passed, the password field is not checked
     public function recordChanged(int $id, string $name, string $username, string $role, string $password = null): bool
     {
-        if (!$record = $this->selectForId($id)) {
+        if (!$record = $this->selectForPrimaryKey($id)) {
             throw new \Exception("No admins record for id $id");
         }
 

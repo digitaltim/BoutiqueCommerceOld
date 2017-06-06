@@ -1,5 +1,9 @@
 1) work on todo list
 
+- make query failures show pg error msg
+
+- figure out how to make error handler output error and continue processing page if not die.
+
 - Create database backup script by modifying existing script. Add instructions how to use. Ex. (cron?)
 
 OTHER

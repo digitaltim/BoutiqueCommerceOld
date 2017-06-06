@@ -102,4 +102,28 @@ class FormHelper
         }
         return '';
     }
+
+    public static function getSubmitField(string $value = 'Go!', string $name = 'submit')
+    {
+        return [
+            'tag' => 'input',
+            'attributes' => [
+                'type' => 'submit',
+                'name' => $name,
+                'value' => $value
+            ]
+        ];
+    }
+
+    public static function getPutMethodField()
+    {
+        return [
+            'tag' => 'input',
+            'attributes' => [
+                'type' => 'hidden',
+                'name' => '_METHOD',
+                'value' => 'PUT'
+            ]
+        ];
+    }
 }
