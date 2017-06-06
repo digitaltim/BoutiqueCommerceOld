@@ -1,6 +1,11 @@
 table {
   border-collapse: separate;
 }
+
+tr:hover {
+  background-color: lightyellow;
+}
+
 th, td {
   padding: .2em .3em;
   text-align: left;
