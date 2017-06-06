@@ -9,33 +9,22 @@ use Psr\Log\InvalidArgumentException;
 
 class TestimonialsModel
 {
-    private $status;
+    private $statusSelectFieldOptions;
 
     public function __construct()
     {
-        $this->status = [
-            'active',
-            'inactive'
+        // Set select field options
+        $this->statusSelectFieldOptions = [
+            '-- select --' => 'disabled',
+            'active' => 'active',
+            'inactive' => 'inactive'
         ];
-    }
-
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     public function getFormFields(string $formType = 'insert'): array
     {
         if ($formType != 'insert' && $formType != 'update') {
             throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
-
-        // create status options array based on status property
-        // TODO maybe just do this statically in the constructor?
-        $statusOptions = [];
-        $statusOptions['-- select --'] = 'disabled';
-        foreach ($this->status as $status) {
-            $statusOptions[$status] = $status;
         }
 
         $fields = [
@@ -101,7 +90,7 @@ class TestimonialsModel
                     'type' => 'select',
                     'value' => ''
                 ],
-                'options' => $statusOptions,
+                'options' => $this->statusSelectFieldOptions,
                 'selected' => 'disabled'
             ],
 
