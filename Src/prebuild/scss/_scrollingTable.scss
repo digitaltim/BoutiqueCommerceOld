@@ -28,9 +28,6 @@
   border-right: 1px solid black;
   //border-left: 1px solid black;
 }
-.scrollingTable > * > tr:nth-child(even) {
-  background-color: #2c2c29;
-}
 .scrollingTable > tbody > :last-child > * {
   //border-bottom: none;
 }
