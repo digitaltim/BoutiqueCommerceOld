@@ -63,8 +63,7 @@ class QueryBuilder
     }
 
     public function execute() {
-        // suppress errors as they are thrown below
-        if (!$res = @pg_query_params($this->sql, $this->args)) {
+        if (!$res = pg_query_params($this->sql, $this->args)) {
             $msg = $this->sql . " args: [" . arrayWalkToStringRecursive($this->args) . "]";
             throw new \Exception('Query Execution Failure: '.$msg);
         }

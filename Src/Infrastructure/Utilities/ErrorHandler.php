@@ -55,13 +55,16 @@ class ErrorHandler
             $this->email();
         }
 
+        // echo
         if (!$this->isLiveServer) {
-            $this->renderError(nl2br($errorMessage, false));
+            echo nl2br($errorMessage, false);
             if ($die) {
-                die($this->fatalMessage);
+                die();
             }
-        } else {
-            $_SESSION['notice'] = ['An error has occurred<br>', 'error'];
+        }
+
+        if ($die) {
+            $_SESSION['notice'] = [$this->fatalMessage, 'error'];
             header("Location: https://$this->redirectPage");
             exit();
         }
@@ -117,7 +120,6 @@ EOT;
         }
 
         $message .= "\nStack Trace:\n".$traceString;
-
         $this->handleError($message, $exitPage);
     }
 
