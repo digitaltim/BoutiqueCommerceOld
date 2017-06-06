@@ -9,37 +9,27 @@ use Psr\Log\InvalidArgumentException;
 
 class AdminsModel
 {
-    private $roles;
+    private $rolesSelectFieldOptions;
 
     public function __construct()
     {
-        $this->roles = [
-            'owner',
-            'director',
-            'manager',
-            'shipper',
-            'admin',
-            'store',
-            'bookkeeper'
+        // Set select field options
+        $this->rolesSelectFieldOptions = [
+            '-- select --' => 'disabled',
+            'owner' => 'owner',
+            'director' => 'director',
+            'manager' => 'manager',
+            'shipper' => 'shipper',
+            'admin' => 'admin',
+            'store' => 'store',
+            'bookkeeper' => 'bookkeeper'
         ];
-    }
-
-    public function getRoles()
-    {
-        return $this->roles;
     }
 
     public function getFormFields(string $formType = 'insert', bool $persistPasswords = false): array
     {
         if ($formType != 'insert' && $formType != 'update') {
             throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
-
-        // create role options array based on roles property
-        $roleOptions = [];
-        $roleOptions['-- select --'] = 'disabled';
-        foreach ($this->roles as $role) {
-            $roleOptions[$role] = $role;
         }
 
         $fields = [
@@ -91,7 +81,7 @@ class AdminsModel
                     'type' => 'select',
                     'value' => ''
                 ],
-                'options' => $roleOptions,
+                'options' => $this->rolesSelectFieldOptions,
                 'selected' => 'disabled'
             ],
 
