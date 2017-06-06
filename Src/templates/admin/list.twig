@@ -17,7 +17,9 @@
                 <tr>
                     <th colspan="10">
                         {{ title }}
-                        <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
+                        {% if insertLink %}
+                            <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
+                        {% endif %}
                     </th>
                 </tr>
                 {% set break = false %}
@@ -38,7 +40,9 @@
                 {% for row in table %}
                     <tr>
                         {% for key, value in row %}
-                            {% if key == primaryKeyColumn and updatePermitted %}
+                            {# for admins table, do not allow non-owners to edit owners #}
+                            {% if key == primaryKeyColumn and updatePermitted and (title != 'Admins' or (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner')) %}
+
                                 <td><a href="{{ path_for(updateRoute, {"primaryKey": attribute(row, primaryKeyColumn)}) }}" title="update">{{ value }}</a></td>
 
                             {%  else %}
@@ -46,9 +50,13 @@
                             {% endif %}
                         {% endfor %}
 
+
                         {# add delete column if necessary #}
-                        {% if addDeleteColumn %}
+                        {# for admins table, do not admin to delete themself or non-owners to delete owners #}
+                        {% if addDeleteColumn and (title != 'Admins' or (attribute(row, 'username') != authentication.user.username and (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner'))) %}
                             <td><a href="{{ path_for(deleteRoute, {"primaryKey": attribute(row, primaryKeyColumn)}) }}" title="delete" onclick="return confirm('Are you sure you want to delete record  {{ attribute(row, primaryKeyColumn) }}?');">X</a></td>
+                        {% else %}
+                            <td>&nbsp;</td>
                         {% endif %}
 
                     </tr>

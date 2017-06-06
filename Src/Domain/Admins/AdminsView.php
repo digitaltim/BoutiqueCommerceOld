@@ -19,14 +19,14 @@ class AdminsView extends AdminView
             $results[] = $row; //array_merge($row, ['delete' => 'admins.delete']);
         }
 
-
+        $insertLink = ($this->authorization->check($this->container->settings['authorization']['admins.insert'])) ? ['text' => 'Insert Admin', 'route' => 'admins.insert'] : false;
         return $this->view->render(
             $response,
-            'admin/adminsList.twig',
+            'admin/list.twig',
             [
                 'title' => 'Admins',
                 'primaryKeyColumn' => 'id',
-                'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
+                'insertLink' => $insertLink,
                 'updateColumn' => 'username',
                 'updatePermitted' => $this->authorization
                     ->check($this->container->settings['authorization']['admins.update']),
