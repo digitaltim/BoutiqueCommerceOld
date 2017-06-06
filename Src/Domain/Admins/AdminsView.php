@@ -12,18 +12,27 @@ class AdminsView extends AdminView
     {
         $res = (new AdminsModel)->select('id, username, name, role');
         $results = [];
+        // add on proper delete keys based on rules:
+        //
         while ($row = pg_fetch_assoc($res)) {
-            $results[] = array_merge($row, ['delete' => 'admins.delete']);
+            // if
+            $results[] = $row; //array_merge($row, ['delete' => 'admins.delete']);
         }
+
 
         return $this->view->render(
             $response,
-            'admin/list.twig',
+            'admin/adminsList.twig',
             [
                 'title' => 'Admins',
+                'primaryKeyColumn' => 'id',
                 'insertLink' => ['text' => 'Insert Admin', 'route' => 'admins.insert'],
                 'updateColumn' => 'username',
+                'updatePermitted' => $this->authorization
+                    ->check($this->container->settings['authorization']['admins.update']),
                 'updateRoute' => 'admins.put.update',
+                'addDeleteColumn' => true,
+                'deleteRoute' => 'admins.delete',
                 'table' => $results,
                 'navigationItems' => $this->navigationItems
             ]

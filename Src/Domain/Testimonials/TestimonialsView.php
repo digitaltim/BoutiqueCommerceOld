@@ -10,26 +10,21 @@ class TestimonialsView extends AdminView
 {
     public function index($request, $response, $args)
     {
-        /*
-        I would prefer to have the ID be always listed in the first column and
-        used to edit the row. Otherwise there should be an edit button. This
-        would make the UI consistent for every list view.
-        */
         $res = (new TestimonialsModel)->select('id, enter_date, person, text, place, status');
-        $results = [];
-        while ($row = pg_fetch_assoc($res)) {
-            $results[] = array_merge($row, ['delete' => 'testimonials.delete']);
-        }
 
         return $this->view->render(
             $response,
             'admin/list.twig',
             [
                 'title' => 'Testimonials',
+                'primaryKeyColumn' => 'id',
                 'insertLink' => ['text' => 'Insert Testimonial', 'route' => 'testimonials.insert'],
-                'updateColumn' => 'enter_date',
+                'updatePermitted' => $this->authorization
+                    ->check($this->container->settings['authorization']['testimonials.update']),
                 'updateRoute' => 'testimonials.put.update',
-                'table' => $results,
+                'addDeleteColumn' => true,
+                'deleteRoute' => 'testimonials.delete',
+                'table' => pg_fetch_all($res),
                 'navigationItems' => $this->navigationItems
             ]
         );

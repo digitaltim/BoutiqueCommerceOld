@@ -165,7 +165,7 @@ class TestimonialsModel
 
     public function delete(int $id)
     {
-        $q = new QueryBuilder("DELETE FROM testimonials WHERE id = $1 RETURNING person", $id);
+        $q = new QueryBuilder("DELETE FROM testimonials WHERE id = $1 RETURNING person, place", $id);
         return $q->execute();
     }
 

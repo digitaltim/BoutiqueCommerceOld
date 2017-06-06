@@ -123,7 +123,7 @@ class TestimonialsController extends Controller
 
         if ($res = $testimonialsModel->delete(intval($args['primaryKey']))) {
             $returned = pg_fetch_all($res);
-            $message = 'Testimonial '.$returned[0]['username'].' deleted';
+            $message = 'Testimonial by '.$returned[0]['person'].' from '.$returned[0]['place'].' deleted';
             $this->logger->addInfo($message);
             $settings = $this->container->get('settings');
             $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", $message, [$settings['emails']['owner']]);

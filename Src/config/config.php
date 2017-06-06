@@ -43,10 +43,10 @@ return [
     ],
 
     'adminMinimumPermissions' => [
-        'admins.index' => 'director',
+        'admins.index' => 'store',
         'admins.insert' => 'director',
-        'admins.update' => 'owner',
-        'admins.delete' => 'owner',
+        'admins.update' => 'director',
+        'admins.delete' => 'director',
         'testimonials.index' => 'admin',
         'testimonials.insert' => 'admin',
         'testimonials.update' => 'admin',

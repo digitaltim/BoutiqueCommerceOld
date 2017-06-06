@@ -51,10 +51,15 @@ $container['view'] = function ($container) {
         $view->addExtension(new Twig_Extension_Debug());
     }
 
-    // make auth class available inside templates
+    // make authentication class available inside templates
     $view->getEnvironment()->addGlobal('authentication', [
         'check' => $container->authentication->check(),
         'user' => $container->authentication->user()
+    ]);
+
+    // make authorization class available inside templates
+    $view->getEnvironment()->addGlobal('authorization', [
+        'check' => $container->authorization->check()
     ]);
 
     if (isset($_SESSION['adminNotice'])) {

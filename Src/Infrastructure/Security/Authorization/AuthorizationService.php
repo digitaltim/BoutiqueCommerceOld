@@ -29,7 +29,7 @@ class AuthorizationService
      * @param string $minimumPermission
      * @return bool
      */
-    public function check(string $minimumPermission): bool
+    public function check(string $minimumPermission = 'owner'): bool
     {
         if (!in_array($minimumPermission, $this->roles)) {
             throw new InvalidArgumentException("minimumRole $minimumPermission must be a valid role");

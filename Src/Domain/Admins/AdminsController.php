@@ -123,6 +123,10 @@ class AdminsController extends Controller
         if (!$this->authorization->checkFunctionality('admins.delete')) {
             throw new \Exception('No permission.');
         }
+        // make sure the current admin is not deleting themself
+        if ($args['primaryKey'] == $this->container->authentication->user()['id']) {
+            throw new \Exception('You cannot delete yourself from admins');
+        }
 
         $adminsModel = new AdminsModel();
 
