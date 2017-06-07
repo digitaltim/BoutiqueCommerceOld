@@ -32,7 +32,7 @@ class AdminsView extends AdminView
         );
     }
 
-    private function getPersistPasswords():  bool
+    private function getPersistPasswords(): bool
     {
         return !isset($_SESSION['validationErrors']['password_hash']) && !isset($_SESSION['validationErrors']['confirm_password_hash']);
     }

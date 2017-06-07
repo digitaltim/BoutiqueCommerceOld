@@ -26,8 +26,6 @@ class AdminsController extends Controller
         }
 
         if (!$error) {
-
-
             $id = intval($args['primaryKey']);
             $name = $request->getParam('name');
             $username = $request->getParam('username');
