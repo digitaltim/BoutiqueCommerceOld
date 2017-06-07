@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\Testimonials;
+namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\Testimonials;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;

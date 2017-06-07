@@ -7,6 +7,8 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertUpdateBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\UpdateBuilder;
+use function It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\printPreArray;
+use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
 abstract class Model
 {
@@ -79,13 +81,24 @@ abstract class Model
         return $q->execute();
     }
 
-    public function hasRecordChanged(array $columnValues, $primaryKeyValue, string $primaryKeyName = 'id'): bool
+    public function getValidationRules($formType = 'insert'): array
+    {
+        if ($formType != 'insert' && $formType != 'update') {
+            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        }
+
+        return ValidationService::getRules($this->getFormFields($formType));
+    }
+
+    public function hasRecordChanged(array $columnValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null): bool
     {
         $record = $this->selectForPrimaryKey($primaryKeyValue, $primaryKeyName);
 
         foreach ($this->columns as $columnName => $columnInfo) {
-            if ($record[$columnName] != $columnValues[$columnName]) {
-                return true;
+            if (is_null($skipColumns) || !in_array($columnName, $skipColumns)) {
+                if ($record[$columnName] != $columnValues[$columnName]) {
+                    return true;
+                }
             }
         }
         return false;

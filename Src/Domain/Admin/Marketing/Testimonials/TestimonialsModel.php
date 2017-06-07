@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\Testimonials;
+namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\Testimonials;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
@@ -118,19 +118,5 @@ class TestimonialsModel extends Model
         }
 
         return $fields;
-    }
-
-    public function getValidationRules($formType = 'insert'): array
-    {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
-
-        return ValidationService::getRules($this->getFormFields($formType));
-    }
-
-    public function delete(int $id)
-    {
-        return $this->deleteByPrimaryKey($id, 'id', 'person, place');
     }
 }

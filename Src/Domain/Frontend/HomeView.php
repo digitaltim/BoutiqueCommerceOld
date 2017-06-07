@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\Home;
+namespace It_All\BoutiqueCommerce\Src\Domain\Frontend;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\View;
 

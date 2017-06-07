@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\AdminHome;
+namespace It_All\BoutiqueCommerce\Src\Domain\Admin;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
 

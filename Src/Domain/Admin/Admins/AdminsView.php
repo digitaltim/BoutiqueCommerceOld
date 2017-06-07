@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
+namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
@@ -66,7 +66,12 @@ class AdminsView extends AdminView
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.
          * note, this works for post/put because controller calls this method directly in case of errors instead of redirecting
          */
-        $fieldData = ($request->isGet()) ? $adminsModel->selectForPrimaryKey(intval($args['primaryKey'])) : null;
+        if ($request->isGet()) {
+            $fieldData = $adminsModel->selectForPrimaryKey(intval($args['primaryKey']));
+            $fieldData['password_hash'] = ''; // do not display
+        } else {
+            $fieldData = null;
+        }
 
         return $this->view->render(
             $response,

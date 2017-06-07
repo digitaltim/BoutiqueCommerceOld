@@ -1,31 +1,37 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\Admins;
+namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
+use function It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\printPreArray;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
 class AdminsModel extends Model
 {
+    private $roles;
     private $rolesSelectFieldOptions;
 
     public function __construct()
     {
-        // Set select field options
-        $this->rolesSelectFieldOptions = [
-            '-- select --' => 'disabled',
-            'owner' => 'owner',
-            'director' => 'director',
-            'manager' => 'manager',
-            'shipper' => 'shipper',
-            'admin' => 'admin',
-            'store' => 'store',
-            'bookkeeper' => 'bookkeeper'
+        $this->roles = [
+            'owner',
+            'director',
+            'manager',
+            'shipper',
+            'admin',
+            'store',
+            'bookkeeper'
         ];
+
+        // Set select field options
+        $this->rolesSelectFieldOptions = ['-- select --' => 'disabled'];
+        foreach ($this->roles as $role) {
+            $this->rolesSelectFieldOptions[$role] = $role;
+        }
         parent::__construct('admins');
     }
 
@@ -150,34 +156,20 @@ class AdminsModel extends Model
         return in_array($roleCheck, $this->roles);
     }
 
-    public function getValidationRules($formType = 'insert'): array
-    {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
-
-        return ValidationService::getRules($this->getFormFields($formType));
-    }
-
 //    If a null password is passed, the password field is not updated
-    public function update(int $id, string $name, string $username, string $role, string $password = null)
+    public function update(int $id, array $columnValues)
     {
-        if (!$this->validateRole($role)) {
-            throw new \Exception("Admin being updated with invalid role $role");
+        if (!$this->validateRole($columnValues['role'])) {
+            throw new \Exception("Admin being updated with invalid role ".$columnValues['role']);
         }
-        $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, role = $3", $name, $username, $role);
+        $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, role = $3", $columnValues['name'], $columnValues['username'], $columnValues['role']);
         $argNum = 4;
         if ($password !== null) {
-            $q->add(", password_hash = $$argNum", password_hash($password, PASSWORD_DEFAULT));
+            $q->add(", password_hash = $$argNum", password_hash($columnValues['password'], PASSWORD_DEFAULT));
             $argNum++;
         }
         $q->add(" WHERE id = $$argNum RETURNING username", $id);
         return $q->execute();
-    }
-
-    public function delete(int $id)
-    {
-        return $this->deleteByPrimaryKey($id, 'id', 'username');
     }
 
     public function checkRecordExistsForUsername(string $username): bool
@@ -194,19 +186,14 @@ class AdminsModel extends Model
     }
 
     // If a null password is passed, the password field is not checked
-    public function recordChanged(int $id, string $name, string $username, string $role, string $password = null): bool
+    public function hasRecordChanged(array $columValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null): bool
     {
-        if (!$record = $this->selectForPrimaryKey($id)) {
-            throw new \Exception("No admins record for id $id");
+        if (strlen($columValues['password_hash']) == 0) {
+            $skipColumns[] = 'password_hash';
+        } else {
+            $columValues['password_hash'] = password_hash($columValues['password_hash'], PASSWORD_DEFAULT);
         }
 
-        if ($name != $record['name'] || $username != $record['username'] || $role != $record['role']) {
-            return true;
-        }
-        if ($password !== null && password_hash($password, PASSWORD_DEFAULT) != $record['password']) {
-            return true;
-        }
-
-        return false;
+        return parent::hasRecordChanged($columValues, $primaryKeyValue, $primaryKeyName, $skipColumns);
     }
 }

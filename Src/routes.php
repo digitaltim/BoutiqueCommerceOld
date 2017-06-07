@@ -10,13 +10,14 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authorization\Authorizat
 
 // use as shortcuts for callables in routes
 $securityNs = 'It_All\BoutiqueCommerce\Src\Infrastructure\Security';
-$domainNs = 'It_All\BoutiqueCommerce\Src\Domain';
+$domainFrontendNs = 'It_All\BoutiqueCommerce\Src\Domain\Frontend';
+$domainAdminNs = 'It_All\BoutiqueCommerce\Src\Domain\Admin';
 
 /////////////////////////////////////////
 // Routes that anyone can access
 
 $slim->get('/',
-    'It_All\BoutiqueCommerce\Src\Domain\Home\HomeView:index')
+    $domainFrontendNs . '\HomeView:index')
     ->setName('home');
 
 /////////////////////////////////////////
@@ -41,7 +42,7 @@ $slim->post('/' . $config['dirs']['admin'],
 // Note, if route needs authorization as well, the authorization is added prior to authentication, so that authentication is performed first
 
 $slim->get('/' . $config['dirs']['admin'] . '/home',
-    $domainNs.'\AdminHome\AdminHomeView:index')
+    $domainAdminNs.'\AdminHomeView:index')
     ->add(new AuthenticationMiddleware($container))
     ->setName('admin.home');
 
@@ -50,92 +51,99 @@ $slim->get('/' . $config['dirs']['admin'] . '/logout',
     ->add(new AuthenticationMiddleware($container))
     ->setName('authentication.logout');
 
+////////////////////////////////////////////////////////////////////////////////
 // admins
+$adminsPath = $domainAdminNs.'\Admins\\';
 $slim->get('/' . $config['dirs']['admin'] . '/admins',
-    $domainNs.'\Admins\AdminsView:index')
+    $adminsPath . 'AdminsView:index')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.index']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.index');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/insert',
-    $domainNs.'\Admins\AdminsView:getInsert')
+    $adminsPath . 'AdminsView:getInsert')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.insert']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.insert');
 
 $slim->post('/' . $config['dirs']['admin'] . '/admins/insert',
-    $domainNs.'\Admins\AdminsController:postInsert')
+    $adminsPath . 'AdminsController:postInsert')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.insert']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.post.insert');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
-    $domainNs.'\Admins\AdminsView:getUpdate')
+    $adminsPath . 'AdminsView:getUpdate')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.update']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.update');
 
 $slim->put('/' . $config['dirs']['admin'] . '/admins/{primaryKey}',
-    $domainNs.'\Admins\AdminsController:putUpdate')
+    $adminsPath . 'AdminsController:putUpdate')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.update']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.put.update');
 
 $slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
-    $domainNs.'\Admins\AdminsController:getDelete')
+    $adminsPath . 'AdminsController:getDelete')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.delete']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.delete');
 
 ////////////////////////////////////////////////////////////////////////////////
 // testimonials
+$testimonialsPath = $domainAdminNs . '\Marketing\Testimonials\\';
+
 $slim->get('/' . $config['dirs']['admin'] . '/testimonials',
-    $domainNs.'\Testimonials\TestimonialsView:index')
+    $testimonialsPath . 'TestimonialsView:index')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.index']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.index');
 
 $slim->get('/' . $config['dirs']['admin'] . '/testimonials/insert',
-    $domainNs.'\Testimonials\TestimonialsView:getInsert')
+    $testimonialsPath . 'TestimonialsView:getInsert')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.insert']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.insert');
 
 $slim->post('/' . $config['dirs']['admin'] . '/testimonials/insert',
-    $domainNs.'\Testimonials\TestimonialsController:postInsert')
+    $testimonialsPath . 'TestimonialsController:postInsert')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.insert']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.post.insert');
 
 $slim->get('/' . $config['dirs']['admin'] . '/testimonials/{primaryKey}',
-    $domainNs.'\Testimonials\TestimonialsView:getUpdate')
+    $testimonialsPath . 'TestimonialsView:getUpdate')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.update']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.update');
 
 $slim->put('/' . $config['dirs']['admin'] . '/testimonials/{primaryKey}',
-    $domainNs.'\Testimonials\TestimonialsController:putUpdate')
+    $testimonialsPath . 'TestimonialsController:putUpdate')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.update']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.put.update');
 
 $slim->get('/' . $config['dirs']['admin'] . '/testimonials/delete/{primaryKey}',
-    $domainNs.'\Testimonials\TestimonialsController:getDelete')
+    $testimonialsPath . 'TestimonialsController:getDelete')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.delete']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.delete');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ad Codes
+$adCodesPath = $domainAdminNs . '\Admin\Marketing\AdCodes\\';
+
 $slim->get('/' . $config['dirs']['admin'] . '/adCodes',
-    $domainNs.'\AdCodes\AdCodesView:index')
+    $adCodesPath . 'AdCodesView:index')
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.index']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('adCodes.index');
 
 
 
-
+////////////////////////////////////////////////////////////////////////////////
+// not found
 $slim->get('/notFound',
     'It_All\BoutiqueCommerce\Src\Infrastructure\View:pageNotFound')
     ->setName('pageNotFound');
