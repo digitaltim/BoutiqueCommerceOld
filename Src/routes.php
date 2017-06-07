@@ -132,7 +132,7 @@ $slim->get('/' . $config['dirs']['admin'] . '/testimonials/delete/{primaryKey}',
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ad Codes
-$adCodesPath = $domainAdminNs . '\Admin\Marketing\AdCodes\\';
+$adCodesPath = $domainAdminNs . '\Marketing\AdCodes\\';
 
 $slim->get('/' . $config['dirs']['admin'] . '/adCodes',
     $adCodesPath . 'AdCodesView:index')
@@ -140,7 +140,35 @@ $slim->get('/' . $config['dirs']['admin'] . '/adCodes',
     ->add(new AuthenticationMiddleware($container))
     ->setName('adCodes.index');
 
+$slim->get('/' . $config['dirs']['admin'] . '/adCodes/insert',
+    $adCodesPath . 'AdCodesView:getInsert')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.insert']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('adCodes.insert');
 
+$slim->post('/' . $config['dirs']['admin'] . '/adCodes/insert',
+    $adCodesPath . 'AdCodesController:postInsert')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.insert']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('adCodes.post.insert');
+
+$slim->get('/' . $config['dirs']['admin'] . '/adCodes/{primaryKey}',
+    $adCodesPath . 'AdCodesView:getUpdate')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.update']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('adCodes.update');
+
+$slim->put('/' . $config['dirs']['admin'] . '/adCodes/{primaryKey}',
+    $adCodesPath . 'AdCodesController:putUpdate')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.update']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('adCodes.put.update');
+
+$slim->get('/' . $config['dirs']['admin'] . '/adCodes/delete/{primaryKey}',
+    $adCodesPath . 'AdCodesController:getDelete')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.delete']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('adCodes.delete');
 
 ////////////////////////////////////////////////////////////////////////////////
 // not found

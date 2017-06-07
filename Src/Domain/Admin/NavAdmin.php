@@ -39,6 +39,12 @@ class NavAdmin
                     'Ad Codes' => [
                         'minimumPermissions' => $container->authorization->getMinimumPermission('adCodes.index'),
                         'link' => 'adCodes.index',
+                        'subSections' => [
+                            'Insert' => [
+                                'minimumPermissions' => $container->authorization->getMinimumPermission('adCodes.insert'),
+                                'link' => 'adCodes.insert',
+                            ]
+                        ]
                     ]
                 ]
             ],
