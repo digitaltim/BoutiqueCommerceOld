@@ -125,6 +125,14 @@ $slim->get('/' . $config['dirs']['admin'] . '/testimonials/delete/{primaryKey}',
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.delete');
 
+////////////////////////////////////////////////////////////////////////////////
+// Ad Codes
+$slim->get('/' . $config['dirs']['admin'] . '/adCodes',
+    $domainNs.'\AdCodes\AdCodesView:index')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.index']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('adCodes.index');
+
 
 
 

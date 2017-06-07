@@ -51,6 +51,10 @@ return [
         'testimonials.insert' => 'admin',
         'testimonials.update' => 'admin',
         'testimonials.delete' => 'admin',
+        'adCodes.index' => 'manager',
+        'adCodes.insert' => 'manager',
+        'adCodes.update' => 'manager',
+        'adCodes.delete' => 'manager',
     ],
 
     'maxFailedLogins' => 5

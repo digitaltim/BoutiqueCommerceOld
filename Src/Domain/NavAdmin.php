@@ -21,27 +21,39 @@ class NavAdmin
     private function setSections(Container $container)
     {
         $this->sections = [
-            'Admins' => [
+
+            'Marketing' => [
                 'minimumPermissions' => $container->authorization->getMinimumPermission('admins.index'),
-                'link' => $container->router->pathFor('admins.index'),
                 'subSections' => [
-                    'Insert' => [
-                        'minimumPermissions' => $container->authorization->getMinimumPermission('admins.insert'),
-                        'link' => $container->router->pathFor('admins.insert'),
+                    'Testimonials' => [
+                        'minimumPermissions' => $container->authorization->getMinimumPermission('testimonials.index'),
+                        'link' => 'testimonials.index',
+                        'subSections' => [
+                            'Insert' => [
+                                'minimumPermissions' => $container->authorization->getMinimumPermission('testimonials.insert'),
+                                'link' => 'testimonials.insert',
+                            ]
+                        ]
+                    ],
+
+                    'Ad Codes' => [
+                        'minimumPermissions' => $container->authorization->getMinimumPermission('adCodes.index'),
+                        'link' => 'adCodes.index',
                     ]
                 ]
             ],
-            'Testimonials' => [
-                'minimumPermissions' => $container->authorization
-                    ->getMinimumPermission('testimonials.index'),
-                'link' => $container->router->pathFor('testimonials.index'),
+
+            'Admins' => [
+                'minimumPermissions' => $container->authorization->getMinimumPermission('admins.index'),
+                'link' => 'admins.index',
                 'subSections' => [
                     'Insert' => [
-                        'minimumPermissions' => $container->authorization->getMinimumPermission('testimonials.insert'),
-                        'link' => $container->router->pathFor('testimonials.insert'),
+                        'minimumPermissions' => $container->authorization->getMinimumPermission('admins.insert'),
+                        'link' => 'admins.insert',
                     ]
                 ]
             ]
+
         ];
     }
 

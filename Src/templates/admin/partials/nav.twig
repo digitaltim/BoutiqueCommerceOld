@@ -1,21 +1,29 @@
-<nav id="adminNav">
-    <ul>
-        {% for key, navigationItem in navigationItems %}
-        <li>
-            {% if navigationItem.link %}
-                <a href="{{ navigationItem.link }}">{{ key }}</a>
-            {% else %}
-                {{ key }}
-            {% endif %}
-
-            {% if navigationItem.subSections %}
-                <ul>
-                {% for key, subSectionItem in navigationItem.subSections %}
-                    <li><a href="{{ subSectionItem.link }}">{{ key }}</a></li>
+{% macro recursiveNavSection(key, navigationItem) %}
+    {% import _self as self %}
+    <li>
+        {% if navigationItem.link %}
+            <a href="{{ path_for(navigationItem.link) }}">{{ key }}</a>
+        {% else %}
+            {{ key }}
+        {% endif %}
+        {% if navigationItem.subSections|length %}
+            <ul>
+                {% for key, navigationItem in navigationItem.subSections %}
+                    {{ self.recursiveNavSection(key, navigationItem) }}
                 {% endfor %}
-                </ul>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-</nav>
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+{% from _self import recursiveNavSection %}
+
+{% if navigationItems %}
+    <nav id="adminNav">
+        <ul>
+            {% for key, navigationItem in navigationItems %}
+                {{ recursiveNavSection(key, navigationItem) }}
+            {% endfor %}
+        </ul>
+    </nav>
+{% endif %}
