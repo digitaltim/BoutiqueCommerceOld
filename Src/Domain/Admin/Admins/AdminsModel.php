@@ -132,8 +132,15 @@ class AdminsModel extends Model
         $fields['password_hash']['persist'] = $persistPasswords;
 
         if ($formType == 'insert') {
-            $fields['password_hash']['validation']['required'] = true;
-            $fields['confirm_password_hash']['validation']['required'] = true;
+            // note put required first so it's validated first
+            $fields['password_hash']['validation'] = [
+                'required' => true,
+                'minlength' => 12,
+            ];
+            $fields['confirm_password_hash']['validation'] = [
+                'required' => true,
+                'minlength' => 12,
+            ];
         } else { // update
             $fields['password_hash']['label'] = 'Change Password (leave blank to keep existing password)';
             $fields['confirm_password_hash']['label'] = 'Confirm New Password';
