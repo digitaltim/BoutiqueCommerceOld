@@ -43,7 +43,7 @@ class AdminsModel extends Model
                 'tag' => 'input',
                 'label' => 'Username',
                 'validation' => [
-                    'required' => null,
+                    'required' => true,
                     '%^[a-zA-Z]+$%' => 'only letters',
                     'minlength' => 5,
                     'maxlength' => 20
@@ -62,8 +62,8 @@ class AdminsModel extends Model
                 'tag' => 'input',
                 'label' => 'Name',
                 'validation' => [
-                    'required' => null,
-                    'alphaspace' => null,
+                    'required' => true,
+                    'alphaspace' => true,
                     'maxlength' => 50
                 ],
                 'attributes' => [
@@ -79,7 +79,7 @@ class AdminsModel extends Model
             'role' => [
                 'tag' => 'select',
                 'label' => 'Role',
-                'validation' => ['required' => null],
+                'validation' => ['required' => true],
                 'attributes' => [
                     'id' => 'role',
                     'name' => 'role',
@@ -116,7 +116,7 @@ class AdminsModel extends Model
             'confirm_password_hash' => [
                 'tag' => 'input',
                 'label' => 'Confirm Password',
-                'validation' => ['minlength' => 12, 'confirm' => null],
+                'validation' => ['minlength' => 12, 'confirm' => true],
                 'attributes' => [
                     'type' => 'password',
                     'name' => 'confirm_password_hash',
@@ -132,8 +132,8 @@ class AdminsModel extends Model
         $fields['password_hash']['persist'] = $persistPasswords;
 
         if ($formType == 'insert') {
-            $fields['password_hash']['validation']['required'] = null;
-            $fields['confirm_password_hash']['validation']['required'] = null;
+            $fields['password_hash']['validation']['required'] = true;
+            $fields['confirm_password_hash']['validation']['required'] = true;
         } else { // update
             $fields['password_hash']['label'] = 'Change Password (leave blank to keep existing password)';
             $fields['confirm_password_hash']['label'] = 'Confirm New Password';

@@ -50,8 +50,10 @@ class ValidationService
                 break;
             }
             foreach ($ruleFieldValue as $rule => $ruleContext) {
-                if (!$this->validateRule($ruleFieldName, $fieldValue, $rule, $ruleContext)) {
-                    break; // stop validating further rules for this field upon error
+                if ($ruleContext !== false) {
+                    if (!$this->validateRule($ruleFieldName, $fieldValue, $rule, $ruleContext)) {
+                        break; // stop validating further rules for this field upon error
+                    }
                 }
             }
         }

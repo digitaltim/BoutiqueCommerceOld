@@ -24,9 +24,6 @@ class AdCodesModel extends Model
 
             'start_dt' => [
                 'tag' => 'input',
-                'validation' => [
-                    'required' => null,
-                ],
                 'attributes' => [
                     'name' => 'start_dt',
                     'type' => 'hidden',
@@ -47,7 +44,7 @@ class AdCodesModel extends Model
                 'tag' => 'textarea',
                 'label' => 'Description',
                 'validation' => [
-                    'required' => null,
+                    'required' => true,
                 ],
                 'attributes' => [
                     'id' => 'description',
@@ -62,7 +59,7 @@ class AdCodesModel extends Model
                 'tag' => 'textarea',
                 'label' => 'Results',
                 'validation' => [
-                    'required' => null,
+                    'required' => true,
                 ],
                 'attributes' => [
                     'id' => 'results',

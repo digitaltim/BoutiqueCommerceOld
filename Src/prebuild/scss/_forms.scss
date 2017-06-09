@@ -25,10 +25,16 @@ input[type="submit"] {
 }
 
 label {
-  display: block;
+  //display: block;
   color: $formLabelColor;
   font-size: 1em;
   margin: 0 .3em 0 .2em;
+}
+
+.fieldRequired {
+  display: inline;
+  font-size: .8em;
+  color: #cccccc;
 }
 
 .generalFormError {
