@@ -15,16 +15,16 @@ return [
 
     'session' => [
         'ttlHours' => 24,
-        'savePath' => APP_ROOT . '/../storage/sessions',
+        'savePath' => APP_ROOT . '../storage/sessions',
     ],
 
     'storage' => [
         'logs' => [
-            'pathPhpErrors' => APP_ROOT . '/../storage/logs/phpErrors.log',
-            'pathEvents' => APP_ROOT . '/../storage/logs/events.log'
+            'pathPhpErrors' => APP_ROOT . '../storage/logs/phpErrors.log',
+            'pathEvents' => APP_ROOT . '../storage/logs/events.log'
         ],
 
-        'pathCache' => APP_ROOT . '/../storage/cache/'
+        'pathCache' => APP_ROOT . '../storage/cache/'
     ],
 
     'pathTemplates' => APP_ROOT . 'templates/',
