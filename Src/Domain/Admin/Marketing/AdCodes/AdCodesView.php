@@ -51,13 +51,24 @@ class AdCodesView extends AdminView
     public function getUpdate($request, $response, $args)
     {
         $adCodesModel = new AdCodesModel();
+        $id = intval($args['primaryKey']);
+
+        // make sure there is a record for the model
+        if (!$record = $adCodesModel->selectForPrimaryKey($id)) {
+            $_SESSION['adminNotice'] = [
+                "Record $id Not Found",
+                'adminNoticeFailure'
+            ];
+            return $response->withRedirect($this->router->pathFor('adCodes.index'));
+        }
+
         $fields = $adCodesModel->getFormFields('update');
 
         /**
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.
          * note, this works for post/put because controller calls this method directly in case of errors instead of redirecting
          */
-        $fieldData = ($request->isGet()) ? $adCodesModel->selectForPrimaryKey(intval($args['primaryKey'])) : null;
+        $fieldData = ($request->isGet()) ? $adCodesModel->selectForPrimaryKey($id) : null;
 
         return $this->view->render(
             $response,

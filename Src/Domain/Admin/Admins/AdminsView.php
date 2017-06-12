@@ -13,6 +13,7 @@ class AdminsView extends AdminView
         $res = (new AdminsModel)->select('id, username, name, role');
 
         $insertLink = ($this->authorization->check($this->container->settings['authorization']['admins.insert'])) ? ['text' => 'Insert Admin', 'route' => 'admins.insert'] : false;
+
         return $this->view->render(
             $response,
             'admin/list.twig',
@@ -64,6 +65,7 @@ class AdminsView extends AdminView
     {
         $adminsModel = new AdminsModel();
         $id = intval($args['primaryKey']);
+
         // make sure there is a record for the model
         if (!$record = $adminsModel->selectForPrimaryKey($id)) {
             $_SESSION['adminNotice'] = [
