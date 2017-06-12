@@ -55,6 +55,11 @@ return [
         'adCodes.insert' => 'manager',
         'adCodes.update' => 'manager',
         'adCodes.delete' => 'manager',
+        'orders.index' => 'admin',
+        'orders.insert' => 'admin',
+        'orders.update' => 'admin',
+        'orders.delete' => 'admin',
+
     ],
 
     'maxFailedLogins' => 5
