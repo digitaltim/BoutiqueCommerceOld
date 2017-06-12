@@ -33,6 +33,8 @@ abstract class Model
         return $this->columns;
     }
 
+    abstract public function getFormFields(string $dbAction = 'insert'): array;
+
     public function select(string $columns = '*')
     {
         $q = new QueryBuilder("SELECT $columns FROM $this->tableName");
@@ -43,10 +45,10 @@ abstract class Model
     {
         $q = new QueryBuilder("SELECT * FROM $this->tableName WHERE $primaryKeyName = $1", $primaryKeyValue);
         if(!$res = $q->execute()) {
+            // this is for a query error not a not found condition
             throw new \Exception("Invalid $primaryKeyName for $this->table: $primaryKeyValue");
         }
-
-        return pg_fetch_assoc($res);
+        return pg_fetch_assoc($res); // returns false if not records are found
     }
 
     public function updateByPrimaryKey(array $columnValues, $primaryKeyValue, $primaryKeyName = 'id')
@@ -59,11 +61,14 @@ abstract class Model
         return $ub->execute();
     }
 
-    public function insert($columnValues)
+    public function insert(array $columnValues, string $primaryKeyName = null)
     {
         $ib = new InsertBuilder($this->tableName);
+        if ($primaryKeyName != null) {
+            $ib->setPrimaryKeyName($primaryKeyName);
+        }
         $this->addColumnsToBuilder($ib, $columnValues);
-        return ($ib->execute()) ? true : false;
+        return $ib->execute();
     }
 
     public function deleteByPrimaryKey(
@@ -90,9 +95,11 @@ abstract class Model
         return ValidationService::getRules($this->getFormFields($formType));
     }
 
-    public function hasRecordChanged(array $columnValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null): bool
+    public function hasRecordChanged(array $columnValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null, array $record = null): bool
     {
-        $record = $this->selectForPrimaryKey($primaryKeyValue, $primaryKeyName);
+        if (!is_array($record)) {
+            $record = $this->selectForPrimaryKey($primaryKeyValue, $primaryKeyName);
+        }
 
         foreach ($this->columns as $columnName => $columnInfo) {
             if (is_null($skipColumns) || !in_array($columnName, $skipColumns)) {

@@ -41,7 +41,7 @@ class TestimonialsModel extends Model
                 'tag' => 'textarea',
                 'label' => 'Text',
                 'validation' => [
-                    'required' => null,
+                    'required' => true,
                 ],
                 'attributes' => [
                     'id' => 'text',
@@ -56,8 +56,8 @@ class TestimonialsModel extends Model
                 'tag' => 'input',
                 'label' => 'Person',
                 'validation' => [
-                    'required' => null,
-                    'alphaspace' => null,
+                    'required' => true,
+                    'alphaspace' => true,
                     'maxlength' => 50
                 ],
                 'attributes' => [
@@ -74,8 +74,8 @@ class TestimonialsModel extends Model
                 'tag' => 'input',
                 'label' => 'Place',
                 'validation' => [
-                    'required' => null,
-                    'alphaspace' => null,
+                    'required' => true,
+                    'alphaspace' => true,
                     'maxlength' => 100
                 ],
                 'attributes' => [
@@ -91,7 +91,7 @@ class TestimonialsModel extends Model
             'status' => [
                 'tag' => 'select',
                 'label' => 'Status',
-                'validation' => ['required' => null],
+                'validation' => ['required' => true],
                 'attributes' => [
                     'id' => 'status',
                     'name' => 'status',

@@ -12,10 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "It_All\\": "",
-            "It_All\\BoutiqueCommerce\\": "",
-            "It_All\\BoutiqueCommerce\\Utilities\\": "",
-            "It_All\\BoutiqueCommerce\\Services\\": ""
+            "It_All\\BoutiqueCommerce\\": ""
         }
     }
 }

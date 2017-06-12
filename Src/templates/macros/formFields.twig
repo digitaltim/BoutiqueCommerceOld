@@ -2,6 +2,7 @@
 
     {% import 'macros/htmlElement.twig' as htmlElement %}
     {% for fieldName, fieldInfo in formFields %}
+        {% set showRequired = true %}
         {% if fieldInfo.label %}
             {% if fieldInfo.attributes.id %}
                 <label for="{{ fieldInfo.attributes.id }}">{{ fieldInfo.label }}</label>
@@ -11,7 +12,14 @@
         {% endif %}
 
         {% if fieldInfo.error %}
+            {% if fieldInfo.error == 'required' %}
+                {% set showRequired = false %}
+            {% endif %}
             <span class="formErrorMsg">{{ fieldInfo.error }}</span>
+        {% endif %}
+
+        {% if showRequired and fieldInfo.validation.required %}
+            <span class="fieldRequired">required</span>
         {% endif %}
 
         {% if fieldInfo.tag == 'select' %}
