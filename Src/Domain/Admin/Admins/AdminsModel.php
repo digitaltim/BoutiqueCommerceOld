@@ -5,8 +5,6 @@ namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
-use function It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\printPreArray;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
@@ -105,10 +103,10 @@ class AdminsModel extends Model
         ];
     }
 
-    public function getFormFields(string $formType = 'insert', bool $persistPasswords = false): array
+    public function getFormFields(string $dbAction = 'insert'): array
     {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        if ($dbAction != 'insert' && $dbAction != 'update') {
+            throw new InvalidArgumentException("dbAction must be insert or update: ".$dbAction);
         }
 
         $fields = array_merge($this->columns, [
@@ -123,15 +121,15 @@ class AdminsModel extends Model
                     'size' => '20',
                     'maxlength' => '30',
                 ],
-                'persist' => $persistPasswords,
+                'persist' => false,
             ],
 
             'submit' => FormHelper::getSubmitField()
         ]);
 
-        $fields['password_hash']['persist'] = $persistPasswords;
+        $fields['password_hash']['persist'] = false;
 
-        if ($formType == 'insert') {
+        if ($dbAction == 'insert') {
             // note put required first so it's validated first
             $fields['password_hash']['validation'] = [
                 'required' => true,
@@ -163,19 +161,25 @@ class AdminsModel extends Model
         return in_array($roleCheck, $this->roles);
     }
 
-//    If a null password is passed, the password field is not updated
-    public function update(int $id, array $columnValues)
+    /**
+     * If a blank password is passed, the password field is not updated
+     * @param int $id
+     * @param array $columnValues
+     * @return resource
+     * @throws \Exception
+     */
+    public function updateByPrimaryKey(array $columnValues, $primaryKeyValue, $primaryKeyName = 'id')
     {
         if (!$this->validateRole($columnValues['role'])) {
             throw new \Exception("Admin being updated with invalid role ".$columnValues['role']);
         }
         $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, role = $3", $columnValues['name'], $columnValues['username'], $columnValues['role']);
         $argNum = 4;
-        if ($password !== null) {
+        if (strlen($columnValues['password_hash']) > 0) {
             $q->add(", password_hash = $$argNum", password_hash($columnValues['password'], PASSWORD_DEFAULT));
             $argNum++;
         }
-        $q->add(" WHERE id = $$argNum RETURNING username", $id);
+        $q->add(" WHERE id = $$argNum RETURNING id", $primaryKeyValue);
         return $q->execute();
     }
 
@@ -193,7 +197,7 @@ class AdminsModel extends Model
     }
 
     // If a null password is passed, the password field is not checked
-    public function hasRecordChanged(array $columValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null): bool
+    public function hasRecordChanged(array $columValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null, array $record = null): bool
     {
         if (strlen($columValues['password_hash']) == 0) {
             $skipColumns[] = 'password_hash';

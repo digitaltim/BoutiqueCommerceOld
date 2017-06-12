@@ -15,7 +15,7 @@
             <h1>{{ title }}</h1>
             <form name="f1" method="post" action="{{ path_for(formActionRoute, {'primaryKey': primaryKey})}}">
                 {% if generalFormError %}
-                    <span class="generalFormError">{{ generalFormError }}</span>
+                    <div class="generalFormError">{{ generalFormError }}</div>
                 {% endif %}
                 {% import 'macros/formFields.twig' as formFieldsMacro %}
                 {{ formFieldsMacro.render(formFields) }}

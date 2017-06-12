@@ -32,15 +32,19 @@ class AdminsView extends AdminView
         );
     }
 
-    private function getPersistPasswords(): bool
+    private function setPersistPasswords(array &$fields): array
     {
-        return !isset($_SESSION['validationErrors']['password_hash']) && !isset($_SESSION['validationErrors']['confirm_password_hash']);
+        if (!isset($_SESSION['validationErrors']['password_hash']) && !isset($_SESSION['validationErrors']['confirm_password_hash'])) {
+            $fields['password_hash']['persist'] = true;
+            $fields['confirm_password_hash']['persist'] = true;
+        }
+        return $fields;
     }
 
     public function getInsert($request, $response, $args)
     {
-        $fields = (new AdminsModel)->
-            getFormFields('insert', $this->getPersistPasswords());
+        $fields = (new AdminsModel)->getFormFields();
+        $fields = $this->setPersistPasswords($fields);
 
         return $this->view->render(
             $response,
@@ -59,15 +63,25 @@ class AdminsView extends AdminView
     public function getUpdate($request, $response, $args)
     {
         $adminsModel = new AdminsModel();
-        $fields = $adminsModel->
-            getFormFields('update', $this->getPersistPasswords());
+        $id = intval($args['primaryKey']);
+        // make sure there is a record for the model
+        if (!$record = $adminsModel->selectForPrimaryKey($id)) {
+            $_SESSION['adminNotice'] = [
+                "Record $id Not Found",
+                'adminNoticeFailure'
+            ];
+            return $response->withRedirect($this->router->pathFor('admins.index'));
+        }
+
+        $fields = (new AdminsModel)->getFormFields('update');
+        $fields = $this->setPersistPasswords($fields);
 
         /**
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.
          * note, this works for post/put because controller calls this method directly in case of errors instead of redirecting
          */
         if ($request->isGet()) {
-            $fieldData = $adminsModel->selectForPrimaryKey(intval($args['primaryKey']));
+            $fieldData = $adminsModel->selectForPrimaryKey($id);
             $fieldData['password_hash'] = ''; // do not display
         } else {
             $fieldData = null;

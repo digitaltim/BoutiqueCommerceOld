@@ -5,7 +5,9 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries;
 
 abstract class InsertUpdateBuilder extends QueryBuilder
 {
-    public $dbTable;
+    protected $dbTable;
+
+    protected $primaryKeyName;
 
     function __construct(string $dbTable)
     {
@@ -28,4 +30,8 @@ abstract class InsertUpdateBuilder extends QueryBuilder
         return parent::execute();
     }
 
+    public function setPrimaryKeyName(string $name)
+    {
+        $this->primaryKeyName = $name;
+    }
 }

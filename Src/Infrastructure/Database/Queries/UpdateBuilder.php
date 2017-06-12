@@ -48,5 +48,8 @@ class UpdateBuilder extends InsertUpdateBuilder {
         $this->args[] = $this->updateOnColumnValue;
         $lastArgNum = count($this->args);
         $this->sql = "UPDATE $this->dbTable SET $this->setColumnsValues WHERE $this->updateOnColumnName = $".$lastArgNum;
+        if (isset($this->primaryKeyName)) {
+            $this->sql .= " RETURNING ".$this->primaryKeyName;
+        }
     }
 }
