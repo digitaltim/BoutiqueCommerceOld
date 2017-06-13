@@ -39,18 +39,15 @@ class OrdersModel extends Model
     {
         $this->columns = [
 
-            'username' => [
+            'order_dt' => [
                 'tag' => 'input',
-                'label' => 'Username',
+                'label' => 'Order Date',
                 'validation' => [
-                    'required' => null,
-                    '%^[a-zA-Z]+$%' => 'only letters',
-                    'minlength' => 5,
-                    'maxlength' => 20
+                    'required' => null
                 ],
                 'attributes' => [
-                    'id' => 'username',
-                    'name' => 'username',
+                    'id' => 'order_dt',
+                    'name' => 'order_dt',
                     'type' => 'text',
                     'size' => '15',
                     'maxlength' => '20',
@@ -58,17 +55,17 @@ class OrdersModel extends Model
                 ]
             ],
 
-            'name' => [
+            'order_type' => [
                 'tag' => 'input',
-                'label' => 'Name',
+                'label' => 'Order Type',
                 'validation' => [
                     'required' => null,
                     'alphaspace' => null,
                     'maxlength' => 50
                 ],
                 'attributes' => [
-                    'id' => 'name',
-                    'name' => 'name',
+                    'id' => 'order_type',
+                    'name' => 'order_type',
                     'type' => 'text',
                     'size' => '15',
                     'maxlength' => '50',
@@ -186,7 +183,7 @@ class OrdersModel extends Model
     }
 
     // If a null password is passed, the password field is not checked
-    public function hasRecordChanged(array $columValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null): bool
+    public function hasRecordChanged(array $columValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null, array $record = null): bool
     {
         if (strlen($columValues['password_hash']) == 0) {
             $skipColumns[] = 'password_hash';
@@ -195,5 +192,65 @@ class OrdersModel extends Model
         }
 
         return parent::hasRecordChanged($columValues, $primaryKeyValue, $primaryKeyName, $skipColumns);
+    }
+
+    public function getOrders()
+    {
+        // $q = new QueryBuilder("SELECT id, order_dt, store_receipt_number FROM orders WHERE order_dt >= '2017-03-02'");
+
+        // $q = new QueryBuilder("SELECT a.*, b.name as ship_name, b.address1 as ship_address1, b.city as ship_city, b.state as ship_state, b.country as ship_country, b.postal as ship_postal, b.email as ship_email, b.phone as ship_phone, b.email_list as ship_email_list FROM orders a LEFT OUTER JOIN contacts b ON a.contact_id=b.id WHERE true AND a.order_dt >= '2017-03-02' ORDER BY a.order_dt DESC, a.id DESC");
+
+        // $q = new QueryBuilder("
+        //     SELECT
+        //     ord.id as order_id,
+        //     con.name,
+        //     ord.order_dt,
+        //     oi.id as oi_id,
+        //     ois.id as ois_id,
+        //     ois.order_item_status,
+        //     ord.order_type,
+        //     oi.item_name,
+        //     oi.item_qty,
+        //     oi.item_price
+        //     FROM orders ord
+        //     JOIN order_items oi
+        //     ON ord.id = oi.order_id
+        //     JOIN order_item_status ois
+        //     ON oi.id = ois.order_item_id
+        //     JOIN contacts con
+        //     ON ord.contact_id = con.id
+        //     order by order_dt
+        //     desc limit 10
+        // ");
+
+        $q = new QueryBuilder("
+            SELECT
+            orders.order_dt AS \"order date\",
+            orders.id AS order_id,
+            orders.order_type AS type,
+            contacts.name AS customer,
+            orders.ship_amount AS amount,
+            orders.notes AS notes,
+            orders.salesperson1 AS salespeople,
+            order_item_status.id AS ois_id,
+            order_items.item_name AS item,
+            inventory_items.style_number AS style_number,
+            order_items.item_qty AS quantity,
+            order_items.item_price AS price,
+            order_item_status.order_item_status AS status
+            FROM orders
+            JOIN order_items
+            ON orders.id = order_items.order_id
+            JOIN order_item_status
+            ON order_items.id = order_item_status.order_item_id
+            JOIN contacts
+            ON orders.contact_id = contacts.id
+            JOIN inventory_items
+            ON order_items.item_id = inventory_items.id
+            order by order_dt
+            desc limit 10
+        ");
+
+        return $q->execute();
     }
 }

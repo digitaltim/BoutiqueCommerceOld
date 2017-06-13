@@ -5,26 +5,29 @@ namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 
 class OrdersView extends AdminView
 {
     public function index($request, $response, $args)
     {
-        $res = (new OrdersModel)->select('id, username, name, role');
+        $res = (new OrdersModel)->getOrders();
+        // var_dump(pg_fetch_all($res));
+        // die();
 
-        $insertLink = ($this->authorization->check($this->container->settings['authorization']['orders.insert'])) ? ['text' => 'Insert Order', 'route' => 'orders.insert'] : false;
+        // $insertLink = ($this->authorization->check($this->container->settings['authorization']['orders.insert'])) ? ['text' => 'Insert Order', 'route' => 'orders.insert'] : false;
         return $this->view->render(
             $response,
-            'admin/list.twig',
+            'admin/orders/orders.twig',
             [
                 'title' => 'Orders',
-                'primaryKeyColumn' => 'id',
-                'insertLink' => $insertLink,
-                'updateColumn' => 'username',
+                'primaryKeyColumn' => 'order_id',
+                'insertLink' => '',
+                'updateColumn' => '',
                 'updatePermitted' => $this->authorization
                     ->check($this->container->settings['authorization']['orders.update']),
                 'updateRoute' => 'orders.put.update',
-                'addDeleteColumn' => true,
+                'addDeleteColumn' => false,
                 'deleteRoute' => 'orders.delete',
                 'table' => pg_fetch_all($res),
                 'navigationItems' => $this->navigationItems

@@ -1,0 +1,183 @@
+{% extends "base.twig" %}
+
+{% block htmlHeadCss %}
+    <link href="/css/adminGrid.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block htmlBodyContent %}
+
+    {% include 'admin/partials/header.twig' %}
+
+    {% include 'admin/partials/nav.twig' %}
+
+    <main>
+        <div id="scrollingTableContainer">
+            <table class="scrollingTable">
+                {# <thead>
+                <tr>
+                    <th colspan="10">
+                        {{ title }}
+                        {% if insertLink %}
+                            <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
+                        {% endif %}
+                    </th>
+                </tr>
+                {% set break = false %}
+                {% for row in table if not break %}
+                    <tr>
+                        {% for key in row|keys %}
+                            <th>{{ key|capitalize }}</th>
+                        {% endfor %}
+
+                        {% if addDeleteColumn  %}
+                            <th>X</th>
+                        {% endif %}
+                    </tr>
+                    {% set break = true %}
+                {% endfor %}
+                </thead> #}
+
+                {# Set Column Headers #}
+                <thead>
+                    <tr>
+                        <th colspan="7">
+                            {{ title }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <th>Order #</th>
+                        <th>Type</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Notes</th>
+                        <th>Salespeople</th>
+                    </tr>
+                </thead>
+
+                {# Create rows of table data #}
+                <tbody>
+                {% set order_id = false %}
+                {% for row in table %}
+                    {#
+                    if order_id same as previous
+                    don't display duplicate data
+                    else
+                    save order_id
+                    display full output
+                    where do I close out table?
+                    #}
+                    {# If new order and not first run close out prior table #}
+                    {% if order_id != row[primaryKeyColumn] and
+                        order_id != false %}
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                    {# If this is a new order set the base info #}
+                    {% if order_id != row[primaryKeyColumn] %}
+                        {% set order_id = row[primaryKeyColumn] %}
+                        <tr>
+                            <td>{{ row['order date'] }}</td>
+                            <td>{{ row['order_id'] }}</td>
+                            <td>{{ row['type'] }}</td>
+                            <td>{{ row['customer'] }}</td>
+                            <td>{{ row['amount'] }}</td>
+                            <td>{{ row['notes'] }}</td>
+                            <td>{{ row['salespeople'] }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <table border="1" align="center">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Style #</th>
+                                            <th>Qty</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ row['item'] }}</td>
+                                            <td>{{ row['style_number'] }}</td>
+                                            <td>{{ row['quantity'] }}</td>
+                                            <td>{{ row['price'] }}</td>
+                                            <td>{{ row['status'] }}</td>
+                                        </tr>
+                                    {# </tbody>
+                                </table>
+                            </td>
+                        </tr> #}
+                    {% elseif order_id == row[primaryKeyColumn] %}
+                                        <tr>
+                                            <th>{{ row['item'] }}</th>
+                                            <th>{{ row['style_number'] }}</th>
+                                            <th>{{ row['quantity'] }}</th>
+                                            <th>{{ row['price'] }}</th>
+                                            <th>{{ row['status'] }}</th>
+                                        </tr>
+                                    {# </tbody>
+                                </table>
+                            </td>
+                        </tr> #}
+                    {% endif %}
+
+                    {# If this row is part of the prior order, only at the item data  #}
+                    {# {% if order_id == row[primaryKeyColumn] %}
+                        <tr>
+                            {% for key, value in row %}
+                                {% if key == primaryKeyColumn %}
+                                    <td></td>
+                                {%  else %}
+                                    <td>{{ value }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% else %}
+                        {% set order_id = row[primaryKeyColumn] %}
+
+                        <tr>
+                            {% for key, value in row %} #}
+                                {# for admins table, do not allow non-owners to edit owners #}
+                                {# {% if key == primaryKeyColumn and updatePermitted and (title != 'Admins' or (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner')) %}
+
+                                    <td><a href="{{ path_for(updateRoute, {"primaryKey": attribute(row, primaryKeyColumn)}) }}" title="update">{{ value }}</a></td>
+
+                                {%  else %}
+                                    <td>{{ value }}</td>
+                                {% endif %}
+                            {% endfor %} #}
+
+
+                            {# add delete column if necessary #}
+                            {# for admins table, do not admin to delete themself or non-owners to delete owners #}
+                            {# {% if addDeleteColumn and (title != 'Admins' or (attribute(row, 'username') != authentication.user.username and (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner'))) %}
+                                <td><a href="{{ path_for(deleteRoute, {"primaryKey": attribute(row, primaryKeyColumn)}) }}" title="delete" onclick="return confirm('Are you sure you want to delete record  {{ attribute(row, primaryKeyColumn) }}?');">X</a></td>
+                            {% else %}
+                                <td>&nbsp;</td>
+                            {% endif %}
+
+                        </tr>
+
+                    {% endif %} #}
+
+                {% endfor %}
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    {% include 'admin/partials/footer.twig' %}
+
+{% endblock %}
+{% block htmlBodyJs %}
+    <script type="text/javascript" src="/js/uiHelper.js"></script>
+{% endblock %}

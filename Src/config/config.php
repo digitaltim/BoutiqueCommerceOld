@@ -33,7 +33,7 @@ return [
         'emailTo' => ['owner', 'programmer'], // emails must be set in 'emails' section
         'fatalMessage' => 'Apologies, there has been an error on our site. We have been alerted and will correct it as soon as possible.',
         'echoDev' => true, // echo on dev servers (note, live server will never echo)
-        'emailDev' => true // email on dev servers (note, live server will always email)
+        'emailDev' => false // email on dev servers (note, live server will always email)
     ],
 
     'emails' => [
