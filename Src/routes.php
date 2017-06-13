@@ -179,36 +179,6 @@ $slim->get('/' . $config['dirs']['admin'] . '/orders',
     ->add(new AuthenticationMiddleware($container))
     ->setName('orders.index');
 
-$slim->get('/' . $config['dirs']['admin'] . '/orders/insert',
-    $ordersPath . 'OrdersView:getInsert')
-    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['orders.insert']))
-    ->add(new AuthenticationMiddleware($container))
-    ->setName('orders.insert');
-
-$slim->post('/' . $config['dirs']['admin'] . '/orders/insert',
-    $ordersPath . 'OrdersController:postInsert')
-    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['orders.insert']))
-    ->add(new AuthenticationMiddleware($container))
-    ->setName('orders.post.insert');
-
-$slim->get('/' . $config['dirs']['admin'] . '/orders/{primaryKey}',
-    $ordersPath . 'OrdersView:getUpdate')
-    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['orders.update']))
-    ->add(new AuthenticationMiddleware($container))
-    ->setName('orders.update');
-
-$slim->put('/' . $config['dirs']['admin'] . '/orders/{primaryKey}',
-    $ordersPath . 'OrdersController:putUpdate')
-    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['orders.update']))
-    ->add(new AuthenticationMiddleware($container))
-    ->setName('orders.put.update');
-
-$slim->get('/' . $config['dirs']['admin'] . '/orders/delete/{primaryKey}',
-    $ordersPath . 'OrdersController:getDelete')
-    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['orders.delete']))
-    ->add(new AuthenticationMiddleware($container))
-    ->setName('orders.delete');
-
 ////////////////////////////////////////////////////////////////////////////////
 // not found
 $slim->get('/notFound',
