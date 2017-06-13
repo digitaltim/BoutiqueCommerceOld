@@ -9,7 +9,7 @@ return [
 
         'addContentLengthHeader' => false, // if this is not disabled, slim/App.php line 585 triggered an exception related to error handling, when the php set_error_handler() function was triggered
 
-        'routerCacheFile' => $config['storage']['pathCache'].'router.txt',
+//        'routerCacheFile' => $config['storage']['pathCache'].'router.txt',
 
         'authentication' => $config['maxFailedLogins'],
 
