@@ -30,24 +30,24 @@ class AdminView
 
     public function index($request, $response, $args)
     {
-        $this->indexView($response, $this->routePrefix);
+        $this->indexView($response);
     }
 
     public function getInsert($request, $response, $args)
     {
-        return $this->insertView($response, $this->routePrefix);
+        return $this->insertView($response);
     }
 
     public function getUpdate($request, $response, $args)
     {
-        return $this->updateView($request, $response, $args, $this->routePrefix);
+        return $this->updateView($request, $response, $args);
     }
 
-    protected function indexView($response, string $routePrefix, string $columns = '*')
+    protected function indexView($response, string $columns = '*')
     {
         $res = $this->model->select($columns);
 
-        $insertLink = ($this->authorization->check($this->container->settings['authorization'][$routePrefix.'.insert'])) ? ['text' => 'Insert '.$this->model->getFormalTableName(false), 'route' => $routePrefix.'.insert'] : false;
+        $insertLink = ($this->authorization->check($this->container->settings['authorization'][$this->routePrefix.'.insert'])) ? ['text' => 'Insert '.$this->model->getFormalTableName(false), 'route' => $this->routePrefix.'.insert'] : false;
 
         return $this->view->render(
             $response,
@@ -57,17 +57,17 @@ class AdminView
                 'primaryKeyColumn' => $this->model->getPrimaryKeyColumnName(),
                 'insertLink' => $insertLink,
                 'updatePermitted' => $this->authorization
-                    ->check($this->container->settings['authorization'][$routePrefix.'.update']),
-                'updateRoute' => $routePrefix.'.put.update',
+                    ->check($this->container->settings['authorization'][$this->routePrefix.'.update']),
+                'updateRoute' => $this->routePrefix.'.put.update',
                 'addDeleteColumn' => true,
-                'deleteRoute' => $routePrefix.'.delete',
+                'deleteRoute' => $this->routePrefix.'.delete',
                 'table' => pg_fetch_all($res),
                 'navigationItems' => $this->navigationItems
             ]
         );
     }
 
-    protected function insertView($response, string $routePrefix)
+    protected function insertView($response)
     {
         $fields = $this->model->getFormFields('insert');
 
@@ -76,7 +76,7 @@ class AdminView
             'admin/form.twig',
             [
                 'title' => 'Insert '.$this->model->getFormalTableName(false),
-                'formActionRoute' => $routePrefix.'.post.insert',
+                'formActionRoute' => $this->routePrefix.'.post.insert',
                 'formFields' => FormHelper::insertValuesErrors($fields),
                 'focusField' => FormHelper::getFocusField(),
                 'generalFormError' => FormHelper::getGeneralFormError(),
@@ -85,7 +85,7 @@ class AdminView
         );
     }
 
-    protected function updateView($request, $response, $args, string $routePrefix)
+    protected function updateView($request, $response, $args)
     {
         // make sure there is a record for the model
         if (!$record = $this->model->selectForPrimaryKey($args['primaryKey'])) {
@@ -93,7 +93,7 @@ class AdminView
                 "Record ".$args['primaryKey']." Not Found",
                 'adminNoticeFailure'
             ];
-            return $response->withRedirect($this->router->pathFor($routePrefix.'.index'));
+            return $response->withRedirect($this->router->pathFor($this->routePrefix.'.index'));
         }
 
         $fields = $this->model->getFormFields('update');
@@ -109,7 +109,7 @@ class AdminView
             'admin/form.twig',
             [
                 'title' => 'Update ' . ucwords($this->model->getTableName()),
-                'formActionRoute' => $routePrefix.'.put.update',
+                'formActionRoute' => $this->routePrefix.'.put.update',
                 'primaryKey' => $args['primaryKey'],
                 'formFields' => FormHelper::insertValuesErrors($fields, $fieldData),
                 'focusField' => FormHelper::getFocusField(),
