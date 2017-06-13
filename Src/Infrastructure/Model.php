@@ -28,6 +28,14 @@ abstract class Model
 
     abstract protected function setColumns();
 
+    /**
+     * @return string defaults to 'id', can be overridden by children
+     */
+    public function getPrimaryKeyColumnName(): string
+    {
+        return 'id';
+    }
+
     public function getColumns(): array
     {
         return $this->columns;
@@ -164,5 +172,18 @@ abstract class Model
             return 'f';
         }
         return '';
+    }
+
+    /**
+     * @param bool $plural if false last character is removed
+     * @return string
+     */
+    public function getFormalTableName(bool $plural = true): string
+    {
+        $name = ucwords(str_replace('_', ' ', $this->tableName));
+        if (!$plural) {
+            $name = substr($name, 0, strlen($this->tableName) - 1);
+        }
+        return $name;
     }
 }
