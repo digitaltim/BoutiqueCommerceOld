@@ -5,12 +5,16 @@ namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
+use Slim\Container;
 
 class AdminsView extends AdminView
 {
-    public function index($request, $response, $args)
+    public function __construct(Container $container)
     {
-        $this->indexView($response, new AdminsModel, 'admins', 'id, username, name, role');
+        $this->routePrefix = 'admins';
+        $this->model = new AdminsModel();
+
+        parent::__construct($container);
     }
 
     private function setPersistPasswords(array &$fields): array
@@ -46,10 +50,5 @@ class AdminsView extends AdminView
                 'navigationItems' => $this->navigationItems
             ]
         );
-    }
-
-    public function getUpdate($request, $response, $args)
-    {
-        return $this->updateView($request, $response, $args, new AdminsModel(), 'admins');
     }
 }

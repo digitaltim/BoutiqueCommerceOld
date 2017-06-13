@@ -4,22 +4,15 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\AdCodes;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
+use Slim\Container;
 
 class AdCodesView extends AdminView
 {
-
-    public function index($request, $response, $args)
+    public function __construct(Container $container)
     {
-        $this->indexView($response, new AdCodesModel, 'adCodes');
-    }
+        $this->routePrefix = 'adCodes';
+        $this->model = new AdCodesModel();
 
-    public function getInsert($request, $response, $args)
-    {
-        return $this->insertView($response, new AdCodesModel(), 'adCodes');
-    }
-
-    public function getUpdate($request, $response, $args)
-    {
-        return $this->updateView($request, $response, $args, new AdCodesModel(), 'adCodes');
+        parent::__construct($container);
     }
 }

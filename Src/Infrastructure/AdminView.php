@@ -11,6 +11,8 @@ class AdminView
 {
     protected $container; // dependency injection container
     protected $navigationItems;
+    protected $routePrefix;
+    protected $model;
 
     public function __construct(Container $container)
     {
@@ -26,7 +28,22 @@ class AdminView
         return $this->container->{$name};
     }
 
-    public function indexView($response, Model $model, string $routePrefix, string $columns = '*')
+    public function index($request, $response, $args)
+    {
+        $this->indexView($response, $this->model, $this->routePrefix);
+    }
+
+    public function getInsert($request, $response, $args)
+    {
+        return $this->insertView($response, $this->model, $this->routePrefix);
+    }
+
+    public function getUpdate($request, $response, $args)
+    {
+        return $this->updateView($request, $response, $args, $this->model, $this->routePrefix);
+    }
+
+    protected function indexView($response, Model $model, string $routePrefix, string $columns = '*')
     {
         $res = $model->select($columns);
 
@@ -50,7 +67,7 @@ class AdminView
         );
     }
 
-    public function insertView($response, Model $model, string $routePrefix)
+    protected function insertView($response, Model $model, string $routePrefix)
     {
         $fields = $model->getFormFields('insert');
 
@@ -68,7 +85,7 @@ class AdminView
         );
     }
 
-    public function updateView($request, $response, $args, Model $model, string $routePrefix)
+    protected function updateView($request, $response, $args, Model $model, string $routePrefix)
     {
         // make sure there is a record for the model
         if (!$record = $model->selectForPrimaryKey($args['primaryKey'])) {
