@@ -5,16 +5,11 @@ namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
-use function It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\printPreArray;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
 class OrdersModel extends Model
 {
-    private $roles;
-    private $rolesSelectFieldOptions;
-
     public function __construct()
     {
         parent::__construct('orders');
