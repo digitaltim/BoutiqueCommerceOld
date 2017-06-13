@@ -7,7 +7,7 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
 
 class AdminHomeView extends AdminView
 {
-    public function index($request, $response)
+    public function index($request, $response, $args)
     {
         return $this->view->render(
             $response,
