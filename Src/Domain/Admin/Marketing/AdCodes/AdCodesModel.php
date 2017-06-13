@@ -69,15 +69,15 @@ class AdCodesModel extends Model implements DatabaseTable
         ];
     }
 
-    public function getFormFields(string $databaseAction = 'insert'): array
+    public function getFormFields(string $formType = 'insert'): array
     {
-        if ($databaseAction != 'insert' && $databaseAction != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$databaseAction);
+        if ($formType != 'insert' && $formType != 'update') {
+            throw new InvalidArgumentException("formType must be insert or update ".$formType);
         }
 
         $fields = array_merge($this->columns, ['submit' => FormHelper::getSubmitField()]);
 
-        if ($databaseAction == 'update') {
+        if ($formType == 'update') {
             // override post method to put
             $fields['_METHOD'] = FormHelper::getPutMethodField();
         }

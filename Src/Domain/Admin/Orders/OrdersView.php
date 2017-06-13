@@ -4,16 +4,21 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
-use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
+use Slim\Container;
 
 class OrdersView extends AdminView
 {
+    public function __construct(Container $container)
+    {
+        $this->routePrefix = 'orders';
+        $this->model = new OrdersModel();
+
+        parent::__construct($container);
+    }
+
     public function index($request, $response, $args)
     {
-        $res = (new OrdersModel)->getOrders();
-
-        $insertLink = ($this->authorization->check($this->container->settings['authorization']['orders.insert'])) ? ['text' => 'Insert Order', 'route' => 'orders.insert'] : false;
+        $res = $this->model->getOrders();
 
         return $this->view->render(
             $response,
@@ -22,12 +27,12 @@ class OrdersView extends AdminView
                 'title' => 'Orders',
                 'primaryKeyColumn' => 'order_id',
                 'insertLink' => false,
-                'updateColumn' => 'order_id',
+                'updateColumn' => '',
                 'updatePermitted' => $this->authorization
                     ->check($this->container->settings['authorization']['orders.update']),
-                'updateRoute' => 'orders.put.update',
+                'updateRoute' => '',
                 'addDeleteColumn' => false,
-                'deleteRoute' => 'orders.delete',
+                'deleteRoute' => '',
                 'table' => pg_fetch_all($res),
                 'navigationItems' => $this->navigationItems
             ]
