@@ -17,6 +17,17 @@ class AdminsView extends AdminView
         parent::__construct($container);
     }
 
+    /**
+     * override to eliminate some columns
+     * @param $request
+     * @param $response
+     * @param $args
+     */
+    public function index($request, $response, $args)
+    {
+        $this->indexView($response, 'id, name, username, role');
+    }
+
     private function setPersistPasswords(array &$fields): array
     {
         if (!isset($_SESSION['validationErrors']['password_hash']) && !isset($_SESSION['validationErrors']['confirm_password_hash'])) {

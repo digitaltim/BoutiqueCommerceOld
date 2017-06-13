@@ -176,7 +176,7 @@ class AdminsModel extends Model
         $q = new QueryBuilder("UPDATE admins SET name = $1, username = $2, role = $3", $columnValues['name'], $columnValues['username'], $columnValues['role']);
         $argNum = 4;
         if (strlen($columnValues['password_hash']) > 0) {
-            $q->add(", password_hash = $$argNum", password_hash($columnValues['password'], PASSWORD_DEFAULT));
+            $q->add(", password_hash = $$argNum", password_hash($columnValues['password_hash'], PASSWORD_DEFAULT));
             $argNum++;
         }
         $q->add(" WHERE id = $$argNum RETURNING id", $primaryKeyValue);
@@ -197,14 +197,20 @@ class AdminsModel extends Model
     }
 
     // If a null password is passed, the password field is not checked
-    public function hasRecordChanged(array $columValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null, array $record = null): bool
+    public function hasRecordChanged(array $columnValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
     {
-        if (strlen($columValues['password_hash']) == 0) {
+        if (strlen($columnValues['password_hash']) == 0) {
             $skipColumns[] = 'password_hash';
         } else {
-            $columValues['password_hash'] = password_hash($columValues['password_hash'], PASSWORD_DEFAULT);
+            $columnValues['password_hash'] = password_hash($columnValues['password_hash'], PASSWORD_DEFAULT);
         }
 
-        return parent::hasRecordChanged($columValues, $primaryKeyValue, $primaryKeyName, $skipColumns);
+        return parent::hasRecordChanged($columnValues, $primaryKeyValue, $skipColumns);
+    }
+
+    public function insert(array $columnValues)
+    {
+        $columnValues['password_hash'] = password_hash($columnValues['password_hash'], PASSWORD_DEFAULT);
+        return parent::insert($columnValues);
     }
 }

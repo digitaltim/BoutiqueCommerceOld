@@ -8,6 +8,9 @@ use Slim\Container;
 abstract class Controller
 {
     protected $container; // dependency injection container
+    protected $model;
+    protected $view;
+    protected $routePrefix;
 
     public function __construct(Container $container)
     {
@@ -19,6 +22,35 @@ abstract class Controller
         return $this->container->{$name};
     }
 
+    public function postInsert($request, $response, $args)
+    {
+        $this->setFormInput($request, $this->model);
+
+        if (!$this->insert()) {
+            // redisplay form with errors and input values
+            return ($this->view->getInsert($request, $response, $args));
+        } else {
+            return $response->withRedirect($this->router->pathFor($this->routePrefix.'.index'));
+        }
+    }
+
+    public function putUpdate($request, $response, $args)
+    {
+        $this->setFormInput($request, $this->model);
+
+        if (!$updateResponse = $this->update($response, $args)) {
+            // redisplay form with errors and input values
+            return $this->view->getUpdate($request, $response, $args);
+        } else {
+            return $updateResponse;
+        }
+    }
+
+    public function getDelete($request, $response, $args)
+    {
+        return $this->delete($response, $args);
+    }
+
     protected function setFormInput($request, Model $model, $dbAction = 'insert')
     {
         foreach ($model->getFormFields($dbAction) as $fieldName => $fieldInfo) {
@@ -26,14 +58,17 @@ abstract class Controller
         }
     }
 
-    protected function update($request, $response, $primaryKey, string $route, Model $model, string $redirectRoute, string $primaryKeyName = 'id', array $changedCheckSkipColumns = null)
+    protected function update($response, $args, array $changedCheckSkipColumns = null)
     {
-        if (!$this->authorization->checkFunctionality($route)) {
+        if (!$this->authorization->checkFunctionality($this->routePrefix.'.update')) {
             throw new \Exception('No permission.');
         }
 
+        $primaryKey = $args['primaryKey'];
+        $redirectRoute = $this->routePrefix.'.index';
+
         // make sure there is a record for the primary key in the model
-        if (!$record = $model->selectForPrimaryKey($primaryKey)) {
+        if (!$record = $this->model->selectForPrimaryKey($primaryKey)) {
             $_SESSION['adminNotice'] = [
                 "Record $primaryKey Not Found",
                 'adminNoticeFailure'
@@ -41,15 +76,14 @@ abstract class Controller
             return $response->withRedirect($this->router->pathFor($redirectRoute));
         }
 
-        if (!$this->validator->validate($_SESSION['formInput'], $model->getValidationRules('update'))) {
+        if (!$this->validator->validate($_SESSION['formInput'], $this->model->getValidationRules('update'))) {
             return false;
         }
 
         // if no changes made, redirect
-        if (!$model->hasRecordChanged(
-            $_SESSION['formInput'],
+        if (!$this->model->hasRecordChanged(
+                $_SESSION['formInput'],
                 $primaryKey,
-                $primaryKeyName,
                 $changedCheckSkipColumns,
                 $record
         )) {
@@ -58,10 +92,10 @@ abstract class Controller
         }
 
         // attempt to update the model
-        if ($model->updateByPrimaryKey($_SESSION['formInput'], $primaryKey, $primaryKeyName)) {
+        if ($this->model->updateByPrimaryKey($_SESSION['formInput'], $primaryKey)) {
             unset($_SESSION['formInput']);
             $message = 'Updated record '.$primaryKey;
-            $this->logger->addInfo($message . ' in '. $model->getTableName());
+            $this->logger->addInfo($message . ' in '. $this->model->getTableName());
             $_SESSION['adminNotice'] = [$message, 'adminNoticeSuccess'];
 
             return $response->withRedirect($this->router->pathFor($redirectRoute));
@@ -72,28 +106,28 @@ abstract class Controller
         }
     }
 
-    protected function insert(string $route, Model $model, string $primaryKeyName = 'id', bool $sendEmail = false)
+    protected function insert(bool $sendEmail = false)
     {
-        if (!$this->authorization->checkFunctionality($route)) {
+        if (!$this->authorization->checkFunctionality($this->routePrefix.'.insert')) {
             throw new \Exception('No permission.');
         }
 
-        if (!$this->validator->validate($_SESSION['formInput'], $model->getValidationRules())) {
+        if (!$this->validator->validate($_SESSION['formInput'], $this->model->getValidationRules())) {
             return false;
         }
 
         // attempt insert
-        if ($res = $model->insert($_SESSION['formInput'], $primaryKeyName)) {
+        if ($res = $this->model->insert($_SESSION['formInput'])) {
             unset($_SESSION['formInput']);
             $returned = pg_fetch_all($res);
-            $message = 'Inserted record '.$returned[0][$primaryKeyName].
-                ' into '.$model->getTableName();
+            $message = 'Inserted record '.$returned[0][$this->model->getPrimaryKeyColumnName()].
+                ' into '.$this->model->getTableName();
             $this->logger->addInfo($message);
             if ($sendEmail) {
                 $settings = $this->container->get('settings');
                 $this->mailer->send(
                     $_SERVER['SERVER_NAME'] . " Event",
-                    "Inserted into ".$model->getTableName()."\n See event log for details.",
+                    "Inserted into ".$this->model->getTableName()."\n See event log for details.",
                     [$settings['emails']['owner']]
                 );
             }
@@ -107,24 +141,27 @@ abstract class Controller
         }
     }
 
-    protected function delete($response, $primaryKey, string $route, Model $model, string $redirectRoute, string $primaryKeyName = 'id', string $returnColumn = null, bool $sendEmail = false)
+    protected function delete($response, $args, string $returnColumn = null, bool $sendEmail = false)
     {
-        if (!$this->authorization->checkFunctionality($route)) {
+        if (!$this->authorization->checkFunctionality($this->routePrefix.'.delete')) {
             throw new \Exception('No permission.');
         }
 
-        if ($res = $model->deleteByPrimaryKey($primaryKey, $primaryKeyName, $returnColumn)) {
+        $primaryKey = $args['primaryKey'];
+        $redirectRoute = $this->routePrefix.'.index';
+
+        if ($res = $this->model->deleteByPrimaryKey($primaryKey, $returnColumn)) {
             $message = 'Deleted record '.$primaryKey;
             if ($returnColumn != null) {
                 $returned = pg_fetch_all($res);
                 $message .= ' '.$returnColumn.' '.$returned[0][$returnColumn];
             }
-            $this->logger->addInfo($message . " from ".$model->getTableName()."");
+            $this->logger->addInfo($message . " from ".$this->model->getTableName()."");
             if ($sendEmail) {
                 $settings = $this->container->get('settings');
                 $this->mailer->send(
                     $_SERVER['SERVER_NAME'] . " Event",
-                    "Deleted record from ".$model->getTableName().".\nSee event log for details.",
+                    "Deleted record from ".$this->model->getTableName().".\nSee event log for details.",
                     [$settings['emails']['owner']]
                 );
             }
@@ -134,7 +171,7 @@ abstract class Controller
 
         } else {
 
-            $this->logger->addWarning("primary key $primaryKey for ".$model->getTableName()." not found for deletion. IP: " . $_SERVER['REMOTE_ADDR']);
+            $this->logger->addWarning("primary key $primaryKey for ".$this->model->getTableName()." not found for deletion. IP: " . $_SERVER['REMOTE_ADDR']);
 
             $settings = $this->container->get('settings');
             $this->mailer->send($_SERVER['SERVER_NAME'] . " Event", "primary key $primaryKey not found for deletion. Check event log for details.", [$settings['emails']['programmer']]);

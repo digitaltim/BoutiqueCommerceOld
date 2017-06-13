@@ -13,12 +13,14 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 abstract class Model
 {
     protected $columns;
-    private $tableName;
+    protected $tableName;
+    protected $primaryKeyColumnName;
 
     public function __construct(string $tableName)
     {
         $this->tableName = $tableName;
         $this->setColumns();
+        $this->primaryKeyColumnName = 'id'; // default
     }
 
     public function getTableName()
@@ -33,7 +35,7 @@ abstract class Model
      */
     public function getPrimaryKeyColumnName(): string
     {
-        return 'id';
+        return $this->primaryKeyColumnName;
     }
 
     public function getColumns(): array
@@ -49,8 +51,10 @@ abstract class Model
         return $q->execute();
     }
 
-    public function selectForPrimaryKey($primaryKeyValue, string $primaryKeyName = 'id')
+    public function selectForPrimaryKey($primaryKeyValue)
     {
+        $primaryKeyName = $this->getPrimaryKeyColumnName();
+
         $q = new QueryBuilder("SELECT * FROM $this->tableName WHERE $primaryKeyName = $1", $primaryKeyValue);
         if(!$res = $q->execute()) {
             // this is for a query error not a not found condition
@@ -59,8 +63,10 @@ abstract class Model
         return pg_fetch_assoc($res); // returns false if not records are found
     }
 
-    public function updateByPrimaryKey(array $columnValues, $primaryKeyValue, $primaryKeyName = 'id')
+    public function updateByPrimaryKey(array $columnValues, $primaryKeyValue)
     {
+        $primaryKeyName = $this->getPrimaryKeyColumnName();
+
         if (!$currentRow = $this->selectForPrimaryKey($primaryKeyValue)) {
             throw new \Exception("Invalid $primaryKeyName $primaryKeyValue for $this->tableName");
         }
@@ -69,23 +75,17 @@ abstract class Model
         return $ub->execute();
     }
 
-    public function insert(array $columnValues, string $primaryKeyName = null)
+    public function insert(array $columnValues)
     {
         $ib = new InsertBuilder($this->tableName);
-        if ($primaryKeyName != null) {
-            $ib->setPrimaryKeyName($primaryKeyName);
-        }
+        $ib->setPrimaryKeyName($this->getPrimaryKeyColumnName());
         $this->addColumnsToBuilder($ib, $columnValues);
         return $ib->execute();
     }
 
-    public function deleteByPrimaryKey(
-        $primaryKeyValue,
-        string $primaryKeyName = 'id',
-        string $returning = null
-    )
+    public function deleteByPrimaryKey($primaryKeyValue, string $returning = null)
     {
-        $query = "DELETE FROM $this->tableName WHERE $primaryKeyName = $1";
+        $query = "DELETE FROM $this->tableName WHERE ".$this->getPrimaryKeyColumnName()." = $1";
         if ($returning !== null) {
             $query .= "RETURNING $returning";
         }
@@ -103,10 +103,10 @@ abstract class Model
         return ValidationService::getRules($this->getFormFields($formType));
     }
 
-    public function hasRecordChanged(array $columnValues, $primaryKeyValue, string $primaryKeyName = 'id', array $skipColumns = null, array $record = null): bool
+    public function hasRecordChanged(array $columnValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
     {
         if (!is_array($record)) {
-            $record = $this->selectForPrimaryKey($primaryKeyValue, $primaryKeyName);
+            $record = $this->selectForPrimaryKey($primaryKeyValue);
         }
 
         foreach ($this->columns as $columnName => $columnInfo) {
@@ -119,7 +119,7 @@ abstract class Model
         return false;
     }
 
-    private function addColumnsToBuilder(
+    protected function addColumnsToBuilder(
         InsertUpdateBuilder $builder,
         array $columnValues,
         array $updateRow=null
