@@ -3,16 +3,13 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\AdCodes;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTable;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
-class AdCodesModel extends Model
+class AdCodesModel extends Model implements DatabaseTable
 {
-    private $statusSelectFieldOptions;
-
     public function __construct()
     {
         parent::__construct('ad_codes');
@@ -72,15 +69,15 @@ class AdCodesModel extends Model
         ];
     }
 
-    public function getFormFields(string $formType = 'insert'): array
+    public function getFormFields(string $databaseAction = 'insert'): array
     {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        if ($databaseAction != 'insert' && $databaseAction != 'update') {
+            throw new InvalidArgumentException("formType must be insert or update ".$databaseAction);
         }
 
         $fields = array_merge($this->columns, ['submit' => FormHelper::getSubmitField()]);
 
-        if ($formType == 'update') {
+        if ($databaseAction == 'update') {
             // override post method to put
             $fields['_METHOD'] = FormHelper::getPutMethodField();
         }

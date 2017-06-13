@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders;
 
 use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
-use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
-use Psr\Log\InvalidArgumentException;
 
 class OrdersModel extends Model
 {
@@ -53,32 +51,6 @@ class OrdersModel extends Model
                 ]
             ],
         ];
-    }
-
-    public function getFormFields(string $formType = 'insert', bool $persistPasswords = false): array
-    {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
-
-        $fields = array_merge($this->columns, [
-
-            'submit' => FormHelper::getSubmitField()
-        ]);
-
-        $fields['password_hash']['persist'] = $persistPasswords;
-
-        // override post method
-        $fields['_METHOD'] = [
-            'tag' => 'input',
-            'attributes' => [
-                'type' => 'hidden',
-                'name' => '_METHOD',
-                'value' => 'PUT'
-            ]
-        ];
-
-        return $fields;
     }
 
     public function getOrders()

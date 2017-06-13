@@ -43,8 +43,6 @@ abstract class Model
         return $this->columns;
     }
 
-    abstract public function getFormFields(string $dbAction = 'insert'): array;
-
     public function select(string $columns = '*')
     {
         $q = new QueryBuilder("SELECT $columns FROM $this->tableName");
@@ -119,11 +117,7 @@ abstract class Model
         return false;
     }
 
-    protected function addColumnsToBuilder(
-        InsertUpdateBuilder $builder,
-        array $columnValues,
-        array $updateRow=null
-    )
+    protected function addColumnsToBuilder(InsertUpdateBuilder $builder, array $columnValues)
     {
         foreach ($this->columns as $columnName => $columnInfo) {
 

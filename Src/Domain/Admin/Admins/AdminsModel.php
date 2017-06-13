@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTable;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
-class AdminsModel extends Model
+class AdminsModel extends Model implements DatabaseTable
 {
     private $roles;
     private $rolesSelectFieldOptions;
@@ -103,10 +104,10 @@ class AdminsModel extends Model
         ];
     }
 
-    public function getFormFields(string $dbAction = 'insert'): array
+    public function getFormFields(string $databaseAction = 'insert'): array
     {
-        if ($dbAction != 'insert' && $dbAction != 'update') {
-            throw new InvalidArgumentException("dbAction must be insert or update: ".$dbAction);
+        if ($databaseAction != 'insert' && $databaseAction != 'update') {
+            throw new InvalidArgumentException("databaseAction must be insert or update: ".$databaseAction);
         }
 
         $fields = array_merge($this->columns, [
@@ -129,7 +130,7 @@ class AdminsModel extends Model
 
         $fields['password_hash']['persist'] = false;
 
-        if ($dbAction == 'insert') {
+        if ($databaseAction == 'insert') {
             // note put required first so it's validated first
             $fields['password_hash']['validation'] = [
                 'required' => true,
