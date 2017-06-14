@@ -18,11 +18,12 @@ class OrdersView extends AdminView
 
     public function index($request, $response, $args)
     {
-        $res = $this->model->getOrders();
+        $orders = $this->model->getOrders();
+
 
         return $this->view->render(
             $response,
-            'admin/orders/orders.twig',
+            'admin/orders/orders_objects.twig',
             [
                 'title' => 'Orders',
                 'primaryKeyColumn' => 'order_id',
@@ -33,7 +34,7 @@ class OrdersView extends AdminView
                 'updateRoute' => '',
                 'addDeleteColumn' => false,
                 'deleteRoute' => '',
-                'table' => pg_fetch_all($res),
+                'table' => $orders,
                 'navigationItems' => $this->navigationItems
             ]
         );

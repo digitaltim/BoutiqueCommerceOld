@@ -1,0 +1,88 @@
+{% extends "base.twig" %}
+
+{% block htmlHeadCss %}
+    <link href="/css/adminGrid.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block htmlBodyContent %}
+
+    {% include 'admin/partials/header.twig' %}
+
+    {% include 'admin/partials/nav.twig' %}
+
+    <main>
+        <div id="scrollingTableContainer">
+            <table class="scrollingTable">
+                {# Set Column Headers #}
+                <thead>
+                    <tr>
+                        <th colspan="7">
+                            {{ title }}
+                            {% if insertLink %}
+                                <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
+                            {% endif %}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <th>Order #</th>
+                        <th>Type</th>
+                        <th>Customer</th>
+                        <th>Total Amount</th>
+                        <th>Notes</th>
+                        <th>Salespeople</th>
+                    </tr>
+                </thead>
+
+                {# Create rows of table data #}
+                <tbody>
+                {% set order_id = false %}
+                {% for order in table %}
+                    <tr>
+                        <td>{{ order.getDate() }}</td>
+                        <td><a href="orders/{{ order.getId() }}">{{ order.getId() }}</a></td>
+                        <td>{{ order.getType() }}</td>
+                        <td><a href="customers/{{ order.getCustomer().getId() }}">{{ order.getCustomer().getName() }}</a></td>
+                        <td>${{ order.getAmount() }}</td>
+                        <td>{{ order.getNotes() }}</td>
+                        <td>{{ order.getSalespeople() }}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="7">
+                            <table border="1" align="center">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Style #</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in order.getProducts() %}
+                                    <tr>
+                                        <td><a href="products/{{ product.getProductId() }}">{{ product.getItem() }}</a></td>
+                                        <td>{{ product.getStyleNumber() }}</td>
+                                        <td>{{ product.getQuantity() }}</td>
+                                        <td>${{ product.getPrice() }}</td>
+                                        <td>{{ product.getStatus() }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    {% include 'admin/partials/footer.twig' %}
+
+{% endblock %}
+{% block htmlBodyJs %}
+    <script type="text/javascript" src="/js/uiHelper.js"></script>
+{% endblock %}
