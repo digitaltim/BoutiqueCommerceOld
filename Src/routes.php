@@ -180,6 +180,15 @@ $slim->get('/' . $config['dirs']['admin'] . '/orders',
     ->setName('orders.index');
 
 ////////////////////////////////////////////////////////////////////////////////
+// order
+$orderPath = $domainAdminNs.'\Orders\Order\\';
+$slim->get('/' . $config['dirs']['admin'] . '/orders/{primaryKey}',
+    $orderPath . 'OrderView:show')
+    ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['order.show']))
+    ->add(new AuthenticationMiddleware($container))
+    ->setName('order.show');
+
+////////////////////////////////////////////////////////////////////////////////
 // not found
 $slim->get('/notFound',
     'It_All\BoutiqueCommerce\Src\Infrastructure\View:pageNotFound')

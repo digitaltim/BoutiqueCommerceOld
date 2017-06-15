@@ -25,12 +25,6 @@ class NavAdmin
             'Orders' => [
                 'minimumPermissions' => $container->authorization->getMinimumPermission('orders.index'),
                 'link' => 'orders.index',
-                'subSections' => [
-                    'Insert' => [
-                        'minimumPermissions' => $container->authorization->getMinimumPermission('orders.insert'),
-                        'link' => '',
-                    ]
-                ]
             ],
 
             'Marketing' => [
