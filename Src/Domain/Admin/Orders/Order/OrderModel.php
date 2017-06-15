@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order;
 
-use It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order\ProductModel;
-use It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order\CustomerModel;
+use It_All\BoutiqueCommerce\Src\Domain\Admin\Products\ProductModel;
+use It_All\BoutiqueCommerce\Src\Domain\Admin\Customers\CustomerModel;
 
 class OrderModel
 {
@@ -37,22 +37,33 @@ class OrderModel
         $this->salespeople = $salespeople;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
-    public function getDate() {
+
+    public function getDate()
+    {
         return $this->date;
     }
-    public function getType() {
+
+    public function getType()
+    {
         return $this->type;
     }
-    public function getNotes() {
+
+    public function getNotes()
+    {
         return $this->notes;
     }
-    public function getSalespeople() {
+
+    public function getSalespeople()
+    {
         return $this->salespeople;
     }
-    public function getProducts() {
+
+    public function getProducts()
+    {
         return $this->products;
     }
 
@@ -79,7 +90,6 @@ class OrderModel
     public function setAmount()
     {
         foreach ($this->products as $product) {
-            $price = $product->getPrice();
             $this->amount += $product->getPrice();
         }
     }

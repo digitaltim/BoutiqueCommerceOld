@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order;
+namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Customers;
 
 class CustomerModel
 {
@@ -16,10 +16,13 @@ class CustomerModel
         $this->id = $id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
-    public function getId() {
+
+    public function getId()
+    {
         return $this->id;
     }
 }

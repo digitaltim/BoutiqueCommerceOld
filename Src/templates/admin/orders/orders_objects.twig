@@ -63,7 +63,7 @@
                                 <tbody>
                                     {% for product in order.getProducts() %}
                                     <tr>
-                                        <td><a href="products/{{ product.getProductId() }}">{{ product.getItem() }}</a></td>
+                                        <td><a href="products/{{ product.getProductId() }}">{{ product.getName() }}</a></td>
                                         <td>{{ product.getStyleNumber() }}</td>
                                         <td>{{ product.getQuantity() }}</td>
                                         <td>${{ product.getPrice() }}</td>
