@@ -8,12 +8,10 @@ class CustomerModel
     private $name;
     private $id;
 
-    public function __construct(
-        string $name,
-        string $id)
+    public function __construct(int $id, string $name)
     {
-        $this->name = $name;
         $this->id = $id;
+        $this->name = $name;
     }
 
     public function getName()

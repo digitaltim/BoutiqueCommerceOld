@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use Slim\Container;
 
 abstract class Controller
@@ -51,9 +52,9 @@ abstract class Controller
         return $this->delete($response, $args);
     }
 
-    protected function setFormInput($request, Model $model, $dbAction = 'insert')
+    protected function setFormInput($request, DatabaseTableModel $model, $action = 'insert')
     {
-        foreach ($model->getFormFields($dbAction) as $fieldName => $fieldInfo) {
+        foreach (FormHelper::getFields($model, $action) as $fieldName => $fieldInfo) {
             $_SESSION['formInput'][$fieldName] = ($request->getParam($fieldName) !== null) ? trim($request->getParam($fieldName)) : '';
         }
     }

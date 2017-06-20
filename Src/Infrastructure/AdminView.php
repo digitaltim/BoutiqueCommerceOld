@@ -69,7 +69,7 @@ class AdminView
 
     protected function insertView($response)
     {
-        $fields = $this->model->getFormFields('insert');
+        $fields = FormHelper::getFields($this->model);
 
         return $this->view->render(
             $response,
@@ -96,7 +96,7 @@ class AdminView
             return $response->withRedirect($this->router->pathFor($this->routePrefix.'.index'));
         }
 
-        $fields = $this->model->getFormFields('update');
+        $fields = FormHelper::getFields($this->model, 'update');
 
         /**
          * data to send to FormHelper - either from the model or from prior input. Note that when sending null FormHelper defaults to using $_SESSION['formInput']. It's important to send null, not $_SESSION['formInput'], because FormHelper unsets $_SESSION['formInput'] after using it.

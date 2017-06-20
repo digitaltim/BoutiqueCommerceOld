@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
+use It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order\OrderModelFactory;
+use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order\OrderModel;
 
-class OrdersModel extends Model
+class OrdersModel extends DatabaseTableModel
 {
     public function __construct()
     {
@@ -61,40 +62,18 @@ class OrdersModel extends Model
         $orderModel = null;
 
         $queryResults = $this->getOrdersQueryResults();
+
+        $orderRows = []; // store records for one order to be passed to factory
+
         foreach ($queryResults as $row) {
-            // create new order object
-            if ($previousOrderId != $row['order_id']) {
-                $previousOrderId = $row['order_id'];
-                $orderModel = new OrderModel(
-                    intval($row['order_id']),
-                    $row['order date'],
-                    $row['type'],
-                    $row['notes'],
-                    $row['salespeople']
-                );
-                $orders[] = $orderModel;
+            if ($previousOrderId != $row['id']) {
+                $previousOrderId = $row['id'];
+                if (count($orderRows) > 0) {
+                    $orders[] = OrderModelFactory::create($orderRows);
+                    $orderRows = [];
+                }
             }
-
-            // create new product object
-            $orderModel->addProductToOrder(
-                $row['item'],
-                $row['style_number'],
-                intval($row['quantity']),
-                intval($row['price']),
-                $row['status'],
-                $row['product_id']
-            );
-
-            // create new customer object
-            $orderModel->addCustomerToOrder(
-                $row['customer'],
-                $row['customer_id']
-            );
-        }
-
-        // Create total amount for each order
-        foreach ($orders as $order) {
-            $order->setAmount();
+            $orderRows[] = $row;
         }
 
         return $orders;
@@ -105,14 +84,9 @@ class OrdersModel extends Model
     {
         $q = new QueryBuilder("
             SELECT
-            orders.order_dt AS \"order date\",
-            orders.id AS order_id,
-            orders.order_type AS type,
+            orders.*,
             contacts.name AS customer,
             orders.contact_id AS customer_id,
-            orders.ship_amount AS amount,
-            orders.notes AS notes,
-            orders.salesperson1 || ' ' || orders.salesperson2 AS salespeople,
             order_item_status.id AS ois_id,
             order_items.item_name AS item,
             inventory_items.style_number AS style_number,

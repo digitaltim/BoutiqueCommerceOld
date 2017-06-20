@@ -26,7 +26,7 @@ class OrdersView extends AdminView
             'admin/orders/orders_objects.twig',
             [
                 'title' => 'Orders',
-                'primaryKeyColumn' => 'order_id',
+                'primaryKeyColumn' => 'id',
                 'table' => $orders,
                 'navigationItems' => $this->navigationItems
             ]

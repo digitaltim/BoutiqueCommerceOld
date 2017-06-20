@@ -3,16 +3,14 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTable;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
+use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use Psr\Log\InvalidArgumentException;
 
-class AdminsModel extends Model implements DatabaseTable
+class AdminsModel extends DatabaseTableModel
 {
     private $roles;
-    private $rolesSelectFieldOptions;
 
     public function __construct()
     {
@@ -26,16 +24,17 @@ class AdminsModel extends Model implements DatabaseTable
             'bookkeeper'
         ];
 
-        // Set select field options
-        $this->rolesSelectFieldOptions = ['-- select --' => 'disabled'];
-        foreach ($this->roles as $role) {
-            $this->rolesSelectFieldOptions[$role] = $role;
-        }
         parent::__construct('admins');
     }
 
     protected function setColumns()
     {
+        // Set select field options
+        $rolesSelectFieldOptions = ['-- select --' => 'disabled'];
+        foreach ($this->roles as $role) {
+            $this->rolesSelectFieldOptions[$role] = $role;
+        }
+
         $this->columns = [
 
             'username' => [
@@ -85,7 +84,7 @@ class AdminsModel extends Model implements DatabaseTable
                     'type' => 'select',
                     'value' => ''
                 ],
-                'options' => $this->rolesSelectFieldOptions,
+                'options' => $rolesSelectFieldOptions,
                 'selected' => 'disabled'
             ],
 

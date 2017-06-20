@@ -3,23 +3,12 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\Testimonials;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTable;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
-use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
-use Psr\Log\InvalidArgumentException;
+use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
 
-class TestimonialsModel extends Model implements DatabaseTable
+class TestimonialsModel extends DatabaseTableModel
 {
-    private $statusSelectFieldOptions;
-
     public function __construct()
     {
-        // Set select field options
-        $this->statusSelectFieldOptions = [
-            '-- select --' => 'disabled',
-            'active' => 'active',
-            'inactive' => 'inactive'
-        ];
         parent::__construct('testimonials');
     }
 
@@ -27,31 +16,45 @@ class TestimonialsModel extends Model implements DatabaseTable
     {
         $this->columns = [
 
+            'id' => [
+                'type' => 'bigint',
+                'isNullable' => false
+            ],
+
             'enter_date' => [
-            'tag' => 'input',
-                'attributes' => [
-                    'name' => 'enter_date',
-                    'type' => 'hidden',
-                    'value' => date('Y-m-d')
-                ]
+                'type' => 'date',
+                'isNullable' => false
             ],
 
             'text' => [
-                'tag' => 'textarea',
-                'label' => 'Text',
-                'validation' => [
-                    'required' => true,
-                ],
-                'attributes' => [
-                    'id' => 'text',
-                    'name' => 'text',
-                    'rows' => '5',
-                    'cols' => '60',
-                    'value' => ''
-                ]
+                'type' => 'text',
+                'isNullable' => false
             ],
 
             'person' => [
+                'type' => 'charcter varying',
+                'max' => 50,
+                'isNullable' => false,
+                'validation' => ['alphaspace' => true]
+            ],
+
+            'place' => [
+                'type' => 'charcter varying',
+                'max' => 100,
+                'isNullable' => false,
+                'validation' => ['alphaspace' => true]
+            ],
+
+            'status' => [
+                'type' => 'enum',
+                'options' => ['active', 'inactive'],
+                'isNullable' => false
+            ]
+        ];
+
+
+/*
+            '' => [
                 'tag' => 'input',
                 'label' => 'Person',
                 'validation' => [
@@ -74,7 +77,6 @@ class TestimonialsModel extends Model implements DatabaseTable
                 'label' => 'Place',
                 'validation' => [
                     'required' => true,
-                    'alphaspace' => true,
                     'maxlength' => 100
                 ],
                 'attributes' => [
@@ -101,21 +103,6 @@ class TestimonialsModel extends Model implements DatabaseTable
                 'selected' => 'disabled'
             ]
         ];
-    }
-
-    public function getFormFields(string $databaseAction = 'insert'): array
-    {
-        if ($databaseAction != 'insert' && $databaseAction != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$databaseAction);
-        }
-
-        $fields = array_merge($this->columns, ['submit' => FormHelper::getSubmitField()]);
-
-        if ($databaseAction == 'update') {
-            // override post method to put
-            $fields['_METHOD'] = FormHelper::getPutMethodField();
-        }
-
-        return $fields;
+*/
     }
 }

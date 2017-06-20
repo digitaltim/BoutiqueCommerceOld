@@ -5,27 +5,27 @@ namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Products;
 
 class ProductModel
 {
+    private $id;
     private $name;
     private $styleNumber;
     private $quantity;
     private $price;
     private $status;
-    private $productId;
 
     public function __construct(
+        int $id,
         string $name,
         string $styleNumber,
         int $quantity,
         int $price,
-        string $status,
-        string $productId)
+        string $status)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->styleNumber = $styleNumber;
         $this->quantity = $quantity;
         $this->price = $price;
         $this->status = $status;
-        $this->productId = $productId;
     }
 
     public function getName()
@@ -53,8 +53,8 @@ class ProductModel
         return $this->status;
     }
 
-    public function getProductId()
+    public function getId()
     {
-        return $this->productId;
+        return $this->id;
     }
 }

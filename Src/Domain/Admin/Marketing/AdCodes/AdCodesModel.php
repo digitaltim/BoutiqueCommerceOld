@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\AdCodes;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTable;
-use It_All\BoutiqueCommerce\Src\Infrastructure\Model;
-use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
-use Psr\Log\InvalidArgumentException;
+use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
 
-class AdCodesModel extends Model implements DatabaseTable
+class AdCodesModel extends DatabaseTableModel
 {
     public function __construct()
     {
@@ -19,69 +16,30 @@ class AdCodesModel extends Model implements DatabaseTable
     {
         $this->columns = [
 
+            'id' => [
+                'type' => 'bigint',
+                'isNullable' => false
+            ],
+
             'start_dt' => [
-                'tag' => 'input',
-                'attributes' => [
-                    'name' => 'start_dt',
-                    'type' => 'hidden',
-                    'value' => date('Y-m-d')
-                ]
+                'type' => 'timestamp without time zone',
+                'isNullable' => false
             ],
 
             'end_dt' => [
-                'tag' => 'input',
-                'attributes' => [
-                    'name' => 'end_dt',
-                    'type' => 'hidden',
-                    'value' => date('Y-m-d')
-                ]
+                'type' => 'timestamp without time zone',
+                'isNullable' => true
             ],
 
             'description' => [
-                'tag' => 'textarea',
-                'label' => 'Description',
-                'validation' => [
-                    'required' => true,
-                ],
-                'attributes' => [
-                    'id' => 'description',
-                    'name' => 'description',
-                    'rows' => '5',
-                    'cols' => '60',
-                    'value' => ''
-                ]
+                'type' => 'text',
+                'isNullable' => false
             ],
 
             'results' => [
-                'tag' => 'textarea',
-                'label' => 'Results',
-                'validation' => [
-                    'required' => true,
-                ],
-                'attributes' => [
-                    'id' => 'results',
-                    'name' => 'results',
-                    'rows' => '5',
-                    'cols' => '60',
-                    'value' => ''
-                ]
+                'type' => 'text',
+                'isNullable' => false
             ]
         ];
-    }
-
-    public function getFormFields(string $formType = 'insert'): array
-    {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
-        }
-
-        $fields = array_merge($this->columns, ['submit' => FormHelper::getSubmitField()]);
-
-        if ($formType == 'update') {
-            // override post method to put
-            $fields['_METHOD'] = FormHelper::getPutMethodField();
-        }
-
-        return $fields;
     }
 }

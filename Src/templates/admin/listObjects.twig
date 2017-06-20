@@ -1,0 +1,78 @@
+{% extends "base.twig" %}
+
+{% block htmlHeadCss %}
+    <link href="/css/adminGrid.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block htmlBodyContent %}
+
+    {% include 'admin/partials/header.twig' %}
+
+    {% include 'admin/partials/nav.twig' %}
+
+    <main>
+        <div id="scrollingTableContainer">
+            <table class="scrollingTable">
+                <thead>
+                <tr>
+                    <th colspan="10">
+                        {{ title }}
+                        {% if insertLink %}
+                            <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
+                        {% endif %}
+                    </th>
+                </tr>
+                <tr>
+                    {% set columns = objects.0.getColumns() %}
+                    {% for k,v in columns %}
+                        <th>{{ k }}</th>
+                    {% endfor %}
+
+                    {% if addDeleteColumn  %}
+                    <th>X</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in objects %}
+                    <tr>
+                        {% set properties = object.getPropertiesFromColumns() %}
+                        {% set getPrimaryKeyMethod = 'get' ~ primaryKeyColumn|capitalize %}
+                        {% set primaryKeyValue = attribute(object, getPrimaryKeyMethod) %}
+
+                        {% for property in properties %}
+
+                            {# for admins table, do not allow non-owners to edit owners #}
+                            {% if property == primaryKeyColumn and updatePermitted and (title != 'Admins' or (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner')) %}
+
+                                <td><a href="{{ path_for(updateRoute, {"primaryKey": primaryKeyValue}) }}" title="update">{{ primaryKeyValue }}</a></td>
+
+                            {%  else %}
+                                {% set method = 'get' ~ property %}
+                                <td>{{ attribute(object, method) }}</td>
+                            {% endif %}
+
+                        {% endfor %}
+
+                         {#add delete column if necessary#}
+                         {#for admins table, do not admin to delete themself or non-owners to delete owners#}
+                        {% if addDeleteColumn and (title != 'Admins' or (attribute(row, 'username') != authentication.user.username and (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner'))) %}
+
+                        <td><a href="{{ path_for(deleteRoute, {"primaryKey": primaryKeyValue}) }}" title="delete" onclick="return confirm('Are you sure you want to delete record  {{ primaryKeyValue }}?');">X</a></td>
+                        {% else %}
+                        <td>&nbsp;</td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    {% include 'admin/partials/footer.twig' %}
+
+{% endblock %}
+{% block htmlBodyJs %}
+    <script type="text/javascript" src="/js/uiHelper.js"></script>
+{% endblock %}

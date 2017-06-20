@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
+
 class FormHelper
 {
     private static $fields;
@@ -124,5 +126,80 @@ class FormHelper
                 'value' => 'PUT'
             ]
         ];
+    }
+
+    private static function getFormFieldFromColumn(
+        string $columnName,
+        array $columnInfo
+    ): array
+    {
+
+        $attributes['name'] = $columnName;
+        $attributes['id'] = $columnName;
+        $validation = (isset($columnInfo['validation'])) ? $columnInfo['validation'] : [];
+
+        switch ($columnInfo['type']) {
+            case 'text':
+                $element = 'textarea';
+                break;
+
+            // input fields of various types
+
+            case 'date':
+                $element = 'input';
+                $attributes['type'] = 'date';
+                break;
+
+            case 'character varying':
+                $element = 'input';
+                $attributes['type'] = 'text';
+                $validation['maxlength'] = $columnInfo['max'];
+                break;
+
+            default:
+                $element = 'input';
+                $attributes['type'] = 'text';
+
+        }
+
+        if (!$columnInfo['isNullable']) {
+            $validation['required'] = true;
+        }
+
+        $formField = [
+            'tag' => $element,
+            'label' => $columnName,
+            'attributes' => $attributes,
+            'validation' => $validation
+        ];
+
+        return $formField;
+    }
+
+    private static function getFieldsFromDatabaseColumns(DatabaseTableModel $model)
+    {
+        $formFields = [];
+        foreach ($model->getColumns() as $columnName => $columnInfo) {
+            if ($columnName != $model->getPrimaryKeyColumnName()) {
+                $formFields[$columnName] = self::getFormFieldFromColumn($columnName, $columnInfo);
+            }
+        }
+        return $formFields;
+    }
+
+    public static function getFields(DatabaseTableModel $model, string $action = 'insert'): array
+    {
+        if ($action != 'insert' && $action != 'update') {
+            throw new \Exception("action must be insert or update ".$action);
+        }
+
+        $fields = array_merge(self::getFieldsFromDatabaseColumns($model), ['submit' => FormHelper::getSubmitField()]);
+
+        if ($action == 'update') {
+            // override post method to put
+            $fields['_METHOD'] = self::getPutMethodField();
+        }
+
+        return $fields;
     }
 }

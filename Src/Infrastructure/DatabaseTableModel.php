@@ -7,28 +7,28 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertUpdateBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\UpdateBuilder;
-use function It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\printPreArray;
+use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
-abstract class Model
+abstract class DatabaseTableModel
 {
     protected $columns;
     protected $tableName;
-    protected $primaryKeyColumnName;
+    protected $primaryKeyColumnName; // defaults to id
 
-    public function __construct(string $tableName)
+    abstract protected function setColumns();
+
+    public function __construct(string $tableName, string $primaryKeyColumnName = 'id')
     {
         $this->tableName = $tableName;
+        $this->primaryKeyColumnName = $primaryKeyColumnName;
         $this->setColumns();
-        $this->primaryKeyColumnName = 'id'; // default
     }
 
     public function getTableName()
     {
         return $this->tableName;
     }
-
-    abstract protected function setColumns();
 
     /**
      * @return string defaults to 'id', can be overridden by children
@@ -92,13 +92,13 @@ abstract class Model
         return $q->execute();
     }
 
-    public function getValidationRules($formType = 'insert'): array
+    public function getValidationRules($action = 'insert'): array
     {
-        if ($formType != 'insert' && $formType != 'update') {
-            throw new InvalidArgumentException("formType must be insert or update ".$formType);
+        if ($action != 'insert' && $action != 'update') {
+            throw new \Exception("action must be insert or update ".$action);
         }
 
-        return ValidationService::getRules($this->getFormFields($formType));
+        return ValidationService::getRules(FormHelper::getFields($this, $action));
     }
 
     public function hasRecordChanged(array $columnValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
@@ -121,18 +121,20 @@ abstract class Model
     {
         foreach ($this->columns as $columnName => $columnInfo) {
 
-            if (isset($columnValues[$columnName])) {
-                $columnValue = $columnValues[$columnName];
-                if ($this->isBooleanColumn($columnName) && $columnValue == 'on') {
-                    $columnValue = 't';
-                }
-                if (strlen($columnValue) == 0) {
+            if ($columnName != $this->primaryKeyColumnName) {
+                if (isset($columnValues[$columnName])) {
+                    $columnValue = $columnValues[$columnName];
+                    if ($this->isBooleanColumn($columnName) && $columnValue == 'on') {
+                        $columnValue = 't';
+                    }
+                    if (strlen($columnValue) == 0) {
+                        $columnValue = $this->handleBlankValue($columnName);
+                    }
+                } else {
                     $columnValue = $this->handleBlankValue($columnName);
                 }
-            } else {
-                $columnValue = $this->handleBlankValue($columnName);
+                $builder->addColumn($columnName, $columnValue);
             }
-            $builder->addColumn($columnName, $columnValue);
         }
     }
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order;
 
+use It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\AdCodes\AdCodesModel;
 use It_All\BoutiqueCommerce\Src\Domain\Admin\Products\ProductModel;
 use It_All\BoutiqueCommerce\Src\Domain\Admin\Customers\CustomerModel;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
@@ -16,27 +17,57 @@ class OrderModel
         4. Gift certificates
     */
     private $id;
-    private $date;
+    private $datetime;
     private $type;
     private $notes;
-    private $salespeople; // TODO: separate out eventually?
+    private $salesperson1;
+    private $salesperson2;
     private $products;
     private $customer;
     private $amount;
 
     public function __construct(
         int $id,
-        string $date,
+        string $datetime,
         string $type,
         string $notes,
-        string $salespeople)
+        string $salesperson1,
+        string $salesperson2,
+        array $products,
+        CustomerModel $customerModel
+    )
     {
         $this->id = $id;
-        $this->date = $date;
+        $this->datetime = $datetime;
         $this->type = $type;
         $this->notes = $notes;
-        $this->salespeople = $salespeople;
+//        $this->ship_amount = $ship_amount;
+//        $this->ship_method = $ship_method;
+//        $this->ship_name = $ship_name;
+//        $this->ship_company = $ship_company;
+//        $this->ship_address1 = $ship_address1;
+//        $this->ship_address2 = $ship_address2;
+//        $this->ship_city = $ship_city;
+//        $this->ship_state = $ship_state;
+//        $this->ship_country = $ship_country;
+//        $this->ship_postal = $ship_postal;
+//        $this->ship_phone = $ship_phone;
+        $this->salesperson1 = $salesperson1;
+        $this->salesperson2 = $salesperson2;
+//        $this->checkoutperson = $checkoutperson;
+//        $this->checkoutperson = $checkoutperson;
+//        $this->checkoutperson = $checkoutperson;
+//        $this->setAdCode($adCode);
+        $this->setProducts($products);
+        $this->setAmount();
+        $this->customer = $customerModel;
+
     }
+
+//    private function setAdCode(AdCodeModel $AdCodeModel)
+//    {
+//
+//    }
 
     public function getId()
     {
@@ -45,7 +76,7 @@ class OrderModel
 
     public function getDate()
     {
-        return $this->date;
+        return substr($this->datetime, 0, 10);
     }
 
     public function getType()
@@ -60,7 +91,7 @@ class OrderModel
 
     public function getSalespeople()
     {
-        return $this->salespeople;
+        return $this->salesperson1 . ' ' . $this->salesperson2;
     }
 
     public function getProducts()
@@ -68,27 +99,19 @@ class OrderModel
         return $this->products;
     }
 
-    public function addProductToOrder(
-        $item,
-        $style_number,
-        $quantity,
-        $price,
-        $status,
-        $product_id)
+    private function addProduct(ProductModel $product)
     {
-        $productModel = new ProductModel(
-            $item,
-            $style_number,
-            $quantity,
-            $price,
-            $status,
-            $product_id
-        );
-
-        $this->products[] = $productModel;
+        $this->products[] = $product;
     }
 
-    public function setAmount()
+    private function setProducts(array $products)
+    {
+        foreach ($products as $product) {
+            $this->addProduct($product);
+        }
+    }
+
+    private function setAmount()
     {
         foreach ($this->products as $product) {
             $this->amount += $product->getPrice();
@@ -100,15 +123,8 @@ class OrderModel
         return $this->amount;
     }
 
-    public function addCustomerToOrder(
-        $name,
-        $id)
+    public function setCustomer(CustomerModel $customerModel)
     {
-        $customerModel = new customerModel(
-            $name,
-            $id
-        );
-
         $this->customer = $customerModel;
     }
 
@@ -133,13 +149,14 @@ class OrderModel
                     $row['order date'],
                     $row['type'],
                     $row['notes'],
-                    $row['salespeople']
+                    $row['salesperson1'],
+                    $row['salesperson2']
                 );
                 $orders[] = $orderModel;
             }
 
             // create new product object
-            $orderModel->addProductToOrder(
+            $orderModel->addProduct(
                 $row['item'],
                 $row['style_number'],
                 intval($row['quantity']),
@@ -149,7 +166,7 @@ class OrderModel
             );
 
             // create new customer object
-            $orderModel->addCustomerToOrder(
+            $orderModel->setCustomer(
                 $row['customer'],
                 $row['customer_id']
             );
@@ -175,7 +192,8 @@ class OrderModel
             orders.contact_id AS customer_id,
             orders.ship_amount AS amount,
             orders.notes AS notes,
-            orders.salesperson1 || ' ' || orders.salesperson2 AS salespeople,
+            orders.salesperson1,
+            orders.salesperson2,
             order_item_status.id AS ois_id,
             order_items.item_name AS item,
             inventory_items.style_number AS style_number,
