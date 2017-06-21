@@ -5,18 +5,18 @@ namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\AdCodes;
 
 use It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\AdCodes\AdCodeModel;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
+use It_All\BoutiqueCommerce\Src\Infrastructure\AdminCrudView;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use Slim\Container;
 
-class AdCodesView extends AdminView
+class AdCodesView extends AdminCrudView
 {
     public function __construct(Container $container)
     {
-        $this->routePrefix = 'adCodes';
-        $this->model = new AdCodesModel();
+//        $this->routePrefix = 'adCodes';
+//        $this->model = new AdCodesModel();
 
-        parent::__construct($container);
+        parent::__construct($container, new AdCodesModel(), 'adCodes');
     }
 
 //    public function index($request, $response, $args)

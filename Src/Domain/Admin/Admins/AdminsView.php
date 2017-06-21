@@ -3,18 +3,15 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\AdminView;
+use It_All\BoutiqueCommerce\Src\Infrastructure\AdminCrudView;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use Slim\Container;
 
-class AdminsView extends AdminView
+class AdminsView extends AdminCrudView
 {
     public function __construct(Container $container)
     {
-        $this->routePrefix = 'admins';
-        $this->model = new AdminsModel();
-
-        parent::__construct($container);
+        parent::__construct($container, new AdminsModel(), 'admins');
     }
 
     /**
