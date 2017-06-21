@@ -13,9 +13,6 @@ class AdCodesView extends AdminCrudView
 {
     public function __construct(Container $container)
     {
-//        $this->routePrefix = 'adCodes';
-//        $this->model = new AdCodesModel();
-
         parent::__construct($container, new AdCodesModel(), 'adCodes');
     }
 
