@@ -9,6 +9,8 @@ class FormHelper
 {
     private static $fields;
     private static $focusField;
+    const TEXTAREA_COLS = 50;
+    const TEXTAREA_ROWS = 5;
 
     /**
      * for each field with a validation error, this adds the 'error' key and message and an error class attribute to fieldName
@@ -133,45 +135,54 @@ class FormHelper
         array $columnInfo
     ): array
     {
+        $formField = [
+            'label' => $columnName,
+            'attributes' => [
+                'name' => $columnName,
+                'id' => $columnName
+            ],
+            'validation' => (isset($columnInfo['validation'])) ? $columnInfo['validation'] : []
+        ];
 
-        $attributes['name'] = $columnName;
-        $attributes['id'] = $columnName;
-        $validation = (isset($columnInfo['validation'])) ? $columnInfo['validation'] : [];
-
+        // the rest of $formField is derived in the switch statement
         switch ($columnInfo['type']) {
             case 'text':
-                $element = 'textarea';
+                $formField['tag'] = 'textarea';
+                $formField['attributes']['cols'] = self::TEXTAREA_COLS;
+                $formField['attributes']['rows'] = self::TEXTAREA_ROWS;
                 break;
 
             // input fields of various types
 
             case 'date':
-                $element = 'input';
-                $attributes['type'] = 'date';
+                $formField['tag'] = 'input';
+                $formField['attributes']['type'] = 'date';
                 break;
 
             case 'character varying':
-                $element = 'input';
-                $attributes['type'] = 'text';
-                $validation['maxlength'] = $columnInfo['max'];
+                $formField['tag'] = 'input';
+                $formField['attributes']['type'] = 'text';
+                $formField['validation']['maxlength'] = $columnInfo['max'];
+                break;
+
+            case 'enum':
+                $formField['tag'] = 'select';
+                if (!isset($columnInfo['options']) || !is_array($columnInfo['options'])) {
+                    throw new \Exception("Options array must be set for enum field: ".$columnName);
+                }
+                $formField['validation']['enum'] = $columnInfo['options'];
+                $formField['options']['-- select --'] = 'disabled';
+                foreach ($columnInfo['options'] as $option) {
+                    $formField['options'][$option] = $option;
+                }
+                $formField['selected'] = 'disabled';
                 break;
 
             default:
-                $element = 'input';
-                $attributes['type'] = 'text';
+                $formField['tag'] = 'input';
+                $formField['attributes']['type'] = 'text';
 
         }
-
-        if (!$columnInfo['isNullable']) {
-            $validation['required'] = true;
-        }
-
-        $formField = [
-            'tag' => $element,
-            'label' => $columnName,
-            'attributes' => $attributes,
-            'validation' => $validation
-        ];
 
         return $formField;
     }

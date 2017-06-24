@@ -76,6 +76,16 @@ class ValidationService
 
         switch ($rule) {
 
+            case 'enum':
+                if (!is_array($context)) {
+                    throw new \Exception("Context must be array for enum validation");
+                }
+                if (!in_array($fieldValue, $context)) {
+                    $this->setError($fieldName, $rule, "Invalid option selected.");
+                    return false;
+                }
+                break;
+
             case 'minlength':
                 if (strlen($fieldValue) < $context) {
                     $this->setError($fieldName, $rule, "Must be $context characters or more");

@@ -145,7 +145,7 @@ abstract class DatabaseTableModel
 
     private function isNullableColumn(string $columnName): bool
     {
-        return isset($this->columns[$columnName]['isNullable']) && $this->columns[$columnName]['isNullable'];
+        return isset($this->columns[$columnName]['validation']['required']) && $this->columns[$columnName]['validation']['required'];
     }
 
     private function isNumericTypeColumn(string $columnName): bool
