@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DatabaseTableModel;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use Slim\Container;
 
-class AdminCrudView extends AdminView
+abstract class AdminCrudView extends AdminView
 {
     protected $routePrefix;
     protected $model;
@@ -63,15 +64,15 @@ class AdminCrudView extends AdminView
 
     protected function insertView($response)
     {
-        $fields = FormHelper::getFields($this->model);
+        $formFields = $this->model->getFormFields();
 
         return $this->view->render(
             $response,
             'admin/form.twig',
             [
-                'title' => 'Insert '.$this->model->getFormalTableName(false),
+                'title' => 'Insert '. $this->model->getFormalTableName(false),
                 'formActionRoute' => $this->routePrefix.'.post.insert',
-                'formFields' => FormHelper::insertValuesErrors($fields),
+                'formFields' => FormHelper::insertValuesErrors($formFields),
                 'focusField' => FormHelper::getFocusField(),
                 'generalFormError' => FormHelper::getGeneralFormError(),
                 'navigationItems' => $this->navigationItems
@@ -102,7 +103,7 @@ class AdminCrudView extends AdminView
             $response,
             'admin/form.twig',
             [
-                'title' => 'Update ' . ucwords($this->model->getTableName()),
+                'title' => 'Update ' . $this->model->getFormalTableName(false),
                 'formActionRoute' => $this->routePrefix.'.put.update',
                 'primaryKey' => $args['primaryKey'],
                 'formFields' => FormHelper::insertValuesErrors($fields, $fieldData),

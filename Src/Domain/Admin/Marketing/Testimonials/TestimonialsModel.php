@@ -32,13 +32,13 @@ class TestimonialsModel extends DatabaseTableModel
             ],
 
             'person' => [
-                'type' => 'charcter varying',
+                'type' => 'character varying',
                 'max' => 50,
                 'validation' => ['required' => true, 'alphaspace' => true]
             ],
 
             'place' => [
-                'type' => 'charcter varying',
+                'type' => 'character varying',
                 'max' => 100,
                 'validation' => ['required' => true, 'alphaspace' => true]
             ],

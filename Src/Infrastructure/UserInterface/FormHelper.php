@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DatabaseColumnModel;
 
 class FormHelper
 {
@@ -130,22 +130,20 @@ class FormHelper
         ];
     }
 
-    private static function getFormFieldFromColumn(
-        string $columnName,
-        array $columnInfo
-    ): array
+    public static function getFieldFromDatabaseColumn(DatabaseColumnModel $column): array
     {
+        $columnName = $column->getName();
         $formField = [
-            'label' => $columnName,
+            'label' => str_replace('_', ' ', $columnName),
             'attributes' => [
                 'name' => $columnName,
                 'id' => $columnName
             ],
-            'validation' => (isset($columnInfo['validation'])) ? $columnInfo['validation'] : []
+            'validation' => $column->getValidation()
         ];
 
         // the rest of $formField is derived in the switch statement
-        switch ($columnInfo['type']) {
+        switch ($column->getType()) {
             case 'text':
                 $formField['tag'] = 'textarea';
                 $formField['attributes']['cols'] = self::TEXTAREA_COLS;
@@ -159,20 +157,27 @@ class FormHelper
                 $formField['attributes']['type'] = 'date';
                 break;
 
+
             case 'character varying':
                 $formField['tag'] = 'input';
                 $formField['attributes']['type'] = 'text';
-                $formField['validation']['maxlength'] = $columnInfo['max'];
+                // must have max defined
+                $formField['attributes']['maxlength'] = $column->getCharacterMaximumLength();
+                $formField['validation']['maxlength'] = $column->getCharacterMaximumLength();
+                if (isset($columnInfo['min'])) {
+                    $formField['validation']['minlength'] = $columnInfo['min'];
+                }
                 break;
 
-            case 'enum':
+            case 'USER-DEFINED':
                 $formField['tag'] = 'select';
-                if (!isset($columnInfo['options']) || !is_array($columnInfo['options'])) {
+                $enumOptions = $column->getEnumOptions();
+                if (count($enumOptions) == 0) {
                     throw new \Exception("Options array must be set for enum field: ".$columnName);
                 }
-                $formField['validation']['enum'] = $columnInfo['options'];
+                $formField['validation']['enum'] = $enumOptions;
                 $formField['options']['-- select --'] = 'disabled';
-                foreach ($columnInfo['options'] as $option) {
+                foreach ($enumOptions as $option) {
                     $formField['options'][$option] = $option;
                 }
                 $formField['selected'] = 'disabled';
@@ -185,32 +190,5 @@ class FormHelper
         }
 
         return $formField;
-    }
-
-    private static function getFieldsFromDatabaseColumns(DatabaseTableModel $model)
-    {
-        $formFields = [];
-        foreach ($model->getColumns() as $columnName => $columnInfo) {
-            if ($columnName != $model->getPrimaryKeyColumnName()) {
-                $formFields[$columnName] = self::getFormFieldFromColumn($columnName, $columnInfo);
-            }
-        }
-        return $formFields;
-    }
-
-    public static function getFields(DatabaseTableModel $model, string $action = 'insert'): array
-    {
-        if ($action != 'insert' && $action != 'update') {
-            throw new \Exception("action must be insert or update ".$action);
-        }
-
-        $fields = array_merge(self::getFieldsFromDatabaseColumns($model), ['submit' => FormHelper::getSubmitField()]);
-
-        if ($action == 'update') {
-            // override post method to put
-            $fields['_METHOD'] = self::getPutMethodField();
-        }
-
-        return $fields;
     }
 }

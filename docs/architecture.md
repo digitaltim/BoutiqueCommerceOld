@@ -14,3 +14,10 @@ Architecture
     
     NOTE: every front end that needs it's content to be accessed by search engines page MUST send the variable pageType => 'public' to Twig in the render call. Note also this should not be done by the cart, checkout, and customer account pages.
     
+    
+    Config. Not sure if better to have config as static object properties or global array (currently is the latter). Interesting thoughts here: https://stackoverflow.com/questions/10987703/is-it-right-to-set-a-config-php-class-to-keep-project-settings
+    After reading 
+    
+        "@David: Testability isn't really a drawback for config class constants vs other methods of configuration. Autoloading can make a custom config class easy...just load your replacement before anything needs it, and there ya go. The problem is that configuration itself complicates unit testing, as it inherently involves inter-unit relationships. Basically all configuration schemes have this same problem when misused. If testability is a goal, then your app's init code (and nothing else) should read config settings and parcel them out to everything else as constructor parameters etc"
+        
+        I decided to leave as is until more information about testing is gathered.

@@ -78,11 +78,7 @@ Class Postgres
         return true;
     }
 
-    /**
-     * @param string $tableName
-     * @return recordset
-     * note: NOT enough info given by pg_meta_data($tableName);
-     */
+    /** note: NOT enough info given by pg_meta_data($tableName); */
     public static function getTableMetaData(string $tableName)
     {
         $q = new QueryBuilder("SELECT column_name, data_type, column_default, is_nullable, character_maximum_length, numeric_precision, udt_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = $1", $tableName);
@@ -91,6 +87,7 @@ Class Postgres
         if (pg_num_rows($rs) == 0) {
             return false;
         }
+
         return $rs;
     }
 }

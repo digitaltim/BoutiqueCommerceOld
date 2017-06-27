@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace It_All\BoutiqueCommerce\Src\Infrastructure;
+namespace It_All\BoutiqueCommerce\Src\Infrastructure\Database;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Postgres;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertUpdateBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
@@ -10,37 +11,58 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\UpdateBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
-abstract class DatabaseTableModel
+class DatabaseTableModel
 {
+    /** @var  array of column model objects */
     protected $columns;
+
+    /** @var string  */
     protected $tableName;
-    protected $primaryKeyColumnName; // defaults to id
 
-    abstract protected function setColumns();
+    /** @var string or false if no primary key column exists */
+    protected $primaryKeyColumnName;
 
-    public function __construct(string $tableName, string $primaryKeyColumnName = 'id')
+    /**
+     * @var array of columnNames with UNIQUE constraint
+     * NOTE this does not handle multi-column unique constraints
+     */
+    private $uniqueColumns;
+
+    private $skipPrimaryKeyColumnInFormFields;
+
+    public function __construct(string $tableName, $skipPrimaryKeyColumnInFormFields = true)
     {
         $this->tableName = $tableName;
-        $this->primaryKeyColumnName = $primaryKeyColumnName;
+        $this->skipPrimaryKeyColumnInFormFields = $skipPrimaryKeyColumnInFormFields;
+        $this->primaryKeyColumnName = false; // default
+        $this->uniqueColumns = [];
+        $this->setConstraints(); // $this->primaryKeyColumnName will be updated if exists\
         $this->setColumns();
     }
 
-    public function getTableName()
+    private function setConstraints()
     {
-        return $this->tableName;
+        $q = new QueryBuilder("SELECT ccu.column_name, tc.constraint_type FROM INFORMATION_SCHEMA.constraint_column_usage ccu JOIN information_schema.table_constraints tc ON ccu.constraint_name = tc.constraint_name WHERE tc.table_name = ccu.table_name AND ccu.table_name = $1", $this->tableName);
+        $qResult = $q->execute();
+        while ($qRow = pg_fetch_assoc($qResult)) {
+            switch($qRow['constraint_type']) {
+                case 'PRIMARY KEY':
+                    $this->primaryKeyColumnName = $qRow['column_name'];
+                    break;
+                case 'UNIQUE':
+                    $this->uniqueColumns[] = $qRow['column_name'];
+            }
+        }
     }
 
-    /**
-     * @return string defaults to 'id', can be overridden by children
-     */
-    public function getPrimaryKeyColumnName(): string
+    protected function setColumns()
     {
-        return $this->primaryKeyColumnName;
-    }
-
-    public function getColumns(): array
-    {
-        return $this->columns;
+        $rs = Postgres::getTableMetaData($this->tableName);
+        while ($columnInfo = pg_fetch_assoc($rs)) {
+            $columnInfo['is_unique'] = in_array($columnInfo['column_name'], $this->uniqueColumns);
+            $c = new DatabaseColumnModel($this, $columnInfo);
+            $this->columns[] = $c;
+        }
     }
 
     public function select(string $columns = '*')
@@ -98,7 +120,32 @@ abstract class DatabaseTableModel
             throw new \Exception("action must be insert or update ".$action);
         }
 
-        return ValidationService::getRules(FormHelper::getFields($this, $action));
+        return ValidationService::getRules($this->getFormFields($action));
+    }
+
+    public function getFormFields(string $databaseAction = 'insert'): array
+    {
+        if ($databaseAction != 'insert' && $databaseAction != 'update') {
+            throw new \Exception("databaseAction must be insert or update: " . $databaseAction);
+        }
+
+        $formFields = [];
+
+        foreach ($this->getColumns() as $column) {
+            $name = $column->getName();
+            if (!$this->skipPrimaryKeyColumnInFormFields || ($this->skipPrimaryKeyColumnInFormFields && !$column->isPrimaryKey()) ) {
+                $formFields[$name] = FormHelper::getFieldFromDatabaseColumn($column);
+            }
+        }
+
+        if ($databaseAction == 'update') {
+            // override post method
+            $formFields['_METHOD'] = FormHelper::getPutMethodField();
+        }
+
+        $formFields['submit'] = FormHelper::getSubmitField();
+
+        return $formFields;
     }
 
     public function hasRecordChanged(array $columnValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
@@ -107,7 +154,8 @@ abstract class DatabaseTableModel
             $record = $this->selectForPrimaryKey($primaryKeyValue);
         }
 
-        foreach ($this->columns as $columnName => $columnInfo) {
+        foreach ($this->columns as $column) {
+            $columnName = $column->getName();
             if (is_null($skipColumns) || !in_array($columnName, $skipColumns)) {
                 if ($record[$columnName] != $columnValues[$columnName]) {
                     return true;
@@ -119,54 +167,43 @@ abstract class DatabaseTableModel
 
     protected function addColumnsToBuilder(InsertUpdateBuilder $builder, array $columnValues)
     {
-        foreach ($this->columns as $columnName => $columnInfo) {
+        foreach ($this->columns as $column) {
+            $columnName = $column->getName();
 
-            if ($columnName != $this->primaryKeyColumnName) {
+            if (!$this->skipPrimaryKeyColumnInFormFields || ($this->skipPrimaryKeyColumnInFormFields && !$column->isPrimaryKey()) ) {
                 if (isset($columnValues[$columnName])) {
                     $columnValue = $columnValues[$columnName];
-                    if ($this->isBooleanColumn($columnName) && $columnValue == 'on') {
+                    if ($column->isBoolean() && $columnValue == 'on') {
                         $columnValue = 't';
                     }
                     if (strlen($columnValue) == 0) {
-                        $columnValue = $this->handleBlankValue($columnName);
+                        $columnValue = $this->handleBlankValue($column);
                     }
                 } else {
-                    $columnValue = $this->handleBlankValue($columnName);
+                    $columnValue = $this->handleBlankValue($column);
                 }
                 $builder->addColumn($columnName, $columnValue);
             }
         }
     }
 
-    private function isBooleanColumn(string $columnName): bool
-    {
-        return isset($this->columns[$columnName]['isBoolean']) && $this->columns[$columnName]['isBoolean'];
-    }
-
-    private function isNullableColumn(string $columnName): bool
-    {
-        return isset($this->columns[$columnName]['validation']['required']) && $this->columns[$columnName]['validation']['required'];
-    }
-
-    private function isNumericTypeColumn(string $columnName): bool
-    {
-        return isset($this->columns[$columnName]['isNumericType']) && $this->columns[$columnName]['isNumericType'];
-    }
-
-    private function handleBlankValue(string $columnName)
+    private function handleBlankValue(DatabaseColumnModel $column)
     {
         // set to null if field is nullable
-        if ($this->isNullableColumn($columnName)) {
+        if ($column->getIsNullable()) {
             return null;
         }
+
         // set to 0 if field is numeric
-        if ($this->isNumericTypeColumn($columnName)) {
+        if ($column->isNumericType()) {
             return 0;
         }
+
         // set to f if field is boolean
-        if ($this->isBooleanColumn($columnName)) {
+        if ($column->isBoolean()) {
             return 'f';
         }
+
         return '';
     }
 
@@ -181,5 +218,28 @@ abstract class DatabaseTableModel
             $name = substr($name, 0, strlen($this->tableName) - 1);
         }
         return $name;
+    }
+
+    // getters
+
+    public function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    /**
+     * @return string defaults to 'id', can be overridden by children
+     */
+    public function getPrimaryKeyColumnName(): string
+    {
+        return $this->primaryKeyColumnName;
+    }
+
+    public function getColumns(): array
+    {
+        if (count($this->columns) == 0) {
+            throw new \Exception('No columns in model '.$this->tableName);
+        }
+        return $this->columns;
     }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Infrastructure;
 
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DatabaseTableModel;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use Slim\Container;
 
@@ -54,7 +55,7 @@ abstract class Controller
 
     protected function setFormInput($request, DatabaseTableModel $model, $action = 'insert')
     {
-        foreach (FormHelper::getFields($model, $action) as $fieldName => $fieldInfo) {
+        foreach ($this->model->getFormFields($action) as $fieldName => $fieldInfo) {
             $_SESSION['formInput'][$fieldName] = ($request->getParam($fieldName) !== null) ? trim($request->getParam($fieldName)) : '';
         }
     }

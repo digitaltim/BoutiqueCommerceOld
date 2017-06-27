@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DatabaseTableModel;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
-use Psr\Log\InvalidArgumentException;
 
 class AdminsModel extends DatabaseTableModel
 {
@@ -27,132 +26,103 @@ class AdminsModel extends DatabaseTableModel
         parent::__construct('admins');
     }
 
-    protected function setColumns()
+    protected function setColumnsOld()
     {
-        // Set select field options
-        $rolesSelectFieldOptions = ['-- select --' => 'disabled'];
-        foreach ($this->roles as $role) {
-            $this->rolesSelectFieldOptions[$role] = $role;
-        }
-
         $this->columns = [
 
+            'id' => [
+                'type' => 'bigint',
+                'validation' => ['required' => true]
+            ],
+
             'username' => [
-                'tag' => 'input',
-                'label' => 'Username',
-                'validation' => [
-                    'required' => true,
-                    '%^[a-zA-Z]+$%' => 'only letters',
-                    'minlength' => 5,
-                    'maxlength' => 20
-                ],
-                'attributes' => [
-                    'id' => 'username',
-                    'name' => 'username',
-                    'type' => 'text',
-                    'size' => '15',
-                    'maxlength' => '20',
-                    'value' => ''
-                ]
+                'type' => 'character varying',
+                'max' => 20,
+                'validation' => ['required' => true, '%^[a-zA-Z]+$%' => 'only letters']
             ],
 
             'name' => [
-                'tag' => 'input',
-                'label' => 'Name',
-                'validation' => [
-                    'required' => true,
-                    'alphaspace' => true,
-                    'maxlength' => 50
-                ],
-                'attributes' => [
-                    'id' => 'name',
-                    'name' => 'name',
-                    'type' => 'text',
-                    'size' => '15',
-                    'maxlength' => '50',
-                    'value' => ''
-                ]
+                'type' => 'character varying',
+                'max' => 50,
+                'validation' => ['required' => true, 'alphaspace' => true]
             ],
 
             'role' => [
-                'tag' => 'select',
-                'label' => 'Role',
-                'validation' => ['required' => true],
-                'attributes' => [
-                    'id' => 'role',
-                    'name' => 'role',
-                    'type' => 'select',
-                    'value' => ''
-                ],
-                'options' => $rolesSelectFieldOptions,
-                'selected' => 'disabled'
+                'type' => 'enum',
+                'options' => $this->roles,
+                'validation' => ['required' => true]
             ],
 
+            // max in the db definition is 255, but the hash function changes the length of the input
             'password_hash' => [
-                'tag' => 'input',
-                'label' => 'Password',
-                'validation' => ['minlength' => 12],
-                'attributes' => [
-                    'id' => 'password',
-                    'type' => 'password',
-                    'name' => 'password_hash',
-                    'size' => '20',
-                    'maxlength' => '30',
-                ],
+                'label' => 'password',
+                'type' => 'character varying',
+                'fieldType' => 'password',
+                'max' => 50,
+                'min' => 12,
+                'validation' => ['required' => true, 'alphaspace' => true],
+                'persist' => false
             ]
+
         ];
     }
 
     public function getFormFields(string $databaseAction = 'insert'): array
     {
         if ($databaseAction != 'insert' && $databaseAction != 'update') {
-            throw new InvalidArgumentException("databaseAction must be insert or update: ".$databaseAction);
+            throw new \Exception("databaseAction must be insert or update: " . $databaseAction);
         }
 
-        $fields = array_merge($this->columns, [
+        $formFields = [];
 
-            'confirm_password_hash' => [
-                'tag' => 'input',
-                'label' => 'Confirm Password',
-                'validation' => ['minlength' => 12, 'confirm' => true],
-                'attributes' => [
+        foreach ($this->getColumns() as $databaseColumnModel) {
+            $name = $databaseColumnModel->getName();
+            if (!$databaseColumnModel->isPrimaryKey()) {
+                $formFields[$name] = FormHelper::getFieldFromDatabaseColumn($databaseColumnModel);
+            }
+            if ($name == 'password_hash') {
+                $formFields['confirm_password_hash'] = [
+                    'label' => 'confirm password hash',
+                    'tag' => 'input',
                     'type' => 'password',
-                    'name' => 'confirm_password_hash',
-                    'size' => '20',
-                    'maxlength' => '30',
-                ],
-                'persist' => false,
-            ],
-
-            'submit' => FormHelper::getSubmitField()
-        ]);
-
-        $fields['password_hash']['persist'] = false;
+                    'maxlength' => 50,
+                    'minlength' => 12,
+                    'persist' => false
+                ];
+            }
+        }
 
         if ($databaseAction == 'insert') {
             // note put required first so it's validated first
-            $fields['password_hash']['validation'] = [
+            $formFields['password_hash']['validation'] = [
                 'required' => true,
                 'minlength' => 12,
             ];
-            $fields['confirm_password_hash']['validation'] = [
+            $formFields['confirm_password_hash']['validation'] = [
                 'required' => true,
                 'minlength' => 12,
             ];
+
         } else { // update
-            $fields['password_hash']['label'] = 'Change Password (leave blank to keep existing password)';
-            $fields['confirm_password_hash']['label'] = 'Confirm New Password';
+
+            $formFields['password_hash']['label'] = 'Change Password (leave blank to keep existing password)';
+            $formFields['confirm_password_hash']['label'] = 'Confirm New Password';
             // override post method
-            $fields['_METHOD'] = [
-                'tag' => 'input',
-                'attributes' => [
-                    'type' => 'hidden',
-                    'name' => '_METHOD',
-                    'value' => 'PUT'
-                ]
-            ];
+            $formFields['_METHOD'] = FormHelper::getPutMethodField();
         }
 
+        $formFields['submit'] = FormHelper::getSubmitField();
+
+        return $this->setPersistPasswords($formFields);
+
+    }
+
+    private function setPersistPasswords(array &$fields): array
+    {
+        if (!isset($_SESSION['validationErrors']['password_hash']) && !isset($_SESSION['validationErrors']['confirm_password_hash'])) {
+            $fields['password_hash']['persist'] = true;
+            $fields['confirm_password_hash']['persist'] = true;
+        }
         return $fields;
     }
 

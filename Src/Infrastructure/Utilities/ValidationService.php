@@ -11,7 +11,7 @@ namespace It_All\BoutiqueCommerce\Src\Infrastructure\Utilities;
 class ValidationService
 {
     private $errors;
-    private $postFormFieldsWithValues;
+    private $formInputData;
 
     public function __construct()
     {
@@ -30,29 +30,26 @@ class ValidationService
         return $rules;
     }
 
-    // Handles case for form fields which are not submitted in POST
-    // by using underlying form structure to check for rules
-    // (ex. contains 'disabled' attribute from select, checkbox, radio...)
     public function validate(array $formInputData, array $rules): bool
     {
         // save for special case where confirming two fields match, ex. password creation confirmation field
-        $this->postFormFieldsWithValues = $formInputData;
+        $this->formInputData = $formInputData;
 
         foreach ($rules as $ruleFieldName => $ruleFieldValue) {
+
             // check for name of form field found in rules in submitted data set
-            if (array_key_exists($ruleFieldName, $formInputData)) {
-                $fieldValue = $formInputData[$ruleFieldName];
-            } else {
-                $fieldValue = '';
-            }
+            $fieldValue = isset($formInputData[$ruleFieldName]) ? $formInputData[$ruleFieldName] : '';
+
             // if field is not required and value is empty stop validating this field (unless it has a confirm rule)
             if (!array_key_exists('confirm', $rules[$ruleFieldName]) && !array_key_exists('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {
-                break;
-            }
-            foreach ($ruleFieldValue as $rule => $ruleContext) {
-                if ($ruleContext !== false) {
-                    if (!$this->validateRule($ruleFieldName, $fieldValue, $rule, $ruleContext)) {
-                        break; // stop validating further rules for this field upon error
+
+            } else {
+
+                foreach ($ruleFieldValue as $rule => $ruleContext) {
+                    if ($ruleContext !== false) {
+                        if (!$this->validateRule($ruleFieldName, $fieldValue, $rule, $ruleContext)) {
+                            break; // stop validating further rules for this field upon error
+                        }
                     }
                 }
             }
@@ -68,6 +65,9 @@ class ValidationService
     // note regex delimiter must be %.
     private function validateRule(string $fieldName, string $fieldValue, string $rule, $context = null): bool
     {
+        $args = func_get_args();
+        var_dump($args);
+
         // special case, regex ie [a-z]
         if (substr($rule, 0, 1) == '%') {
             $regex = $rule;
@@ -163,13 +163,13 @@ class ValidationService
 
             case 'confirm':
                 // if there's already an error on the confirm field then do not validate the confirmation
-
                 // convention prepends 'confirm_' to the second field for confirmation... remove to find other field to compare with
+
                 $fieldNameToConfirm = trim($fieldName, 'confirm_');
                 if (isset($this->errors[$fieldNameToConfirm])) {
                     break;
                 }
-                $fieldValueToConfirm = $this->postFormFieldsWithValues[$fieldNameToConfirm];
+                $fieldValueToConfirm = $this->formInputData[$fieldNameToConfirm];
 
                 if ($fieldValue !== $fieldValueToConfirm) {
                     $this->setError($fieldNameToConfirm, $rule, $fieldNameToConfirm . 's must match');
