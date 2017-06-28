@@ -131,9 +131,8 @@ function getFileExt(string $fileName)
  * @param int $level
  * @return string
  */
-function arrayWalkToStringRecursive(array $arr, int $level = 0): string
+function arrayWalkToStringRecursive(array $arr, int $level = 0, int $maxLevel = 1000): string
 {
-    $maxNestingLevel = 10;
     $out = "";
     $tabs = " ";
     for ($i = 0; $i < $level; $i++) {
@@ -145,7 +144,7 @@ function arrayWalkToStringRecursive(array $arr, int $level = 0): string
             $out .= 'object type: '.get_class($v);
         } elseif (is_array($v)) {
             $newLevel = $level + 1;
-            if ($newLevel > $maxNestingLevel) {
+            if ($newLevel > $maxLevel) {
                 $out .= ' array, too deep, quitting';
             } else {
                 $out .= arrayWalkToStringRecursive($v, $newLevel);
