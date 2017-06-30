@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\Testimonials;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\Controller;
+use It_All\BoutiqueCommerce\Src\Infrastructure\CrudController;
 use Slim\Container;
 
-class TestimonialsController extends Controller
+class TestimonialsController extends CrudController
 {
     public function __construct(Container $container)
     {

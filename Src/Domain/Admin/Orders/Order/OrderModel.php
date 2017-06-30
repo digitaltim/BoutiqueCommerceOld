@@ -135,49 +135,39 @@ class OrderModel
 
     public static function getOrder(string $index)
     {
-        $orders = []; // create orders array
         $previousOrderId = null;
         $orderModel = null;
 
-        $queryResults = self::getOrderQueryResults($index);
-        foreach ($queryResults as $row) {
-            // create new order object
-            if ($previousOrderId != $row['order_id']) {
-                $previousOrderId = $row['order_id'];
-                $orderModel = new OrderModel(
-                    intval($row['order_id']),
-                    $row['order date'],
-                    $row['type'],
-                    $row['notes'],
-                    $row['salesperson1'],
-                    $row['salesperson2']
-                );
-                $orders[] = $orderModel;
-            }
+        $orderProducts = [];
 
-            // create new product object
-            $orderModel->addProduct(
+        $queryResults = self::getOrderQueryResults($index);
+
+        // todo fix based on ois
+
+        foreach ($queryResults as $row) {
+            $orderProducts[] = new ProductModel(
+                intval($row['product_id']),
                 $row['item'],
                 $row['style_number'],
                 intval($row['quantity']),
                 intval($row['price']),
-                $row['status'],
-                $row['product_id']
-            );
-
-            // create new customer object
-            $orderModel->setCustomer(
-                $row['customer'],
-                $row['customer_id']
+                $row['status']
             );
         }
 
-        // Create total amount for each order
-        foreach ($orders as $order) {
-            $order->setAmount();
-        }
+        // create new customer object
+        $customerModel = new CustomerModel(intval($row['customer_id']), $row['customer']);
 
-        return $orders;
+        return new OrderModel(
+            intval($row['order_id']),
+            $row['order date'],
+            $row['type'],
+            $row['notes'],
+            $row['salesperson1'],
+            $row['salesperson2'],
+            $orderProducts,
+            $customerModel
+        );
     }
 
 

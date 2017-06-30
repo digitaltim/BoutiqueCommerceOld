@@ -13,7 +13,7 @@ class DatabaseColumnModel
     /** @var string */
     private $name;
 
-    /** @var string */
+    /** @var string postgres column type */
     private $type;
 
     /** @var bool */
@@ -83,7 +83,7 @@ class DatabaseColumnModel
             case 'character varying':
             case 'text' :
             case 'USER-DEFINED':
-                break; // no validation
+                break; // no default validation
             default:
                 throw new \Exception("$this->type column type validation not defined, column $this->name");
         }

@@ -9,6 +9,7 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\InsertUpdateBuil
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\UpdateBuilder;
 use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
+use function It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\printPreArray;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
 class DatabaseTableModel
@@ -29,6 +30,11 @@ class DatabaseTableModel
     private $uniqueColumns;
 
     private $skipPrimaryKeyColumnInFormFields;
+
+    /**
+     * @var array. the form fields can vary based on whether the action is insert or update, and every page will not use a form, so they are not constructed upon instantiation
+     */
+    protected $formFields;
 
     public function __construct(string $tableName, $skipPrimaryKeyColumnInFormFields = true)
     {
@@ -114,50 +120,56 @@ class DatabaseTableModel
         return $q->execute();
     }
 
-    public function getValidationRules($action = 'insert'): array
-    {
-        if ($action != 'insert' && $action != 'update') {
-            throw new \Exception("action must be insert or update ".$action);
-        }
-
-        return ValidationService::getRules($this->getFormFields($action));
-    }
-
-    public function getFormFields(string $databaseAction = 'insert'): array
+    protected function validateDatabaseActionString(string $databaseAction = 'insert')
     {
         if ($databaseAction != 'insert' && $databaseAction != 'update') {
-            throw new \Exception("databaseAction must be insert or update: " . $databaseAction);
+            throw new \Exception("databaseAction must be insert or update ".$databaseAction);
         }
+    }
 
-        $formFields = [];
+    public function getValidationRules(string $databaseAction = 'insert'): array
+    {
+        $this->validateDatabaseActionString($databaseAction);
+        return ValidationService::getRules($this->getFormFields($databaseAction));
+    }
+
+    public function setFormFields(string $databaseAction = 'insert')
+    {
+        $this->validateDatabaseActionString($databaseAction);
+
+        $this->formFields = [];
 
         foreach ($this->getColumns() as $column) {
             $name = $column->getName();
             if (!$this->skipPrimaryKeyColumnInFormFields || ($this->skipPrimaryKeyColumnInFormFields && !$column->isPrimaryKey()) ) {
-                $formFields[$name] = FormHelper::getFieldFromDatabaseColumn($column);
+                $this->formFields[$name] = FormHelper::getFieldFromDatabaseColumn($column);
             }
         }
 
         if ($databaseAction == 'update') {
             // override post method
-            $formFields['_METHOD'] = FormHelper::getPutMethodField();
+            $this->formFields['_METHOD'] = FormHelper::getPutMethodField();
         }
 
-        $formFields['submit'] = FormHelper::getSubmitField();
-
-        return $formFields;
+        $this->formFields['submit'] = FormHelper::getSubmitField();
     }
 
-    public function hasRecordChanged(array $columnValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
+    public function hasRecordChanged(array $fieldValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
     {
+        if ($skipColumns == null) {
+            $skipColumns = [];
+        }
+        if ($this->primaryKeyColumnName && $this->skipPrimaryKeyColumnInFormFields) {
+            $skipColumns[] = $this->primaryKeyColumnName;
+        }
         if (!is_array($record)) {
             $record = $this->selectForPrimaryKey($primaryKeyValue);
         }
 
         foreach ($this->columns as $column) {
             $columnName = $column->getName();
-            if (is_null($skipColumns) || !in_array($columnName, $skipColumns)) {
-                if ($record[$columnName] != $columnValues[$columnName]) {
+            if (!in_array($columnName, $skipColumns)) {
+                if ($record[$columnName] != $fieldValues[$columnName]) {
                     return true;
                 }
             }
@@ -241,5 +253,24 @@ class DatabaseTableModel
             throw new \Exception('No columns in model '.$this->tableName);
         }
         return $this->columns;
+    }
+
+    public function getColumnByName(string $columnName): DatabaseColumnModel
+    {
+        foreach ($this->columns as $column) {
+            if ($column->getName() == $columnName) {
+                return $column;
+            }
+        }
+        throw new \Exception('Search for column '.$columnName.' in table '.$this->tableName.' failed.');
+    }
+
+    public function getFormFields(string $databaseAction = 'insert'): array
+    {
+        if (!isset($this->formFields)) {
+            $this->setFormFields($databaseAction);
+        }
+
+        return $this->formFields;
     }
 }

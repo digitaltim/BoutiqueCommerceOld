@@ -30,26 +30,49 @@ class ValidationService
         return $rules;
     }
 
+    private function isFieldRequired(string $fieldName, array $rules): bool
+    {
+        return array_key_exists('required', $rules[$fieldName]);
+    }
+
+    private function shouldProcessRule(
+        string $fieldName,
+        $fieldValue,
+        string $rule,
+        $ruleContext,
+        array $rules
+    ): bool
+    {
+        // if field is not required and value is empty stop validating this field (unless it is for a confirm rule)
+//            if (!array_key_exists('confirm', $rules[$fieldName]) && !array_key_exists('required', $rules[$fieldName]) && self::isBlankOrNull($fieldValue)) {
+
+        // if ruleContext is false do not process
+        if ($ruleContext === false) {
+            return false;
+        }
+
+        // if not a required field and has empty value do not process, unless this is a confirm rule
+        if (!$this->isFieldRequired($fieldName, $rules) && self::isBlankOrNull($fieldValue) && $rule != 'confirm') {
+            return false;
+        }
+
+        return true;
+    }
+
     public function validate(array $formInputData, array $rules): bool
     {
         // save for special case where confirming two fields match, ex. password creation confirmation field
         $this->formInputData = $formInputData;
 
-        foreach ($rules as $ruleFieldName => $ruleFieldValue) {
+        foreach ($rules as $fieldName => $fieldRules) {
 
             // check for name of form field found in rules in submitted data set
-            $fieldValue = isset($formInputData[$ruleFieldName]) ? $formInputData[$ruleFieldName] : '';
+            $fieldValue = isset($formInputData[$fieldName]) ? $formInputData[$fieldName] : '';
 
-            // if field is not required and value is empty stop validating this field (unless it has a confirm rule)
-            if (!array_key_exists('confirm', $rules[$ruleFieldName]) && !array_key_exists('required', $rules[$ruleFieldName]) && self::isBlankOrNull($fieldValue)) {
-
-            } else {
-
-                foreach ($ruleFieldValue as $rule => $ruleContext) {
-                    if ($ruleContext !== false) {
-                        if (!$this->validateRule($ruleFieldName, $fieldValue, $rule, $ruleContext)) {
-                            break; // stop validating further rules for this field upon error
-                        }
+            foreach ($fieldRules as $rule => $ruleContext) {
+                if ($this->shouldProcessRule($fieldName, $fieldValue, $rule, $ruleContext, $rules)) {
+                    if (!$this->validateRule($fieldName, $fieldValue, $rule, $ruleContext)) {
+                        break; // stop validating further rules for this field upon error
                     }
                 }
             }
@@ -63,11 +86,9 @@ class ValidationService
     }
 
     // note regex delimiter must be %.
+    // note, do not use fieldName in error message, as the field label may be different and cause confusion
     private function validateRule(string $fieldName, string $fieldValue, string $rule, $context = null): bool
     {
-        $args = func_get_args();
-        var_dump($args);
-
         // special case, regex ie [a-z]
         if (substr($rule, 0, 1) == '%') {
             $regex = $rule;
@@ -172,8 +193,9 @@ class ValidationService
                 $fieldValueToConfirm = $this->formInputData[$fieldNameToConfirm];
 
                 if ($fieldValue !== $fieldValueToConfirm) {
-                    $this->setError($fieldNameToConfirm, $rule, $fieldNameToConfirm . 's must match');
-                    $this->setError($fieldName, $rule, $fieldNameToConfirm . 's must match');
+                    $confirmErrorMessage = 'must match';
+                    $this->setError($fieldNameToConfirm, $rule, $confirmErrorMessage);
+                    $this->setError($fieldName, $rule, $confirmErrorMessage);
                     return false;
                 }
                 break;

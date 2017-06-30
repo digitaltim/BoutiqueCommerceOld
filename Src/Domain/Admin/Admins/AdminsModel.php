@@ -9,121 +9,116 @@ use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 
 class AdminsModel extends DatabaseTableModel
 {
-    private $roles;
+    private $roles; // array of existing roles
 
     public function __construct()
     {
-        $this->roles = [
-            'owner',
-            'director',
-            'manager',
-            'shipper',
-            'admin',
-            'store',
-            'bookkeeper'
-        ];
-
         parent::__construct('admins');
+        $this->roles = $this->getColumnByName('role')->getEnumOptions();
     }
 
-    protected function setColumnsOld()
+    private function getConfirmPasswordHashField(string $label, array $validation): array
     {
-        $this->columns = [
-
-            'id' => [
-                'type' => 'bigint',
-                'validation' => ['required' => true]
+        $field = [
+            'label' => $label,
+            'tag' => 'input',
+            'attributes' => [
+                'name' => 'confirm_password_hash',
+                'id' => 'confirm_password_hash',
+                'type' => 'password',
+                'maxlength' => 50
             ],
-
-            'username' => [
-                'type' => 'character varying',
-                'max' => 20,
-                'validation' => ['required' => true, '%^[a-zA-Z]+$%' => 'only letters']
-            ],
-
-            'name' => [
-                'type' => 'character varying',
-                'max' => 50,
-                'validation' => ['required' => true, 'alphaspace' => true]
-            ],
-
-            'role' => [
-                'type' => 'enum',
-                'options' => $this->roles,
-                'validation' => ['required' => true]
-            ],
-
-            // max in the db definition is 255, but the hash function changes the length of the input
-            'password_hash' => [
-                'label' => 'password',
-                'type' => 'character varying',
-                'fieldType' => 'password',
-                'max' => 50,
-                'min' => 12,
-                'validation' => ['required' => true, 'alphaspace' => true],
-                'persist' => false
-            ]
-
+            'validation' => $validation
         ];
+
+        return $field;
     }
 
-    public function getFormFields(string $databaseAction = 'insert'): array
+    /**
+     * override for customization
+     * @param string $databaseAction
+     * @return array
+     */
+    public function setFormFields(string $databaseAction = 'insert')
     {
-        if ($databaseAction != 'insert' && $databaseAction != 'update') {
-            throw new \Exception("databaseAction must be insert or update: " . $databaseAction);
-        }
+        $this->validateDatabaseActionString($databaseAction);
 
-        $formFields = [];
+        $this->formFields = [];
+
+        if ($databaseAction == 'insert') {
+
+            $passwordHashLabel = 'password';
+            $confirmPasswordHashLabel = 'confirm password';
+
+            // same validation for pw and conf pw
+            // note put required first so it's validated first
+            $passwordHashFieldValidation = [
+                'required' => true,
+                'minlength' => 12,
+                'maxlength' => 50
+            ];
+            $confirmPasswordHashFieldValidation = array_merge($passwordHashFieldValidation, ['confirm' => true]);
+
+
+        } else { //update
+
+            $passwordHashLabel = 'change password (leave blank to keep existing password)';
+            $confirmPasswordHashLabel = 'confirm new password';
+
+            // same validation for pw and conf pw
+            $passwordHashFieldValidation = [
+                'minlength' => 12,
+                'maxlength' => 50
+            ];
+            $confirmPasswordHashFieldValidation = array_merge($passwordHashFieldValidation, ['confirm' => true]);
+
+            // override post method
+            $this->formFields['_METHOD'] = FormHelper::getPutMethodField();
+        }
 
         foreach ($this->getColumns() as $databaseColumnModel) {
             $name = $databaseColumnModel->getName();
-            if (!$databaseColumnModel->isPrimaryKey()) {
-                $formFields[$name] = FormHelper::getFieldFromDatabaseColumn($databaseColumnModel);
-            }
-            if ($name == 'password_hash') {
-                $formFields['confirm_password_hash'] = [
-                    'label' => 'confirm password hash',
-                    'tag' => 'input',
-                    'type' => 'password',
-                    'maxlength' => 50,
-                    'minlength' => 12,
-                    'persist' => false
-                ];
+
+            // no need to have form field for primary key column
+            if (!$databaseColumnModel->isPrimaryKey() && $databaseColumnModel->getName() != 'employee_id') {
+
+                $labelOverride = null;
+                $inputTypeOverride = null;
+                $validationOverride = null;
+
+                if ($name == 'password_hash') {
+                    $labelOverride = $passwordHashLabel;
+                    $inputTypeOverride = 'password';
+                    $validationOverride = $passwordHashFieldValidation;
+                }
+
+                $this->formFields[$name] = FormHelper::getFieldFromDatabaseColumn(
+                    $databaseColumnModel,
+                    $labelOverride,
+                    $inputTypeOverride,
+                    $validationOverride
+                );
+
+                if ($name == 'password_hash') {
+                    $this->formFields['confirm_password_hash'] = $this->getConfirmPasswordHashField($confirmPasswordHashLabel, $confirmPasswordHashFieldValidation);
+                }
             }
         }
 
-        if ($databaseAction == 'insert') {
-            // note put required first so it's validated first
-            $formFields['password_hash']['validation'] = [
-                'required' => true,
-                'minlength' => 12,
-            ];
-            $formFields['confirm_password_hash']['validation'] = [
-                'required' => true,
-                'minlength' => 12,
-            ];
+        $this->formFields['submit'] = FormHelper::getSubmitField();
 
-        } else { // update
-
-            $formFields['password_hash']['label'] = 'Change Password (leave blank to keep existing password)';
-            $formFields['confirm_password_hash']['label'] = 'Confirm New Password';
-            // override post method
-            $formFields['_METHOD'] = FormHelper::getPutMethodField();
-        }
-
-        $formFields['submit'] = FormHelper::getSubmitField();
-
-        return $this->setPersistPasswords($formFields);
-
+        $this->setPersistPasswords();
     }
 
-    private function setPersistPasswords(array &$fields): array
+    private function setPersistPasswords()
     {
         if (!isset($_SESSION['validationErrors']['password_hash']) && !isset($_SESSION['validationErrors']['confirm_password_hash'])) {
-            $fields['password_hash']['persist'] = true;
-            $fields['confirm_password_hash']['persist'] = true;
+            $this->formFields['password_hash']['persist'] = true;
+            $this->formFields['confirm_password_hash']['persist'] = true;
+        } else {
+            $this->formFields['password_hash']['persist'] = false;
+            $this->formFields['confirm_password_hash']['persist'] = false;
         }
-        return $fields;
     }
 
     private function validateRole(string $roleCheck): bool
@@ -167,15 +162,16 @@ class AdminsModel extends DatabaseTableModel
     }
 
     // If a null password is passed, the password field is not checked
-    public function hasRecordChanged(array $columnValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
+    public function hasRecordChanged(array $fieldValues, $primaryKeyValue, array $skipColumns = null, array $record = null): bool
     {
-        if (strlen($columnValues['password_hash']) == 0) {
+        if (strlen($fieldValues['password_hash']) == 0) {
+            $skipColumns[] = 'password_hash';
             $skipColumns[] = 'password_hash';
         } else {
-            $columnValues['password_hash'] = password_hash($columnValues['password_hash'], PASSWORD_DEFAULT);
+            $columnValues['password_hash'] = password_hash($fieldValues['password_hash'], PASSWORD_DEFAULT);
         }
 
-        return parent::hasRecordChanged($columnValues, $primaryKeyValue, $skipColumns);
+        return parent::hasRecordChanged($fieldValues, $primaryKeyValue, $skipColumns);
     }
 
     public function insert(array $columnValues)

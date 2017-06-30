@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Marketing\AdCodes;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\Controller;
+use It_All\BoutiqueCommerce\Src\Infrastructure\CrudController;
 use Slim\Container;
 
-class AdCodesController extends Controller
+class AdCodesController extends CrudController
 {
     public function __construct(Container $container)
     {

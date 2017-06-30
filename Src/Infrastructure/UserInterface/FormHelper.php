@@ -50,7 +50,10 @@ class FormHelper
                         self::$fields[$fieldName]['value'] = $values[$fieldName];
                         break;
                     case 'select':
-                        self::$fields[$fieldName]['selected'] = $values[$fieldName];
+                        // leave unchanged if no value was submitted so top (disabled) option remains selected by default
+                        if (strlen($values[$fieldName]) > 0) {
+                            self::$fields[$fieldName]['selected'] = $values[$fieldName];
+                        }
                         break;
                     default:
                         self::$fields[$fieldName]['attributes']['value'] = $values[$fieldName];
@@ -130,16 +133,23 @@ class FormHelper
         ];
     }
 
-    public static function getFieldFromDatabaseColumn(DatabaseColumnModel $column): array
+    public static function getFieldFromDatabaseColumn(
+        DatabaseColumnModel $column,
+        string $labelOverride = null,
+        string $inputTypeOverride = null,
+        array $validationOverride = null
+    ): array
     {
         $columnName = $column->getName();
+        $columnDefaultValue = $column->getDefaultValue();
+
         $formField = [
-            'label' => str_replace('_', ' ', $columnName),
+            'label' => ($labelOverride) ?: str_replace('_', ' ', $columnName),
             'attributes' => [
                 'name' => $columnName,
                 'id' => $columnName
             ],
-            'validation' => $column->getValidation()
+            'validation' => ($validationOverride) ? $validationOverride : $column->getValidation()
         ];
 
         // the rest of $formField is derived in the switch statement
@@ -160,7 +170,7 @@ class FormHelper
 
             case 'character varying':
                 $formField['tag'] = 'input';
-                $formField['attributes']['type'] = 'text';
+                $formField['attributes']['type'] = self::getInputType($inputTypeOverride);
                 // must have max defined
                 $formField['attributes']['maxlength'] = $column->getCharacterMaximumLength();
                 $formField['validation']['maxlength'] = $column->getCharacterMaximumLength();
@@ -180,15 +190,21 @@ class FormHelper
                 foreach ($enumOptions as $option) {
                     $formField['options'][$option] = $option;
                 }
-                $formField['selected'] = 'disabled';
+                // set initial value to column default if it exists else to top option (-- select --)
+                $formField['selected'] = ($columnDefaultValue != null && strlen($columnDefaultValue) > 0) ? $columnDefaultValue : 'disabled';
+                
                 break;
 
             default:
                 $formField['tag'] = 'input';
-                $formField['attributes']['type'] = 'text';
-
+                $formField['attributes']['type'] = self::getInputType($inputTypeOverride);
         }
 
         return $formField;
+    }
+
+    private static function getInputType(string $inputTypeOverride = null)
+    {
+        return ($inputTypeOverride) ? $inputTypeOverride : 'text';
     }
 }

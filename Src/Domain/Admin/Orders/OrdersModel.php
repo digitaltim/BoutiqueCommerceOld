@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Orders;
 
 use It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order\OrderModelFactory;
-use It_All\BoutiqueCommerce\Src\Infrastructure\DatabaseTableModel;
+use It_All\BoutiqueCommerce\Src\Infrastructure\Database\DatabaseTableModel;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Database\Queries\QueryBuilder;
 use It_All\BoutiqueCommerce\Src\Domain\Admin\Orders\Order\OrderModel;
 

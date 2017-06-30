@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace It_All\BoutiqueCommerce\Src\Domain\Admin\Admins;
 
-use It_All\BoutiqueCommerce\Src\Infrastructure\Controller;
+use It_All\BoutiqueCommerce\Src\Infrastructure\CrudController;
 use Slim\Container;
 
-class AdminsController extends Controller
+class AdminsController extends CrudController
 {
     public function __construct(Container $container)
     {
@@ -33,7 +33,7 @@ class AdminsController extends Controller
             $error = true;
         } elseif (!$this->insert()) {
             $error = true;
-        } else {
+        } else { // successful insert
             return $response->withRedirect($this->router->pathFor($this->routePrefix.'.index'));
         }
 
