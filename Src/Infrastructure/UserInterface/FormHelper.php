@@ -137,17 +137,20 @@ class FormHelper
         DatabaseColumnModel $column,
         string $labelOverride = null,
         string $inputTypeOverride = null,
-        array $validationOverride = null
+        array $validationOverride = null,
+        string $nameOverride = null,
+        string $idOverride = null,
+        bool $persist = true
     ): array
     {
         $columnName = $column->getName();
         $columnDefaultValue = $column->getDefaultValue();
 
         $formField = [
-            'label' => ($labelOverride) ?: str_replace('_', ' ', $columnName),
+            'label' => ($labelOverride) ?: ucwords(str_replace('_', ' ', $columnName)),
             'attributes' => [
-                'name' => $columnName,
-                'id' => $columnName
+                'name' => ($nameOverride) ? $nameOverride : $columnName,
+                'id' => ($idOverride) ? $idOverride : $columnName
             ],
             'validation' => ($validationOverride) ? $validationOverride : $column->getValidation()
         ];
@@ -199,6 +202,8 @@ class FormHelper
                 $formField['tag'] = 'input';
                 $formField['attributes']['type'] = self::getInputType($inputTypeOverride);
         }
+
+        $formField['persist'] = $persist;
 
         return $formField;
     }

@@ -47,8 +47,8 @@ class AdminsModel extends DatabaseTableModel
 
         if ($databaseAction == 'insert') {
 
-            $passwordHashLabel = 'password';
-            $confirmPasswordHashLabel = 'confirm password';
+            $passwordHashLabel = 'Password';
+            $confirmPasswordHashLabel = 'Confirm Password';
 
             // same validation for pw and conf pw
             // note put required first so it's validated first
@@ -62,8 +62,8 @@ class AdminsModel extends DatabaseTableModel
 
         } else { //update
 
-            $passwordHashLabel = 'change password (leave blank to keep existing password)';
-            $confirmPasswordHashLabel = 'confirm new password';
+            $passwordHashLabel = 'Change Password (leave blank to keep existing password)';
+            $confirmPasswordHashLabel = 'Confirm New Password';
 
             // same validation for pw and conf pw
             $passwordHashFieldValidation = [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace It_All\BoutiqueCommerce\Src\Infrastructure\Security\Authentication;
 
 use It_All\BoutiqueCommerce\Src\Domain\Admin\Admins\AdminsModel;
+use It_All\BoutiqueCommerce\Src\Infrastructure\UserInterface\FormHelper;
 use It_All\BoutiqueCommerce\Src\Infrastructure\Utilities\ValidationService;
 
 class AuthenticationService
@@ -79,48 +80,44 @@ class AuthenticationService
     {
         unset($_SESSION['user']);
     }
-
+    
     public function getLoginFields(): array
     {
-        return [
+        $adminsModel = new AdminsModel();
 
+        $loginFields = [];
+
+        $fieldColumns = [
             'username' => [
-                'tag' => 'input',
-                'label' => 'Username',
-                'validation' => ['required' => null],
-                'attributes' => [
-                    'id' => 'username',
-                    'name' => 'username',
-                    'type' => 'text',
-                    'size' => '20',
-                    'maxlength' => '20',
-                    'value' => ''
-                ]
+                'labelOverride' => null,
+                'nameOverride' => null,
+                'inputOverride' => null,
+                'persist' => true
             ],
-
-            'password' => [
-                'tag' => 'input',
-                'label' => 'Password',
-                'validation' => ['required' => null],
-                'attributes' => [
-                    'id' => 'password',
-                    'type' => 'password',
-                    'name' => 'password',
-                    'size' => '20',
-                    'maxlength' => '30',
-                ],
-                'persist' => false,
-            ],
-
-            'submit' => [
-                'tag' => 'input',
-                'attributes' => [
-                    'type' => 'submit',
-                    'name' => 'submit',
-                    'value' => 'Go!'
-                ]
+            'password_hash' => [
+                'labelOverride' => 'Password',
+                'nameOverride' => 'password',
+                'inputOverride' => 'password',
+                'persist' => false
             ]
         ];
+
+        foreach ($fieldColumns as $columnName => $fieldInfo) {
+            $fieldName = ($fieldInfo['nameOverride']) ?: $columnName;
+            $loginFields[$fieldName] = FormHelper::getFieldFromDatabaseColumn(
+                $adminsModel->getColumnByName($columnName),
+                $fieldInfo['labelOverride'],
+                $fieldInfo['inputOverride'],
+                null,
+                $fieldInfo['nameOverride'],
+                $fieldInfo['nameOverride'],
+                $fieldInfo['persist']
+            );
+        }
+
+        $loginFields['submit'] = FormHelper::getSubmitField();
+
+        return $loginFields;
     }
 
     public function getFocusField()
