@@ -1,15 +1,14 @@
 /* https://codepen.io/hubpork/pen/HsBnd */
-@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans:700,300');
 @import url('https://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css');
 
-#adminNav .box {
+#navOverlay {
   position: fixed;
-  text-align: center;
-  overflow: hidden;
+  overflow: auto;
   z-index: -1;
   opacity: 0;
-  width: 100%;
   height: 100%;
+  width: 100%;
+  margin: 0;
   left: 0px;
   top: 0px;
   background: rgba(0,0,0,0.8);
@@ -19,30 +18,29 @@
   transition: all 0.3s ease-in-out;
 }
 
-#adminNav ul {
+#navOverlay ul {
   position: relative;
-  top: 20%;
-  -webkit-transform: scale(2);
-  -moz-transform: scale(2);
-  -ms-transform: scale(2);
-  transform: scale(2);
+  top: 10%;
+  //-webkit-transform: scale(2);
+  //-moz-transform: scale(2);
+  //-ms-transform: scale(2);
+  //transform: scale(2);
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
 
-#adminNav li {
-  display: inline-block;
-  margin: 20px;
+#navOverlay li {
+  margin: .5em;
+  //font-size: 1.2em;
 }
 
-#adminNav li a {
+#navOverlay li a {
   border-radius: 3px;
-  padding: 15px;
+  padding: .2em;
   border: 1px solid transparent;
   text-decoration: none;
-  font-size: 10px;
   color: #fff;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -50,11 +48,20 @@
   transition: all 0.2s ease-in-out;
 }
 
-#adminNav li a:hover { border-color: #fff; }
+#navOverlay li a:hover { border-color: #fff; }
 
-#adminNav li a i {
-  margin-right: 5px;
-  font-size: 24px;
+#navOverlay > ul > li {
+  font-size: 1.2em;
+}
+
+#navOverlay > ul > li > ul > li {
+  font-size: .9em;
+  margin-left: 2em;
+}
+
+#navOverlay > ul > li > ul > li > ul > li {
+  font-size: .6em;
+  margin-left: 4em;
 }
 
 #toggle-nav-label {
@@ -74,12 +81,12 @@
 
 #toggle-nav { display: none; }
 
-#toggle-nav:checked ~ .box {
+#toggle-nav:checked ~ #navOverlay {
   opacity: 1;
   z-index: 400;
 }
 
-#toggle-nav:checked ~ .box ul {
+#toggle-nav:checked ~ #navOverlay ul {
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);

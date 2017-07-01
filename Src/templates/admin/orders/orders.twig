@@ -1,14 +1,12 @@
 {% extends "base.twig" %}
 
 {% block htmlHeadCss %}
-    <link href="/css/adminGrid.css" rel="stylesheet" type="text/css">
+    <link href="/css/adminFlexList.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block htmlBodyContent %}
 
     {% include 'admin/partials/header.twig' %}
-
-    {% include 'admin/partials/nav.twig' %}
 
     <main>
         <div id="scrollingTableContainer">
@@ -28,7 +26,7 @@
                         <th>Order #</th>
                         <th>Type</th>
                         <th>Customer</th>
-                        <th>Amount</th>
+                        <th>Total Amount</th>
                         <th>Notes</th>
                         <th>Salespeople</th>
                     </tr>
@@ -37,63 +35,44 @@
                 {# Create rows of table data #}
                 <tbody>
                 {% set order_id = false %}
-                {% for row in table %}
-                    {# If new order and not first run close out prior table #}
-                    {% if order_id != row[primaryKeyColumn] and
-                        order_id != false %}
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    {% endif %}
+                {% for order in table %}
+                    <tr>
+                        <td>{{ order.getDate() }}</td>
+                        <td><a href="orders/{{ order.getId() }}">{{ order.getId() }}</a></td>
+                        <td>{{ order.getType() }}</td>
+                        <td><a href="customers/{{ order.getCustomer().getId() }}">{{ order.getCustomer().getName() }}</a></td>
+                        <td>${{ order.getAmount() }}</td>
+                        <td>{{ order.getNotes() }}</td>
+                        <td>{{ order.getSalespeople() }}</td>
+                    </tr>
 
-                    {# If this is a new order set the base info #}
-                    {% if order_id != row[primaryKeyColumn] %}
-                        {% set order_id = row[primaryKeyColumn] %}
-                        <tr>
-                            <td>{{ row['order date'] }}</td>
-                            <td>{{ row['order_id'] }}</td>
-                            <td>{{ row['type'] }}</td>
-                            <td>{{ row['customer'] }}</td>
-                            <td>{{ row['amount'] }}</td>
-                            <td>{{ row['notes'] }}</td>
-                            <td>{{ row['salespeople'] }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="7">
-                                <table border="1" align="center">
-                                    <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th>Style #</th>
-                                            <th>Qty</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ row['item'] }}</td>
-                                            <td>{{ row['style_number'] }}</td>
-                                            <td>{{ row['quantity'] }}</td>
-                                            <td>{{ row['price'] }}</td>
-                                            <td>{{ row['status'] }}</td>
-                                        </tr>
-
-                    {% elseif order_id == row[primaryKeyColumn] %}
-                                        <tr>
-                                            <th>{{ row['item'] }}</th>
-                                            <th>{{ row['style_number'] }}</th>
-                                            <th>{{ row['quantity'] }}</th>
-                                            <th>{{ row['price'] }}</th>
-                                            <th>{{ row['status'] }}</th>
-                                        </tr>
-                    {% endif %}
+                    <tr>
+                        <td colspan="7">
+                            <table border="1" align="center">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Style #</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in order.getProducts() %}
+                                    <tr>
+                                        <td><a href="products/{{ product.getProductId() }}">{{ product.getName() }}</a></td>
+                                        <td>{{ product.getStyleNumber() }}</td>
+                                        <td>{{ product.getQuantity() }}</td>
+                                        <td>${{ product.getPrice() }}</td>
+                                        <td>{{ product.getStatus() }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
                 {% endfor %}
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
                 </tbody>
             </table>
         </div>

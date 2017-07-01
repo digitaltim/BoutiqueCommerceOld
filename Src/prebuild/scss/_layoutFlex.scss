@@ -6,9 +6,11 @@ body {
 }
 
 main {
+  padding: $main-padding;
+  width: 96%;
   flex: 1 0;
   overflow-y: auto;
   overflow-x: hidden;
-  margin: 1.5em 1em 1em 1.5em;
+  margin: 1em auto;
   display: flex;
 }

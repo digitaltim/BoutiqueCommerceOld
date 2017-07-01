@@ -3,7 +3,12 @@ $main-padding: 1em;
 @import 'foundation';
 @import 'admin';
 @import 'layoutFlex';
-@import 'adminHeaderLoggedIn';
+@import 'adminHeaderNotLoggedIn';
 @import 'adminNavOverlay';
 @import 'adminFooter';
 @import 'forms';
+
+#simpleContainer {
+  margin: auto;
+  width: 14em;
+}

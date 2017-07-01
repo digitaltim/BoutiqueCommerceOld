@@ -23,7 +23,7 @@ class OrdersView extends AdminView
 
         return $this->view->render(
             $response,
-            'admin/orders/orders_objects.twig',
+            'admin/orders/orders.twig',
             [
                 'title' => 'Orders',
                 'primaryKeyColumn' => 'id',

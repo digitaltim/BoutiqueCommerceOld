@@ -1,17 +1,15 @@
 {% extends 'base.twig' %}
 
 {% block htmlHeadCss %}
-    <link href="/css/adminGrid.css" rel="stylesheet" type="text/css">
+    <link href="/css/adminFlexSimple.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block htmlBodyContent %}
 
     {% include 'admin/partials/header.twig' %}
 
-    {% include 'admin/partials/nav.twig' %}
-
     <main>
-        <div id='mainContainerSmall'>
+        <div id='simpleContainer'>
             <h1>{{ title }}</h1>
             <form name="f1" method="post" action="{{ path_for(formActionRoute, {'primaryKey': primaryKey})}}">
                 {% if generalFormError %}
@@ -23,6 +21,8 @@
             </form>
         </div>
     </main>
+
+    {% include 'admin/partials/footer.twig' %}
 
 {% endblock %}
 
