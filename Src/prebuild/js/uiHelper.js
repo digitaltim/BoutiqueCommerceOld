@@ -1,27 +1,8 @@
-function toggleNav() {
-    var nav = document.getElementById('adminNavMain');
-    var showNav = document.getElementById('showNav');
-    var navDisplay = nav.style.display;
-    if (navDisplay == '' || navDisplay == 'none') {
-        nav.style.display = 'block';
-        showNav.innerHTML = "<a href='#' onclick='toggleNav();'>- nav</a>";
-    } else if (navDisplay == 'block') {
-        nav.style.display = 'none';
-        showNav.innerHTML = "<a href='#' onclick='toggleNav();'>+ nav</a>";
-    }
-}
-
-function toggleNavSubSection(sectionNumber) {
-    var navSection = document.getElementById('adminNavMainSubSection'+sectionNumber);
-    var showNavSubSection = document.getElementById('showNavSubSection'+sectionNumber);
-    var navSectionDisplay = navSection.style.display;
-    if (navSectionDisplay == '' || navSectionDisplay == 'none') {
-        navSection.style.display = 'block';
-        showNavSubSection.innerHTML = " <a href='#' onclick='toggleNavSubSection("+sectionNumber+");'>-</a>";
-    } else if (navSectionDisplay == 'block') {
-        navSection.style.display = 'none';
-        showNavSubSection.innerHTML = " <a href='#' onclick='toggleNavSubSection("+sectionNumber+");'>+ </a>";
-    }
+if(document.getElementById("scrollingTableContainer")) {
+    document.getElementById("scrollingTableContainer").addEventListener("scroll",function(){
+        var translate = "translate(0,"+this.scrollTop+"px)";
+        this.querySelector("thead").style.transform = translate;
+    });
 }
 
 function toggleDisplay(el) {
@@ -159,11 +140,4 @@ function createXMLHTTPObject() {
         break;
     }
     return xmlhttp;
-}
-
-if(document.getElementById("scrollingTableContainer")) {
-    document.getElementById("scrollingTableContainer").addEventListener("scroll",function(){
-        var translate = "translate(0,"+this.scrollTop+"px)";
-        this.querySelector("thead").style.transform = translate;
-    });
 }

@@ -19,11 +19,9 @@
 {% from _self import recursiveNavSection %}
 
 {% if navigationItems %}
-    <nav id="adminNav">
-        <ul>
-            {% for key, navigationItem in navigationItems %}
-                {{ recursiveNavSection(key, navigationItem) }}
-            {% endfor %}
-        </ul>
-    </nav>
+    <ul>
+        {% for key, navigationItem in navigationItems %}
+            {{ recursiveNavSection(key, navigationItem) }}
+        {% endfor %}
+    </ul>
 {% endif %}
