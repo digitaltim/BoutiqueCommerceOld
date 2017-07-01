@@ -80,7 +80,7 @@ class AuthenticationService
     {
         unset($_SESSION['user']);
     }
-    
+
     public function getLoginFields(): array
     {
         $adminsModel = new AdminsModel();

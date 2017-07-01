@@ -20,6 +20,12 @@ $slim->get('/',
     $domainFrontendNs . '\HomeView:index')
     ->setName('home');
 
+// remainder of front end pages to go here
+
+// not found
+$slim->get('/notFound',
+    'It_All\BoutiqueCommerce\Src\Infrastructure\View:pageNotFound')
+    ->setName('pageNotFound');
 /////////////////////////////////////////
 
 /////////////////////////////////////////
@@ -34,11 +40,9 @@ $slim->post('/' . $config['dirs']['admin'],
     $securityNs.'\Authentication\AuthenticationController:postLogin')
     ->add(new GuestMiddleware($container))
     ->setName('authentication.post.login');
-
 /////////////////////////////////////////
 
-/////////////////////////////////////////
-// Routes that only authenticated users access
+// Routes that only authenticated users access (to end of file)
 // Note, if route needs authorization as well, the authorization is added prior to authentication, so that authentication is performed first
 
 $slim->get('/' . $config['dirs']['admin'] . '/home',
@@ -51,7 +55,6 @@ $slim->get('/' . $config['dirs']['admin'] . '/logout',
     ->add(new AuthenticationMiddleware($container))
     ->setName('authentication.logout');
 
-////////////////////////////////////////////////////////////////////////////////
 // admins
 $adminsPath = $domainAdminNs.'\Admins\\';
 $slim->get('/' . $config['dirs']['admin'] . '/admins',
@@ -89,8 +92,8 @@ $slim->get('/' . $config['dirs']['admin'] . '/admins/delete/{primaryKey}',
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['admins.delete']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('admins.delete');
+// end admins
 
-////////////////////////////////////////////////////////////////////////////////
 // testimonials
 $testimonialsPath = $domainAdminNs . '\Marketing\Testimonials\\';
 
@@ -129,8 +132,8 @@ $slim->get('/' . $config['dirs']['admin'] . '/testimonials/delete/{primaryKey}',
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['testimonials.delete']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('testimonials.delete');
+// end testimonials
 
-////////////////////////////////////////////////////////////////////////////////
 // Ad Codes
 $adCodesPath = $domainAdminNs . '\Marketing\AdCodes\\';
 
@@ -169,8 +172,8 @@ $slim->get('/' . $config['dirs']['admin'] . '/adCodes/delete/{primaryKey}',
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['adCodes.delete']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('adCodes.delete');
+// end Ad Codes
 
-////////////////////////////////////////////////////////////////////////////////
 // orders
 $ordersPath = $domainAdminNs.'\Orders\\';
 $slim->get('/' . $config['dirs']['admin'] . '/orders',
@@ -178,8 +181,8 @@ $slim->get('/' . $config['dirs']['admin'] . '/orders',
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['orders.index']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('orders.index');
+// end orders
 
-////////////////////////////////////////////////////////////////////////////////
 // order
 $orderPath = $domainAdminNs.'\Orders\Order\\';
 $slim->get('/' . $config['dirs']['admin'] . '/orders/{primaryKey}',
@@ -187,9 +190,4 @@ $slim->get('/' . $config['dirs']['admin'] . '/orders/{primaryKey}',
     ->add(new AuthorizationMiddleware($container, $config['adminMinimumPermissions']['order.show']))
     ->add(new AuthenticationMiddleware($container))
     ->setName('order.show');
-
-////////////////////////////////////////////////////////////////////////////////
-// not found
-$slim->get('/notFound',
-    'It_All\BoutiqueCommerce\Src\Infrastructure\View:pageNotFound')
-    ->setName('pageNotFound');
+// end order

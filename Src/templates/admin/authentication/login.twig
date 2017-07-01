@@ -17,6 +17,7 @@
             {% endif %}
             {% import 'macros/formFields.twig' as formFieldsMacro %}
             {{ formFieldsMacro.render(formFields) }}
+            {% include 'partials/csrfFields.twig' %}
         </form>
     </main>
 
