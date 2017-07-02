@@ -13,6 +13,10 @@ function toggleDisplay(el) {
     }
 }
 
+function togglePlusMinus(el) {
+    el.innerHTML = (el.innerHTML == '+') ? '-' : '+';
+}
+
 /**
  *
  * @param element

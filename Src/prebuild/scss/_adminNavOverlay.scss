@@ -34,6 +34,7 @@
 #navOverlay li {
   margin: .5em;
   //font-size: 1.2em;
+  color: #787878;
 }
 
 #navOverlay li a {
@@ -96,4 +97,8 @@
 #toggle-nav:checked ~ #toggle-nav-label {
   background: #fff;
   color: rgba(0,0,0,0.8);
+}
+
+.adminNavSubSection {
+  display: none;
 }

@@ -7,7 +7,8 @@
             {{ key }}
         {% endif %}
         {% if navigationItem.subSections|length %}
-            <ul>
+            <a href="#" onclick="toggleDisplay(getElementById('{{ key }}'));togglePlusMinus(this);">+</a>
+            <ul class="adminNavSubSection" id="{{ key }}">
                 {% for key, navigationItem in navigationItem.subSections %}
                     {{ self.recursiveNavSection(key, navigationItem) }}
                 {% endfor %}
