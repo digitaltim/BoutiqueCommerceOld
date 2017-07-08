@@ -71,9 +71,22 @@ class DatabaseTableModel
         }
     }
 
-    public function select(string $columns = '*')
+    public function select(string $columns = '*', string $orderByColumn = null, bool $orderByAsc = true)
     {
         $q = new QueryBuilder("SELECT $columns FROM $this->tableName");
+        if ($orderByColumn != null) {
+            if ($orderByColumn == 'PRIMARYKEY') {
+                if ($this->primaryKeyColumnName === false) {
+                    throw new \Exception("Cannot order by Primary Key since it does not exist for table ".$this->tableName);
+                }
+                $orderByColumn = $this->primaryKeyColumnName;
+            }
+            $orderByString = " ORDER BY $orderByColumn";
+            if (!$orderByAsc) {
+                $orderByString .= " DESC";
+            }
+            $q->add($orderByString);
+        }
         return $q->execute();
     }
 

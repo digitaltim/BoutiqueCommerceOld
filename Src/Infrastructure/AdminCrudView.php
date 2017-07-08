@@ -55,7 +55,7 @@ abstract class AdminCrudView extends AdminView
 
     protected function indexView($response, string $columns = '*')
     {
-        $res = $this->model->select($columns);
+        $results = pg_fetch_all($this->model->select($columns, 'PRIMARYKEY', false));
 
         $insertLink = ($this->authorization->check($this->container->settings['authorization'][$this->routePrefix.'.insert'])) ? ['text' => 'Insert '.$this->model->getFormalTableName(false), 'route' => $this->routePrefix.'.insert'] : false;
 
@@ -71,7 +71,10 @@ abstract class AdminCrudView extends AdminView
                 'updateRoute' => $this->routePrefix.'.put.update',
                 'addDeleteColumn' => true,
                 'deleteRoute' => $this->routePrefix.'.delete',
-                'table' => pg_fetch_all($res),
+                'results' => $results,
+                'numResults' => count($results),
+                'sortColumn' => $this->model->getPrimaryKeyColumnName(),
+                'sortByAsc' => false,
                 'navigationItems' => $this->navigationItems
             ]
         );

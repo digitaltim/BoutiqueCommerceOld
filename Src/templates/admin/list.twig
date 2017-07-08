@@ -10,33 +10,44 @@
 
     <main>
         <div id="scrollingTableContainer">
-            <table class="scrollingTable">
+            <table class="scrollingTable sortable">
                 <thead>
-                <tr>
-                    <th colspan="10">
-                        {{ title }}
-                        {% if insertLink %}
-                            <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
-                        {% endif %}
-                    </th>
-                </tr>
-                {% set break = false %}
-                {% for row in table if not break %}
                     <tr>
-                        {% for key in row|keys %}
-                            <th>{{ key }}</th>
-                        {% endfor %}
-
-                        {% if addDeleteColumn  %}
-                            <th>X</th>
-                        {% endif %}
+                        <th colspan="10">
+                            {{ title }} ({{ numResults }})
+                            {% if insertLink %}
+                                <a class="tableCaptionAction" href="{{ path_for(insertLink.route) }}">{{ insertLink.text }}</a>
+                            {% endif %}
+                        </th>
                     </tr>
-                    {% set break = true %}
-                {% endfor %}
+                    {% set break = false %}
+                    {% for row in results if not break %}
+                        <tr class="sortable-header-row">
+                            {% set colCount = 0 %}
+                            {% for key in row|keys %}
+                                {% if key == sortColumn %}
+                                    {% set thClass = ' sorttable_sorted_reverse' %}
+                                {% else %}
+                                    {% set thClass = '' %}
+                                {% endif %}
+                                {#<th class="{{ thClass }}"><a href="#" onclick="sortTable(tbody, {{ colCount }}, asc1); asc1 *= -1; asc2 = 1; asc3 = 1;">{{ key }}</a></th>#}
+                                <th class="{{ thClass }}">{{ key }}</th>
+                                {% set colCount = colCount + 1 %}
+                            {% endfor %}
+
+                            {% if addDeleteColumn  %}
+                                <th class="sorttable_nosort">X</th>
+                            {% endif %}
+                        </tr>
+                        {% set break = true %}
+                    {% endfor %}
                 </thead>
-                <tbody>
-                {% for row in table %}
-                    <tr>
+                <tbody id="tbody">
+                {% set rowId = 0 %}
+                {% for row in results %}
+                    {% set rowId = rowId + 1 %}
+                    <script type="text/javascript"></script>
+                    <tr id="row{{ rowId }}">
                         {% for key, value in row %}
                             {# for admins table, do not allow non-owners to edit owners #}
                             {% if key == primaryKeyColumn and updatePermitted and (title != 'Admins' or (authentication.user.role == 'owner' or attribute(row, 'role') != 'owner')) %}
@@ -69,4 +80,5 @@
 {% endblock %}
 {% block htmlBodyJs %}
     <script type="text/javascript" src="/js/uiHelper.js"></script>
+    <script type="text/javascript" src="/js/sortTable.js"></script>
 {% endblock %}

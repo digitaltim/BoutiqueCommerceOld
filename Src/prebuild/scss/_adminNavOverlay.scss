@@ -1,5 +1,4 @@
 /* https://codepen.io/hubpork/pen/HsBnd */
-@import url('https://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css');
 
 #navOverlay {
   position: fixed;
@@ -78,6 +77,7 @@
   width: 30px;
   height: 20px;
   border-radius: 3px;
+  margin-right: 3px;
 }
 
 #toggle-nav { display: none; }

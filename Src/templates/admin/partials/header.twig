@@ -4,10 +4,12 @@
         <nav id="adminNav">
 
             <input type="checkbox" id="toggle-nav">
-            <label id="toggle-nav-label" for="toggle-nav"><i class="icon-reorder"></i></label>
+            <label id="toggle-nav-label" for="toggle-nav">
+                <img src="/images/admin/menu-icon2.png" width="20" height="20">
+            </label>
 
             <div id="navOverlay">
-                {% include 'admin/partials/nav.twig' %}
+                {% include 'admin/partials/navigationMenu.twig' %}
             </div>
 
         </nav>
