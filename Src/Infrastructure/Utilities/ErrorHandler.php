@@ -70,26 +70,6 @@ class ErrorHandler
         }
     }
 
-//    private function renderError(string $errorMessage)
-//    {
-//        echo <<< EOT
-//<!doctype html>
-//<html lang="en">
-//    <head>
-//        <meta charset="utf-8"/>
-//        <title>{{ Error }}</title>
-//        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-//        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//        <meta name="robots" content="noindex, nofollow">
-//        <link href='/css/home.css' rel='stylesheet' type='text/css'>
-//    </head>
-//    <body>
-//        $errorMessage
-//    </body>
-//</html>
-//EOT;
-//    }
-
     /**
      * used in register_shutdown_function to see if a fatal error has occured and handle it.
      * note, this does not occur often in php7, as almost all errors are now exceptions and will be caught by the registered exception handler. fatal errors can still occur for conditions like out of memory: https://trowski.com/2015/06/24/throwable-exceptions-and-errors-in-php7/

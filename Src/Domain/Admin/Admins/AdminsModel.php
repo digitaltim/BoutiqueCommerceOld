@@ -14,7 +14,7 @@ class AdminsModel extends DatabaseTableModel
     public function __construct()
     {
         parent::__construct('admins');
-        $this->roles = $this->getColumnByName('role')->getEnumOptions();
+        $this->getColumnByName('role')->getEnumOptions();
     }
 
     private function getConfirmPasswordHashField(string $label, array $validation): array

@@ -1,18 +1,18 @@
 {
-    "name": "it-all/boutique-commerce",
-    "description": "eCommerce and Point-Of-Sale Platform for Apparel Boutiques",
-    "license": "GPL-3.0",
-    "require": {
-        "slim/slim": "^3.0",
-        "monolog/monolog": "^1.22",
-        "league/oauth2-google": "^2.0",
-        "phpmailer/phpmailer": "^5.2",
-        "slim/twig-view": "^2.2",
-        "slim/csrf": "^0.8.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "It_All\\BoutiqueCommerce\\": ""
-        }
+  "name": "it-all/boutique-commerce",
+  "description": "eCommerce and Point-Of-Sale Platform for Apparel Boutiques",
+  "license": "GPL-3.0",
+  "require": {
+    "slim/slim": "^3.0",
+    "monolog/monolog": "^1.22",
+    "league/oauth2-google": "^2.0",
+    "phpmailer/phpmailer": "^5.2",
+    "slim/twig-view": "^2.2",
+    "slim/csrf": "^0.8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "It_All\\BoutiqueCommerce\\": ""
     }
+  }
 }
